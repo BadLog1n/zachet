@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <style name="EditTextStyle">
+        <item name="android:colorControlNormal">#ccc</item>
+        <item name="android:colorControlActivated">@color/light_green</item>
+
+    </style>
+</resources>

@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+    <layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#F2B600"
+        tools:context=".LoginFragment">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter_semibold"
+            android:paddingTop="50dp"
+            android:text="@string/enter"
+            android:textAlignment="center"
+            android:textColor="#F5F0DE"
+            android:textSize="30sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <EditText
+            android:id="@+id/editTextLogin"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="45dp"
+            android:layout_marginEnd="12dp"
+            android:background="@drawable/rounded_edittext"
+            android:ellipsize="start"
+            android:ems="10"
+            android:hint="@string/login"
+            android:inputType="textEmailAddress"
+            android:minHeight="55dp"
+            android:outlineProvider="paddedBounds"
+            android:paddingStart="10dp"
+            android:textColorHint="@color/grey_hint"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/textView" />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/passwordLayout"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:minHeight="50dp"
+            android:textColorHint="@color/grey_hint"
+            android:theme="@style/EditTextStyle"
+            app:boxStrokeColor="#00FFFFFF"
+            app:boxStrokeWidth="0dp"
+            app:hintTextColor="@color/light_green"
+            app:layout_constraintBottom_toTopOf="@+id/enterButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/editTextLogin"
+            app:passwordToggleEnabled="true"
+            app:passwordToggleTint="@color/light_green">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_edittext"
+                android:ems="10"
+                android:hint="@string/password"
+                android:minHeight="50dp"
+                android:textColorHint="@color/grey_hint"
+                android:textSize="18sp" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <Button
+            android:id="@+id/enterButton"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:backgroundTint="@color/light_green"
+            android:fontFamily="@font/inter_semibold"
+            android:minHeight="51dp"
+            android:text="@string/to_enter"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            app:cornerRadius="100dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/passwordLayout" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</layout>
