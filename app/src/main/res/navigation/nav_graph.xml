@@ -20,4 +20,14 @@
         android:name="com.example.universitysystem.GradesFragment"
         android:label="fragment_grades"
         tools:layout="@layout/fragment_grades" />
+    <fragment
+        android:id="@+id/helpFragment"
+        android:name="com.example.universitysystem.HelpFragment"
+        android:label="fragment_help"
+        tools:layout="@layout/fragment_help" />
+    <fragment
+        android:id="@+id/settingsFragment"
+        android:name="com.example.universitysystem.SettingsFragment"
+        android:label="fragment_settings"
+        tools:layout="@layout/fragment_settings" />
 </navigation>

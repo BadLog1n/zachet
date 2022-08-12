@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn = "navigation_view">
+
+    <item android:title="@string/my_grades"
+        android:id="@+id/grades_menu"
+        android:icon="@drawable/ic___icon__graph_bar_">
+    </item>
+    <item android:title="@string/settings"
+        android:id="@+id/settings_menu"
+        android:icon="@drawable/ic_clarity_settings_line">
+    </item>
+    <item android:title=""/>
+    <item android:title="">
+        <menu>
+
+            <item
+        android:title="@string/help"
+        android:id="@+id/help_menu"
+        android:icon="@drawable/ic___icon__help_circle_outline_"
+                >
+        </item>
+            <item android:title="@string/to_logout"
+        android:id="@+id/logout_menu"
+        android:icon="@drawable/ic___icon__logout_">
+        </item>
+        </menu>
+</item>
+
+</menu>

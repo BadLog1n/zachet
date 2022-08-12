@@ -1,15 +1,18 @@
 package com.example.universitysystem
 
 import android.content.Context
+import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import android.widget.Button
-import android.widget.EditText
 import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
     private val saveUserid = "save_userid"
@@ -23,13 +26,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         if (sharedPref?.getBoolean(checkSettings, false) == true) {
             loadSettings()
+            view.hideKeyboard()
             findNavController().navigate(R.id.gradesFragment)
         }
         view.findViewById<Button>(R.id.enterButton).setOnClickListener {
             //findNavController().navigate(R.id.action_feedFragment_to_detailFragment2)
             //Toast.makeText(activity, "FFF", Toast.LENGTH_SHORT).show()
             saveSettings()
+            view.hideKeyboard()
             findNavController().navigate(R.id.gradesFragment)
+
         }
     }
 
@@ -52,6 +58,10 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun message() {
         Toast.makeText(activity, "$un\n$pw", Toast.LENGTH_SHORT).show()
+    }
+    fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }
