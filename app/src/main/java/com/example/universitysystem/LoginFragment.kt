@@ -1,17 +1,18 @@
 package com.example.universitysystem
 
 import android.content.Context
-import android.content.Context.INPUT_METHOD_SERVICE
 import android.content.SharedPreferences
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import kotlin.system.exitProcess
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
@@ -20,6 +21,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val checkSettings = "check_settings"
     private var un = ""
     private var pw = ""
+    private var clickBack = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
@@ -36,6 +38,19 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             view.hideKeyboard()
             findNavController().navigate(R.id.gradesFragment)
 
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (!clickBack) {
+                Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show()
+                clickBack = true
+                DoAsync {
+                    Thread.sleep(2000)
+                    clickBack = false
+                }
+            } else {
+                Thread.sleep(150)
+                exitProcess(0)
+            }
         }
     }
 
@@ -59,9 +74,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun message() {
         Toast.makeText(activity, "$un\n$pw", Toast.LENGTH_SHORT).show()
     }
-    fun View.hideKeyboard() {
+
+    private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
+    class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
+        init {
+            execute()
+        }
 
+        @Deprecated("Deprecated in Java")
+        override fun doInBackground(vararg params: Void?): Void? {
+            handler()
+            return null
+        }
+    }
 }
+

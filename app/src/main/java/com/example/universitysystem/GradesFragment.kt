@@ -1,30 +1,28 @@
 package com.example.universitysystem
 
+import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.core.view.GravityCompat
-import androidx.core.view.isVisible
-import androidx.databinding.DataBindingUtil
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
-import com.example.universitysystem.databinding.ActivityMainBinding
-import com.google.android.material.navigation.NavigationView
 import kotlin.system.exitProcess
 
 
 class GradesFragment : Fragment(R.layout.fragment_grades) {
 
 
-    var clickBack = false
+    private var clickBack = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (!clickBack) {
                 Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show()
                 clickBack = true
+                DoAsync {
+                    Thread.sleep(2000)
+                    clickBack = false
+                }
             } else {
                 Thread.sleep(150)
                 exitProcess(0)
@@ -49,6 +47,16 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         }*/
     }
+    class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
+        init {
+            execute()
+        }
 
+        @Deprecated("Deprecated in Java")
+        override fun doInBackground(vararg params: Void?): Void? {
+            handler()
+            return null
+        }
+    }
 
 }
