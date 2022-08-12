@@ -34,7 +34,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun saveSettings() {
-        un = (view?.findViewById<EditText>(R.id.editTextLogin))?.text.toString()
+        un = (view?.findViewById<TextInputLayout>(R.id.layoutLogin))?.editText?.text.toString()
         pw = (view?.findViewById<TextInputLayout>(R.id.layoutPassword))?.editText?.text.toString()
         val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.edit()?.putString(saveUserid, un)?.apply()
