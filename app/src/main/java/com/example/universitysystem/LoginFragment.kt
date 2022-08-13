@@ -21,13 +21,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private val saveUserid = "save_userid"
     private val savePassword = "save_password"
     private val checkSettings = "check_settings"
+    private val checkLogin = "check_login"
     private var un = ""
     private var pw = ""
     private var clickBack = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
-
+        sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
         //var ma = view.findViewById<DrawerLayout>(R.id.drawer)
         //var ma=activity?.gat
        // var ma = activity?.findViewById<DrawerLayout>(R.id.drawer)
@@ -38,6 +39,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (sharedPref?.getBoolean(checkSettings, false) == true) {
             loadSettings()
             view.hideKeyboard()
+            sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
             findNavController().navigate(R.id.gradesFragment)
         }
         view.findViewById<Button>(R.id.enterButton).setOnClickListener {
