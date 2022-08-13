@@ -9,8 +9,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Button
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.core.view.isVisible
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
@@ -29,24 +29,21 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
         sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
-        //var ma = view.findViewById<DrawerLayout>(R.id.drawer)
-        //var ma=activity?.gat
-       // var ma = activity?.findViewById<DrawerLayout>(R.id.drawer)
-        //ma?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-       // activity?.findViewById<DrawerLayout>(R.id.drawer)?.isEnabled=false
-        //activity?.findViewById<DrawerLayout>(R.id.drawer)?.isActivated=false
-        //activity?.findViewById<DrawerLayout>(R.id.drawer)?.isVisible=false
+
+        activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+
         if (sharedPref?.getBoolean(checkSettings, false) == true) {
             loadSettings()
             view.hideKeyboard()
             sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
+            activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             findNavController().navigate(R.id.gradesFragment)
         }
         view.findViewById<Button>(R.id.enterButton).setOnClickListener {
-            //findNavController().navigate(R.id.action_feedFragment_to_detailFragment2)
-            //Toast.makeText(activity, "FFF", Toast.LENGTH_SHORT).show()
             saveSettings()
             view.hideKeyboard()
+            sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
+            activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             findNavController().navigate(R.id.gradesFragment)
 
         }
