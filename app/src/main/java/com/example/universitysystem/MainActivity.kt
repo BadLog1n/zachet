@@ -35,10 +35,13 @@ class MainActivity : AppCompatActivity() {
                 R.id.help_menu->
                     findNavController(R.id.nav_host_fragment).navigate(R.id.helpFragment)
                 R.id.logout_menu-> {
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.logoutFragment)
+                    LogoutFragment().show(
+                        this.supportFragmentManager, LogoutFragment.TAG)
                     val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
                     //findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
                     sharedPref?.edit()?.putBoolean(checkSettings, false)?.apply()
-                    findNavController(R.id.nav_host_fragment).navigate(R.id.loginFragment)
+                    //findNavController(R.id.nav_host_fragment).navigate(R.id.loginFragment)
                 }
 
             }
