@@ -22,5 +22,5 @@
 
     <style name="Theme.UniversitySystem.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    <style name="Theme.UniversitySystem.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+
 </resources>

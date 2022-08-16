@@ -19,6 +19,8 @@
     <string name="to_logout">Выйти</string>
     <string name="ok">ok</string>
     <string name="cancel">Отмена</string>
+    <string name="sure">Вы действительно хотите выйти?</string>
+    <string name="logout_descrip">Если вы выйдете из аккаунта, вам нужно будет вводить данные для входа заново.</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

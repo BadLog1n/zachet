@@ -7,27 +7,36 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/blue">
+    android:background="@color/light_grey_background"
+    android:backgroundTint="@color/light_grey_text">
 
     <FrameLayout
         android:id="@+id/standard_bottom_sheet"
+
         style="@style/ModalBottomSheet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="clip_horizontal"
+        android:background="@drawable/bottom_sheet_background"
+        android:visibility="visible"
         app:layout_behavior="com.google.android.material.bottomsheet.BottomSheetBehavior">
 
         <LinearLayout
-            style="@style/ModalBottomSheet"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:color/transparent"
+            android:backgroundTint="@android:color/transparent"
             android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
                 android:layout_marginTop="30dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginBottom="5dp"
                 android:fontFamily="@font/inter"
-                android:text="@string/to_logout"
+                android:text="@string/sure"
                 android:textAlignment="center"
                 android:textColor="@color/black"
                 android:textSize="24sp"
@@ -38,8 +47,10 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:layout_marginEnd="10dp"
                 android:fontFamily="@font/inter"
-                android:text="@string/ok"
+                android:text="@string/logout_descrip"
                 android:textAlignment="center"
                 android:textColor="@color/light_grey_text"
                 android:textSize="16sp">
@@ -49,16 +60,17 @@
             <TextView
                 android:id="@+id/textView3"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content" />
+                android:layout_height="wrap_content"
+                android:layout_gravity="center" />
 
             <Button
-                android:id="@+id/bottomsheet_button"
+                android:id="@+id/bs_logoutButton"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:layout_weight="0.5"
                 android:backgroundTint="@color/black"
                 android:fontFamily="@font/inter_semibold"
@@ -73,22 +85,26 @@
             </Button>
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/bs_cancelButton"
+                style="@style/Widget.AppCompat.Button.Borderless.Colored"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
+                android:layout_gravity="bottom|center"
                 android:layout_marginStart="10dp"
                 android:layout_marginEnd="10dp"
                 android:layout_marginBottom="10dp"
                 android:layout_weight="0.5"
                 android:backgroundTint="#00A39C9C"
                 android:fontFamily="@font/inter_semibold"
+                android:paddingBottom="15dp"
+                android:shadowColor="@color/white"
                 android:text="@string/cancel"
                 android:textAllCaps="false"
                 android:textColor="@color/teal_200"
-                android:textSize="16sp" />
+                android:textSize="16sp"
+                app:strokeColor="@color/beige"
+                app:strokeWidth="0dp" />
 
         </LinearLayout>
-
     </FrameLayout>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
