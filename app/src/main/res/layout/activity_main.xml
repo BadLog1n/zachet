@@ -32,7 +32,8 @@
         android:visibility="visible"
         app:itemTextAppearance="@style/MenuTextStyle"
         app:itemTextColor="#000000"
-        app:menu="@menu/nav_menu">
+        app:menu="@menu/nav_menu"
+        app:headerLayout="@layout/menu_header">
 
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
