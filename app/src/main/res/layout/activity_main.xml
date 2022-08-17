@@ -10,8 +10,38 @@
         tools:openDrawer="start"
         tools:context=".MainActivity">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:orientation="horizontal">
 
-     <fragment
+        <ImageButton
+            android:id="@+id/imageButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="32dp"
+            android:layout_weight="0.005"
+            android:backgroundTint="#FFFEFE"
+            app:srcCompat="@drawable/ic___icon__menu_unfold_line_" />
+
+        <TextView
+            android:id="@+id/textView2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center|top"
+            android:layout_marginTop="35dp"
+            android:layout_marginEnd="32dp"
+            android:layout_weight="0.05"
+            android:fontFamily="@font/inter"
+            android:text="TextView"
+            android:textAlignment="center"
+            android:textColor="@color/black"
+            android:textSize="30sp" />
+    </LinearLayout>
+
+    <fragment
         android:id="@+id/nav_host_fragment"
         android:name="androidx.navigation.fragment.NavHostFragment"
         android:layout_width="0dp"
@@ -21,7 +51,7 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:navGraph="@navigation/nav_graph"/>
+        app:navGraph="@navigation/nav_graph" />
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navViewGrades"
@@ -30,10 +60,10 @@
         android:layout_gravity="start"
         android:background="@color/blue"
         android:visibility="visible"
+        app:headerLayout="@layout/menu_header"
         app:itemTextAppearance="@style/MenuTextStyle"
         app:itemTextColor="#000000"
-        app:menu="@menu/nav_menu"
-        app:headerLayout="@layout/menu_header">
+        app:menu="@menu/nav_menu">
 
     </com.google.android.material.navigation.NavigationView>
 </androidx.drawerlayout.widget.DrawerLayout>
