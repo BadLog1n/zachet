@@ -2,7 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
-
+    <item android:title=""/>
     <item android:title="@string/my_grades"
         android:id="@+id/grades_menu"
         android:icon="@drawable/ic___icon__graph_bar_">
