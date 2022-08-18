@@ -21,6 +21,10 @@
     <string name="cancel">Отмена</string>
     <string name="sure">Вы действительно хотите выйти?</string>
     <string name="logout_descrip">Если вы выйдете из аккаунта, вам нужно будет вводить данные для входа заново.</string>
+    <string name="grades_for_testing">Баллы за</string>
+    <string name="additional_grades">Дополнительные баллы:</string>
+    <string name="premium_grades">Премиальные баллы:</string>
+    <string name="connect_with_teacher">Связаться с преподавателем</string>
 
     <string name="hello_blank_fragment">Hello blank fragment</string>
 

@@ -4,6 +4,8 @@ import android.content.Context
 import android.content.SharedPreferences
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
@@ -27,7 +29,9 @@ class MainActivity : AppCompatActivity() {
         if (sharedPref?.getBoolean(checkLogin, false) == true){
             findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_UNLOCKED)
         }
-
+        findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
+            findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
+        }
         findViewById<NavigationView>(R.id.navViewGrades).setNavigationItemSelectedListener {
             when (it.itemId){
                 R.id.grades_menu->
