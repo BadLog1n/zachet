@@ -27,7 +27,7 @@
             app:srcCompat="@drawable/ic___icon__menu_unfold_line_" />
 
         <TextView
-            android:id="@+id/textView2"
+            android:id="@+id/header_tv"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center|top"

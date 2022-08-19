@@ -1,0 +1,84 @@
+package com.example.universitysystem
+
+import android.annotation.SuppressLint
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.RecyclerView
+import com.example.universitysystem.databinding.SubjectGradesItemBinding
+
+
+
+class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
+    var gradesList = ArrayList<SubjectGrades>()
+    class GradesHolder(item:View):RecyclerView.ViewHolder (item){
+        val binding = SubjectGradesItemBinding.bind(item)
+        fun bind(subjectGrades: SubjectGrades) = with(binding){
+            tv1Subject.text = subjectGrades.subject
+            grAll.text = subjectGrades.allGradesCount.toString()
+            expandBtn.setImageResource(R.drawable.ic_arrow_down)
+            tv2Subject.text = subjectGrades.subject
+            collapseBtn.setImageResource(R.drawable.ic_arrow_up)
+            typeOfSubject.text = subjectGrades.typeOfSubject
+            segment1.text = subjectGrades.segments[0]
+            segment2.text = subjectGrades.segments[1]
+            segment3.text = subjectGrades.segments[2]
+            segment4.text = subjectGrades.segments[3]
+            seg1Visit.text = subjectGrades.grades[0].toString()
+            seg1Academ.text = subjectGrades.grades[1].toString()
+            seg2Visit.text = subjectGrades.grades[2].toString()
+            seg2Academ.text = subjectGrades.grades[3].toString()
+            seg3Visit.text = subjectGrades.grades[4].toString()
+            seg3Academ.text = subjectGrades.grades[5].toString()
+            seg4Visit.text = subjectGrades.grades[6].toString()
+            seg4Academ.text = subjectGrades.grades[7].toString()
+            var test:String = "Баллы за ${subjectGrades.typeOfSubject}:"
+            grForTestingTv.text = test
+            grForTestingCount.text = subjectGrades.grades[8].toString()
+            additionalGrTv.text = "Дополнительные баллы:"
+            additionalGrCount.text = subjectGrades.grades[9].toString()
+            premiumGrTv.text = "Премиальные баллы:"
+            premiumGrCount.text = subjectGrades.grades[10].toString()
+        }
+    }
+
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GradesHolder {
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item,parent,false)
+        view.findViewById<ImageButton>(R.id.expandBtn).setOnClickListener {
+            var expView = view.findViewById<LinearLayout>(R.id.expandedView)
+            expView.visibility = View.VISIBLE
+            var collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+            collView.visibility = View.GONE
+        }
+
+        view.findViewById<ImageButton>(R.id.collapseBtn).setOnClickListener {
+            var expView = view.findViewById<LinearLayout>(R.id.expandedView)
+            expView.visibility = View.GONE
+            var collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+            collView.visibility = View.VISIBLE
+        }
+        var expView = view.findViewById<LinearLayout>(R.id.expandedView)
+        expView.visibility = View.GONE
+        return GradesHolder(view)
+    }
+
+    override fun onBindViewHolder(holder: GradesHolder, position: Int) {
+        holder.bind(gradesList[position])
+    }
+
+    override fun getItemCount(): Int {
+        return gradesList.size
+    }
+    @SuppressLint("NotifyDataSetChanged")
+    fun addSubjectGrades(subjectGrades: SubjectGrades){
+        gradesList.add(subjectGrades)
+        notifyDataSetChanged()
+    }
+
+    fun clearRecords(){
+        gradesList.removeAll(gradesList)
+    }
+}

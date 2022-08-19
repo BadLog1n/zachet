@@ -12,6 +12,7 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:background="@drawable/grades_collapsed_backgr"
         android:orientation="horizontal"
         android:visibility="visible">
@@ -29,7 +30,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/gr_all1"
+            android:id="@+id/gr_all"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -57,10 +58,12 @@
         android:layout_marginStart="30dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="30dp"
+        android:layout_marginBottom="10dp"
         android:layout_weight="15"
         android:background="@drawable/grades_collapsed_backgr"
         android:backgroundTint="@color/light_grey_background"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:visibility="visible">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -372,7 +375,7 @@
             android:orientation="horizontal">
 
             <ImageButton
-                android:id="@+id/imageButton2"
+                android:id="@+id/spechBubbblesImg"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="0.1"
@@ -380,7 +383,7 @@
                 app:srcCompat="@drawable/ic_speech_bubbles" />
 
             <TextView
-                android:id="@+id/textView4"
+                android:id="@+id/connectWTeacher_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="5dp"
