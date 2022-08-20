@@ -1,13 +1,18 @@
 package com.example.universitysystem
 
 import android.os.Bundle
-import android.view.Gravity
+import android.util.Log
 import android.view.Menu
-import android.view.View
-import android.view.ViewGroup
+import android.view.MotionEvent
+import android.view.View.OnTouchListener
+import android.view.Window
+import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
+import javax.security.auth.callback.Callback
+
 
 class IndividualChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -22,6 +27,9 @@ class IndividualChatActivity : AppCompatActivity() {
         //supportActionBar?.setLogo(R.drawable.ic_arrow_back_)
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
             onBackPressed()
+        }
+        findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
+            Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
         }
     }
 
