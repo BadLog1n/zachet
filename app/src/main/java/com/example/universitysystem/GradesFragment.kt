@@ -1,6 +1,7 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
@@ -75,5 +76,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             rcAdapter.addSubjectGrades(sg)
         }
     }
+    /*public fun startChat(){
+        var intent = Intent(this.context,IndividualChatActivity::class.java)
+        startActivity(intent)
+    }*/
 
 }

@@ -1,11 +1,14 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
+import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
 
@@ -62,6 +65,15 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         }
         var expView = view.findViewById<LinearLayout>(R.id.expandedView)
         expView.visibility = View.GONE
+
+        view.findViewById<ImageButton>(R.id.spechBubbblesImg).setOnClickListener {
+            var intent = Intent(parent.context,IndividualChatActivity::class.java)
+            parent.context.startActivity(intent)
+        }
+        view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
+            var intent = Intent(parent.context,IndividualChatActivity::class.java)
+            parent.context.startActivity(intent)
+        }
         return GradesHolder(view)
     }
 
