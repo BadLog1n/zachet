@@ -8,16 +8,14 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
-import androidx.core.content.ContextCompat.startActivity
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
-
 
 
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
     class GradesHolder(item:View):RecyclerView.ViewHolder (item){
-        val binding = SubjectGradesItemBinding.bind(item)
+        private val binding = SubjectGradesItemBinding.bind(item)
         fun bind(subjectGrades: SubjectGrades) = with(binding){
             tv1Subject.text = subjectGrades.subject
             grAll.text = subjectGrades.allGradesCount.toString()
@@ -37,7 +35,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             seg3Academ.text = subjectGrades.grades[5].toString()
             seg4Visit.text = subjectGrades.grades[6].toString()
             seg4Academ.text = subjectGrades.grades[7].toString()
-            var test:String = "Баллы за ${subjectGrades.typeOfSubject}:"
+            val test = "Баллы за ${subjectGrades.typeOfSubject}:"
             grForTestingTv.text = test
             grForTestingCount.text = subjectGrades.grades[8].toString()
             additionalGrTv.text = "Дополнительные баллы:"
@@ -51,27 +49,27 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GradesHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item,parent,false)
         view.findViewById<ImageButton>(R.id.expandBtn).setOnClickListener {
-            var expView = view.findViewById<LinearLayout>(R.id.expandedView)
+            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
             expView.visibility = View.VISIBLE
-            var collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
             collView.visibility = View.GONE
         }
 
         view.findViewById<ImageButton>(R.id.collapseBtn).setOnClickListener {
-            var expView = view.findViewById<LinearLayout>(R.id.expandedView)
+            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
             expView.visibility = View.GONE
-            var collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
             collView.visibility = View.VISIBLE
         }
-        var expView = view.findViewById<LinearLayout>(R.id.expandedView)
+        val expView = view.findViewById<LinearLayout>(R.id.expandedView)
         expView.visibility = View.GONE
 
         view.findViewById<ImageButton>(R.id.spechBubbblesImg).setOnClickListener {
-            var intent = Intent(parent.context,IndividualChatActivity::class.java)
+            val intent = Intent(parent.context,IndividualChatActivity::class.java)
             parent.context.startActivity(intent)
         }
         view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
-            var intent = Intent(parent.context,IndividualChatActivity::class.java)
+            val intent = Intent(parent.context,IndividualChatActivity::class.java)
             parent.context.startActivity(intent)
         }
         return GradesHolder(view)
@@ -91,6 +89,6 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     }
 
     fun clearRecords(){
-        gradesList.removeAll(gradesList)
+        gradesList.removeAll(gradesList.toSet())
     }
 }

@@ -33,7 +33,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
 
         rcAdapter.clearRecords()
-        rcAdapter.gradesList =  ArrayList<SubjectGrades>()
+        rcAdapter.gradesList =  ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
         initGradesRc()
@@ -69,8 +69,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private fun initGradesRc(){
         binding.apply {
             //gradesRcView.adapter = rcAdapter
-            var grArray:IntArray = intArrayOf(4,12,4,12,4,3,4,9,10,12,20)
-            var sg = SubjectGrades("Базы данных",36,"зачет",grArray)
+            val grArray:IntArray = intArrayOf(4,12,4,12,4,3,4,9,10,12,20)
+            val sg = SubjectGrades("Базы данных",36,"зачет",grArray)
             rcAdapter.addSubjectGrades(sg)
             rcAdapter.addSubjectGrades(sg)
             rcAdapter.addSubjectGrades(sg)

@@ -1,6 +1,7 @@
 package com.example.universitysystem
 
 import android.content.Context
+import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.os.AsyncTask
 import android.os.Bundle
@@ -28,7 +29,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private var clickBack = false
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
 
         activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
@@ -36,7 +37,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         if (sharedPref?.getBoolean(checkSettings, false) == true) {
             loadSettings()
             view.hideKeyboard()
-            sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
+            sharedPref.edit()?.putBoolean(checkLogin, true)?.apply()
             activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             findNavController().navigate(R.id.gradesFragment)
         }
@@ -67,7 +68,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private fun saveSettings() {
         un = (view?.findViewById<TextInputLayout>(R.id.layoutLogin))?.editText?.text.toString()
         pw = (view?.findViewById<TextInputLayout>(R.id.layoutPassword))?.editText?.text.toString()
-        val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         sharedPref?.edit()?.putString(saveUserid, un)?.apply()
         sharedPref?.edit()?.putString(savePassword, pw)?.apply()
         sharedPref?.edit()?.putBoolean(checkSettings, true)?.apply()
@@ -75,7 +76,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun loadSettings() {
-        val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         un = sharedPref?.getString(saveUserid, "").toString()
         pw = sharedPref?.getString(savePassword, "").toString()
         message()
