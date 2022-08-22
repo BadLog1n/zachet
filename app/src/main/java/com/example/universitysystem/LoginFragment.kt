@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.drawerlayout.widget.DrawerLayout
@@ -44,6 +45,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             view.hideKeyboard()
             sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
             activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
             findNavController().navigate(R.id.gradesFragment)
 
         }
