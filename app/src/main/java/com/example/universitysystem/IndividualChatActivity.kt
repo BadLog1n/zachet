@@ -1,10 +1,6 @@
 package com.example.universitysystem
 
-import android.annotation.SuppressLint
-import android.content.Context
-
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -21,16 +17,12 @@ import com.google.firebase.database.*
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
-import java.util.*
 
 
 class IndividualChatActivity : AppCompatActivity() {
 
-    var countMessages = 0
     private lateinit var database: DatabaseReference
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,87 +44,60 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
             Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
         }
-        addPostEventListener()
-
-
+        addPostEventListener(un, "19-06-0109")
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()
             sendMessage(un, "19-06-0109", text, "text", getChatName(un, "19-06-0109"))
-/*            adapter.add(ChatToItem( text,getTime()))
-            rcView.adapter= adapter
-            rcView.scrollToPosition(adapter.itemCount-1)*/
-
             findViewById<EditText>(R.id.messageEditText).text.clear()
         }
-
     }
 
-
-
-
-    private fun addPostEventListener() {
-
-        // [START post_value_event_listener]
+    private fun addPostEventListener(sendUser: String, getUser: String) {
+        val chatName = getChatName(sendUser, getUser)
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
+                rcView.layoutManager = LinearLayoutManager(this@IndividualChatActivity)
+                val adapter = GroupAdapter<GroupieViewHolder>()
+                val username = "username"
+                val text = "text"
+                val type = "type"
+                val dataTime = "dataTime"
+                updateChat(sendUser, getUser, false)
                 // Get Post object and use the values to update the UI
                 val post = dataSnapshot.value
                 Log.w("T", "$post")
 
-                // ...
-                val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
-                rcView.layoutManager = LinearLayoutManager(this@IndividualChatActivity)
-                val adapter = initRcView()
+                for (i in dataSnapshot.children) {
+                    when (i.child(type).value.toString()) {
+                        "text" -> {
+                            if (i.child(username).value.toString() == sendUser){
+                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                            }
+                            else {
+                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                            }
+                        }
+                        "file" -> {
+                            Log.d("Message", "Новый файл")
+                        }
+                        "photo" -> {
+                            Log.d("Message", "Скачать файл")
+                        }
+                    }
+                }
                 rcView.adapter= adapter
-                rcView.scrollToPosition(countMessages-1)
+                rcView.scrollToPosition(adapter.itemCount-1)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                // Getting Post failed, log a message
                 Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
         }
-        database = FirebaseDatabase.getInstance().getReference("chatMessages")
+        database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
     }
-
-
-    private fun initRcView():GroupAdapter<GroupieViewHolder>{
-        var adapter = GroupAdapter<GroupieViewHolder>()
-        val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)
-        val un = sharedPref?.getString("save_userid", "").toString()
-        adapter = getChatMessages(un, "19-06-0109", false, adapter)
-        //findViewById<RecyclerView>(R.id.messagesRcView)
-
-
-       /* */
-
-
-        return adapter
-        //adapter
-        //rcView.layoutManager = LinearLayoutManager(this)
-        //rcView.adapter = adapter
-    }
-
-    private fun getTime(): String {
-
-        val currentDate = Date()
-        val timeFormat: DateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
-        return timeFormat.format(currentDate)
-    }
-
-
-//        fun onChildAdded(dataSnapshot: DataSnapshot, prevChildKey: String) {
-//            val newPost: Post? = dataSnapshot.getValue(Post::class.java)
-//            System.out.println("Author: " + newPost.author)
-//            System.out.println("Title: " + newPost.title)
-//            println("Previous Post ID: $prevChildKey")
-//        }
-
-
-
-
 
     private fun getChatName(sendUser: String, getUser: String): String {
         return if (sendUser > getUser) "$getUser$sendUser" else "$sendUser$getUser"
@@ -183,87 +148,7 @@ class IndividualChatActivity : AppCompatActivity() {
         }
     }
 
-
-    /**
-     * Функция, которая получает список чатов, в которых состоит пользователь [userName].
-     * */
-    private fun getUsersChats(userName: String) {
-        database = FirebaseDatabase.getInstance().getReference("chatMembers")
-        database.child(userName).get().addOnSuccessListener {
-            if (it.exists()) {
-                for (i in it.children) {
-                    //getChatMessages(userName, i.key.toString(), true)
-                }
-            }
-        }
-
-    }
-
-
-    /**
-     * Функция которая получает одно последнее или все сообщения между пользователем приложения [sendUser]
-     * и собеседником пользователя [getUser]. Параметр [needLast]
-     * отвечает за то, нужно ли получить только последнее сообщение.
-     * @param needLast
-     * True - только последнее сообщение
-     * False - все сообщения
-     * */
-    private fun getChatMessages(sendUser: String, getUser: String, needLast: Boolean,
-                                adapter: GroupAdapter<GroupieViewHolder>) :  GroupAdapter<GroupieViewHolder> {
-        val username = "username"
-        val text = "text"
-        val type = "type"
-        val dataTime = "dataTime"
-        val chatName = getChatName(sendUser, getUser)
-        updateChat(sendUser, getUser, false)
-        database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
-        var requestToDatabase = database.get()
-        if (needLast) {
-            requestToDatabase = database.limitToLast(1).get()
-        }
-        requestToDatabase.addOnSuccessListener {
-            countMessages = it.children.count()
-            for (i in it.children) {
-                    when (i.child(type).value.toString()) {
-                        "text" -> {
-                            if (i.child(username).value.toString() == sendUser){
-                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
-                            }
-                            else {
-                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
-                            }
-                        }
-                        "file" -> {
-                            if (needLast){
-                                Log.d("Message", "Новый файл")
-                            }
-                            else{
-                                //download(i.child(text).value.toString(), chatName)
-
-                            }
-                        }
-                        "photo" -> {
-                            if(needLast){
-                                Log.d("Message", "Новая фотография")
-                            }
-                            else{
-                                Log.d("Message", "Скачать файл")
-                                //displayImage(i.child(text).value.toString(), chatName)
-                            }
-
-                    }
-                }
-            }
-        }
-    return adapter
-    }
-
-
 }
-
-
-
-
 
 class ChatFromItem(val text:String, private val time:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -289,14 +174,3 @@ class ChatToItem(val text: String, private val time:String): Item<GroupieViewHol
 
 }
 
-class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
-    init {
-        execute()
-    }
-
-    @Deprecated("Deprecated in Java")
-    override fun doInBackground(vararg params: Void?): Void? {
-        handler()
-        return null
-    }
-}
