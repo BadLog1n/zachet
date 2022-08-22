@@ -4,19 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:backgroundTint="@color/light_grey_background"
     tools:context=".IndividualChatActivity">
 
 
     <EditText
         android:id="@+id/messageEditText"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="52dp"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="10dp"
+        android:background="@drawable/message_edittext"
         android:ems="10"
         android:hint="@string/message"
         android:inputType="textPersonName"
+        android:paddingStart="20dp"
+        android:paddingEnd="50dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/sendButton"
         app:layout_constraintStart_toStartOf="parent" />
@@ -26,9 +30,10 @@
         android:id="@+id/clipButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="26dp"
-        android:background="@color/white"
+        android:layout_marginEnd="33dp"
+        android:layout_marginBottom="23dp"
+        android:background="@color/grey_mes_edittext"
+        android:tint="@color/light_grey_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintHorizontal_bias="0.976"
@@ -41,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginEnd="10dp"
-        android:layout_marginBottom="26dp"
+        android:layout_marginBottom="23dp"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,6 +54,7 @@
         app:srcCompat="@drawable/ic___icon__send_" />
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/messagesRcView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="10dp"

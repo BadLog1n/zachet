@@ -18,5 +18,6 @@
     <color name="light_grey_text">#666666</color>
     <color name="blue">#afdafc</color>
     <color name="darker_blue">#28B6E2</color>
+    <color name="grey_mes_edittext">#F6F6F6</color>
 
 </resources>
