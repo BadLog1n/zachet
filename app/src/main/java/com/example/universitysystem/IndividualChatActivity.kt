@@ -47,9 +47,12 @@ class IndividualChatActivity : AppCompatActivity() {
         }
         adapter = initRcView()
         rcView.adapter= adapter
+        rcView.scrollToPosition(adapter.itemCount-1)
+
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
             adapter.add(ChatToItem( findViewById<EditText>(R.id.messageEditText).text.toString(),getTime()))
             rcView.adapter= adapter
+            rcView.scrollToPosition(adapter.itemCount-1)
 
             findViewById<EditText>(R.id.messageEditText).text.clear()
         }
