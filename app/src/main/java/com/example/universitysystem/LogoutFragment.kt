@@ -10,9 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.bottomsheet.BottomSheetBehavior
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 
@@ -29,7 +27,9 @@ class LogoutFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Button>(R.id.bs_logoutButton).setOnClickListener {
-            val sharedPref: SharedPreferences? = activity?.getPreferences(Context.MODE_PRIVATE)
+            val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings",
+                Context.MODE_PRIVATE
+            )
             sharedPref?.edit()?.putBoolean(checkSettings, false)?.apply()
             findNavController().navigate(R.id.loginFragment)
             dismiss()
