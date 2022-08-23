@@ -14,7 +14,7 @@ import kotlinx.coroutines.NonDisposableHandle.parent
 import java.util.*
 import kotlin.collections.ArrayList
 
-lateinit var userChatId:UUID
+lateinit var userChatId:UUID // наша переменная для айди чата или препода на уровне адаптера(файла в котором мы сейчас)
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
 
@@ -47,7 +47,14 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             additionalGrCount.text = subjectGrades.grades[9].toString()
             premiumGrTv.text = "Премиальные баллы:"
             premiumGrCount.text = subjectGrades.grades[10].toString()
-
+            /**
+             * Здесь мы этой красоте присваиваем значение. А именно:
+             * Теперь когда мы добавляем в ресайклер вью новый айтем(новый предмет типа) мы туда передаем +1
+             * новый параметр userChatId (название и тип можешь поменять потом если я промахнулась и
+             * не угадала). Этот параметр мы отлавливаем так сказать в строке ниже, присваиваем значение,
+             * которое мы получили когда создавали новый объект(добавляли в список новый предмет грубо говоря)
+             * переменной на уровне адаптера.
+             */
             userChatId = subjectGrades.userChatId
 
 
@@ -80,6 +87,10 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         }
         view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
+            /**Здесь мы значение переменной грубо говоря передаем каждой кнопке в разных окнах.
+             * То есть у каждого окна свой обработчик нажатия засчет того что userChatId - переменная.
+             * Если интересна логика - то метод вверху и этот метод вызывается для каждого элемента списка.
+             * **/
             intent.putExtra("smthn",userChatId)
             parent.context.startActivity(intent)
         }
