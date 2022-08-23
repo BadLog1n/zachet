@@ -10,11 +10,16 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
+import kotlinx.coroutines.NonDisposableHandle.parent
+import java.util.*
+import kotlin.collections.ArrayList
 
-
+lateinit var userChatId:UUID
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
+
     class GradesHolder(item:View):RecyclerView.ViewHolder (item){
+
         private val binding = SubjectGradesItemBinding.bind(item)
         fun bind(subjectGrades: SubjectGrades) = with(binding){
             tv1Subject.text = subjectGrades.subject
@@ -42,7 +47,12 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             additionalGrCount.text = subjectGrades.grades[9].toString()
             premiumGrTv.text = "Премиальные баллы:"
             premiumGrCount.text = subjectGrades.grades[10].toString()
+
+            userChatId = subjectGrades.userChatId
+
+
         }
+
     }
 
 
@@ -70,6 +80,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         }
         view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
+            intent.putExtra("smthn",userChatId)
             parent.context.startActivity(intent)
         }
         return GradesHolder(view)
