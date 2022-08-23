@@ -70,10 +70,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         binding.apply {
             //gradesRcView.adapter = rcAdapter
             val grArray:IntArray = intArrayOf(4,12,4,12,4,3,4,9,10,12,20)
-            val sg = SubjectGrades("Базы данных",36,"зачет",grArray)
-            rcAdapter.addSubjectGrades(sg)
-            rcAdapter.addSubjectGrades(sg)
-            rcAdapter.addSubjectGrades(sg)
+            val sg1 = SubjectGrades("Сохина",36,"зачет",grArray, "19-06-0245")
+            rcAdapter.addSubjectGrades(sg1)
+            val sg2 = SubjectGrades("Немченко",36,"зачет",grArray, "19-06-0109")
+            rcAdapter.addSubjectGrades(sg2)
+            //rcAdapter.addSubjectGrades(sg)
         }
     }
     /*public fun startChat(){

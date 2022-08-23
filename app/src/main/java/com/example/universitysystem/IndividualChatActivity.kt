@@ -26,6 +26,8 @@ class IndividualChatActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+        val arguments = intent.extras
+        val name = arguments!!["getUser"].toString()
         val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)
         val un = sharedPref?.getString("save_userid", "").toString()
         super.onCreate(savedInstanceState)
@@ -44,7 +46,7 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
             Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
         }
-        addPostEventListener(un, "19-06-0109")
+        addPostEventListener(un, name)
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()

@@ -14,7 +14,7 @@ import kotlinx.coroutines.NonDisposableHandle.parent
 import java.util.*
 import kotlin.collections.ArrayList
 
-lateinit var userChatId:UUID
+lateinit var userChatId:String
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
 
@@ -80,7 +80,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         }
         view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
-            intent.putExtra("smthn",userChatId)
+            intent.putExtra("getUser",userChatId)
             parent.context.startActivity(intent)
         }
         return GradesHolder(view)
