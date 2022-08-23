@@ -65,6 +65,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx:20.0.1'
     implementation 'com.firebaseui:firebase-ui-storage:7.2.0'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.6.1'
+
     implementation 'androidx.preference:preference:1.2.0'
 
 
