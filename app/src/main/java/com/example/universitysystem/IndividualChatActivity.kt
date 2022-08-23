@@ -8,6 +8,7 @@ import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -280,6 +281,9 @@ class IndividualChatActivity : AppCompatActivity() {
 
 }
 
+/**
+ * Класс с конструктором для отображения данных входящего сообщения.
+ */
 class ChatFromItem(val text:String, private val time:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_tv).text = text
@@ -291,7 +295,9 @@ class ChatFromItem(val text:String, private val time:String): Item<GroupieViewHo
     }
 
 }
-
+/**
+ * Класс с конструктором для отображения данных исходящего сообщения.
+ */
 class ChatToItem(val text: String, private val time:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
@@ -300,6 +306,18 @@ class ChatToItem(val text: String, private val time:String): Item<GroupieViewHol
 
     override fun getLayout(): Int {
         return R.layout.to_message_item
+    }
+
+}
+
+class ChatToFileItem(val name: String, private val icon:Drawable, val link:String): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        ////viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
+        //viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.to_message_item // сменить
     }
 
 }
