@@ -50,7 +50,7 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()
-            sendMessage(un, "19-06-0109", text, "text", getChatName(un, "19-06-0109"))
+            sendMessage(un, "19-06-0109", text, "text", getChatName(un, name))
             findViewById<EditText>(R.id.messageEditText).text.clear()
         }
     }
