@@ -91,7 +91,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
              * То есть у каждого окна свой обработчик нажатия засчет того что userChatId - переменная.
              * Если интересна логика - то метод вверху и этот метод вызывается для каждого элемента списка.
              * **/
-            intent.putExtra("smthn",userChatId)
+            intent.putExtra("getUser",userChatId)
             parent.context.startActivity(intent)
         }
         return GradesHolder(view)
