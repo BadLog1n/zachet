@@ -1,14 +1,19 @@
 package com.example.universitysystem
 
+import UriPathHelper.UriPathHelper
+import android.app.Activity
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.TextView
-import android.widget.Toast
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
@@ -16,22 +21,26 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import com.google.firebase.storage.FirebaseStorage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
+import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
 
 
 class IndividualChatActivity : AppCompatActivity() {
-
+    private var typeOfFile = ""
+    private var sendName = ""
+    private var getName = ""
     private lateinit var database: DatabaseReference
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         val arguments = intent.extras
-        val name = arguments!!["getUser"].toString()
+        getName = arguments!!["getUser"].toString()
         val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)
-        val un = sharedPref?.getString("save_userid", "").toString()
+        sendName = sharedPref?.getString("save_userid", "").toString()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_individual_chat)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
@@ -47,32 +56,97 @@ class IndividualChatActivity : AppCompatActivity() {
         }
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
             //Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
-            val builder: AlertDialog.Builder? = this?.let {
-                AlertDialog.Builder(it)
+            val builder = AlertDialog.Builder(this)
+            builder.setPositiveButton("Фото") { _, _ ->
+                pickFileOrPhoto(false)
             }
-            if (builder != null) {
-                builder.setTitle("Выберите вложение")
-                    .setItems(R.array.colors_array,
-                    DialogInterface.OnClickListener { dialog, which ->
-                        // The 'which' argument contains the index position
-                        // of the selected item
-                    })
-                    .setIcon(R.drawable.hungrycat)
-                    .setPositiveButton("Прикрепить") { dialog, id ->  dialog.cancel()
-                    }
+            builder.setNeutralButton("Файл") { _, _ ->
+                pickFileOrPhoto(true)
             }
-            if (builder != null) {
-                builder.create()
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            with(autoBtn) {
+                setTextColor(Color.BLACK)
             }
+            val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+            with(userBtn) {
+                setTextColor(Color.BLACK)
+            }
+
         }
-        addPostEventListener(un, name)
+        addPostEventListener(sendName, getName)
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()
-            sendMessage(un, name, text, "text", getChatName(un, name))
+            sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
             findViewById<EditText>(R.id.messageEditText).text.clear()
         }
     }
+
+    /**
+     * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
+     * */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private fun pickFileOrPhoto(isNeededFile: Boolean) {
+        val intent = Intent(Intent.ACTION_PICK)
+        if (isNeededFile) {
+            intent.type = "*/*"
+            typeOfFile = "file"
+        } else {
+            intent.type = "image/*"
+            typeOfFile = "photo"
+        }
+        resultLauncher.launch(intent)
+
+    }
+
+    /**
+     * Функция, которая загружает выбранный файл(фото) на сервер и отправляет соответствуееще сообщение на сервер.
+     * */
+    @RequiresApi(Build.VERSION_CODES.O)
+    private var resultLauncher =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                val data: Intent? = result.data
+                if (data != null && data.data != null) {
+                    val uriPathHelper = UriPathHelper()
+                    val filePath = uriPathHelper.getPathFromUri(this, data.data!!)!!.toString()
+                    val subFile = filePath.substring(filePath.lastIndexOf("/")+1)
+                    val chatName = getChatName(sendName, getName)
+                    val currentTimestamp = System.currentTimeMillis().toString()
+
+                    putFile(filePath, chatName, currentTimestamp)
+                    sendMessage(
+                        sendName,
+                        getName,
+                        chatName =  getChatName(sendName, getName),
+                        type = typeOfFile,
+                        text = "$currentTimestamp/$subFile"
+                    )
+                }
+            }
+
+
+        }
+
+
+    /**
+     * Функция, которая загружает файл на сервер. [file] - путь к файлу на телефоне, [chatName] -
+     * название чата между пользователями, [currentTimestamp] - штамп о времени отправления сообщения.
+     * */
+    private fun putFile(file: String, chatName: String, currentTimestamp: String) {
+        val refStorageRoot = FirebaseStorage.getInstance().reference
+        val putPath =
+            refStorageRoot.child(chatName)
+        val uriFile = Uri.fromFile(File(file))
+        val subFile = file.substring(file.lastIndexOf("/")+1)
+
+        putPath.child(currentTimestamp).child(subFile).putFile(uriFile)
+    }
+
+
 
     private fun addPostEventListener(sendUser: String, getUser: String) {
         val chatName = getChatName(sendUser, getUser)
@@ -87,7 +161,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 val dataTime = "dataTime"
                 updateChat(sendUser, getUser, false)
                 // Get Post object and use the values to update the UI
-                val post = dataSnapshot.value
+                // val post = dataSnapshot.value
                 //Log.w("T", "$post")
 
                 for (i in dataSnapshot.children) {
