@@ -1,5 +1,6 @@
 package com.example.universitysystem
 
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.os.Build
 import android.os.Bundle
@@ -10,6 +11,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -44,7 +46,24 @@ class IndividualChatActivity : AppCompatActivity() {
             onBackPressed()
         }
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
-            Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
+            //Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
+            val builder: AlertDialog.Builder? = this?.let {
+                AlertDialog.Builder(it)
+            }
+            if (builder != null) {
+                builder.setTitle("Выберите вложение")
+                    .setItems(R.array.colors_array,
+                    DialogInterface.OnClickListener { dialog, which ->
+                        // The 'which' argument contains the index position
+                        // of the selected item
+                    })
+                    .setIcon(R.drawable.hungrycat)
+                    .setPositiveButton("Прикрепить") { dialog, id ->  dialog.cancel()
+                    }
+            }
+            if (builder != null) {
+                builder.create()
+            }
         }
         addPostEventListener(un, name)
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
