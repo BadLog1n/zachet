@@ -82,6 +82,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
 
         view.findViewById<ImageButton>(R.id.spechBubbblesImg).setOnClickListener {
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
+            intent.putExtra("getUser",view.findViewById<TextView>(R.id.textView4).text)
             parent.context.startActivity(intent)
         }
         view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
