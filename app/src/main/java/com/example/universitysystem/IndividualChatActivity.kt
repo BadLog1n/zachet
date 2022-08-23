@@ -198,9 +198,21 @@ class IndividualChatActivity : AppCompatActivity() {
                             }
                         }
                         "file" -> {
+                            if (i.child(username).value.toString() == sendUser){
+                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                            }
+                            else {
+                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                            }
                             Log.d("Message", "Новый файл")
                         }
                         "photo" -> {
+                            if (i.child(username).value.toString() == sendUser){
+                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                            }
+                            else {
+                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                            }
                             Log.d("Message", "Скачать файл")
                         }
                     }
