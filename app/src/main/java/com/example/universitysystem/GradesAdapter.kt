@@ -2,19 +2,20 @@ package com.example.universitysystem
 
 import android.annotation.SuppressLint
 import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
 import kotlinx.coroutines.NonDisposableHandle.parent
 import java.util.*
 import kotlin.collections.ArrayList
 
-lateinit var userChatId:String // наша переменная для айди чата или препода на уровне адаптера(файла в котором мы сейчас)
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
 
@@ -55,9 +56,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
              * которое мы получили когда создавали новый объект(добавляли в список новый предмет грубо говоря)
              * переменной на уровне адаптера.
              */
-            userChatId = subjectGrades.userChatId
-
-
+            textView4.text = subjectGrades.userChatId
         }
 
     }
@@ -91,8 +90,9 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
              * То есть у каждого окна свой обработчик нажатия засчет того что userChatId - переменная.
              * Если интересна логика - то метод вверху и этот метод вызывается для каждого элемента списка.
              * **/
-            intent.putExtra("getUser",userChatId)
+            intent.putExtra("getUser",view.findViewById<TextView>(R.id.textView4).text)
             parent.context.startActivity(intent)
+
         }
         return GradesHolder(view)
     }

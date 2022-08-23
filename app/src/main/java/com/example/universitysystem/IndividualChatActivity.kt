@@ -69,7 +69,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 updateChat(sendUser, getUser, false)
                 // Get Post object and use the values to update the UI
                 val post = dataSnapshot.value
-                Log.w("T", "$post")
+                //Log.w("T", "$post")
 
                 for (i in dataSnapshot.children) {
                     when (i.child(type).value.toString()) {

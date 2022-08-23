@@ -65,10 +65,14 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         binding.apply {
             //gradesRcView.adapter = rcAdapter
             val grArray:IntArray = intArrayOf(4,12,4,12,4,3,4,9,10,12,20)
-            val sg1 = SubjectGrades("Сохина",36,"зачет",grArray, "19-06-0245")
-            rcAdapter.addSubjectGrades(sg1)
-            val sg2 = SubjectGrades("Немченко",36,"зачет",grArray, "19-06-0109")
-            rcAdapter.addSubjectGrades(sg2)
+            val array = ArrayList<String>()
+            array.add("19-06-0245")
+            array.add("19-06-0109")
+
+            var sg = SubjectGrades("Немченко",36,"зачет",grArray, array[0])
+            rcAdapter.addSubjectGrades(sg)
+            sg = SubjectGrades("Сохина",36,"зачет",grArray, array[1])
+            rcAdapter.addSubjectGrades(sg)
             //rcAdapter.addSubjectGrades(sg)
             /**В строке ниже теперь должен быть добавлен еще один параметр. То есть ты потом получишь
              * это все(параметры) из бд и передашь в конструктор.
