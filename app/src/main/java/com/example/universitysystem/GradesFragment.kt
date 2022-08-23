@@ -1,18 +1,13 @@
 package com.example.universitysystem
 
-import android.annotation.SuppressLint
-import android.content.Intent
 import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageButton
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.universitysystem.databinding.ActivityMainBinding
 import com.example.universitysystem.databinding.FragmentGradesBinding
 import kotlin.system.exitProcess
 
@@ -75,6 +70,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val sg2 = SubjectGrades("Немченко",36,"зачет",grArray, "19-06-0109")
             rcAdapter.addSubjectGrades(sg2)
             //rcAdapter.addSubjectGrades(sg)
+            /**В строке ниже теперь должен быть добавлен еще один параметр. То есть ты потом получишь
+             * это все(параметры) из бд и передашь в конструктор.
+             **/
+
         }
     }
     /*public fun startChat(){
