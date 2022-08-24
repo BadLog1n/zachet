@@ -83,6 +83,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
         }
         addPostEventListener(sendName, getName)
+
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()
@@ -220,8 +221,6 @@ class IndividualChatActivity : AppCompatActivity() {
                     }
                 }
 
-                adapter.add(ChatFromFileItem("file"))
-
                 rcView.adapter= adapter
                 rcView.scrollToPosition(adapter.itemCount-1)
             }
@@ -314,7 +313,7 @@ class ChatToItem(val text: String, private val time:String): Item<GroupieViewHol
 
 }
 
-class ChatToFileItem(val name: String, private val icon:Drawable, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatToFileItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
         viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
