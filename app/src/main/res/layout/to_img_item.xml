@@ -53,15 +53,17 @@
 
                 <ImageView
                     android:id="@+id/to_img"
-                    android:layout_width="200dp"
-                    android:layout_height="wrap_content"
+                    android:layout_width="240dp"
+                    android:layout_height="290dp"
                     android:layout_marginStart="10dp"
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
                     android:layout_weight="0.05"
+                    android:maxWidth="240dp"
+                    android:maxHeight="280dp"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/ic_file_icon" />
+                    app:srcCompat="@drawable/aesthetic_desert_2560_x_1440" />
 
             </LinearLayout>
 
