@@ -171,10 +171,12 @@ class IndividualChatActivity : AppCompatActivity() {
                     when (i.child(type).value.toString()) {
                         "text" -> {
                             if (i.child(username).value.toString() == sendUser){
-                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                                val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                                adapter.add(ChatToItem(i.child(text).value.toString(),dt))
                             }
                             else {
-                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                                val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                                adapter.add(ChatFromItem(i.child(text).value.toString(),dt))
                             }
                         }
                         "file" -> {
@@ -227,7 +229,7 @@ class IndividualChatActivity : AppCompatActivity() {
         type: String,
         chatName: String
     ) {
-        val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("M/d/y H:m:ss"))
+        val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d/M/y H:m:ss"))
 
         updateChat(sendUser, getUser, true)
         database = FirebaseDatabase.getInstance().getReference("chatMessages")
