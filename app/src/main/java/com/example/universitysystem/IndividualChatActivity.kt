@@ -15,6 +15,7 @@ import android.os.Bundle
 import android.util.Log
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -218,6 +219,9 @@ class IndividualChatActivity : AppCompatActivity() {
                         }
                     }
                 }
+
+                adapter.add(ChatFromFileItem("file"))
+
                 rcView.adapter= adapter
                 rcView.scrollToPosition(adapter.itemCount-1)
             }
@@ -310,15 +314,28 @@ class ChatToItem(val text: String, private val time:String): Item<GroupieViewHol
 
 }
 
-class ChatToFileItem(val name: String, private val icon:Drawable, val link:String): Item<GroupieViewHolder>(){
+class ChatToFileItem(val name: String, private val icon:Drawable, private val time:String, val link:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        ////viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
-        //viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time
+        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
+        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
+        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img).setImageResource(R.drawable.ic_file_icon)
     }
 
     override fun getLayout(): Int {
-        return R.layout.to_message_item // сменить
+        return R.layout.to_file_item
     }
 
 }
 
+class ChatFromFileItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
+        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img).setImageResource(R.drawable.ic_file_icon)
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.from_file_item
+    }
+
+}
