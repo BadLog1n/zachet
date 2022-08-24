@@ -354,13 +354,15 @@ class ChatFromFileItem(val name: String, private val time:String, val link:Strin
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatFromImgItem(val image: Drawable, private val time:String, val link:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
-        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img).setImageResource(R.drawable.ic_file_icon)
-        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
-            TODO()
+        viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
+            val builder = AlertDialog.Builder(IndividualChatActivity)
+            builder.setView(R.layout.image_dialog)
+            val alertDialog = builder.create()
+            alertDialog.show()
         }
     }
 
