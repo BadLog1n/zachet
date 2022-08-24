@@ -32,15 +32,15 @@
                 android:maxLines="1"
                 android:text="12.20"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintBottom_toTopOf="@+id/to_file_layout"
+                app:layout_constraintEnd_toEndOf="@+id/to_file_layout"
                 app:layout_constraintHorizontal_bias="0.966"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/to_file_layout"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="1.0" />
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/to_file_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/ic_my_message_bg"

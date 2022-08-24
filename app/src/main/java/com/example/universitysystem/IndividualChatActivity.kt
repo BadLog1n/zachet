@@ -11,10 +11,7 @@ import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.ImageView
-import android.widget.TextView
+import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
@@ -297,11 +294,17 @@ class ChatToItem(val text: String, private val time:String): Item<GroupieViewHol
 
 }
 
+/**
+ * Класс с конструктором для отображения файла в исходящем сообщении.
+ */
 class ChatToFileItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
         viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_file_layout).setOnClickListener {
+            TODO()
+        }
     }
 
     override fun getLayout(): Int {
@@ -310,15 +313,59 @@ class ChatToFileItem(val name: String, private val time:String, val link:String)
 
 }
 
+/**
+ * Класс с конструктором для отображения файла во входящем сообщении.
+ */
 class ChatFromFileItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
         viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
+            TODO()
+        }
     }
 
     override fun getLayout(): Int {
         return R.layout.from_file_item
+    }
+
+}
+
+/**
+ * Класс с конструктором для отображения картинки в входящем сообщении.
+ */
+class ChatFromImgItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
+        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
+            TODO()
+        }
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.from_img_item
+    }
+
+}
+
+/**
+ * Класс с конструктором для отображения картинки в исходящем сообщении.
+ */
+class ChatToImgItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
+        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
+        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_file_layout).setOnClickListener {
+            TODO()
+        }
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.to_img_item
     }
 
 }
