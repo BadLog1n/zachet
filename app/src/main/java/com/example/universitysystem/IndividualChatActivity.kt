@@ -2,14 +2,16 @@ package com.example.universitysystem
 
 import UriPathHelper.UriPathHelper
 import android.app.Activity
+import android.app.DownloadManager
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
@@ -20,7 +22,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.FirebaseStorage
+import com.google.firebase.storage.ktx.storage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
@@ -34,6 +38,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private var sendName = ""
     private var getName = ""
     private lateinit var database: DatabaseReference
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         val arguments = intent.extras
@@ -115,7 +120,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 if (data != null && data.data != null) {
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriPathHelper.getPathFromUri(this, data.data!!)!!.toString()
-                    val subFile = filePath.substring(filePath.lastIndexOf("/")+1)
+                    val subFile = filePath.substring(filePath.lastIndexOf("/") + 1)
                     val chatName = getChatName(sendName, getName)
                     val currentTimestamp = System.currentTimeMillis().toString()
 
@@ -123,7 +128,7 @@ class IndividualChatActivity : AppCompatActivity() {
                     sendMessage(
                         sendName,
                         getName,
-                        chatName =  getChatName(sendName, getName),
+                        chatName = getChatName(sendName, getName),
                         type = typeOfFile,
                         text = "$currentTimestamp/$subFile"
                     )
@@ -143,11 +148,10 @@ class IndividualChatActivity : AppCompatActivity() {
         val putPath =
             refStorageRoot.child(chatName)
         val uriFile = Uri.fromFile(File(file))
-        val subFile = file.substring(file.lastIndexOf("/")+1)
+        val subFile = file.substring(file.lastIndexOf("/") + 1)
 
         putPath.child(currentTimestamp).child(subFile).putFile(uriFile)
     }
-
 
 
     private fun addPostEventListener(sendUser: String, getUser: String) {
@@ -169,41 +173,54 @@ class IndividualChatActivity : AppCompatActivity() {
                 for (i in dataSnapshot.children) {
                     when (i.child(type).value.toString()) {
                         "text" -> {
-                            if (i.child(username).value.toString() == sendUser){
-                                val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
-                                adapter.add(ChatToItem(i.child(text).value.toString(),dt))
-                            }
-                            else {
-                                val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
-                                adapter.add(ChatFromItem(i.child(text).value.toString(),dt))
+                            val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                            val tx = i.child(text).value.toString()
+
+                            if (i.child(username).value.toString() == sendUser) {
+                                adapter.add(ChatToItem(tx, dt))
+                            } else {
+                                adapter.add(ChatFromItem(tx, dt))
                             }
                         }
                         "file" -> {
-                            if (i.child(username).value.toString() == sendUser){
-                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
-                            }
+                            val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                            val tx = i.child(text).value.toString()
+                            if (i.child(username).value.toString() == sendUser) {
+                                adapter.add(
+                                    ChatToFileItem(
+                                        tx,
+                                        dt,
+                                        chatName,
+                                        this@IndividualChatActivity
+                                    )
+                                )
+                                                        }
                             else {
-                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                                adapter.add(
+                                    ChatFromFileItem(
+                                        tx,
+                                        dt,
+                                        chatName,
+                                        this@IndividualChatActivity
+                                    )
+                                )
                             }
                             Log.d("Message", "Новый файл")
                         }
                         "photo" -> {
-                            if (i.child(username).value.toString() == sendUser){
+                            if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
-                            }
-                            else {
+                            } else {
                                 adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
                             }
-                            Log.d("Message", "Скачать файл")
+                            Log.d("Message", "Скачать фото")
                         }
                     }
                 }
 
-                adapter.add(ChatFromFileItem("name", "12.30", "dundi"))
-                adapter.add(ChatToFileItem("name", "12.30", "dundi"))
 
-                rcView.adapter= adapter
-                rcView.scrollToPosition(adapter.itemCount-1)
+                rcView.adapter = adapter
+                rcView.scrollToPosition(adapter.itemCount - 1)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -268,7 +285,7 @@ class IndividualChatActivity : AppCompatActivity() {
 /**
  * Класс с конструктором для отображения данных входящего сообщения.
  */
-class ChatFromItem(val text:String, private val time:String): Item<GroupieViewHolder>(){
+class ChatFromItem(val text: String, private val time: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_tv).text = text
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_time_tv).text = time
@@ -279,10 +296,11 @@ class ChatFromItem(val text:String, private val time:String): Item<GroupieViewHo
     }
 
 }
+
 /**
  * Класс с конструктором для отображения данных исходящего сообщения.
  */
-class ChatToItem(val text: String, private val time:String): Item<GroupieViewHolder>(){
+class ChatToItem(val text: String, private val time: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time
@@ -297,13 +315,20 @@ class ChatToItem(val text: String, private val time:String): Item<GroupieViewHol
 /**
  * Класс с конструктором для отображения файла в исходящем сообщении.
  */
-class ChatToFileItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatToFileItem(
+    val text: String,
+    private val time: String,
+    private val chatName: String,
+    val context: Context
+) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
+        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = text.substringAfter("/")
         viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img)
+            .setImageResource(R.drawable.ic_file_icon)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.to_file_layout).setOnClickListener {
-            TODO()
+            download(text, chatName, context)
+
         }
     }
 
@@ -311,18 +336,59 @@ class ChatToFileItem(val name: String, private val time:String, val link:String)
         return R.layout.to_file_item
     }
 
+    /**
+     * Функция, позволяющая загружать файлы напрямую в телефон. [filename] - имя файла с расширением,
+     * [chatName] - имя чата между пользователями.
+     * */
+    private fun download(filename: String, chatName: String, context: Context) {
+        val storageRef = Firebase.storage.reference
+        val photoRef = storageRef.child(chatName).child(filename)
+        val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
+        photoRef.downloadUrl
+            .addOnSuccessListener { uri ->
+                val url = uri.toString()
+                downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
+            }.addOnFailureListener { }
+    }
+
+    /**
+     * Расширение функции загрузки фото
+     * */
+    private fun downloadFile(
+        context: Context,
+        fileName: String,
+        destinationDirectory: String?,
+        url: String?
+    ) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val uri = Uri.parse(url)
+        val request = DownloadManager.Request(uri)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalFilesDir(
+            context,
+            destinationDirectory,
+            fileName
+        )
+        downloadManager.enqueue(request)
+    }
 }
 
 /**
  * Класс с конструктором для отображения файла во входящем сообщении.
  */
-class ChatFromFileItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatFromFileItem(
+    val text: String,
+    private val time: String,
+    private val chatName: String,
+    val context: Context
+) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
+        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = text.substringAfter("/")
         viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img)
+            .setImageResource(R.drawable.ic_file_icon)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
-            TODO()
+            download(text, chatName, context)
         }
     }
 
@@ -330,18 +396,54 @@ class ChatFromFileItem(val name: String, private val time:String, val link:Strin
         return R.layout.from_file_item
     }
 
+    /**
+     * Функция, позволяющая загружать файлы напрямую в телефон. [filename] - имя файла с расширением,
+     * [chatName] - имя чата между пользователями.
+     * */
+    private fun download(filename: String, chatName: String, context: Context) {
+        val storageRef = Firebase.storage.reference
+        val photoRef = storageRef.child(chatName).child(filename)
+        val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
+        photoRef.downloadUrl
+            .addOnSuccessListener { uri ->
+                val url = uri.toString()
+                downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
+            }.addOnFailureListener { }
+    }
+
+    /**
+     * Расширение функции загрузки фото
+     * */
+    private fun downloadFile(
+        context: Context,
+        fileName: String,
+        destinationDirectory: String?,
+        url: String?
+    ) {
+        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val uri = Uri.parse(url)
+        val request = DownloadManager.Request(uri)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalFilesDir(
+            context,
+            destinationDirectory,
+            fileName
+        )
+        downloadManager.enqueue(request)
+    }
 }
 
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatFromImgItem(val name: String, private val time: String) :
+    Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
         viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img)
+            .setImageResource(R.drawable.ic_file_icon)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
-            TODO()
         }
     }
 
@@ -354,11 +456,13 @@ class ChatFromImgItem(val name: String, private val time:String, val link:String
 /**
  * Класс с конструктором для отображения картинки в исходящем сообщении.
  */
-class ChatToImgItem(val name: String, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatToImgItem(val name: String, private val time: String) :
+    Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
         viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img).setImageResource(R.drawable.ic_file_icon)
+        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img)
+            .setImageResource(R.drawable.ic_file_icon)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.to_file_layout).setOnClickListener {
             TODO()
         }
