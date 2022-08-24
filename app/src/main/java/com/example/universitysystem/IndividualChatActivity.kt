@@ -3,6 +3,7 @@ package com.example.universitysystem
 import UriPathHelper.UriPathHelper
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
@@ -354,7 +355,7 @@ class ChatFromFileItem(val name: String, private val time:String, val link:Strin
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val image: Drawable, private val time:String, val link:String): Item<GroupieViewHolder>(){
+class ChatFromImgItem(val image: Drawable, private val time:String, val link:String, val context: Context): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
