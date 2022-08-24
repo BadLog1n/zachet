@@ -3,7 +3,6 @@ package com.example.universitysystem
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.os.AsyncTask
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -16,6 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
 
@@ -54,7 +54,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             if (!clickBack) {
                 Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show()
                 clickBack = true
-                DoAsync {
+                val executor = Executors.newSingleThreadExecutor()
+                executor.execute {
                     Thread.sleep(2000)
                     clickBack = false
                 }
@@ -90,16 +91,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
-    class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
-        init {
-            execute()
-        }
 
-        @Deprecated("Deprecated in Java")
-        override fun doInBackground(vararg params: Void?): Void? {
-            handler()
-            return null
-        }
-    }
 }
 

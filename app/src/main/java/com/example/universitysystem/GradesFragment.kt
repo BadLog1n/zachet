@@ -1,6 +1,6 @@
 package com.example.universitysystem
 
-import android.os.AsyncTask
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -9,15 +9,17 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FragmentGradesBinding
+import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
 
 class GradesFragment : Fragment(R.layout.fragment_grades) {
 
-    lateinit var binding: FragmentGradesBinding
+    private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
     private var clickBack = false
 
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         binding = FragmentGradesBinding.inflate(layoutInflater)
         super.onViewCreated(view, savedInstanceState)
@@ -40,7 +42,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             if (!clickBack) {
                 Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show()
                 clickBack = true
-                DoAsync {
+                val executor = Executors.newSingleThreadExecutor()
+                executor.execute {
                     Thread.sleep(2000)
                     clickBack = false
                 }
@@ -50,28 +53,16 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
     }
-    class DoAsync(val handler: () -> Unit) : AsyncTask<Void, Void, Void>() {
-        init {
-            execute()
-        }
 
-        @Deprecated("Deprecated in Java")
-        override fun doInBackground(vararg params: Void?): Void? {
-            handler()
-            return null
-        }
-    }
     private fun initGradesRc(){
         binding.apply {
             //gradesRcView.adapter = rcAdapter
-            val grArray:IntArray = intArrayOf(4,12,4,12,4,3,4,9,10,12,20)
-            val array = ArrayList<String>()
-            array.add("19-06-0245")
-            array.add("19-06-0109")
+            val grArray = listOf(4,12,4,12,4,3,4,9,10,12,20)
+            val arrayTest = listOf("19-06-0245", "19-06-0109")
 
-            var sg = SubjectGrades("Немченко",36,"зачет",grArray, array[0])
+            var sg = SubjectGrades("Немченко",36,"зачет",grArray, arrayTest[0])
             rcAdapter.addSubjectGrades(sg)
-            sg = SubjectGrades("Сохина",36,"зачет",grArray, array[1])
+            sg = SubjectGrades("Сохина",36,"зачет",grArray, arrayTest[1])
             rcAdapter.addSubjectGrades(sg)
             //rcAdapter.addSubjectGrades(sg)
             /**В строке ниже теперь должен быть добавлен еще один параметр. То есть ты потом получишь

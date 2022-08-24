@@ -1,12 +1,10 @@
 package com.example.universitysystem
 
 import UriPathHelper.UriPathHelper
-import android.Manifest
 import android.app.Activity
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.pm.PackageManager
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -21,7 +19,6 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -136,25 +133,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
 
         }
-    private val REQUEST_EXTERNAL_STORAGE = 1
-    private val PERMISSIONS_STORAGE = arrayOf(
-        Manifest.permission.READ_EXTERNAL_STORAGE,
-        Manifest.permission.WRITE_EXTERNAL_STORAGE
-    )
 
-    private fun verifyStoragePermissions(activity: Activity?) {
-        val permission = ActivityCompat.checkSelfPermission(
-            activity!!,
-            Manifest.permission.WRITE_EXTERNAL_STORAGE
-        )
-        if (permission != PackageManager.PERMISSION_GRANTED) {
-            ActivityCompat.requestPermissions(
-                activity,
-                PERMISSIONS_STORAGE,
-                REQUEST_EXTERNAL_STORAGE
-            )
-        }
-    }
 
     /**
      * Функция, которая загружает файл на сервер. [file] - путь к файлу на телефоне, [chatName] -

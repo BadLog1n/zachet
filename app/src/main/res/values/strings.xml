@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">UniversitySystem</string>
+    <string name="app_name">Зачёт!</string>
     <string name="title_activity_login">LoginActivity</string>
     <string name="prompt_email">Email</string>
     <string name="prompt_password">Password</string>
@@ -17,7 +17,7 @@
     <string name="settings">Настройки</string>
     <string name="help">Помощь</string>
     <string name="to_logout">Выйти</string>
-    <string name="ok">ok</string>
+    <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
     <string name="sure">Вы действительно хотите выйти?</string>
     <string name="logout_descrip">Если вы выйдете из аккаунта, вам нужно будет вводить данные для входа заново.</string>
