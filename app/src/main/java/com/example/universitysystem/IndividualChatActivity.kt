@@ -21,6 +21,7 @@ import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -221,6 +222,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
                 adapter.add(ChatFromFileItem("name", "12.30", "dundi"))
                 adapter.add(ChatToFileItem("name", "12.30", "dundi"))
+                adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity))
 
                 rcView.adapter= adapter
                 rcView.scrollToPosition(adapter.itemCount-1)
@@ -360,7 +362,7 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
-            val builder = AlertDialog.Builder(IndividualChatActivity)
+            val builder = AlertDialog.Builder(context)
             builder.setView(R.layout.image_dialog)
             val alertDialog = builder.create()
             alertDialog.show()
