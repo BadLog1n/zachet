@@ -362,10 +362,28 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
-            val builder = AlertDialog.Builder(context)
-            builder.setView(R.layout.image_dialog)
-            val alertDialog = builder.create()
-            alertDialog.show()
+            val intent = Intent(context,ImageActivity::class.java)
+            context.startActivity(intent)
+            //val builder = AlertDialog.Builder(context)
+           // builder.setView(R.layout.image_dialog)
+
+            //builder.setNeutralButton(""){ }
+            //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
+           // builder.setNeutralButtonIcon(closImg)
+            //val alertDialog = builder.create()
+            //alertDialog.layoutInflater.inflate(R.layout.image_dialog,null)
+            //alertDialog.setCanceledOnTouchOutside(true)
+           // alertDialog.setButton(R.id.closeImg_btn,"",R.drawable.ic_baseline_close_24.toDrawable(),{ dialog, id ->
+            //    dialog.dismiss()
+            //})
+/*            alertDialog.getButton(R.id.closeImg_btn).setOnClickListener {
+                alertDialog.dismiss()
+            }*/
+            //alertDialog.setContentView(R.layout.image_dialog)
+            /*alertDialog.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
+                alertDialog.dismiss()
+            }*/
+           // alertDialog.show()
         }
     }
 
