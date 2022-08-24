@@ -221,7 +221,7 @@ class IndividualChatActivity : AppCompatActivity() {
                     }
                 }
 
-                adapter.add(ChatFromFileItem("name", "12.30", "dundi"))
+                //adapter.add(ChatFromFileItem("name", "12.30", "dundi"))
 
                 rcView.adapter= adapter
                 rcView.scrollToPosition(adapter.itemCount-1)
