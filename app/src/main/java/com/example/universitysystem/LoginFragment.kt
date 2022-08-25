@@ -15,6 +15,8 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.textfield.TextInputLayout
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
@@ -27,6 +29,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private var un = ""
     private var pw = ""
     private var clickBack = false
+    private lateinit var database: DatabaseReference
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
@@ -41,14 +44,25 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             findNavController().navigate(R.id.gradesFragment)
         }
-        view.findViewById<Button>(R.id.enterButton).setOnClickListener {
-            saveSettings()
-            view.hideKeyboard()
-            sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
-            activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
-            findNavController().navigate(R.id.gradesFragment)
 
+        view.findViewById<Button>(R.id.enterButton).setOnClickListener {
+            un = (view.findViewById<TextInputLayout>(R.id.layoutLogin))?.editText?.text.toString()
+            pw = (view.findViewById<TextInputLayout>(R.id.layoutPassword))?.editText?.text.toString()
+            database = FirebaseDatabase.getInstance().getReference("users/$un")
+            val requestToDatabase = database.get()
+            requestToDatabase.addOnSuccessListener {
+                if (un == it.child("login").value.toString() && pw == it.child("password").value.toString()){
+                    saveSettings(un, pw)
+                    view.hideKeyboard()
+                    sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
+                    activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                    activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
+                    findNavController().navigate(R.id.gradesFragment)
+                }
+                else{
+                    Toast.makeText(activity, "Логин или пароль введён неверно.", Toast.LENGTH_SHORT).show()
+                }
+            }
         }
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (!clickBack) {
@@ -66,9 +80,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun saveSettings() {
-        un = (view?.findViewById<TextInputLayout>(R.id.layoutLogin))?.editText?.text.toString()
-        pw = (view?.findViewById<TextInputLayout>(R.id.layoutPassword))?.editText?.text.toString()
+    private fun saveSettings(un: String, pw: String) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         sharedPref?.edit()?.putString(saveUserid, un)?.apply()
         sharedPref?.edit()?.putString(savePassword, pw)?.apply()
