@@ -53,8 +53,16 @@ class IndividualChatActivity : AppCompatActivity() {
 
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this)
+        findViewById<TextView>(R.id.receiverName_tv).text = ""
 
-        findViewById<TextView>(R.id.receiverName_tv).text = "Петр Иванович"
+
+
+        database = FirebaseDatabase.getInstance().getReference("users/$getName")
+        val requestToDatabase = database.get()
+        requestToDatabase.addOnSuccessListener {
+            val displayName = it.child("name").value.toString() + " " + it.child("surname").value.toString()
+            findViewById<TextView>(R.id.receiverName_tv).text = displayName
+        }
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
             onBackPressed()
         }
