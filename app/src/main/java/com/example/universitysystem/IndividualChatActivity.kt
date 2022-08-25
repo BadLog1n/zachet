@@ -60,7 +60,8 @@ class IndividualChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
-            val displayName = it.child("name").value.toString() + " " + it.child("surname").value.toString()
+            val displayName =
+                it.child("name").value.toString() + " " + it.child("surname").value.toString()
             findViewById<TextView>(R.id.receiverName_tv).text = displayName
         }
         findViewById<ImageButton>(R.id.backButton).setOnClickListener {
@@ -202,8 +203,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                         this@IndividualChatActivity
                                     )
                                 )
-                                                        }
-                            else {
+                            } else {
                                 adapter.add(
                                     ChatFromFileItem(
                                         tx,
@@ -217,9 +217,19 @@ class IndividualChatActivity : AppCompatActivity() {
                         }
                         "photo" -> {
                             if (i.child(username).value.toString() == sendUser) {
-                                adapter.add(ChatToItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                                adapter.add(
+                                    ChatToItem(
+                                        i.child(text).value.toString(),
+                                        i.child(dataTime).value.toString()
+                                    )
+                                )
                             } else {
-                                adapter.add(ChatFromItem(i.child(text).value.toString(),i.child(dataTime).value.toString()))
+                                adapter.add(
+                                    ChatFromItem(
+                                        i.child(text).value.toString(),
+                                        i.child(dataTime).value.toString()
+                                    )
+                                )
                             }
                             Log.d("Message", "Скачать фото")
                         }
@@ -238,6 +248,7 @@ class IndividualChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
     }
+
 
     private fun getChatName(sendUser: String, getUser: String): String {
         return if (sendUser > getUser) "$getUser$sendUser" else "$sendUser$getUser"
@@ -328,17 +339,22 @@ class ChatToFileItem(
     private val time: String,
     private val chatName: String,
     val context: Context
+
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = text.substringAfter("/")
+        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text =
+            text.substringAfter("/")
         viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img)
             .setImageResource(R.drawable.ic_file_icon)
+
         viewHolder.itemView.findViewById<LinearLayout>(R.id.to_file_layout).setOnClickListener {
             download(text, chatName, context)
-
         }
+
+
     }
+
 
     override fun getLayout(): Int {
         return R.layout.to_file_item
@@ -355,6 +371,7 @@ class ChatToFileItem(
         photoRef.downloadUrl
             .addOnSuccessListener { uri ->
                 val url = uri.toString()
+                Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
                 downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
             }.addOnFailureListener { }
     }
@@ -368,6 +385,7 @@ class ChatToFileItem(
         destinationDirectory: String?,
         url: String?
     ) {
+
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
@@ -378,7 +396,9 @@ class ChatToFileItem(
             fileName
         )
         downloadManager.enqueue(request)
+
     }
+
 }
 
 /**
@@ -391,7 +411,8 @@ class ChatFromFileItem(
     val context: Context
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = text.substringAfter("/")
+        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text =
+            text.substringAfter("/")
         viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img)
             .setImageResource(R.drawable.ic_file_icon)
@@ -409,14 +430,19 @@ class ChatFromFileItem(
      * [chatName] - имя чата между пользователями.
      * */
     private fun download(filename: String, chatName: String, context: Context) {
+
         val storageRef = Firebase.storage.reference
         val photoRef = storageRef.child(chatName).child(filename)
         val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
+
         photoRef.downloadUrl
             .addOnSuccessListener { uri ->
                 val url = uri.toString()
+                Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
                 downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
             }.addOnFailureListener { }
+
+
     }
 
     /**
