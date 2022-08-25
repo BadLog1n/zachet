@@ -268,7 +268,7 @@ class IndividualChatActivity : AppCompatActivity() {
         type: String,
         chatName: String
     ) {
-        val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d/M/y H:m:ss"))
+        val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d/m/y hh:mm:ss"))
 
         updateChat(sendUser, getUser, true)
         database = FirebaseDatabase.getInstance().getReference("chatMessages")
