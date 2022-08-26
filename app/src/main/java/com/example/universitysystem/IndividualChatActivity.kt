@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.graphics.BitmapFactory
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -15,12 +16,14 @@ import android.os.Build
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toDrawable
@@ -33,6 +36,11 @@ import com.google.firebase.storage.ktx.storage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.tasks.await
+import kotlinx.coroutines.withContext
 import java.io.File
 import java.time.LocalDateTime
 import java.time.format.DateTimeFormatter
@@ -224,18 +232,26 @@ class IndividualChatActivity : AppCompatActivity() {
                             Log.d("Message", "Новый файл")
                         }
                         "photo" -> {
+                            val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                            val tx = i.child(text).value.toString()
                             if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(
-                                    ChatToItem(
-                                        i.child(text).value.toString(),
-                                        i.child(dataTime).value.toString()
+                                    ChatFromImgItem(
+                                        tx,
+                                        dt,
+                                        chatName,
+                                        this@IndividualChatActivity,
+                                        this@IndividualChatActivity
                                     )
                                 )
                             } else {
                                 adapter.add(
-                                    ChatFromItem(
-                                        i.child(text).value.toString(),
-                                        i.child(dataTime).value.toString()
+                                    ChatFromImgItem(
+                                        tx,
+                                        dt,
+                                        chatName,
+                                        this@IndividualChatActivity,
+                                        this@IndividualChatActivity
                                     )
                                 )
                             }
@@ -244,7 +260,7 @@ class IndividualChatActivity : AppCompatActivity() {
                     }
                 }
 
-                adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity, this@IndividualChatActivity))
+                //adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity, this@IndividualChatActivity))
 
                 rcView.adapter = adapter
                 rcView.scrollToPosition(adapter.itemCount - 1)
@@ -479,31 +495,27 @@ class ChatFromFileItem(
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val image: Drawable, private val time:String, val link:String, val context: Context, val activity: Activity?): Item<GroupieViewHolder>(){
+class ChatFromImgItem(val filename: String, private val time:String, val chatName: String, val context: Context, val activity: Activity?): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
+/*
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
             .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
+*/
+        displayImage(filename,chatName,viewHolder)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
+            /*activity?.let {
 
-            //val intent = Intent(context,ImageActivity::class.java)
-            //context.startActivity(intent)
-
-            activity?.let {
                 val builder = AlertDialog.Builder(it)
-                // Get the layout inflater
                 val inflater = activity.layoutInflater
-
-                // Inflate and set the layout for the dialog
-                // Pass null as the parent view because its going in the dialog layout
                 builder.setView(inflater.inflate(R.layout.image_dialog, null))
-                    // Add action buttons
-                    .setPositiveButton("Сохранить",
-                        DialogInterface.OnClickListener { dialog, id ->
-                            Toast.makeText(context, "saving", Toast.LENGTH_SHORT)
-                        })
+                    .setPositiveButton("Сохранить"
+                    ) { _, _ ->
+                        Toast.makeText(context, "saving", Toast.LENGTH_SHORT).show()
+                    }
 
-                var alD = builder.create()
+                val alD = builder.create()
                 alD.show()
                 alD.setCancelable(true)
                 alD.setCanceledOnTouchOutside(true)
@@ -511,24 +523,27 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
                     alD.cancel()
                 }
                 alD.getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setTextColor(android.graphics.Color.BLACK)
+                    .setTextColor(Color.BLACK)
+            }*/
+            
+        }
 
-                //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
-                // builder.setNeutralButtonIcon(closImg)
-                //val alertDialog = builder.create()
-                //alertDialog.layoutInflater.inflate(R.layout.image_dialog,null)
-                //alertDialog.setCanceledOnTouchOutside(true)
-                // alertDialog.setButton(R.id.closeImg_btn,"",R.drawable.ic_baseline_close_24.toDrawable(),{ dialog, id ->
-                //    dialog.dismiss()
-                //})
-/*            alertDialog.getButton(R.id.closeImg_btn).setOnClickListener {
-                alertDialog.dismiss()
-            }*/
-                //alertDialog.setContentView(R.layout.image_dialog)
-                /*alertDialog.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
-                alertDialog.dismiss()
-            }*/
-                // alertDialog.show()
+    }
+    private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val imageRef = Firebase.storage.reference
+            val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+            val maxDownloadSize = 5L * 1024 * 1024 * 1024
+            val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
+            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            withContext(Dispatchers.Main) {
+                viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+                    .setImageBitmap(bmp)
+                //imageView?.setImageBitmap(bmp)
+            }
+        } catch(e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
             }
         }
     }
