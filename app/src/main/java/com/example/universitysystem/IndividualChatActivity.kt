@@ -3,11 +3,13 @@ package com.example.universitysystem
 import UriPathHelper.UriPathHelper
 import android.app.Activity
 import android.app.DownloadManager
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.graphics.Color
+import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
@@ -19,6 +21,9 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -98,7 +103,10 @@ class IndividualChatActivity : AppCompatActivity() {
             sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
             findViewById<EditText>(R.id.messageEditText).text.clear()
         }
+
+
     }
+
 
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
@@ -236,6 +244,7 @@ class IndividualChatActivity : AppCompatActivity() {
                     }
                 }
 
+                adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity, this@IndividualChatActivity))
 
                 rcView.adapter = adapter
                 rcView.scrollToPosition(adapter.itemCount - 1)
@@ -470,14 +479,57 @@ class ChatFromFileItem(
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val name: String, private val time: String) :
-    Item<GroupieViewHolder>() {
+class ChatFromImgItem(val image: Drawable, private val time:String, val link:String, val context: Context, val activity: Activity?): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text = name
-        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img)
-            .setImageResource(R.drawable.ic_file_icon)
-        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
+        viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+            .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
+
+            //val intent = Intent(context,ImageActivity::class.java)
+            //context.startActivity(intent)
+
+            activity?.let {
+                val builder = AlertDialog.Builder(it)
+                // Get the layout inflater
+                val inflater = activity.layoutInflater
+
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(inflater.inflate(R.layout.image_dialog, null))
+                    // Add action buttons
+                    .setPositiveButton("Сохранить",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            Toast.makeText(context, "saving", Toast.LENGTH_SHORT)
+                        })
+
+                var alD = builder.create()
+                alD.show()
+                alD.setCancelable(true)
+                alD.setCanceledOnTouchOutside(true)
+                alD.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
+                    alD.cancel()
+                }
+                alD.getButton(DialogInterface.BUTTON_POSITIVE)
+                    .setTextColor(android.graphics.Color.BLACK)
+
+                //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
+                // builder.setNeutralButtonIcon(closImg)
+                //val alertDialog = builder.create()
+                //alertDialog.layoutInflater.inflate(R.layout.image_dialog,null)
+                //alertDialog.setCanceledOnTouchOutside(true)
+                // alertDialog.setButton(R.id.closeImg_btn,"",R.drawable.ic_baseline_close_24.toDrawable(),{ dialog, id ->
+                //    dialog.dismiss()
+                //})
+/*            alertDialog.getButton(R.id.closeImg_btn).setOnClickListener {
+                alertDialog.dismiss()
+            }*/
+                //alertDialog.setContentView(R.layout.image_dialog)
+                /*alertDialog.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
+                alertDialog.dismiss()
+            }*/
+                // alertDialog.show()
+            }
         }
     }
 
@@ -486,6 +538,9 @@ class ChatFromImgItem(val name: String, private val time: String) :
     }
 
 }
+
+
+
 
 /**
  * Класс с конструктором для отображения картинки в исходящем сообщении.

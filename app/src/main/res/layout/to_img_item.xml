@@ -59,7 +59,7 @@
                     android:layout_marginTop="10dp"
                     android:layout_marginEnd="10dp"
                     android:layout_marginBottom="10dp"
-                    android:layout_weight="0.05"
+                    android:layout_weight="1"
                     android:maxWidth="240dp"
                     android:maxHeight="280dp"
                     android:visibility="visible"
