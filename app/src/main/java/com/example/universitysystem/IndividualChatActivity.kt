@@ -3,6 +3,7 @@ package com.example.universitysystem
 import UriPathHelper.UriPathHelper
 import android.Manifest
 import android.app.Activity
+import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -20,6 +21,7 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -89,7 +91,10 @@ class IndividualChatActivity : AppCompatActivity() {
             sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
             findViewById<EditText>(R.id.messageEditText).text.clear()
         }
+
+
     }
+
 
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
@@ -362,12 +367,13 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
+
+            //val intent = Intent(context,ImageActivity::class.java)
+            //context.startActivity(intent)
             val intent = Intent(context,ImageActivity::class.java)
             context.startActivity(intent)
-            //val builder = AlertDialog.Builder(context)
-           // builder.setView(R.layout.image_dialog)
 
-            //builder.setNeutralButton(""){ }
+
             //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
            // builder.setNeutralButtonIcon(closImg)
             //val alertDialog = builder.create()
@@ -392,6 +398,9 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
     }
 
 }
+
+
+
 
 /**
  * Класс с конструктором для отображения картинки в исходящем сообщении.

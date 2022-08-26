@@ -21,10 +21,12 @@
         <activity
             android:name=".ImageActivity"
             android:exported="false"
-            android:theme="@android:style/Theme.Holo.Dialog" />
+            android:theme="@style/Theme.UniversitySystem.NoActionBar"
+             />
         <activity
             android:name=".IndividualChatActivity"
-            android:exported="false" />
+            android:exported="false"
+           />
         <activity
             android:name=".MainActivity"
             android:exported="true"
