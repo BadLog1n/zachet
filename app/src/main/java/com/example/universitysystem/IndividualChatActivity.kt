@@ -11,6 +11,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
@@ -24,6 +25,7 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
+import androidx.core.graphics.drawable.toBitmap
 import androidx.core.graphics.drawable.toDrawable
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -368,6 +370,8 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
             .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
+
+        //viewHolder.itemView.findViewById<ImageView>(R.id.from_img).set
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
 
             //val intent = Intent(context,ImageActivity::class.java)
@@ -390,11 +394,14 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
 
                 var alD = builder.create()
                 alD.show()
+                alD.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                //alD.window.s
                 alD.setCancelable(true)
                 alD.setCanceledOnTouchOutside(true)
                 alD.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
                     alD.cancel()
                 }
+                alD.findViewById<ImageView>(R.id.imageView)?.setImageResource(R.drawable.ic_file_icon)
 
                 alD.getButton(DialogInterface.BUTTON_POSITIVE)
                     .setTextColor(android.graphics.Color.BLACK)
