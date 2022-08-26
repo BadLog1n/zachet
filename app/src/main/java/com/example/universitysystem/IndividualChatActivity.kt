@@ -9,6 +9,7 @@ import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.net.Uri
@@ -373,7 +374,7 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
             //context.startActivity(intent)
 
             activity?.let {
-                val builder = AlertDialog.Builder(it)
+                val builder = AlertDialog.Builder(it, R.style.AlertTheme)
                 // Get the layout inflater
                 val inflater = activity.layoutInflater
 
@@ -386,6 +387,7 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
                             Toast.makeText(context, "saving", Toast.LENGTH_SHORT)
                         })
 
+
                 var alD = builder.create()
                 alD.show()
                 alD.setCancelable(true)
@@ -393,6 +395,7 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
                 alD.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
                     alD.cancel()
                 }
+
                 alD.getButton(DialogInterface.BUTTON_POSITIVE)
                     .setTextColor(android.graphics.Color.BLACK)
 

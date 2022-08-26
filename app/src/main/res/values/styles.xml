@@ -33,4 +33,11 @@
     <style name="AppTheme" parent="Theme.UniversitySystem">
         <item name="bottomSheetDialogTheme">@style/ModalBottomSheetDialog</item>
     </style>
+
+    <style name="AlertTheme" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="android:windowSwipeToDismiss">true</item>
+        <item name="adjustable">true</item>
+        <item name="android:maxResizeWidth"></item>
+        <item name="backgroundColor">@android:color/transparent</item>
+    </style>
 </resources>
