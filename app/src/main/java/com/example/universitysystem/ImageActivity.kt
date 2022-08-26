@@ -89,8 +89,7 @@ class ImageActivity : AppCompatActivity() {
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalFilesDir(
-            this,
+        request.setDestinationInExternalPublicDir(
             destinationDirectory,
             fileName
         )
