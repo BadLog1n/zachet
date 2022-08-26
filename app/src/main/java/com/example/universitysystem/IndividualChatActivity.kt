@@ -386,25 +386,26 @@ class ChatFromImgItem(val image: Drawable, private val time:String, val link:Str
                 // Pass null as the parent view because its going in the dialog layout
                 builder.setView(inflater.inflate(R.layout.image_dialog, null))
                     // Add action buttons
-                    .setPositiveButton("Сохранить",
+                    /*.setPositiveButton("Сохранить",
                         DialogInterface.OnClickListener { dialog, id ->
                             Toast.makeText(context, "saving", Toast.LENGTH_SHORT)
-                        })
+                        })*/
 
 
                 var alD = builder.create()
                 alD.show()
-                alD.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
+                val r:FloatArray = floatArrayOf(00f,00f,00f)
+                alD.getWindow()?.setBackgroundDrawable(ColorDrawable(Color.HSVToColor(80,r)))
                 //alD.window.s
                 alD.setCancelable(true)
                 alD.setCanceledOnTouchOutside(true)
                 alD.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
                     alD.cancel()
                 }
-                alD.findViewById<ImageView>(R.id.imageView)?.setImageResource(R.drawable.ic_file_icon)
 
-                alD.getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setTextColor(android.graphics.Color.BLACK)
+
+                //alD.getButton(DialogInterface.BUTTON_POSITIVE)
+                //    .setTextColor(android.graphics.Color.BLACK)
 
                 //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
                 // builder.setNeutralButtonIcon(closImg)
