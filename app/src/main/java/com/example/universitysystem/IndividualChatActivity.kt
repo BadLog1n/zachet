@@ -227,7 +227,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
                 adapter.add(ChatFromFileItem("name", "12.30", "dundi"))
                 adapter.add(ChatToFileItem("name", "12.30", "dundi"))
-                adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity))
+                adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity, this@IndividualChatActivity))
 
                 rcView.adapter= adapter
                 rcView.scrollToPosition(adapter.itemCount-1)
@@ -362,34 +362,57 @@ class ChatFromFileItem(val name: String, private val time:String, val link:Strin
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val image: Drawable, private val time:String, val link:String, val context: Context): Item<GroupieViewHolder>(){
+class ChatFromImgItem(val image: Drawable, private val time:String, val link:String, val context: Context, val activity: Activity?): Item<GroupieViewHolder>(){
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+            .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
 
             //val intent = Intent(context,ImageActivity::class.java)
             //context.startActivity(intent)
-            val intent = Intent(context,ImageActivity::class.java)
-            context.startActivity(intent)
 
+            activity?.let {
+                val builder = AlertDialog.Builder(it)
+                // Get the layout inflater
+                val inflater = activity.layoutInflater
 
-            //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
-           // builder.setNeutralButtonIcon(closImg)
-            //val alertDialog = builder.create()
-            //alertDialog.layoutInflater.inflate(R.layout.image_dialog,null)
-            //alertDialog.setCanceledOnTouchOutside(true)
-           // alertDialog.setButton(R.id.closeImg_btn,"",R.drawable.ic_baseline_close_24.toDrawable(),{ dialog, id ->
-            //    dialog.dismiss()
-            //})
+                // Inflate and set the layout for the dialog
+                // Pass null as the parent view because its going in the dialog layout
+                builder.setView(inflater.inflate(R.layout.image_dialog, null))
+                    // Add action buttons
+                    .setPositiveButton("Сохранить",
+                        DialogInterface.OnClickListener { dialog, id ->
+                            Toast.makeText(context, "saving", Toast.LENGTH_SHORT)
+                        })
+
+                var alD = builder.create()
+                alD.show()
+                alD.setCancelable(true)
+                alD.setCanceledOnTouchOutside(true)
+                alD.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
+                    alD.cancel()
+                }
+                alD.getButton(DialogInterface.BUTTON_POSITIVE)
+                    .setTextColor(android.graphics.Color.BLACK)
+
+                //val closImg=R.drawable.ic_baseline_close_24.toDrawable()
+                // builder.setNeutralButtonIcon(closImg)
+                //val alertDialog = builder.create()
+                //alertDialog.layoutInflater.inflate(R.layout.image_dialog,null)
+                //alertDialog.setCanceledOnTouchOutside(true)
+                // alertDialog.setButton(R.id.closeImg_btn,"",R.drawable.ic_baseline_close_24.toDrawable(),{ dialog, id ->
+                //    dialog.dismiss()
+                //})
 /*            alertDialog.getButton(R.id.closeImg_btn).setOnClickListener {
                 alertDialog.dismiss()
             }*/
-            //alertDialog.setContentView(R.layout.image_dialog)
-            /*alertDialog.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
+                //alertDialog.setContentView(R.layout.image_dialog)
+                /*alertDialog.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
                 alertDialog.dismiss()
             }*/
-           // alertDialog.show()
+                // alertDialog.show()
+            }
         }
     }
 
