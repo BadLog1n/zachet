@@ -503,6 +503,7 @@ class ChatFromImgItem(val filename: String, private val time:String, val chatNam
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
             .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
 */
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(0)
         displayImage(filename,chatName,viewHolder)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
             /*activity?.let {
@@ -525,7 +526,7 @@ class ChatFromImgItem(val filename: String, private val time:String, val chatNam
                 alD.getButton(DialogInterface.BUTTON_POSITIVE)
                     .setTextColor(Color.BLACK)
             }*/
-            
+
         }
 
     }
