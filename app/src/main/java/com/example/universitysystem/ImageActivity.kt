@@ -1,14 +1,15 @@
 package com.example.universitysystem
 
-import android.app.Activity
-import android.content.DialogInterface
+import android.app.DownloadManager
+import android.content.Context
 import android.graphics.BitmapFactory
-import androidx.appcompat.app.AppCompatActivity
+import android.net.Uri
 import android.os.Bundle
+import android.os.Environment.DIRECTORY_DOWNLOADS
 import android.widget.Button
 import android.widget.ImageButton
-import android.widget.ImageView
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ortiz.touchview.TouchImageView
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+
 class ImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_image)
@@ -28,21 +30,22 @@ class ImageActivity : AppCompatActivity() {
             this.onBackPressed()
         }
         findViewById<Button>(R.id.saveBtn).setOnClickListener {
-            Toast.makeText(this,"Сохранение..",Toast.LENGTH_SHORT).show()
+            download(fileName, chatName)
+            //Toast.makeText(this,"Сохранение..",Toast.LENGTH_SHORT).show()
         }
     }
 
 
     /**
-     * Функция, которая отображает фотографии с сервера в приложении. [filename] - имя файла с расширением,
+     * Функция, которая отображает фотографии с сервера в приложении. [fileName] - имя файла с расширением,
      * [chatName] - имя чата между пользователями.
      * */
-    private fun displayImage(filename: String, chatName: String) = CoroutineScope(Dispatchers.IO).launch {
+    private fun displayImage(fileName: String, chatName: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val imageRef = Firebase.storage.reference
             val imageView = findViewById<TouchImageView>(R.id.bigImg)
             val maxDownloadSize = 5L * 1024 * 1024 * 1024
-            val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
+            val bytes = imageRef.child("$chatName/$fileName").getBytes(maxDownloadSize).await()
             val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             withContext(Dispatchers.Main) {
                 imageView?.setImageBitmap(bmp)
@@ -50,7 +53,48 @@ class ImageActivity : AppCompatActivity() {
         } catch(e: Exception) {
             withContext(Dispatchers.Main) {
                 Toast.makeText(this@ImageActivity, e.message, Toast.LENGTH_LONG).show()
+
             }
         }
     }
+    /**
+     * Функция, позволяющая загружать файлы напрямую в телефон. [filename] - имя файла с расширением,
+     * [chatName] - имя чата между пользователями.
+     * */
+    private fun download(filename: String, chatName: String) {
+
+        val storageRef = Firebase.storage.reference
+        val photoRef = storageRef.child(chatName).child(filename)
+        val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
+
+        photoRef.downloadUrl
+            .addOnSuccessListener { uri ->
+                val url = uri.toString()
+                Toast.makeText(this, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
+                downloadFile(subFileName, DIRECTORY_DOWNLOADS, url)
+            }.addOnFailureListener { }
+
+
+    }
+
+    /**
+     * Расширение функции загрузки фото
+     * */
+    private fun downloadFile(
+        fileName: String,
+        destinationDirectory: String?,
+        url: String?
+    ) {
+        val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
+        val uri = Uri.parse(url)
+        val request = DownloadManager.Request(uri)
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
+        request.setDestinationInExternalFilesDir(
+            this,
+            destinationDirectory,
+            fileName
+        )
+        downloadManager.enqueue(request)
+    }
 }
+
