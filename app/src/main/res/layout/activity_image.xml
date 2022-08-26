@@ -17,31 +17,27 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
-
         app:layout_constraintBottom_toTopOf="@+id/bigImg"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_arrow_back_" />
 
-    <ImageView
+    <com.ortiz.touchview.TouchImageView
         android:id="@+id/bigImg"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="25dp"
-        app:layout_constraintBottom_toTopOf="@id/backFromImgBtn"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        app:srcCompat="@drawable/aesthetic_desert_2560_x_1440" />
+        app:layout_constraintTop_toTopOf="parent">
 
+    </com.ortiz.touchview.TouchImageView>
     <Button
         android:id="@+id/saveBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:background="@color/black"
+        android:background="@color/white"
         android:text="@string/save"
         android:visibility="visible"
         app:layout_constraintBottom_toBottomOf="parent"

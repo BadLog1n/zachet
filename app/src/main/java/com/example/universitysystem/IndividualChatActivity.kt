@@ -506,27 +506,10 @@ class ChatFromImgItem(val filename: String, private val time:String, val chatNam
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(0)
         displayImage(filename,chatName,viewHolder)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
-            /*activity?.let {
-
-                val builder = AlertDialog.Builder(it)
-                val inflater = activity.layoutInflater
-                builder.setView(inflater.inflate(R.layout.image_dialog, null))
-                    .setPositiveButton("Сохранить"
-                    ) { _, _ ->
-                        Toast.makeText(context, "saving", Toast.LENGTH_SHORT).show()
-                    }
-
-                val alD = builder.create()
-                alD.show()
-                alD.setCancelable(true)
-                alD.setCanceledOnTouchOutside(true)
-                alD.findViewById<ImageButton>(R.id.closeImg_btn)?.setOnClickListener {
-                    alD.cancel()
-                }
-                alD.getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setTextColor(Color.BLACK)
-            }*/
-
+            val intent = Intent(context,ImageActivity::class.java)
+            intent.putExtra("chatName",chatName)
+            intent.putExtra("fileName",filename)
+            context.startActivity(intent)
         }
 
     }
