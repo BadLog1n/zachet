@@ -10,6 +10,8 @@ import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.davemorrissey.labs.subscaleview.ImageSource
+import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
 import com.ortiz.touchview.TouchImageView
@@ -43,12 +45,12 @@ class ImageActivity : AppCompatActivity() {
     private fun displayImage(fileName: String, chatName: String) = CoroutineScope(Dispatchers.IO).launch {
         try {
             val imageRef = Firebase.storage.reference
-            val imageView = findViewById<TouchImageView>(R.id.bigImg)
+            val imageView = findViewById<SubsamplingScaleImageView>(R.id.bigImg)
             val maxDownloadSize = 5L * 1024 * 1024 * 1024
             val bytes = imageRef.child("$chatName/$fileName").getBytes(maxDownloadSize).await()
             val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
             withContext(Dispatchers.Main) {
-                imageView?.setImageBitmap(bmp)
+                imageView?.setImage(ImageSource.bitmap(bmp))
             }
         } catch(e: Exception) {
             withContext(Dispatchers.Main) {
