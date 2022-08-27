@@ -208,7 +208,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             }
                         }
                         "file" -> {
-                            val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                            val dt = i.child(dataTime).value.toString()
                             val tx = i.child(text).value.toString()
                             if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(
@@ -232,7 +232,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             Log.d("Message", "Новый файл")
                         }
                         "photo" -> {
-                            val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                            val dt = i.child(dataTime).value.toString()
                             val tx = i.child(text).value.toString()
                             if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(
