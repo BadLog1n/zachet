@@ -34,7 +34,7 @@
         android:id="@+id/from_ms_time_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:maxWidth="50dp"
+        android:maxWidth="200dp"
         android:maxLines="1"
         android:text="12.20"
         android:textSize="12sp"

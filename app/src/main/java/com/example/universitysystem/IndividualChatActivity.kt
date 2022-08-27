@@ -182,7 +182,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 for (i in dataSnapshot.children) {
                     when (i.child(type).value.toString()) {
                         "text" -> {
-                            val dt = i.child(dataTime).value.toString().substringAfter("2022 ")
+                            val dt = i.child(dataTime).value.toString()
                             val tx = i.child(text).value.toString()
 
                             if (i.child(username).value.toString() == sendUser) {
