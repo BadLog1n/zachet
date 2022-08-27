@@ -3,6 +3,8 @@ package com.example.universitysystem
 import android.app.DownloadManager
 import android.content.Context
 import android.graphics.BitmapFactory
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
@@ -24,7 +26,8 @@ import kotlinx.coroutines.withContext
 class ImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_image)
-        window.setBac
+        val r:FloatArray = floatArrayOf(00f,00f,00f)
+        window.setBackgroundDrawable(ColorDrawable(Color.HSVToColor(80,r)))
         val chatName:String = intent.getStringExtra("chatName").toString()
         val fileName:String = intent.getStringExtra("fileName").toString()
         super.onCreate(savedInstanceState)

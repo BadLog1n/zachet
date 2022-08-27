@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@android:color/transparent"
+    android:background="@android:drawable/screen_background_dark_transparent"
     android:orientation="vertical">
 
 
@@ -32,6 +32,7 @@
         android:layout_marginTop="33dp"
         android:layout_marginBottom="20dp"
         android:background="@drawable/arrow_back"
+        android:backgroundTint="@color/grey_mes_edittext"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@id/bigImg"
         app:layout_constraintEnd_toEndOf="parent"
@@ -49,6 +50,7 @@
         android:layout_marginEnd="20dp"
         android:adjustViewBounds="false"
         android:background="@drawable/ic__save"
+        android:backgroundTint="@color/grey_mes_edittext"
         android:scaleType="fitCenter"
         android:visibility="visible"
         app:layout_constraintBottom_toTopOf="@+id/bigImg"
