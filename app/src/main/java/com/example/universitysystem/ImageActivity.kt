@@ -24,6 +24,7 @@ import kotlinx.coroutines.withContext
 class ImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_image)
+        window.setBac
         val chatName:String = intent.getStringExtra("chatName").toString()
         val fileName:String = intent.getStringExtra("fileName").toString()
         super.onCreate(savedInstanceState)
@@ -31,7 +32,7 @@ class ImageActivity : AppCompatActivity() {
        findViewById<ImageButton>(R.id.backFromImgBtn).setOnClickListener {
             this.onBackPressed()
         }
-        findViewById<Button>(R.id.saveBtn).setOnClickListener {
+        findViewById<ImageButton>(R.id.saveImgBtn).setOnClickListener {
             download(fileName, chatName)
             //Toast.makeText(this,"Сохранение..",Toast.LENGTH_SHORT).show()
         }

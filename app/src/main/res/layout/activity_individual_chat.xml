@@ -4,9 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_marginTop="80dp"
-    android:fitsSystemWindows="true"
     android:backgroundTint="@color/light_grey_background"
+    android:fitsSystemWindows="true"
     tools:context=".IndividualChatActivity">
 
 
@@ -35,12 +34,12 @@
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="23dp"
         android:background="@color/grey_mes_edittext"
-        android:tint="@color/light_grey_text"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintHorizontal_bias="0.976"
         app:layout_constraintStart_toStartOf="@+id/messageEditText"
-        app:srcCompat="@drawable/ic___icon__paper_clip_" />
+        app:srcCompat="@drawable/ic___icon__paper_clip_"
+        app:tint="@color/light_grey_text" />
 
     <ImageButton
         android:id="@+id/sendButton"
