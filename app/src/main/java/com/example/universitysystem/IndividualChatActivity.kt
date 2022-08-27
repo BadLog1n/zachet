@@ -108,8 +108,13 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()
-            sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
-            findViewById<EditText>(R.id.messageEditText).text.clear()
+            if (text == ""){
+                Toast.makeText(this, "Пожалуйста, введите сообщение", Toast.LENGTH_SHORT).show()
+            }
+            else {
+                sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
+                findViewById<EditText>(R.id.messageEditText).text.clear()
+            }
         }
 
 
