@@ -2,18 +2,18 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="260dp"
-    android:layout_height="320dp"
-    android:layout_gravity="end">
+    android:layout_width="match_parent"
+    android:layout_height="320dp">
 
 
     <LinearLayout
-        android:layout_width="match_parent"
+        android:layout_width="260dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:gravity="end"
         android:orientation="vertical"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
@@ -34,13 +34,13 @@
                 android:maxLines="1"
                 android:text="12.20"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/linearLayout"
+                app:layout_constraintBottom_toTopOf="@+id/to_img_layout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
 
             <LinearLayout
-                android:id="@+id/linearLayout"
+                android:id="@+id/to_img_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
@@ -73,10 +73,10 @@
                 android:layout_height="30dp"
                 android:indeterminateTint="@color/blue"
                 android:visibility="invisible"
-                app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
-                app:layout_constraintStart_toStartOf="@+id/linearLayout"
-                app:layout_constraintTop_toTopOf="@+id/linearLayout"
+                app:layout_constraintBottom_toBottomOf="@+id/to_img_layout"
+                app:layout_constraintEnd_toEndOf="@+id/to_img_layout"
+                app:layout_constraintStart_toStartOf="@+id/to_img_layout"
+                app:layout_constraintTop_toTopOf="@+id/to_img_layout"
                 app:layout_constraintVertical_bias="0.29000002" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 

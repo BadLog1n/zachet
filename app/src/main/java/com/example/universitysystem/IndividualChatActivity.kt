@@ -236,7 +236,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             val tx = i.child(text).value.toString()
                             if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(
-                                    ChatFromImgItem(
+                                    ChatToImgItem(
                                         tx,
                                         dt,
                                         chatName,
@@ -543,15 +543,42 @@ class ChatFromImgItem(val filename: String, private val time:String, val chatNam
 /**
  * Класс с конструктором для отображения картинки в исходящем сообщении.
  */
-class ChatToImgItem(val name: String, private val time: String) :
+class ChatToImgItem(val filename: String, private val time:String, val chatName: String, val context: Context, val activity: Activity?) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text = name
-        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
-        viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img)
-            .setImageResource(R.drawable.ic_file_icon)
-        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_file_layout).setOnClickListener {
-            TODO()
+
+
+
+        viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
+/*
+        viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+            .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
+*/
+        viewHolder.itemView.findViewById<ImageView>(R.id.to_img).setImageResource(0)
+        displayImage(filename,chatName,viewHolder)
+        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).setOnClickListener {
+            val intent = Intent(context,ImageActivity::class.java)
+            intent.putExtra("chatName",chatName)
+            intent.putExtra("fileName",filename)
+            context.startActivity(intent)
+        }
+    }
+    private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) = CoroutineScope(Dispatchers.IO).launch {
+        try {
+            val imageRef = Firebase.storage.reference
+            val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
+            val maxDownloadSize = 5L * 1024 * 1024 * 1024
+            val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
+            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+            withContext(Dispatchers.Main) {
+                viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
+                    .setImageBitmap(bmp)
+                //imageView?.setImageBitmap(bmp)
+            }
+        } catch(e: Exception) {
+            withContext(Dispatchers.Main) {
+                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+            }
         }
     }
 
