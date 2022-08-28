@@ -8,25 +8,25 @@
 
 
     <ImageButton
-        android:id="@+id/backFromChatBtn"
+        android:id="@+id/menuFromChatsBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/receiver_tv"
+        app:layout_constraintEnd_toStartOf="@+id/chats_tv"
         app:layout_constraintHorizontal_bias="0.228"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.499"
-        app:srcCompat="@drawable/ic_arrow_back_" />
+        app:srcCompat="@drawable/ic___icon__menu_unfold_line_" />
 
     <TextView
-        android:id="@+id/receiver_tv"
+        android:id="@+id/chats_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:fontFamily="@font/inter"
         android:gravity="center"
-        android:text="Имя получателя"
+        android:text="@string/chats"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"

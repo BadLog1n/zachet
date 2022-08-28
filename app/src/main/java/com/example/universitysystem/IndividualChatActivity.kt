@@ -65,7 +65,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this)
-        findViewById<TextView>(R.id.receiverName_tv).text = ""
+        findViewById<TextView>(R.id.receiver_tv).text = ""
 
 
 
@@ -74,9 +74,9 @@ class IndividualChatActivity : AppCompatActivity() {
         requestToDatabase.addOnSuccessListener {
             val displayName =
                 it.child("name").value.toString() + " " + it.child("surname").value.toString()
-            findViewById<TextView>(R.id.receiverName_tv).text = displayName
+            findViewById<TextView>(R.id.receiver_tv).text = displayName
         }
-        findViewById<ImageButton>(R.id.backButton).setOnClickListener {
+        findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
             onBackPressed()
         }
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {

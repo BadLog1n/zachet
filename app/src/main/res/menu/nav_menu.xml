@@ -7,6 +7,10 @@
         android:id="@+id/grades_menu"
         android:icon="@drawable/ic___icon__graph_bar_">
     </item>
+    <item android:title="@string/chats"
+        android:id="@+id/chats_menu"
+        android:icon="@drawable/ic___icon__chat_">
+    </item>
     <item android:title="@string/settings"
         android:id="@+id/settings_menu"
         android:icon="@drawable/ic_clarity_settings_line">
