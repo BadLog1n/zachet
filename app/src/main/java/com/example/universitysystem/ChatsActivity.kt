@@ -30,11 +30,7 @@ class ChatsActivity : AppCompatActivity() {
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = LinearLayoutManager(this)
 
-        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        findViewById<android.widget.SearchView>(R.id.chats_searchView).apply {
-            setSearchableInfo(searchManager.getSearchableInfo(componentName))
-            setIconifiedByDefault(false)
-        }
+
         findViewById<ImageButton>(R.id.menuFromChatsBtn).setOnClickListener {
             val intent =Intent(this,MainActivity::class.java)
             intent.putExtra("from_chats",true)
