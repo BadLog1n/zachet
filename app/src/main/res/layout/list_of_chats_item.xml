@@ -74,6 +74,13 @@
             android:textColor="@color/black"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/getUser"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            android:visibility="gone" />
+
     </LinearLayout>
 
     <View

@@ -1,12 +1,16 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.content.Intent
+import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageButton
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.ListOfChatsItemBinding
-import com.example.universitysystem.databinding.SubjectGradesItemBinding
 
 class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
     var chatsList = ArrayList<ChatPreview>()
@@ -16,12 +20,23 @@ class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
             receiverName.text = chatPreview.receiverName
             latestMsgTimeTv.text=chatPreview.latestMsgTime
             latestMsgTv.text=chatPreview.latestMsg
+            if (chatPreview.newMsg) {
+                latestMsgTv.typeface = Typeface.DEFAULT_BOLD
+            }
+            getUser.text = chatPreview.getUser
         }
+
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatsHolder {
+
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_of_chats_item,parent,false)
-        return ChatsAdapter.ChatsHolder(view)
+        view.findViewById<LinearLayout>(R.id.linearLayout).setOnClickListener {
+            val intent = Intent(parent.context,IndividualChatActivity::class.java)
+            intent.putExtra("getUser",view.findViewById<TextView>(R.id.getUser).text)
+            parent.context.startActivity(intent)
+        }
+        return ChatsHolder(view)
     }
 
     override fun onBindViewHolder(holder: ChatsHolder, position: Int) {

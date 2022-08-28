@@ -27,9 +27,9 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import chatsPackage.chatsPackage
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
-import com.google.firebase.storage.FirebaseStorage
 import com.google.firebase.storage.ktx.storage
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -39,9 +39,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
 
 class IndividualChatActivity : AppCompatActivity() {
@@ -50,6 +47,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private var getName = ""
     private lateinit var database: DatabaseReference
     private val storagePermissionCode = 0
+    private val chatsPackage = chatsPackage()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -160,7 +158,7 @@ class IndividualChatActivity : AppCompatActivity() {
             if (text == "") {
                 Toast.makeText(this, "Пожалуйста, введите сообщение", Toast.LENGTH_SHORT).show()
             } else {
-                sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
+                chatsPackage.sendMessage(sendName, getName, text, "text", chatsPackage.getChatName(sendName, getName))
                 findViewById<EditText>(R.id.messageEditText).text.clear()
             }
         }
@@ -199,14 +197,14 @@ class IndividualChatActivity : AppCompatActivity() {
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriPathHelper.getPathFromUri(this, data.data!!)!!.toString()
                     val subFile = filePath.substring(filePath.lastIndexOf("/") + 1)
-                    val chatName = getChatName(sendName, getName)
+                    val chatName = chatsPackage.getChatName(sendName, getName)
                     val currentTimestamp = System.currentTimeMillis().toString()
 
-                    putFile(filePath, chatName, currentTimestamp)
-                    sendMessage(
+                    chatsPackage.putFile(filePath, chatName, currentTimestamp)
+                    chatsPackage.sendMessage(
                         sendName,
                         getName,
-                        chatName = getChatName(sendName, getName),
+                        chatName = chatsPackage.getChatName(sendName, getName),
                         type = typeOfFile,
                         text = "$currentTimestamp/$subFile"
                     )
@@ -217,23 +215,11 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
 
-    /**
-     * Функция, которая загружает файл на сервер. [file] - путь к файлу на телефоне, [chatName] -
-     * название чата между пользователями, [currentTimestamp] - штамп о времени отправления сообщения.
-     * */
-    private fun putFile(file: String, chatName: String, currentTimestamp: String) {
-        val refStorageRoot = FirebaseStorage.getInstance().reference
-        val putPath =
-            refStorageRoot.child(chatName)
-        val uriFile = Uri.fromFile(File(file))
-        val subFile = file.substring(file.lastIndexOf("/") + 1)
 
-        putPath.child(currentTimestamp).child(subFile).putFile(uriFile)
-    }
 
 
     private fun addPostEventListener(sendUser: String, getUser: String) {
-        val chatName = getChatName(sendUser, getUser)
+        val chatName = chatsPackage.getChatName(sendUser, getUser)
         val postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
@@ -243,7 +229,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 val text = "text"
                 val type = "type"
                 val dataTime = "dataTime"
-                updateChat(sendUser, getUser, false)
+                chatsPackage.updateChat(sendUser, getUser, false)
                 // Get Post object and use the values to update the UI
                 // val post = dataSnapshot.value
                 //Log.w("T", "$post")
@@ -325,55 +311,7 @@ class IndividualChatActivity : AppCompatActivity() {
     }
 
 
-    private fun getChatName(sendUser: String, getUser: String): String {
-        return if (sendUser > getUser) "$getUser$sendUser" else "$sendUser$getUser"
-    }
 
-    /**
-     * Функция, которая отправляет новое сообщение.
-     * [sendUser] пользователь приложения, [getUser] собеседник пользователя,
-     * [text] - текст сообщения, [type] - тип сообщения, [chatName] - название чата между собеседниками(
-     * подробнее в функции getChatName)
-     * */
-    @RequiresApi(Build.VERSION_CODES.O)
-    private fun sendMessage(
-        sendUser: String,
-        getUser: String,
-        text: String,
-        type: String,
-        chatName: String
-    ) {
-        val dateTime =
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:MM:ss"))
-
-        updateChat(sendUser, getUser, true)
-        database = FirebaseDatabase.getInstance().getReference("chatMessages")
-        val message = mapOf(
-            "text" to text,
-            "type" to type,
-            "username" to sendUser,
-            "dataTime" to dateTime.toString(),
-        )
-        val currentTimestamp = System.currentTimeMillis().toString()
-        database.child(chatName).child(currentTimestamp).updateChildren(message)
-    }
-
-
-    /**
-     *  Функция, которая создаёт запись о существовании чата между пользователем [sendUser]
-     *  и собеседником пользователя [getUser]. Параметр [isSend] определяет, было ли это
-     *  отправлением сообщения или сообщение просто прочитали.
-     *  @param isSend
-     *  True - сообщение отправлено и у собеседника новое непрочитанное.
-     *  False - чат просто открыт или сообщение прочитано.
-     * */
-    private fun updateChat(sendUser: String, getUser: String, isSend: Boolean) {
-        database = FirebaseDatabase.getInstance().getReference("chatMembers")
-        database.child(sendUser).child(getUser).setValue("true")
-        if (isSend) {
-            database.child(getUser).child(sendUser).setValue("false")
-        }
-    }
 
 
     override fun onRequestPermissionsResult(

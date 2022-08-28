@@ -22,6 +22,7 @@
         >
 
         <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/testInput"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@drawable/message_edittext"
@@ -32,6 +33,14 @@
             android:textColorHint="@color/light_grey_text"
             android:textColorLink="#afdafc"
             android:textSize="18sp" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
+
     </com.google.android.material.textfield.TextInputLayout>
 
     <androidx.recyclerview.widget.RecyclerView
