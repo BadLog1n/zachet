@@ -1,32 +1,30 @@
 package com.example.universitysystem
 
 import UriPathHelper.UriPathHelper
+import android.Manifest
 import android.app.Activity
 import android.app.DownloadManager
-import android.app.Dialog
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
 import android.graphics.BitmapFactory
 import android.graphics.Color
-import android.graphics.drawable.Drawable
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
+import android.os.Environment.isExternalStorageManager
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
-import androidx.core.graphics.drawable.toDrawable
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.*
@@ -51,6 +49,12 @@ class IndividualChatActivity : AppCompatActivity() {
     private var sendName = ""
     private var getName = ""
     private lateinit var database: DatabaseReference
+    private val storagePermissionCode = 0
+    val mainfestRead = Manifest.permission.READ_EXTERNAL_STORAGE
+    val mainfestWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
+
+    @RequiresApi(Build.VERSION_CODES.R)
+    val mainfestManage = Manifest.permission.MANAGE_EXTERNAL_STORAGE
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,26 +85,72 @@ class IndividualChatActivity : AppCompatActivity() {
             onBackPressed()
         }
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
-            //Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
-            val builder = AlertDialog.Builder(this)
-            builder.setPositiveButton("Фото") { _, _ ->
+            try {
+                if ((ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.READ_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
+                        this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED))
+                ) {
+                    ActivityCompat.requestPermissions(
+                        this,
+                        arrayOf(
+                            Manifest.permission.READ_EXTERNAL_STORAGE,
+                            Manifest.permission.WRITE_EXTERNAL_STORAGE
+                        ),
+                        storagePermissionCode
+                    )
+                } else {
 
-                pickFileOrPhoto(false)
-            }
-            builder.setNeutralButton("Файл") { _, _ ->
-                pickFileOrPhoto(true)
-            }
-            val alertDialog = builder.create()
-            alertDialog.show()
+                    //Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
+                    val builder = AlertDialog.Builder(this)
+                    builder.setPositiveButton("Фото") { _, _ ->
 
-            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            with(autoBtn) {
-                setTextColor(Color.BLACK)
+                        pickFileOrPhoto(false)
+
+                    }
+                    builder.setNeutralButton("Файл") { _, _ ->
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                if (!isExternalStorageManager()) {
+                                    Toast.makeText(
+                                        this,
+                                        "Вам необходимо выдать разрешение на работу с памятью в настройках," +
+                                                "чтобы загружать файлы",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    pickFileOrPhoto(true)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this, "Нет доступа к памяти", Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+
+                    }
+                    val alertDialog = builder.create()
+                    alertDialog.show()
+
+                    val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    with(autoBtn) {
+                        setTextColor(Color.BLACK)
+                    }
+                    val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+                    with(userBtn) {
+                        setTextColor(Color.BLACK)
+                    }
+                }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this, "Нет доступа к памяти", Toast.LENGTH_SHORT
+                ).show()
             }
-            val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-            with(userBtn) {
-                setTextColor(Color.BLACK)
-            }
+
 
         }
         findViewById<ImageButton>(R.id.clipButton).setOnLongClickListener {
@@ -112,10 +162,9 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {
 
             val text = findViewById<EditText>(R.id.messageEditText).text.toString()
-            if (text == ""){
+            if (text == "") {
                 Toast.makeText(this, "Пожалуйста, введите сообщение", Toast.LENGTH_SHORT).show()
-            }
-            else {
+            } else {
                 sendMessage(sendName, getName, text, "text", getChatName(sendName, getName))
                 findViewById<EditText>(R.id.messageEditText).text.clear()
             }
@@ -302,7 +351,8 @@ class IndividualChatActivity : AppCompatActivity() {
         type: String,
         chatName: String
     ) {
-        val dateTime = LocalDateTime.now().format(DateTimeFormatter.ofPattern("d/m/y hh:mm:ss"))
+        val dateTime =
+            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:MM:ss"))
 
         updateChat(sendUser, getUser, true)
         database = FirebaseDatabase.getInstance().getReference("chatMessages")
@@ -330,6 +380,24 @@ class IndividualChatActivity : AppCompatActivity() {
         database.child(sendUser).child(getUser).setValue("true")
         if (isSend) {
             database.child(getUser).child(sendUser).setValue("false")
+        }
+    }
+
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray,
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        if (requestCode == storagePermissionCode) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                Toast.makeText(this, "Разрешение получено", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(
+                    this, "Нет доступа к памяти", Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -503,7 +571,13 @@ class ChatFromFileItem(
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
-class ChatFromImgItem(val filename: String, private val time:String, val chatName: String, val context: Context, val activity: Activity?): Item<GroupieViewHolder>(){
+class ChatFromImgItem(
+    val filename: String,
+    private val time: String,
+    val chatName: String,
+    val context: Context,
+    val activity: Activity?
+) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
@@ -512,33 +586,35 @@ class ChatFromImgItem(val filename: String, private val time:String, val chatNam
             .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
 */
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(0)
-        displayImage(filename,chatName,viewHolder)
+        displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
-            val intent = Intent(context,ImageActivity::class.java)
-            intent.putExtra("chatName",chatName)
-            intent.putExtra("fileName",filename)
+            val intent = Intent(context, ImageActivity::class.java)
+            intent.putExtra("chatName", chatName)
+            intent.putExtra("fileName", filename)
             context.startActivity(intent)
         }
 
     }
-    private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val imageRef = Firebase.storage.reference
-            val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
-            val maxDownloadSize = 5L * 1024 * 1024 * 1024
-            val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
-            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            withContext(Dispatchers.Main) {
-                viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
-                    .setImageBitmap(bmp)
-                //imageView?.setImageBitmap(bmp)
-            }
-        } catch(e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+
+    private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val imageRef = Firebase.storage.reference
+                val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+                val maxDownloadSize = 5L * 1024 * 1024 * 1024
+                val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
+                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                withContext(Dispatchers.Main) {
+                    viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+                        .setImageBitmap(bmp)
+                    //imageView?.setImageBitmap(bmp)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
-    }
 
     override fun getLayout(): Int {
         return R.layout.from_img_item
@@ -547,15 +623,18 @@ class ChatFromImgItem(val filename: String, private val time:String, val chatNam
 }
 
 
-
-
 /**
  * Класс с конструктором для отображения картинки в исходящем сообщении.
  */
-class ChatToImgItem(val filename: String, private val time:String, val chatName: String, val context: Context, val activity: Activity?) :
+class ChatToImgItem(
+    val filename: String,
+    private val time: String,
+    val chatName: String,
+    val context: Context,
+    val activity: Activity?
+) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-
 
 
         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
@@ -564,32 +643,34 @@ class ChatToImgItem(val filename: String, private val time:String, val chatName:
             .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
 */
         viewHolder.itemView.findViewById<ImageView>(R.id.to_img).setImageResource(0)
-        displayImage(filename,chatName,viewHolder)
+        displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).setOnClickListener {
-            val intent = Intent(context,ImageActivity::class.java)
-            intent.putExtra("chatName",chatName)
-            intent.putExtra("fileName",filename)
+            val intent = Intent(context, ImageActivity::class.java)
+            intent.putExtra("chatName", chatName)
+            intent.putExtra("fileName", filename)
             context.startActivity(intent)
         }
     }
-    private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val imageRef = Firebase.storage.reference
-            val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
-            val maxDownloadSize = 5L * 1024 * 1024 * 1024
-            val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
-            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            withContext(Dispatchers.Main) {
-                viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
-                    .setImageBitmap(bmp)
-                //imageView?.setImageBitmap(bmp)
-            }
-        } catch(e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+
+    private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val imageRef = Firebase.storage.reference
+                val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
+                val maxDownloadSize = 5L * 1024 * 1024 * 1024
+                val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
+                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                withContext(Dispatchers.Main) {
+                    viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
+                        .setImageBitmap(bmp)
+                    //imageView?.setImageBitmap(bmp)
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
+                }
             }
         }
-    }
 
     override fun getLayout(): Int {
         return R.layout.to_img_item
