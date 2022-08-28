@@ -50,11 +50,6 @@ class IndividualChatActivity : AppCompatActivity() {
     private var getName = ""
     private lateinit var database: DatabaseReference
     private val storagePermissionCode = 0
-    val mainfestRead = Manifest.permission.READ_EXTERNAL_STORAGE
-    val mainfestWrite = Manifest.permission.WRITE_EXTERNAL_STORAGE
-
-    @RequiresApi(Build.VERSION_CODES.R)
-    val mainfestManage = Manifest.permission.MANAGE_EXTERNAL_STORAGE
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -317,9 +312,6 @@ class IndividualChatActivity : AppCompatActivity() {
                         }
                     }
                 }
-
-                //adapter.add(ChatFromImgItem((R.drawable.aesthetic_desert_2560_x_1440).toDrawable(),"12.40","dhidj",this@IndividualChatActivity, this@IndividualChatActivity))
-
                 rcView.adapter = adapter
                 rcView.scrollToPosition(adapter.itemCount - 1)
             }
@@ -572,11 +564,11 @@ class ChatFromFileItem(
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
 class ChatFromImgItem(
-    val filename: String,
+    private val filename: String,
     private val time: String,
-    val chatName: String,
+    private val chatName: String,
     val context: Context,
-    val activity: Activity?
+    private val activity: Activity?
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
 
@@ -600,7 +592,6 @@ class ChatFromImgItem(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val imageRef = Firebase.storage.reference
-                val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
                 val maxDownloadSize = 5L * 1024 * 1024 * 1024
                 val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
@@ -627,11 +618,11 @@ class ChatFromImgItem(
  * Класс с конструктором для отображения картинки в исходящем сообщении.
  */
 class ChatToImgItem(
-    val filename: String,
+    private val filename: String,
     private val time: String,
-    val chatName: String,
+    private val chatName: String,
     val context: Context,
-    val activity: Activity?
+    private val activity: Activity?
 ) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -656,7 +647,6 @@ class ChatToImgItem(
         CoroutineScope(Dispatchers.IO).launch {
             try {
                 val imageRef = Firebase.storage.reference
-                val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
                 val maxDownloadSize = 5L * 1024 * 1024 * 1024
                 val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
