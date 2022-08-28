@@ -46,11 +46,12 @@ class ChatsActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.menuFromChatsBtn).setOnClickListener {
             onBackPressed()
         }
+
         findViewById<Button>(R.id.button).setOnClickListener {
             val intent =Intent(this,IndividualChatActivity::class.java)
             intent.putExtra("getUser",findViewById<EditText>(R.id.testInput).text)
             startActivity(intent)
-            TODO("Сделать проверку на существование аккаунта")
+            //("Сделать проверку на существование аккаунта")
         }
 
     }
