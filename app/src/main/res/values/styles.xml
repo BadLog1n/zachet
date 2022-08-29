@@ -33,4 +33,5 @@
     <style name="AppTheme" parent="Theme.UniversitySystem">
         <item name="bottomSheetDialogTheme">@style/ModalBottomSheetDialog</item>
     </style>
+
 </resources>

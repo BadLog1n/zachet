@@ -3,18 +3,22 @@ package com.example.universitysystem
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
-import android.widget.TextView
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import chatsPackage.chatsPackage
-import com.google.firebase.database.*
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
-class ChatsActivity : AppCompatActivity() {
+
+class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private val chatsPackage = chatsPackage()
 
@@ -22,18 +26,19 @@ class ChatsActivity : AppCompatActivity() {
 
     var sendName = ""
     private var rcAdapter = ChatsAdapter()
-    override fun onCreate(savedInstanceState: Bundle?) {
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         rcAdapter.clearRecords()
-        val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings",
+            AppCompatActivity.MODE_PRIVATE
+        )
         sendName = sharedPref?.getString("save_userid", "").toString()
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_chats)
-        supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.chats_action_bar)
-        supportActionBar?.show()
+        val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
+        recyclerView.layoutManager = LinearLayoutManager(this@ChatsFragment.context)
 
-        val recyclerView: RecyclerView = findViewById(R.id.chatsRcView)
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        /*supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+        supportActionBar?.setCustomView(R.layout.chats_action_bar)
+        supportActionBar?.show()*/
 
         rcAdapter.clearRecords()
         rcAdapter.chatsList = ArrayList()
@@ -41,21 +46,20 @@ class ChatsActivity : AppCompatActivity() {
         recyclerView.adapter = rcAdapter
         initChatsRc()
         recyclerView.adapter = rcAdapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager = LinearLayoutManager(this@ChatsFragment.context)
 
-        findViewById<ImageButton>(R.id.menuFromChatsBtn).setOnClickListener {
-            onBackPressed()
+        activity?.findViewById<ImageButton>(R.id.menuFromChatsBtn)?.setOnClickListener {
+            activity?.onBackPressed()
         }
 
-        findViewById<Button>(R.id.button).setOnClickListener {
-            val intent =Intent(this,IndividualChatActivity::class.java)
-            intent.putExtra("getUser",findViewById<EditText>(R.id.testInput).text)
+        view.findViewById<Button>(R.id.button).setOnClickListener {
+
+            val intent = Intent(this@ChatsFragment.context,IndividualChatActivity::class.java)
+            intent.putExtra("getUser",view.findViewById<EditText>(R.id.searchTxtInput).text)
             startActivity(intent)
             //("Сделать проверку на существование аккаунта")
         }
-
     }
-
     private fun initChatsRc() {
         getUsersChats(sendName)
     }
@@ -121,5 +125,15 @@ class ChatsActivity : AppCompatActivity() {
         }
 
     }
+
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        // Inflate the layout for this fragment
+        return inflater.inflate(R.layout.fragment_chats, container, false)
+    }
+
+
 
 }

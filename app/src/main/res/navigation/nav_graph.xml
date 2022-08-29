@@ -35,4 +35,9 @@
         android:name="com.example.universitysystem.LogoutFragment"
         android:label="fragment_logout"
         tools:layout="@layout/fragment_logout" />
+    <fragment
+        android:id="@+id/chatsFragment"
+        android:name="com.example.universitysystem.ChatsFragment"
+        android:label="fragment_chats"
+        tools:layout="@layout/fragment_chats" />
 </navigation>

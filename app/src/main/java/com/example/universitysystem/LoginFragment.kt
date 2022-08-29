@@ -35,13 +35,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
 
-        activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+        //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+        //requireActivity().actionBar?.hide()
 
         if (sharedPref?.getBoolean(checkSettings, false) == true) {
             loadSettings()
             view.hideKeyboard()
             sharedPref.edit()?.putBoolean(checkLogin, true)?.apply()
-            activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             findNavController().navigate(R.id.gradesFragment)
         }
 
@@ -56,6 +57,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     view.hideKeyboard()
                     sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
                     activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                    mainActionBar.show()
+
                     activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
                     findNavController().navigate(R.id.gradesFragment)
                 }
