@@ -35,10 +35,11 @@
         <activity
             android:name=".ImageActivity"
             android:exported="false"
-            android:theme="@style/Theme.UniversitySystem.NoActionBar" />
+            android:theme="@style/Theme.UniversitySystem" />
         <activity
             android:name=".IndividualChatActivity"
-            android:exported="false" />
+            android:exported="false"
+            android:theme="@style/Theme.UniversitySystem.ActionBar"/>
         <activity
             android:name=".MainActivity"
             android:exported="true"
