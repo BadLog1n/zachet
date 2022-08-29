@@ -8,6 +8,7 @@ import android.util.Log
 import android.widget.Button
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -50,9 +51,20 @@ class ChatsActivity : AppCompatActivity() {
         }
 
         findViewById<Button>(R.id.button).setOnClickListener {
-            val intent =Intent(this,IndividualChatActivity::class.java)
-            intent.putExtra("getUser",findViewById<EditText>(R.id.testInput).text)
-            startActivity(intent)
+            val user = findViewById<EditText>(R.id.testInput).text.toString()
+            database = FirebaseDatabase.getInstance().getReference("users")
+            database.child(user).get().addOnSuccessListener {
+                if (it.exists()) {
+                    val intent =Intent(this,IndividualChatActivity::class.java)
+                    intent.putExtra("getUser",user)
+                    startActivity(intent)
+                }
+                else{
+                    Toast.makeText(this, "Пользователя не существует", Toast.LENGTH_SHORT).show()
+                }
+            }
+
+
             //("Сделать проверку на существование аккаунта")
         }
 
