@@ -55,4 +55,8 @@ class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
     fun clearRecords(){
         chatsList.removeAll(chatsList.toSet())
     }
+
+    fun removeObject(chatPreview: ChatPreview){
+        chatsList.remove(chatPreview)
+    }
 }
