@@ -2,6 +2,7 @@ package com.example.universitysystem
 
 import UriPathHelper.UriPathHelper
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
@@ -41,6 +42,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
+import java.sql.Timestamp
+import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDate
+import java.time.ZoneId
+import java.util.*
 import java.util.concurrent.Executors
 
 
@@ -227,6 +234,8 @@ class IndividualChatActivity : AppCompatActivity() {
     private fun addPostEventListener(sendUser: String, getUser: String) {
         val chatName = chatsPackage.getChatName(sendUser, getUser)
         val postListener = object : ValueEventListener {
+            @RequiresApi(Build.VERSION_CODES.O)
+            @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
                 rcView.layoutManager = LinearLayoutManager(this@IndividualChatActivity)
@@ -241,9 +250,11 @@ class IndividualChatActivity : AppCompatActivity() {
                 //Log.w("T", "$post")
 
                 for (i in dataSnapshot.children) {
+                    val simpleDateFormat = SimpleDateFormat("dd MM yyyy, HH:mm:ss")
+            //        val dt = simpleDateFormat.format(Timestamp(i.key.toString()))
+                   val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong())).toString()
                     when (i.child(type).value.toString()) {
                         "text" -> {
-                            val dt = i.child(dataTime).value.toString()
                             val tx = i.child(text).value.toString()
 
                             if (i.child(username).value.toString() == sendUser) {
@@ -253,7 +264,6 @@ class IndividualChatActivity : AppCompatActivity() {
                             }
                         }
                         "file" -> {
-                            val dt = i.child(dataTime).value.toString()
                             val tx = i.child(text).value.toString()
                             if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(
@@ -277,7 +287,6 @@ class IndividualChatActivity : AppCompatActivity() {
                             Log.d("Message", "Новый файл")
                         }
                         "photo" -> {
-                            val dt = i.child(dataTime).value.toString()
                             val tx = i.child(text).value.toString()
                             if (i.child(username).value.toString() == sendUser) {
                                 adapter.add(
