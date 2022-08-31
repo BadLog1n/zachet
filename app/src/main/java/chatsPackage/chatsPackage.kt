@@ -1,16 +1,12 @@
 package chatsPackage
 
 import android.net.Uri
-import android.os.Build
-import androidx.annotation.RequiresApi
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.storage.FirebaseStorage
 import java.io.File
-import java.time.LocalDateTime
-import java.time.format.DateTimeFormatter
 
-class chatsPackage {
+class ChatsPackage {
     private lateinit var database: DatabaseReference
 
     /**
@@ -39,7 +35,6 @@ class chatsPackage {
      * [text] - текст сообщения, [type] - тип сообщения, [chatName] - название чата между собеседниками(
      * подробнее в функции getChatName)
      * */
-    @RequiresApi(Build.VERSION_CODES.O)
     fun sendMessage(
         sendUser: String,
         getUser: String,
@@ -47,19 +42,16 @@ class chatsPackage {
         type: String,
         chatName: String
     ) {
-        val dateTime =
-            LocalDateTime.now().format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:MM:ss"))
-
-        updateChat(sendUser, getUser, true)
         database = FirebaseDatabase.getInstance().getReference("chatMessages")
         val message = mapOf(
             "text" to text,
             "type" to type,
             "username" to sendUser,
-            "dataTime" to dateTime.toString(),
         )
         val currentTimestamp = System.currentTimeMillis().toString()
         database.child(chatName).child(currentTimestamp).updateChildren(message)
+        updateChat(sendUser, getUser, true, currentTimestamp)
+
     }
 
 
@@ -71,11 +63,13 @@ class chatsPackage {
      *  True - сообщение отправлено и у собеседника новое непрочитанное.
      *  False - чат просто открыт или сообщение прочитано.
      * */
-    fun updateChat(sendUser: String, getUser: String, isSend: Boolean) {
+    fun updateChat(sendUser: String, getUser: String, isSend: Boolean, lastMsg: String = "") {
         database = FirebaseDatabase.getInstance().getReference("chatMembers")
-        database.child(sendUser).child(getUser).setValue("true")
+        database.child(sendUser).child(getUser).child("isRead").setValue("true")
+        database.child(sendUser).child(getUser).child("lastMsg").setValue(lastMsg)
         if (isSend) {
-            database.child(getUser).child(sendUser).setValue("false")
+            database.child(getUser).child(sendUser).child("isRead").setValue("false")
+            database.child(getUser).child(sendUser).child("lastMsg").setValue(lastMsg)
         }
     }
 

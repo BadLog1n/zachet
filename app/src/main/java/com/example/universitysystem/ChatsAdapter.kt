@@ -20,9 +20,7 @@ class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
             receiverName.text = chatPreview.receiverName
             latestMsgTimeTv.text=chatPreview.latestMsgTime
             latestMsgTv.text=chatPreview.latestMsg
-/*            if (chatPreview.newMsg) {
-                latestMsgTv.typeface = Typeface.DEFAULT_BOLD
-            }*/
+            latestMsgTv.typeface = if (!chatPreview.newMsg) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
             getUser.text = chatPreview.getUser
         }
 

@@ -30,7 +30,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import chatsPackage.chatsPackage
+import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -53,7 +53,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private var getName = ""
     private lateinit var database: DatabaseReference
     private val storagePermissionCode = 0
-    private val chatsPackage = chatsPackage()
+    private val chatsPackage = ChatsPackage()
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -174,7 +174,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 findViewById<EditText>(R.id.messageEditText).text.clear()
             }
         }
-
+        chatsPackage.updateChat(sendName, getName, false)
 
     }
 
@@ -238,10 +238,10 @@ class IndividualChatActivity : AppCompatActivity() {
                 val username = "username"
                 val text = "text"
                 val type = "type"
-                chatsPackage.updateChat(sendUser, getUser, false)
                 for (i in dataSnapshot.children) {
-                    SimpleDateFormat("dd MM yyyy, HH:mm:ss")
                    val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong())).toString()
+
+
                     when (i.child(type).value.toString()) {
                         "text" -> {
                             val tx = i.child(text).value.toString()
