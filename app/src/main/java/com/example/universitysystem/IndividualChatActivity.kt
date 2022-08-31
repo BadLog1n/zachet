@@ -42,11 +42,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
-import java.sql.Timestamp
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDate
-import java.time.ZoneId
 import java.util.*
 import java.util.concurrent.Executors
 
@@ -234,7 +230,6 @@ class IndividualChatActivity : AppCompatActivity() {
     private fun addPostEventListener(sendUser: String, getUser: String) {
         val chatName = chatsPackage.getChatName(sendUser, getUser)
         val postListener = object : ValueEventListener {
-            @RequiresApi(Build.VERSION_CODES.O)
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
@@ -243,15 +238,9 @@ class IndividualChatActivity : AppCompatActivity() {
                 val username = "username"
                 val text = "text"
                 val type = "type"
-                val dataTime = "dataTime"
                 chatsPackage.updateChat(sendUser, getUser, false)
-                // Get Post object and use the values to update the UI
-                // val post = dataSnapshot.value
-                //Log.w("T", "$post")
-
                 for (i in dataSnapshot.children) {
-                    val simpleDateFormat = SimpleDateFormat("dd MM yyyy, HH:mm:ss")
-            //        val dt = simpleDateFormat.format(Timestamp(i.key.toString()))
+                    SimpleDateFormat("dd MM yyyy, HH:mm:ss")
                    val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong())).toString()
                     when (i.child(type).value.toString()) {
                         "text" -> {
@@ -520,11 +509,9 @@ class ChatFromImgItem(
     val context: Context,
     private val activity: Activity?
 ) : Item<GroupieViewHolder>() {
-
+    private var trying = 3
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        var trying = 3
-        viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
-
+        trying = 3
         viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(0)
         displayImage(filename, chatName, viewHolder)
         if (trying >= 0) {
@@ -535,11 +522,12 @@ class ChatFromImgItem(
             CoroutineScope(Dispatchers.Main).launch {
                 executor.execute {
                     while (trying > 0) {
-                        Thread.sleep(5000)
+
                         Handler(Looper.getMainLooper()).post {
 
                             displayImage(filename, chatName, viewHolder)
                         }
+                        Thread.sleep(5000)
                         trying -= 1
                     }
                     if (trying == 0) {
@@ -549,13 +537,14 @@ class ChatFromImgItem(
                                 "Ошибка загрузки миниатюры. Пожалуйста перезайдите в чат",
                                 Toast.LENGTH_SHORT
                             ).show()
-                            viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
+                            viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
                                 "Ошибка загрузки"
                         }
                     }
                 }
 
             }
+
         }
 
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).setOnClickListener {
@@ -569,6 +558,7 @@ class ChatFromImgItem(
 
     private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
         CoroutineScope(Dispatchers.IO).launch {
+
             try {
                 val imageRef = Firebase.storage.reference
                 val maxDownloadSize = 5L * 1024 * 1024 * 1024
@@ -577,14 +567,12 @@ class ChatFromImgItem(
                 withContext(Dispatchers.Main) {
                     viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
                         .setImageBitmap(bmp)
-                    //imageView?.setImageBitmap(bmp)
+                    viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
+                    trying = -1
+
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-
-
-                    //Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
-                    Toast.makeText(activity, e.message, Toast.LENGTH_LONG).show()
                 }
             }
 
@@ -611,11 +599,6 @@ class ChatToImgItem(
     private var trying = 3
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         trying = 3
-
-/*
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
-            .setImageResource(R.drawable.aesthetic_desert_2560_x_1440)
-*/
         viewHolder.itemView.findViewById<ImageView>(R.id.to_img).setImageResource(0)
         displayImage(filename, chatName, viewHolder)
         if (trying >= 0) {
@@ -626,12 +609,13 @@ class ChatToImgItem(
             CoroutineScope(Dispatchers.Main).launch {
                 executor.execute {
                     while (trying > 0) {
-                        Thread.sleep(5000)
                         Handler(Looper.getMainLooper()).post {
 
                             displayImage(filename, chatName, viewHolder)
                         }
                         trying -= 1
+                        Thread.sleep(5000)
+
                     }
                     if (trying == 0) {
                         Handler(Looper.getMainLooper()).post {
