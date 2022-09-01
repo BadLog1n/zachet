@@ -76,8 +76,9 @@ class IndividualChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
-            val displayName =
-                it.child("name").value.toString() + " " + it.child("surname").value.toString()
+            val name = if (it.child("name").value.toString() != "null") it.child("name").value.toString() else getName
+            val surname = if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
+            val displayName = "$name $surname"
             findViewById<TextView>(R.id.receiver_tv).text = displayName
         }
         findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {

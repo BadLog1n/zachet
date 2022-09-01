@@ -80,7 +80,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         addPostEventListener(userName)
     }
 
-    var isFirsttry = true
+    var isFirstTry = true
     private fun addPostEventListener(userName: String) {
         val postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
@@ -95,14 +95,11 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     val chatName = chatsPackage.getChatName(userName, getUser)
                     val text = "text"
                     val type = "type"
-                    val dataTime = "dataTime"
-                    var name: String
-                    var surname: String
                     database = FirebaseDatabase.getInstance().getReference("users/$getUser")
                     var requestToDatabase = database.get()
                     requestToDatabase.addOnSuccessListener { itData ->
-                        name = itData.child("name").value.toString()
-                        surname = itData.child("surname").value.toString()
+                        val name = if (itData.child("name").value.toString() != "null") itData.child("name").value.toString() else getUser
+                        val surname = if (itData.child("surname").value.toString() != "null") itData.child("surname").value.toString() else ""
                         database =
                             FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
                         requestToDatabase = database.limitToLast(1).get()
@@ -114,34 +111,21 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
                                         .toString()
                                 val tx = i.child(text).value.toString()
-                                //val item = list.filter { it.getUser == getUser }[0]
-
-
                                 when (i.child(type).value.toString()) {
 
                                     "text" -> {
-                                        Log.d("aaaaaaaaaaa", list.toString())
-
                                         val chat =
                                             ChatPreview("$name $surname", dt, tx, isRead, getUser)
-                                        if (!isFirsttry) {
+                                        if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
                                                     list.single { (it.getUser == getUser && it.latestMsgTime < dt) }
-                                                rcAdapter.removeObject(item)
-                                                list.remove(item)
-                                                list.add(chat)
-                                                rcAdapter.addChatPreview(chat)
+                                                removeAddChat(item,chat)
                                             } catch (e: Exception) {
                                                 try {
                                                     val item: ChatPreview =
                                                         list.single { (it.getUser == getUser && it.newMsg != isRead) }
-                                                    rcAdapter.removeObject(item)
-                                                    list.remove(item)
-                                                    list.add(chat)
-                                                    rcAdapter.addChatPreview(chat)
-                                                    Log.d("aaaaaaaaaaa", list.toString())
-
+                                                    removeAddChat(item,chat)
                                                 } catch (e: Exception) {
                                                     try {
                                                         list.single { (it.getUser == getUser) }
@@ -168,24 +152,25 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                                 isRead,
                                                 getUser
                                             )
-                                        if (!isFirsttry) {
+                                        if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
                                                     list.single { (it.getUser == getUser && it.latestMsgTime < dt) }
-                                                rcAdapter.removeObject(item)
-                                                list.remove(item)
-                                                list.add(chat)
-                                                rcAdapter.addChatPreview(chat)
+                                                removeAddChat(item,chat)
                                             } catch (e: Exception) {
-                                            }
-                                            try {
-                                                val item: ChatPreview =
-                                                    list.single { (it.getUser == getUser && it.newMsg != isRead) }
-                                                rcAdapter.removeObject(item)
-                                                list.remove(item)
-                                                list.add(chat)
-                                                rcAdapter.addChatPreview(chat)
-                                            } catch (e: Exception) {
+                                                try {
+                                                    val item: ChatPreview =
+                                                        list.single { (it.getUser == getUser && it.newMsg != isRead) }
+                                                    removeAddChat(item,chat)
+                                                } catch (e: Exception) {
+                                                    try {
+                                                        list.single { (it.getUser == getUser) }
+
+                                                    } catch (e: Exception) {
+                                                        list.add(chat)
+                                                        rcAdapter.addChatPreview(chat)
+                                                    }
+                                                }
                                             }
                                         } else {
                                             list.add(chat)
@@ -200,24 +185,25 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                             isRead,
                                             getUser
                                         )
-                                        if (!isFirsttry) {
+                                        if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
                                                     list.single { (it.getUser == getUser && it.latestMsgTime < dt) }
-                                                rcAdapter.removeObject(item)
-                                                list.remove(item)
-                                                list.add(chat)
-                                                rcAdapter.addChatPreview(chat)
+                                                removeAddChat(item,chat)
                                             } catch (e: Exception) {
-                                            }
-                                            try {
-                                                val item: ChatPreview =
-                                                    list.single { (it.getUser == getUser && it.newMsg != isRead) }
-                                                rcAdapter.removeObject(item)
-                                                list.remove(item)
-                                                list.add(chat)
-                                                rcAdapter.addChatPreview(chat)
-                                            } catch (e: Exception) {
+                                                try {
+                                                    val item: ChatPreview =
+                                                        list.single { (it.getUser == getUser && it.newMsg != isRead) }
+                                                    removeAddChat(item,chat)
+                                                } catch (e: Exception) {
+                                                    try {
+                                                        list.single { (it.getUser == getUser) }
+
+                                                    } catch (e: Exception) {
+                                                        list.add(chat)
+                                                        rcAdapter.addChatPreview(chat)
+                                                    }
+                                                }
                                             }
                                         } else {
                                             list.add(chat)
@@ -227,7 +213,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                 }
                                 count += 1
                             }
-                            if (dataSnapshot.childrenCount.compareTo(count) == 0 && isFirsttry) {
+                            if (dataSnapshot.childrenCount.compareTo(count) == 0 && isFirstTry) {
                                 list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
 
                                 // list.reverse()
@@ -235,7 +221,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                 for (item in list) {
                                     rcAdapter.addChatPreview(item)
                                 }
-                                isFirsttry = false
+                                isFirstTry = false
                             }
 
                         }
@@ -250,22 +236,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         database = FirebaseDatabase.getInstance().getReference("chatMembers/$userName")
         database.addValueEventListener(postListener)
     }
-
-
-    /**
-     * Функция, которая получает список чатов, в которых состоит пользователь [userName].
-     * */
-    private fun getUsersChats(userName: String) {
-        database = FirebaseDatabase.getInstance().getReference("chatMembers")
-        database.child(userName).get().addOnSuccessListener {
-            if (it.exists()) {
-                for (i in it.children) {
-
-                }
-            }
-        }
-
+    private fun removeAddChat(item: ChatPreview, chat: ChatPreview){
+        rcAdapter.removeObject(item)
+        list.remove(item)
+        list.add(chat)
+        rcAdapter.addChatPreview(chat)
     }
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
