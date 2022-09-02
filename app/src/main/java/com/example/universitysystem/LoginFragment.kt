@@ -57,7 +57,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     view.hideKeyboard()
                     sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
                     activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                    mainActionBar.show()
+                    //mainActionBar.show()
 
                     activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
                     findNavController().navigate(R.id.gradesFragment)

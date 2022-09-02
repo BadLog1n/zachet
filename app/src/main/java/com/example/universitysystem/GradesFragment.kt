@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -27,7 +28,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRcView)
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
-
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Мои баллы"
 
         rcAdapter.clearRecords()
         rcAdapter.gradesList =  ArrayList()
@@ -64,10 +65,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             rcAdapter.addSubjectGrades(sg)
             sg = SubjectGrades("Сохина",36,"зачет",grArray, arrayTest[1])
             rcAdapter.addSubjectGrades(sg)
-            //rcAdapter.addSubjectGrades(sg)
-            /**В строке ниже теперь должен быть добавлен еще один параметр. То есть ты потом получишь
-             * это все(параметры) из бд и передашь в конструктор.
-             **/
 
         }
     }
@@ -75,5 +72,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         var intent = Intent(this.context,IndividualChatActivity::class.java)
         startActivity(intent)
     }*/
+
 
 }
