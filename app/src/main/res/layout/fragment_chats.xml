@@ -8,40 +8,59 @@
     android:orientation="vertical"
     tools:context=".ChatsFragment">
 
-    <com.google.android.material.textfield.TextInputLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:layout_marginEnd="20dp"
-        android:minHeight="50dp"
-        android:textColorHint="@color/grey_hint"
-        android:theme="@style/EditTextStyle"
-        app:boxStrokeColor="#00FFFFFF"
-        app:boxStrokeWidth="0dp"
-        app:hintTextColor="@color/black"
-        >
+        android:layout_height="wrap_content">
 
-        <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/searchTxtInput"
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/searchLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@drawable/message_edittext"
-            android:backgroundTint="@color/grey_mes_edittext"
-            android:ems="10"
-            android:hint="@string/search_hint"
+            android:layout_marginStart="10dp"
+            android:layout_marginEnd="10dp"
             android:minHeight="50dp"
-            android:textColorHint="@color/light_grey_text"
-            android:textColorLink="#afdafc"
-            android:textSize="18sp" />
+            android:textColorHint="@color/grey_hint"
+            android:theme="@style/EditTextStyle"
+            app:boxStrokeColor="#00FFFFFF"
+            app:boxStrokeWidth="0dp"
+            app:hintTextColor="@color/black"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/searchTxtInput"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/message_edittext"
+                android:backgroundTint="@color/grey_mes_edittext"
+                android:ems="10"
+                android:hint="@string/search_hint"
+                android:minHeight="50dp"
+                android:textColorHint="@color/light_grey_text"
+                android:textColorLink="#afdafc"
+                android:textSize="18sp" />
 
-    </com.google.android.material.textfield.TextInputLayout>
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <ImageButton
+            android:id="@+id/findChatButton"
+            android:layout_width="44dp"
+            android:layout_height="44dp"
+            android:layout_marginEnd="10dp"
+            android:background="@color/grey_mes_edittext"
+            android:src="@drawable/ic_baseline_keyboard_arrow_right_24"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.976"
+
+            app:layout_constraintStart_toStartOf="@+id/searchLayout"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/light_grey_text" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/chatsRcView"
@@ -51,4 +70,5 @@
         android:layout_marginTop="10dp"
         android:layout_marginEnd="10dp"
         android:layout_marginBottom="20dp" />
+
 </LinearLayout>

@@ -59,7 +59,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             activity?.onBackPressed()
         }
 
-        view.findViewById<Button>(R.id.button).setOnClickListener {
+        view.findViewById<ImageButton>(R.id.findChatButton).setOnClickListener {
 
             val user = view.findViewById<EditText>(R.id.searchTxtInput).text.toString()
             database = FirebaseDatabase.getInstance().getReference("users")
