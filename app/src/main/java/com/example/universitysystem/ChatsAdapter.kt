@@ -11,14 +11,21 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.ListOfChatsItemBinding
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
     var chatsList = ArrayList<ChatPreview>()
     class ChatsHolder (item: View):RecyclerView.ViewHolder (item){
         private val binding = ListOfChatsItemBinding.bind(item)
+        @SuppressLint("SimpleDateFormat")
         fun bind(chatPreview: ChatPreview) = with(binding){
+            val dt =
+                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(chatPreview.latestMsgTime))
+                    .toString()
             receiverName.text = chatPreview.receiverName
-            latestMsgTimeTv.text=chatPreview.latestMsgTime
+            latestMsgTimeTv.text=dt
             latestMsgTv.text=chatPreview.latestMsg
             latestMsgTv.typeface = if (!chatPreview.newMsg) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
             getUser.text = chatPreview.getUser
@@ -48,6 +55,14 @@ class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
     fun addChatPreview(chatPreview: ChatPreview){
         chatsList.add(chatPreview)
         notifyDataSetChanged()
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun chatChange(item: ChatPreview, chat: ChatPreview){
+        val index = chatsList.indexOf(item)
+        chatsList[index] = chat
+        notifyDataSetChanged()
+
     }
 
     fun clearRecords(){

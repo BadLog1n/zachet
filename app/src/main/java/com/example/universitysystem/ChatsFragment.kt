@@ -12,8 +12,10 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import chatsPackage.ChatsPackage
@@ -67,7 +69,15 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             userSearch()
         }
         addPostEventListener(userName)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(R.id.gradesFragment)
+        }
     }
+
+
+
+
 
     private fun userSearch(){
 
@@ -111,20 +121,22 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
                         requestToDatabase.addOnSuccessListener { itNew ->
                             for (i in itNew.children) {
-
+/*
                                 val dt =
                                     SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
-                                        .toString()
+                                        .toString()*/
+                                //val dt = i.key!!.toString()
+                                val dtLong = i.key!!.toString().toLong()
                                 val tx = i.child(text).value.toString()
                                 when (i.child(type).value.toString()) {
 
                                     "text" -> {
                                         val chat =
-                                            ChatPreview("$name $surname", dt, tx, isRead, getUser)
+                                            ChatPreview("$name $surname", dtLong, tx, isRead, getUser)
                                         if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
-                                                    list.single { (it.getUser == getUser && it.latestMsgTime < dt) }
+                                                    list.single { (it.getUser == getUser && it.latestMsgTime < dtLong) }
                                                 rcAdapter.removeObject(item)
                                                 list.remove(item)
                                                 list.add(chat)
@@ -133,10 +145,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                                 try {
                                                     val item: ChatPreview =
                                                         list.single { (it.getUser == getUser && it.newMsg != isRead) }
-                                                    rcAdapter.removeObject(item)
+                                                    rcAdapter.chatChange(item, chat)
                                                     list.remove(item)
                                                     list.add(chat)
-                                                    rcAdapter.addChatPreview(chat)
                                                 } catch (e: Exception) {
                                                     try {
                                                         list.single { (it.getUser == getUser) }
@@ -158,7 +169,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                         val chat =
                                             ChatPreview(
                                                 "$name $surname",
-                                                dt,
+                                                dtLong,
                                                 "Файл",
                                                 isRead,
                                                 getUser
@@ -166,7 +177,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                         if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
-                                                    list.single { (it.getUser == getUser && it.latestMsgTime < dt) }
+                                                    list.single { (it.getUser == getUser && it.latestMsgTime < dtLong) }
                                                 rcAdapter.removeObject(item)
                                                 list.remove(item)
                                                 list.add(chat)
@@ -175,10 +186,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                                 try {
                                                     val item: ChatPreview =
                                                         list.single { (it.getUser == getUser && it.newMsg != isRead) }
-                                                    rcAdapter.removeObject(item)
+                                                    rcAdapter.chatChange(item, chat)
                                                     list.remove(item)
                                                     list.add(chat)
-                                                    rcAdapter.addChatPreview(chat)
                                                 } catch (e: Exception) {
                                                     try {
                                                         list.single { (it.getUser == getUser) }
@@ -197,7 +207,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     "photo" -> {
                                         val chat = ChatPreview(
                                             "$name $surname",
-                                            dt,
+                                            dtLong,
                                             "Изображение",
                                             isRead,
                                             getUser
@@ -205,11 +215,10 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                         if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
-                                                    list.single { (it.getUser == getUser && it.latestMsgTime < dt) }
-                                                rcAdapter.removeObject(item)
+                                                    list.single { (it.getUser == getUser && it.latestMsgTime < dtLong) }
+                                                rcAdapter.chatChange(item, chat)
                                                 list.remove(item)
                                                 list.add(chat)
-                                                rcAdapter.addChatPreview(chat)
                                             } catch (e: Exception) {
                                                 try {
                                                     val item: ChatPreview =
@@ -236,8 +245,12 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                 }
                                 count += 1
                             }
-                            if ((!itNew.exists() && isFirstTry) || (dataSnapshot.childrenCount.compareTo(count) == 0 && isFirstTry)) {
+                            Log.d("member", member.toString())
+                            Log.d("snapshot", dataSnapshot.children.last().toString())
+                            Log.d("check", (dataSnapshot.children.last().toString() == member.toString()).toString())
+                            if (member.toString() == dataSnapshot.children.last().toString() && isFirstTry) {
                                 list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
+                                Log.d("list", list.toString())
 
                                 // list.reverse()
                                 rcAdapter.clearRecords()
