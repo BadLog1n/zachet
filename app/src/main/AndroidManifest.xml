@@ -39,6 +39,7 @@
         <activity
             android:name=".IndividualChatActivity"
             android:exported="false"
+            android:windowSoftInputMode="stateVisible"
             android:theme="@style/Theme.UniversitySystem.ActionBar"/>
         <activity
             android:name=".MainActivity"

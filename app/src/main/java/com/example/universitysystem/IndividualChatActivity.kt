@@ -84,6 +84,19 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
             onBackPressed()
         }
+
+
+        findViewById<RecyclerView>(R.id.messagesRcView).addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            if (bottom < oldBottom) {
+                rcView.post {
+                    rcView.scrollToPosition(
+                        rcView.adapter!!.itemCount - 1
+                    )
+                }
+            }
+        }
+
+
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
             try {
                 if ((ContextCompat.checkSelfPermission(
