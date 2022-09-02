@@ -41,7 +41,9 @@
                 android:minHeight="50dp"
                 android:textColorHint="@color/light_grey_text"
                 android:textColorLink="#afdafc"
-                android:textSize="18sp" />
+                android:textSize="18sp"
+                android:singleLine="true"
+                />
 
 
         </com.google.android.material.textfield.TextInputLayout>

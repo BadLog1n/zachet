@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
@@ -58,33 +58,38 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         activity?.findViewById<ImageButton>(R.id.menuFromChatsBtn)?.setOnClickListener {
             activity?.onBackPressed()
         }
+        view.findViewById<EditText>(R.id.searchTxtInput).setOnEditorActionListener { _, actionId, _ ->
+            userSearch()
+            actionId == EditorInfo.IME_ACTION_GO
 
+        }
         view.findViewById<ImageButton>(R.id.findChatButton).setOnClickListener {
-
-            val user = view.findViewById<EditText>(R.id.searchTxtInput).text.toString()
-            database = FirebaseDatabase.getInstance().getReference("users")
-            database.child(user).get().addOnSuccessListener {
-                if (it.exists() && user != "") {
-                    val intent =
-                        Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
-                    intent.putExtra("getUser", user)
-                    startActivity(intent)
-                    view.findViewById<EditText>(R.id.searchTxtInput).setText("")
-
-                } else {
-                    Toast.makeText(activity, "Пользователя не существует", Toast.LENGTH_SHORT)
-                        .show()
-                }
-            }
+            userSearch()
         }
         addPostEventListener(userName)
     }
 
+    private fun userSearch(){
+
+        val user = view?.findViewById<EditText>(R.id.searchTxtInput)?.text.toString()
+        database = FirebaseDatabase.getInstance().getReference("users")
+        database.child(user).get().addOnSuccessListener {
+            if (it.exists() && user != "") {
+                val intent =
+                    Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
+                intent.putExtra("getUser", user)
+                startActivity(intent)
+                view?.findViewById<EditText>(R.id.searchTxtInput)?.setText("")
+
+            } else {
+                Toast.makeText(activity, "Пользователя не существует", Toast.LENGTH_SHORT)
+                    .show()
+            }
+        }
+    }
     var isFirstTry = true
     private fun addPostEventListener(userName: String) {
         val postListener = object : ValueEventListener {
-            @SuppressLint("SimpleDateFormat")
-            var count = 0
 
             @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -229,9 +234,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     }
 
                                 }
-                                count += 1
                             }
-                            if (dataSnapshot.childrenCount.compareTo(count) == 0 && isFirstTry) {
+                            if (!itNew.exists() && isFirstTry) {
                                 list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
 
                                 // list.reverse()
