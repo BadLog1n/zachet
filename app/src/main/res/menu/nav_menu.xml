@@ -15,7 +15,9 @@
         android:id="@+id/settings_menu"
         android:icon="@drawable/ic_clarity_settings_line">
     </item>
-    <item android:title=""/>
+    <item
+        android:enabled="false"
+        android:title="" />
     <item android:title="">
         <menu>
 

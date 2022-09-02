@@ -53,7 +53,7 @@ class MainActivity : AppCompatActivity() {
 
         mainActionBar = supportActionBar!!
         findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
-        //supportActionBar?.show()
+
         supportActionBar?.hide()
         val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
 
@@ -71,9 +71,10 @@ class MainActivity : AppCompatActivity() {
 
         if (findNavController(R.id.nav_host_fragment).currentDestination ==
             findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)){
-            findViewById<TextView>(R.id.header_tv).text = "Мои баллы"
+           // findViewById<TextView>(R.id.header_tv).text = "Мои баллы"
+            toolbar.title = "Мои баллы"
             supportActionBar?.show()
-            //actionBar?.show()
+
             findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         }
 
@@ -83,25 +84,32 @@ class MainActivity : AppCompatActivity() {
         findViewById<NavigationView>(R.id.navViewGrades).setNavigationItemSelectedListener {
             when (it.itemId){
                 R.id.grades_menu-> {
-                    findViewById<TextView>(R.id.header_tv).text = "Мои баллы"
+                    //findViewById<TextView>(R.id.header_tv).text = "Мои баллы"
+                    toolbar.title = "Мои баллы"
+                    supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.gradesFragment)
                 }
                 R.id.chats_menu->{
                     //findViewById<TextView>(R.id.header_tv).text = "Чаты"
                     findNavController(R.id.nav_host_fragment).navigate(R.id.chatsFragment)
                     //val intent = Intent(this,ChatsActivity::class.java)
-                    startActivity(intent)
-                    supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-                    supportActionBar?.setCustomView(R.layout.chats_action_bar)
+                    //startActivity(intent)
+                   //supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
+                    //supportActionBar?.setCustomView(R.layout.chats_action_bar)
+                    toolbar.title = "Чаты"
                     supportActionBar?.show()
 
                 }
                 R.id.settings_menu-> {
-                    findViewById<TextView>(R.id.header_tv).text = "Настройки"
+
                     findNavController(R.id.nav_host_fragment).navigate(R.id.settingsFragment)
+                    toolbar.title = "Настройки"
+                    supportActionBar?.show()
                 }
                 R.id.help_menu->{
                     findViewById<TextView>(R.id.header_tv).text = "Помощь"
+                    toolbar.title = "Помощь"
+                    supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.helpFragment)
                 }
 
@@ -111,8 +119,8 @@ class MainActivity : AppCompatActivity() {
                     //val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
                     //haredPref?.edit()?.putBoolean(checkSettings, false)?.apply()
                     //findNavController(R.id.nav_host_fragment).navigate(R.id.loginFragment)
-                    findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
-                    supportActionBar?.hide()
+                    //findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+                    //supportActionBar?.hide()
 
                     sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
                 }
