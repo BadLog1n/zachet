@@ -90,7 +90,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     var isFirstTry = true
     private fun addPostEventListener(userName: String) {
         val postListener = object : ValueEventListener {
-
+            var count = 0
             @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (member in dataSnapshot.children) {
@@ -234,8 +234,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     }
 
                                 }
+                                count += 1
                             }
-                            if (!itNew.exists() && isFirstTry) {
+                            if ((!itNew.exists() && isFirstTry) || (dataSnapshot.childrenCount.compareTo(count) == 0 && isFirstTry)) {
                                 list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
 
                                 // list.reverse()
