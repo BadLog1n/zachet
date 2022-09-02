@@ -11,9 +11,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -61,6 +61,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
                     activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
                     findNavController().navigate(R.id.gradesFragment)
+
                 }
                 else{
                     Toast.makeText(activity, "Логин или пароль введён неверно.", Toast.LENGTH_SHORT).show()

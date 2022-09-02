@@ -18,6 +18,7 @@ import kotlin.collections.ArrayList
 class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
     var chatsList = ArrayList<ChatPreview>()
     class ChatsHolder (item: View):RecyclerView.ViewHolder (item){
+
         private val binding = ListOfChatsItemBinding.bind(item)
         @SuppressLint("SimpleDateFormat")
         fun bind(chatPreview: ChatPreview) = with(binding){
@@ -34,7 +35,6 @@ class ChatsAdapter:RecyclerView.Adapter<ChatsAdapter.ChatsHolder> (){
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ChatsHolder {
-
         val view = LayoutInflater.from(parent.context).inflate(R.layout.list_of_chats_item,parent,false)
         view.findViewById<LinearLayout>(R.id.linearLayout).setOnClickListener {
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
