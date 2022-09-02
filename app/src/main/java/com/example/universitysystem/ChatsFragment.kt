@@ -12,6 +12,7 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
@@ -49,19 +50,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
         recyclerView.layoutManager = linearLayoutManager
 
-        /*supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-    supportActionBar?.setCustomView(R.layout.chats_action_bar)
-    supportActionBar?.show()*/
-
         rcAdapter.clearRecords()
         rcAdapter.chatsList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = linearLayoutManager
 
-        activity?.findViewById<ImageButton>(R.id.menuFromChatsBtn)?.setOnClickListener {
-            activity?.onBackPressed()
-        }
+
         view.findViewById<EditText>(R.id.searchTxtInput).setOnEditorActionListener { _, actionId, _ ->
             userSearch()
             actionId == EditorInfo.IME_ACTION_GO

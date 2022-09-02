@@ -18,27 +18,22 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 
-internal lateinit var mainActionBar:androidx.appcompat.app.ActionBar private set
+//internal lateinit var mainActionBar:androidx.appcompat.app.ActionBar private set
 
 class MainActivity : AppCompatActivity() {
     //private val checkSettings = "check_settings"
     private val checkLogin = "check_login"
-   // public lateinit var mainActionBar: ActionBar
-    //public lateinit var actBar: ActionBar
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        //actBar = supportActionBar!!
 
-        var toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
+        val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
+        toolbar.title = "Мои баллы"
         setSupportActionBar(toolbar)
 
-        var toggle:ActionBarDrawerToggle = ActionBarDrawerToggle(this,findViewById<DrawerLayout>(R.id.drawer),toolbar,R.string.drawer_open,R.string.drawer_closed)
-        //toggle.onDrawerOpened((findViewById<DrawerLayout>(R.id.drawer))
-        //val toggle:ActionBarDrawerToggle = ActionBarDrawerToggle(this,findViewById<DrawerLayout>(R.id.drawer),R.string.drawer_open,R.string.drawer_closed)
+        val toggle = ActionBarDrawerToggle(this,findViewById<DrawerLayout>(R.id.drawer),toolbar,R.string.drawer_open,R.string.drawer_closed)
         toggle.onDrawerOpened(findViewById<DrawerLayout>(R.id.drawer)).apply {
             supportActionBar?.hide()
         }
@@ -46,12 +41,7 @@ class MainActivity : AppCompatActivity() {
         findViewById<DrawerLayout>(R.id.drawer).addDrawerListener(toggle)
         toggle.syncState()
 
-        //findViewById<DrawerLayout>(R.id.drawer).addDrawerListener(DrawerLayout.SimpleDrawerListener(){
-
-        //})
-
-
-        mainActionBar = supportActionBar!!
+        //mainActionBar = supportActionBar!!
         findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
 
         supportActionBar?.hide()
@@ -71,10 +61,8 @@ class MainActivity : AppCompatActivity() {
 
         if (findNavController(R.id.nav_host_fragment).currentDestination ==
             findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)){
-           // findViewById<TextView>(R.id.header_tv).text = "Мои баллы"
             toolbar.title = "Мои баллы"
             supportActionBar?.show()
-
             findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         }
 
@@ -84,24 +72,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<NavigationView>(R.id.navViewGrades).setNavigationItemSelectedListener {
             when (it.itemId){
                 R.id.grades_menu-> {
-                    //findViewById<TextView>(R.id.header_tv).text = "Мои баллы"
                     toolbar.title = "Мои баллы"
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.gradesFragment)
                 }
                 R.id.chats_menu->{
-                    //findViewById<TextView>(R.id.header_tv).text = "Чаты"
                     findNavController(R.id.nav_host_fragment).navigate(R.id.chatsFragment)
-                    //val intent = Intent(this,ChatsActivity::class.java)
-                    //startActivity(intent)
-                   //supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-                    //supportActionBar?.setCustomView(R.layout.chats_action_bar)
                     toolbar.title = "Чаты"
                     supportActionBar?.show()
 
                 }
                 R.id.settings_menu-> {
-
                     findNavController(R.id.nav_host_fragment).navigate(R.id.settingsFragment)
                     toolbar.title = "Настройки"
                     supportActionBar?.show()
@@ -131,9 +112,21 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    /*override fun getActionBar(): ActionBar {
-        return actBar
-    }*/
+
+    override fun onResume() {
+        super.onResume()
+        /**
+         * Меняем заголовок экрана в toolbar при восстановлении фрагментов
+         */
+        val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
+        when (findNavController(R.id.nav_host_fragment).currentDestination){
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment) -> toolbar.title = "Мои баллы"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment) -> toolbar.title = "Чаты"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title = "Помощь"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.settingsFragment) -> toolbar.title = "Настройки"
+        }
+        supportActionBar?.show()
+    }
 
 }
 

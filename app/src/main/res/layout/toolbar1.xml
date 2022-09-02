@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:maxHeight="200dp"
     android:minHeight="?attr/actionBarSize"
-    app:title="@string/chats">
+    app:title="">
 
 
 </androidx.appcompat.widget.Toolbar>
