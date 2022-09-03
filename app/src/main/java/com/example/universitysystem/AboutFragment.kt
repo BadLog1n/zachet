@@ -11,6 +11,7 @@ import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.ImageButton
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import authCheck.AuthCheck
@@ -18,6 +19,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import org.w3c.dom.Text
 
 class HelpFragment : Fragment(R.layout.fragment_help) {
     private val authCheck = AuthCheck()
@@ -37,11 +39,16 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             startActivity(intent)
         }
 
+        database = FirebaseDatabase.getInstance().getReference("version")
+        val requestToDatabase = database.get()
+        requestToDatabase.addOnSuccessListener {
+            view.findViewById<TextView>(R.id.version).text = it.value.toString()
+
+            }
+
         val versionName = getAppVersion(requireContext())
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
-            database = FirebaseDatabase.getInstance().getReference("version")
-            val requestToDatabase = database.get()
             requestToDatabase.addOnSuccessListener {
                 if (versionName != it.value.toString()) {
                     //надо будет добавить alert с предложением скачать обновление
