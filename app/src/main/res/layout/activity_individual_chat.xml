@@ -32,14 +32,14 @@
 
     <ImageButton
         android:id="@+id/clipButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="55dp"
+        android:layout_height="39dp"
         android:layout_marginEnd="33dp"
-        android:layout_marginBottom="23dp"
+        android:layout_marginBottom="16dp"
         android:background="@color/grey_mes_edittext"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
-        app:layout_constraintHorizontal_bias="0.976"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/messageEditText"
         app:srcCompat="@drawable/ic___icon__paper_clip_"
         app:tint="@color/light_grey_text" />
