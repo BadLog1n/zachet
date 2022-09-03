@@ -9,11 +9,11 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import authCheck.AuthCheck
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
 
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
-
     class GradesHolder(item:View):RecyclerView.ViewHolder (item){
 
         private val binding = SubjectGradesItemBinding.bind(item)
@@ -91,6 +91,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         expView.visibility = View.GONE
 
         view.findViewById<ImageButton>(R.id.spechBubbblesImg).setOnClickListener {
+
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
             intent.putExtra("getUser",view.findViewById<TextView>(R.id.textView4).text)
             parent.context.startActivity(intent)

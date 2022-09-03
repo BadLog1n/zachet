@@ -20,6 +20,7 @@ import android.os.Environment.isExternalStorageManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -30,6 +31,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
@@ -46,8 +48,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 
-
 class IndividualChatActivity : AppCompatActivity() {
+
     private var typeOfFile = ""
     private var sendName = ""
     private var getName = ""
@@ -57,6 +59,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
+
         val arguments = intent.extras
         getName = arguments!!["getUser"].toString()
         val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)

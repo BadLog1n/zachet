@@ -4,17 +4,19 @@ import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import authCheck.AuthCheck
 import com.example.universitysystem.databinding.FragmentGradesBinding
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
 
+
 class GradesFragment : Fragment(R.layout.fragment_grades) {
+    private val authCheck = AuthCheck()
 
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
@@ -22,6 +24,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        authCheck.check(view, this@GradesFragment.context)
         binding = FragmentGradesBinding.inflate(layoutInflater)
         super.onViewCreated(view, savedInstanceState)
 
@@ -58,6 +61,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private fun initGradesRc(){
         binding.apply {
             //gradesRcView.adapter = rcAdapter
+            authCheck.check(requireView(), this@GradesFragment.context)
+
             val grArray = listOf(4,12,4,12,4,3,4,9,10,12,20)
             val arrayTest = listOf("19-06-0245", "19-06-0109")
 

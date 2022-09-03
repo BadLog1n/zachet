@@ -10,14 +10,18 @@ import android.view.ViewGroup
 import android.widget.*
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
+import authCheck.AuthCheck
+import chatsPackage.ChatsPackage
 import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 private lateinit var database: DatabaseReference
-
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
+    private val authCheck = AuthCheck()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        authCheck.check(view, this@SettingsFragment.context)
 
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Настройки"

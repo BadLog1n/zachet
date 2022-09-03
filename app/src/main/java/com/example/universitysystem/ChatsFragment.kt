@@ -19,13 +19,14 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
 
-
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
+    private val authCheck = AuthCheck()
 
     private val chatsPackage = ChatsPackage()
 
@@ -38,7 +39,10 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
         super.onViewCreated(view, savedInstanceState)
+        authCheck.check(view, this@ChatsFragment.context)
+
         rcAdapter.clearRecords()
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
