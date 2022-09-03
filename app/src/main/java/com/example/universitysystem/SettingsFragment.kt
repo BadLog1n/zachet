@@ -38,7 +38,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             passwordEditText.setText(it.child("password").value.toString())
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
-            loginEditText.isEnabled = true
             passwordEditText.isEnabled = true
         }
 
