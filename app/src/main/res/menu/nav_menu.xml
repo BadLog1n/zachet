@@ -22,7 +22,7 @@
         <menu>
 
             <item
-        android:title="@string/help"
+        android:title="@string/about"
         android:id="@+id/help_menu"
         android:icon="@drawable/ic___icon__help_circle_outline_"
                 >

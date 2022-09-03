@@ -59,7 +59,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                     //mainActionBar.show()
 
-                    activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
+                    //activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
                     findNavController().navigate(R.id.gradesFragment)
 
                 }

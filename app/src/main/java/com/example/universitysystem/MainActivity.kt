@@ -56,9 +56,9 @@ class MainActivity : AppCompatActivity() {
         if (intent.getBooleanExtra("from_chats",false)==true){
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
         }
-        findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
+        /*findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
-        }
+        }*/
 
         if (findNavController(R.id.nav_host_fragment).currentDestination ==
             findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)){
@@ -89,8 +89,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.show()
                 }
                 R.id.help_menu->{
-                    findViewById<TextView>(R.id.header_tv).text = "Помощь"
-                    toolbar.title = "Помощь"
+                    toolbar.title = "О приложении"
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.helpFragment)
                 }
@@ -123,7 +122,7 @@ class MainActivity : AppCompatActivity() {
         when (findNavController(R.id.nav_host_fragment).currentDestination){
             findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment) -> toolbar.title = "Мои баллы"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment) -> toolbar.title = "Чаты"
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title = "Помощь"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title = "О приложении"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.settingsFragment) -> toolbar.title = "Настройки"
         }
         supportActionBar?.show()

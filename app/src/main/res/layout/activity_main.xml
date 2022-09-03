@@ -32,31 +32,6 @@
             android:layout_weight="0.005"
             android:orientation="vertical" />
 
-        <ImageButton
-            android:id="@+id/menuButton"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="32dp"
-            android:layout_weight="0.005"
-            android:backgroundTint="#FFFEFE"
-            android:visibility="gone"
-            app:srcCompat="@drawable/ic___icon__menu_unfold_line_" />
-
-        <TextView
-            android:id="@+id/header_tv"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center|top"
-            android:layout_marginTop="35dp"
-            android:layout_marginEnd="32dp"
-            android:layout_weight="0.05"
-            android:fontFamily="@font/inter"
-            android:text="TextView"
-            android:textAlignment="center"
-            android:textColor="@color/black"
-            android:textSize="30sp"
-            android:visibility="gone" />
     </LinearLayout>
 
     <fragment
