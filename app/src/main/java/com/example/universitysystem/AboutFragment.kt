@@ -14,6 +14,6 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         super.onViewCreated(view, savedInstanceState)
         authCheck.check(view, this@HelpFragment.context)
 
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Помощь"
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "О приложении"
     }
 }

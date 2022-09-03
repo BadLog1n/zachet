@@ -16,7 +16,7 @@
     <string name="my_grades">Мои баллы</string>
 
     <string name="settings">Настройки</string>
-    <string name="help">Помощь</string>
+    <string name="about">О приложении</string>
     <string name="to_logout">Выйти</string>
     <string name="ok">OK</string>
     <string name="cancel">Отмена</string>
@@ -32,7 +32,18 @@
     <string name="search_hint">Поиск</string>
     <string name="login_password_input">abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789</string>
     <string name="name_surname_input">АБВГДЕЁЖЗИЙКЛМНОПРСТУФХЦЧШЩЪЫЬЭЮЯабвгдеёжзийклмнопрстуфхцчшщъыьэюя</string>
+    <string name="version">Версия</string>
+    <string name="name">Имя</string>
+    <string name="surname">Фамилия</string>
+    <string name="cache_pics">Кешировать изображения</string>
+    <string name="language">Язык</string>
+    <string-array name="languages">
+        <item>Русский</item>
+    </string-array>
 
+    <string name="check_versions">Проверить наличие обновлений</string>
+    <string name="support">Поддержка</string>
+    <string name="our_telegram">Наш телеграмм</string>
 
 
     <string name="drawer_open">Меню открыто</string>
