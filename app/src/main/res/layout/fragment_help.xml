@@ -42,7 +42,7 @@
     </LinearLayout>
 
     <Button
-        android:id="@+id/button"
+        android:id="@+id/checkVersionsBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
@@ -57,12 +57,24 @@
         app:iconTint="@color/black" />
 
     <Button
-        android:id="@+id/button2"
+        android:id="@+id/telegramBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/our_telegram"
+        android:textAlignment="textStart"
+        app:icon="@drawable/ic___icon__telegram_"
+        app:iconTint="@color/white"
+        app:iconTintMode="multiply" />
+
+    <Button
+        android:id="@+id/getSupportBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/black"
-        android:text="@string/feedback"
+        android:backgroundTint="@color/dark_grey_background"
+        android:text="@string/support"
         android:textAllCaps="false"
+        android:textColor="@color/black"
         android:textSize="16sp" />
 
 </LinearLayout>

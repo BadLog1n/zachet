@@ -42,7 +42,8 @@
     </string-array>
 
     <string name="check_versions">Проверить наличие обновлений</string>
-    <string name="feedback">Обратная связь</string>
+    <string name="support">Поддержка</string>
+    <string name="our_telegram">Наш телеграмм</string>
 
 
     <string name="drawer_open">Меню открыто</string>
