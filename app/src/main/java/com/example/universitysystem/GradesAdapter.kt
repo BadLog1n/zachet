@@ -66,6 +66,21 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             collView.visibility = View.GONE
         }
 
+        view.findViewById<LinearLayout>(R.id.collapsedView).setOnClickListener {
+            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
+            expView.visibility = View.VISIBLE
+            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+            collView.visibility = View.GONE
+        }
+
+
+        view.findViewById<TextView>(R.id.tv2_subject).setOnClickListener {
+            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
+            expView.visibility = View.GONE
+            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+            collView.visibility = View.VISIBLE
+        }
+
         view.findViewById<ImageButton>(R.id.collapseBtn).setOnClickListener {
             val expView = view.findViewById<LinearLayout>(R.id.expandedView)
             expView.visibility = View.GONE
