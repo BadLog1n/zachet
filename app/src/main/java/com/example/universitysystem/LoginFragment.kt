@@ -68,6 +68,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 }
             }
         }
+
+
+        /*В случае нажатия кнопки назад просит повторить действие для успешного выхода из приложения
+* В случае если в течение следующих 2-х секунд пользователь не нажал кнопку назад, в следующий раз,
+* при нажатии кнопки "назад", пользователю это будеты предложено вновь*/
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (!clickBack) {
                 Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show()
