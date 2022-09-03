@@ -4,15 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.*
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
-import chatsPackage.ChatsPackage
-import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -46,7 +41,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
 
-        view.findViewById<Button>(R.id.saveBtn).setOnClickListener {
+        view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
             if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
                 database.child("password").setValue(passwordEditText.text.toString())
 
