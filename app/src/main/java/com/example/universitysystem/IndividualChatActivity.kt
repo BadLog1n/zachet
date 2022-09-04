@@ -92,9 +92,13 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<RecyclerView>(R.id.messagesRcView).addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
                 rcView.post {
+                    try {
                     rcView.scrollToPosition(
                         rcView.adapter!!.itemCount - 1
-                    )
+                    )}
+                    catch (e: NullPointerException) {
+                        
+                    }
                 }
             }
         }
