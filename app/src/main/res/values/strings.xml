@@ -37,6 +37,12 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="cache_pics">Кешировать изображения</string>
+    <string name="monday">Понедельник</string>
+    <string name="tuesday">Вторник</string>
+    <string name="wednesday">Среда</string>
+    <string name="thursday">Четверг</string>
+    <string name="friday">Пятница</string>
+    <string name="saturday">Суббота</string>
     <string name="language">Язык</string>
     <string-array name="languages">
         <item>Русский</item>

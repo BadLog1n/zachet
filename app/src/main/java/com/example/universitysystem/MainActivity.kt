@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         toolbar.title = "Мои баллы"
         setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(this,findViewById<DrawerLayout>(R.id.drawer),toolbar,R.string.drawer_open,R.string.drawer_closed)
+        val toggle = ActionBarDrawerToggle(this,findViewById(R.id.drawer),toolbar,R.string.drawer_open,R.string.drawer_closed)
         toggle.onDrawerOpened(findViewById<DrawerLayout>(R.id.drawer)).apply {
             supportActionBar?.hide()
         }
@@ -129,6 +129,7 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment) -> toolbar.title = "Чаты"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title = "О приложении"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.settingsFragment) -> toolbar.title = "Настройки"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.scheduleFragment) -> toolbar.title = "Расписание"
         }
         supportActionBar?.show()
     }
