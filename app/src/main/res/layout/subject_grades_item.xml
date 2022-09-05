@@ -404,7 +404,7 @@
 
                 <TextView
                     android:id="@+id/teacher_tv"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="Аникина Елена Игоревна"
@@ -432,7 +432,7 @@
             android:visibility="gone">
 
             <ImageButton
-                android:id="@+id/spechBubbblesImg"
+                android:id="@+id/spechBubbblesImg2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="10dp"
@@ -458,7 +458,7 @@
 
                 <TextView
                     android:id="@+id/teacher2_tv"
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="5dp"
                     android:text="Аникина Елена Игоревна"

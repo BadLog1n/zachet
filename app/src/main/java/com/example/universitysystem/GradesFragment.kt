@@ -66,9 +66,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val grArray = listOf(4,12,4,12,4,3,4,9,10,12,20)
             val arrayTest = listOf("19-06-0245", "19-06-0109")
 
-            var sg = SubjectGrades("Немченко",36,"зачет",grArray, arrayTest[0])
+            var sg = SubjectGrades("Немченко",36,"зачет",grArray, arrayTest[0],"Аникина Елена Игоревна",arrayTest[0],"Аникина Елена Игоревна")
             rcAdapter.addSubjectGrades(sg)
-            sg = SubjectGrades("Сохина",36,"зачет",grArray, arrayTest[1])
+            sg = SubjectGrades("Сохина",36,"зачет",grArray, arrayTest[1],"Аникина Елена Игоревна",arrayTest[0],"Аникина Елена Игоревна")
             rcAdapter.addSubjectGrades(sg)
 
         }
