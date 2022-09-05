@@ -1,6 +1,8 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -9,12 +11,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.inputmethod.EditorInfo
+import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import android.widget.Toolbar
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -91,7 +95,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                 intent.putExtra("getUser", user)
                 startActivity(intent)
                 view?.findViewById<EditText>(R.id.searchTxtInput)?.setText("")
-
+                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as
+                        InputMethodManager
+                imm.hideSoftInputFromWindow(view?.windowToken, 0)
             } else {
                 Toast.makeText(activity, "Пользователя не существует", Toast.LENGTH_SHORT)
                     .show()
