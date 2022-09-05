@@ -9,6 +9,31 @@
 
     android:theme="@style/Theme.UniversitySystem.LightActionBar">
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="40dp"
+        android:layout_marginEnd="40dp"
+        android:layout_marginBottom="10dp"
+        android:orientation="horizontal">
+
+        <Spinner
+            android:id="@+id/sem_type_spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:entries="@array/semesters"
+            android:spinnerMode="dropdown" />
+
+        <Spinner
+            android:id="@+id/sem_num_spinner"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:baselineAligned="false"
+            android:entries="@array/sem_nums_bachelor"
+            android:spinnerMode="dropdown" />
+    </LinearLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gradesRcView"
         android:layout_width="match_parent"

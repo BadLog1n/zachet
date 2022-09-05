@@ -7,9 +7,14 @@
     android:orientation="vertical"
     tools:context=".ScheduleFragment">
 
-    <TextView
+    <Switch
+        android:id="@+id/switch1"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/inter"
+        android:showText="true"
+        android:textOff="Верхняя"
+        android:textOn="Нижняя"
+        android:switchTextAppearance="@style/SwitchText"/>
 
 </LinearLayout>
