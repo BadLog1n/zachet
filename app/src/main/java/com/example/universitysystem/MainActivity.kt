@@ -105,6 +105,11 @@ class MainActivity : AppCompatActivity() {
 
                     sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
                 }
+                R.id.schedule_menu->{
+                    toolbar.title = "Расписание"
+                    supportActionBar?.show()
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.scheduleFragment)
+                }
 
             }
             findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.START)

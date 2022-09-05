@@ -40,4 +40,9 @@
         android:name="com.example.universitysystem.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" />
+    <fragment
+        android:id="@+id/scheduleFragment"
+        android:name="com.example.universitysystem.ScheduleFragment"
+        android:label="fragment_schedule"
+        tools:layout="@layout/fragment_schedule" />
 </navigation>

@@ -11,10 +11,15 @@
         android:id="@+id/chats_menu"
         android:icon="@drawable/ic___icon__chat_">
     </item>
+    <item android:title="@string/schedule"
+        android:id="@+id/schedule_menu"
+        android:icon="@drawable/ic___icon__calendar_schedule_">
+    </item>
     <item android:title="@string/settings"
         android:id="@+id/settings_menu"
         android:icon="@drawable/ic_clarity_settings_line">
     </item>
+
     <item
         android:enabled="false"
         android:title="" />
