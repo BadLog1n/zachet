@@ -9,7 +9,6 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import authCheck.AuthCheck
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
 
 class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
@@ -43,15 +42,10 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             additionalGrCount.text = subjectGrades.grades[9].toString()
             premiumGrTv.text = "Премиальные баллы:"
             premiumGrCount.text = subjectGrades.grades[10].toString()
-            /**
-             * Здесь мы этой красоте присваиваем значение. А именно:
-             * Теперь когда мы добавляем в ресайклер вью новый айтем(новый предмет типа) мы туда передаем +1
-             * новый параметр userChatId (название и тип можешь поменять потом если я промахнулась и
-             * не угадала). Этот параметр мы отлавливаем так сказать в строке ниже, присваиваем значение,
-             * которое мы получили когда создавали новый объект(добавляли в список новый предмет грубо говоря)
-             * переменной на уровне адаптера.
-             */
-            textView4.text = subjectGrades.userChatId
+            userChatId1Tv.text = subjectGrades.userChatId
+            teacherTv.text = subjectGrades.FIO1
+            teacher2Tv.text = subjectGrades.FIO2
+            userChatId2Tv.text = subjectGrades.userChatId2
         }
 
     }
@@ -93,7 +87,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         view.findViewById<ImageButton>(R.id.spechBubbblesImg).setOnClickListener {
 
             val intent = Intent(parent.context,IndividualChatActivity::class.java)
-            intent.putExtra("getUser",view.findViewById<TextView>(R.id.textView4).text)
+            intent.putExtra("getUser",view.findViewById<TextView>(R.id.teacher_tv).text)
             parent.context.startActivity(intent)
         }
         view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
@@ -102,7 +96,7 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
              * То есть у каждого окна свой обработчик нажатия засчет того что userChatId - переменная.
              * Если интересна логика - то метод вверху и этот метод вызывается для каждого элемента списка.
              * **/
-            intent.putExtra("getUser",view.findViewById<TextView>(R.id.textView4).text)
+            intent.putExtra("getUser",view.findViewById<TextView>(R.id.teacher_tv).text)
             parent.context.startActivity(intent)
 
         }
