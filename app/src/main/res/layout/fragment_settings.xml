@@ -125,8 +125,8 @@
                     android:background="@drawable/settings_edittext"
                     android:digits="@string/login_password_input"
                     android:ems="10"
-                    android:enabled="false"
-                    android:focusable="false"
+                    android:enabled="true"
+                    android:focusable="true"
                     android:fontFamily="@font/inter"
                     android:inputType="textPassword"
                     android:maxLength="20"
@@ -136,8 +136,7 @@
                     android:singleLine="true"
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
-                    android:textSize="16sp"
-                    app:textInputLayoutFocusedRectEnabled="false" />
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
