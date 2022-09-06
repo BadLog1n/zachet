@@ -47,7 +47,7 @@
     <string-array name="languages">
         <item>Русский</item>
     </string-array>
-
+    <string name="sem">Семестр</string>
     <string-array name="semesters">
         <item>Текущий семестр</item>
         <item>Архивный семестр</item>

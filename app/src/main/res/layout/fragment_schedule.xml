@@ -12,16 +12,34 @@
         android:orientation="vertical">
 
 
-        <Switch
-            android:id="@+id/switch1"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:fontFamily="@font/inter"
-            android:showText="true"
-            android:switchTextAppearance="@style/SwitchText"
-            android:textOff="Верхняя"
-            android:textOn="Нижняя" />
+            android:layout_height="match_parent"
+            android:layout_marginEnd="20dp"
+            android:gravity="end"
+            android:orientation="horizontal">
+
+            <TextView
+                android:id="@+id/textView8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Верхняя" />
+
+            <Switch
+                android:id="@+id/switch1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter"
+                android:showText="false"
+                android:switchTextAppearance="@style/SwitchText" />
+
+            <TextView
+                android:id="@+id/textView9"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Нижняя" />
+        </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"

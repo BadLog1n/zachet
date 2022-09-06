@@ -15,19 +15,20 @@
         android:layout_marginStart="40dp"
         android:layout_marginEnd="40dp"
         android:layout_marginBottom="10dp"
+        android:gravity="end"
         android:orientation="horizontal">
 
-        <Spinner
-            android:id="@+id/sem_type_spinner"
+        <TextView
+            android:id="@+id/textView2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="20dp"
-            android:entries="@array/semesters"
-            android:spinnerMode="dropdown" />
+            android:layout_marginEnd="10dp"
+            android:text="@string/sem"
+            android:textColor="@color/black" />
 
         <Spinner
             android:id="@+id/sem_num_spinner"
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
             android:entries="@array/sem_nums_bachelor"
