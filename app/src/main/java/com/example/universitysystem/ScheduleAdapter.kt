@@ -1,18 +1,10 @@
 package com.example.universitysystem
 
-import android.annotation.SuppressLint
-import android.content.Intent
-import android.graphics.Typeface
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.universitysystem.databinding.ListOfChatsItemBinding
 import com.example.universitysystem.databinding.ScheduleStrItemBinding
-import java.text.SimpleDateFormat
-import java.util.*
 import kotlin.collections.ArrayList
 
 class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder> () {
@@ -20,13 +12,10 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder> () {
     class ScheduleHolder (item: View):RecyclerView.ViewHolder (item){
 
         private val binding = ScheduleStrItemBinding.bind(item)
-        @SuppressLint("SimpleDateFormat")
         fun bind(scheduleRecord: ScheduleRecord) = with(binding){
             timeTv.text = scheduleRecord.time
-            val s_n_t = scheduleRecord.subject+scheduleRecord.typeOfClass
-            subjectAndTypeTv.text = s_n_t
-            val r_n_f = scheduleRecord.numberOfRoom+scheduleRecord.teachersFIO
-            roomNFioTv.text = r_n_f
+            subjectAndTypeTv.text = scheduleRecord.subject
+            roomNFioTv.text = scheduleRecord.cabName
         }
 
     }
