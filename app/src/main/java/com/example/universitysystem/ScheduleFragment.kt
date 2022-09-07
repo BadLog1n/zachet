@@ -33,127 +33,118 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         grSpinner.adapter = arrayAdapter
 
         val mondayRc: RecyclerView = view.findViewById(R.id.mondayRc)
-        mondayRc.layoutManager = LinearLayoutManager(this.context)
+        //mondayRc.layoutManager = LinearLayoutManager(this.context)
         mondayAdapter.clearRecords()
         mondayAdapter.scheduleRecordsList =  ArrayList()
         mondayAdapter.notifyDataSetChanged()
         mondayRc.adapter = mondayAdapter
-        initMondayRc()
         mondayRc.adapter = mondayAdapter
         mondayRc.layoutManager = LinearLayoutManager(this.context)
 
         val tuesdayRc: RecyclerView = view.findViewById(R.id.tuesdayRc)
-        tuesdayRc.layoutManager = LinearLayoutManager(this.context)
+        //tuesdayRc.layoutManager = LinearLayoutManager(this.context)
         tuesdayAdapter.clearRecords()
         tuesdayAdapter.scheduleRecordsList =  ArrayList()
         tuesdayAdapter.notifyDataSetChanged()
         tuesdayRc.adapter = tuesdayAdapter
-        initTuesdayRc()
         tuesdayRc.adapter = tuesdayAdapter
         tuesdayRc.layoutManager = LinearLayoutManager(this.context)
 
         val wednesdayRc: RecyclerView = view.findViewById(R.id.wednesdayRc)
-        wednesdayRc.layoutManager = LinearLayoutManager(this.context)
+        //wednesdayRc.layoutManager = LinearLayoutManager(this.context)
         wednesdayAdapter.clearRecords()
         wednesdayAdapter.scheduleRecordsList =  ArrayList()
         wednesdayAdapter.notifyDataSetChanged()
         wednesdayRc.adapter = wednesdayAdapter
-        initWednesdayRc()
         wednesdayRc.adapter = wednesdayAdapter
         wednesdayRc.layoutManager = LinearLayoutManager(this.context)
 
         val thursdayRc: RecyclerView = view.findViewById(R.id.thursdayRc)
-        thursdayRc.layoutManager = LinearLayoutManager(this.context)
+        //thursdayRc.layoutManager = LinearLayoutManager(this.context)
         thursdayAdapter.clearRecords()
         thursdayAdapter.scheduleRecordsList =  ArrayList()
         thursdayAdapter.notifyDataSetChanged()
         thursdayRc.adapter = thursdayAdapter
-        initThursdayRc()
         thursdayRc.adapter = thursdayAdapter
         thursdayRc.layoutManager = LinearLayoutManager(this.context)
 
         val fridayRc: RecyclerView = view.findViewById(R.id.fridayRc)
-        fridayRc.layoutManager = LinearLayoutManager(this.context)
+        //fridayRc.layoutManager = LinearLayoutManager(this.context)
         fridayAdapter.clearRecords()
         fridayAdapter.scheduleRecordsList =  ArrayList()
         fridayAdapter.notifyDataSetChanged()
         fridayRc.adapter = fridayAdapter
-        initFridayRc()
         fridayRc.adapter = fridayAdapter
         fridayRc.layoutManager = LinearLayoutManager(this.context)
 
         val saturdayRc: RecyclerView = view.findViewById(R.id.saturdayRc)
-        saturdayRc.layoutManager = LinearLayoutManager(this.context)
+        //saturdayRc.layoutManager = LinearLayoutManager(this.context)
         saturdayAdapter.clearRecords()
         saturdayAdapter.scheduleRecordsList =  ArrayList()
         saturdayAdapter.notifyDataSetChanged()
         saturdayRc.adapter = saturdayAdapter
-        initSaturdayRc()
         saturdayRc.adapter = saturdayAdapter
         saturdayRc.layoutManager = LinearLayoutManager(this.context)
+
+        var records:MutableList<ScheduleRecord> = mutableListOf()
+        records.add(ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Вторник","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Четверг","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Пятница","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Суббота","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Вторник","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Четверг","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Пятница","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Суббота","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Четверг","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Суббота","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
+        initRcs(records)
     }
 
-    private fun initSaturdayRc() {
+    private fun initRcs(records:MutableList<ScheduleRecord>) {
         binding.apply {
-            val schr1 = ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И.")
-            saturdayAdapter.addScheduleRecord(schr1)
-            saturdayAdapter.notifyDataSetChanged()
-            saturdayAdapter.addScheduleRecord(schr1)
-            saturdayAdapter.notifyDataSetChanged()
+            for (i in records){
+                when (i.weekday){
+                    "Понедельник"->{
+                        mondayAdapter.addScheduleRecord(i)
+                        mondayAdapter.notifyDataSetChanged()
+                        mondayRc.adapter = mondayAdapter
+                        mondayRc.layoutManager = LinearLayoutManager(this@ScheduleFragment.context)}
+                    "Вторник"->{
+                        tuesdayAdapter.addScheduleRecord(i)
+                        tuesdayAdapter.notifyDataSetChanged()
+                        tuesdayRc.adapter = tuesdayAdapter
+                        tuesdayRc.layoutManager = LinearLayoutManager(this@ScheduleFragment.context)}
+                    "Среда"->{
+                        wednesdayAdapter.addScheduleRecord(i)
+                        wednesdayAdapter.notifyDataSetChanged()
+                        wednesdayRc.adapter = wednesdayAdapter
+                        wednesdayRc.layoutManager = LinearLayoutManager(this@ScheduleFragment.context)}
+                    "Четверг"->{
+                        thursdayAdapter.addScheduleRecord(i)
+                        thursdayAdapter.notifyDataSetChanged()
+                        thursdayRc.adapter = thursdayAdapter
+                        thursdayRc.layoutManager = LinearLayoutManager(this@ScheduleFragment.context)}
+                    "Пятница"->{
+                        fridayAdapter.addScheduleRecord(i)
+                        fridayAdapter.notifyDataSetChanged()
+                        fridayRc.adapter = fridayAdapter
+                        fridayRc.layoutManager = LinearLayoutManager(this@ScheduleFragment.context)}
+                    "Суббота"->{
+                        saturdayAdapter.addScheduleRecord(i)
+                        saturdayAdapter.notifyDataSetChanged()
+                        saturdayRc.adapter = saturdayAdapter
+                        saturdayRc.layoutManager = LinearLayoutManager(this@ScheduleFragment.context)}
+                }
+
+            }
         }
     }
-
-    private fun initFridayRc() {
-        binding.apply {
-            val schr1 = ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И.")
-            fridayAdapter.addScheduleRecord(schr1)
-            fridayAdapter.notifyDataSetChanged()
-            fridayAdapter.addScheduleRecord(schr1)
-            fridayAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun initThursdayRc() {
-        binding.apply {
-            val schr1 = ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И.")
-            thursdayAdapter.addScheduleRecord(schr1)
-            thursdayAdapter.notifyDataSetChanged()
-            thursdayAdapter.addScheduleRecord(schr1)
-            thursdayAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun initWednesdayRc() {
-        binding.apply {
-            val schr1 = ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И.")
-            wednesdayAdapter.addScheduleRecord(schr1)
-            wednesdayAdapter.notifyDataSetChanged()
-            wednesdayAdapter.addScheduleRecord(schr1)
-            wednesdayAdapter.notifyDataSetChanged()
-
-        }
-    }
-
-    private fun initTuesdayRc() {
-        binding.apply {
-            val schr1 = ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И.")
-            tuesdayAdapter.addScheduleRecord(schr1)
-            tuesdayAdapter.notifyDataSetChanged()
-            tuesdayAdapter.addScheduleRecord(schr1)
-            tuesdayAdapter.notifyDataSetChanged()
-        }
-    }
-
-    private fun initMondayRc() {
-        binding.apply {
-            val schr1 = ScheduleRecord("Понедельник","8.00","Базы данных(лб)","а-217, Аникина Е.И.")
-            mondayAdapter.addScheduleRecord(schr1)
-            mondayAdapter.notifyDataSetChanged()
-            mondayAdapter.addScheduleRecord(schr1)
-            mondayAdapter.notifyDataSetChanged()
-
-        }
-    }
-
-
 }

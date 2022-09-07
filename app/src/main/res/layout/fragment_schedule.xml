@@ -2,13 +2,13 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:layout_marginTop="100dp"
     tools:context=".ScheduleFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
@@ -88,7 +88,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/mondayRc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/schedule_str_item" />
 
         </LinearLayout>
@@ -120,7 +120,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/tuesdayRc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/schedule_str_item" />
 
         </LinearLayout>
@@ -152,7 +152,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/wednesdayRc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/schedule_str_item" />
 
         </LinearLayout>
@@ -216,7 +216,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/fridayRc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/schedule_str_item" />
 
         </LinearLayout>
@@ -248,7 +248,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/saturdayRc"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/schedule_str_item" />
 
         </LinearLayout>
