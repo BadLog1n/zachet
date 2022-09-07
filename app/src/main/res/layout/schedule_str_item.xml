@@ -12,7 +12,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/time_tv1"
+            android:id="@+id/time_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="8.00"
@@ -26,7 +26,7 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/textView5"
+            android:id="@+id/subject_and_type_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Базы данных (лб)"
@@ -35,7 +35,7 @@
             android:textSize="16sp" />
 
         <TextView
-            android:id="@+id/textView6"
+            android:id="@+id/room_n_fio_tv"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="а-217, Аникина Е.И."
