@@ -1,5 +1,6 @@
 package com.example.universitysystem
 
+import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,12 @@ class ScheduleAdapter: RecyclerView.Adapter<ScheduleAdapter.ScheduleHolder> () {
 
     override fun getItemCount(): Int {
         return  scheduleRecordsList.size
+    }
+
+    @SuppressLint("NotifyDataSetChanged")
+    fun addScheduleRecord(scheduleRecord: ScheduleRecord){
+        scheduleRecordsList.add(scheduleRecord)
+        notifyDataSetChanged()
     }
     fun clearRecords(){
         scheduleRecordsList.removeAll(scheduleRecordsList.toSet())

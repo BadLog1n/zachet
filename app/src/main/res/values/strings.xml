@@ -47,6 +47,8 @@
     <string-array name="languages">
         <item>Русский</item>
     </string-array>
+    <string name="high_week">Верхняя</string>
+    <string name="low_week">Нижняя</string>
     <string name="sem">Семестр</string>
     <string-array name="semesters">
         <item>Текущий семестр</item>
