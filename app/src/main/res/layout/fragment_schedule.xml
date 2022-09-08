@@ -1,257 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
+    android:layout_marginStart="20dp"
     android:layout_marginTop="100dp"
+    android:layout_marginEnd="20dp"
+    android:layout_marginBottom="20dp"
+    android:gravity="center"
+    android:orientation="vertical"
     tools:context=".ScheduleFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="horizontal">
 
+        <Spinner
+            android:id="@+id/spinner"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="start"
+            android:gravity="start" />
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:layout_marginEnd="20dp"
-            android:layout_marginBottom="20dp"
-            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="0.1"
+            android:gravity="end"
             android:orientation="horizontal">
 
-            <Spinner
-                android:id="@+id/groupSpinner"
+            <TextView
+                android:id="@+id/textView10"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="start"
-                android:gravity="start" />
+                android:gravity="center"
+                android:text="@string/high_week" />
 
-            <LinearLayout
-                android:layout_width="0dp"
-                android:layout_height="match_parent"
-                android:layout_weight="0.1"
-                android:gravity="end"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView8"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/high_week" />
-
-                <Switch
-                    android:id="@+id/switch1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
-                    android:fontFamily="@font/inter"
-                    android:showText="false"
-                    android:switchTextAppearance="@style/SwitchText" />
-
-                <TextView
-                    android:id="@+id/textView9"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="@string/low_week" />
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/grades_collapsed_backgr"
-            android:backgroundTint="@color/light_grey_background"
-            android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="8dp">
+            <Switch
+                android:id="@+id/switchh"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter"
+                android:showText="false"
+                android:switchTextAppearance="@style/SwitchText" />
 
             <TextView
-                android:id="@+id/monday_tv"
-                android:layout_width="match_parent"
+                android:id="@+id/textView11"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="@string/monday"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/mondayRc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/schedule_str_item" />
+                android:gravity="center"
+                android:text="@string/low_week" />
 
         </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/grades_collapsed_backgr"
-            android:backgroundTint="@color/light_grey_background"
-            android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/tuesday_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="@string/tuesday"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/tuesdayRc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/schedule_str_item" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/grades_collapsed_backgr"
-            android:backgroundTint="@color/light_grey_background"
-            android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/wednesday_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="@string/wednesday"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/wednesdayRc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/schedule_str_item" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/grades_collapsed_backgr"
-            android:backgroundTint="@color/light_grey_background"
-            android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/thursday_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="@string/thursday"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/thursdayRc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/schedule_str_item" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/grades_collapsed_backgr"
-            android:backgroundTint="@color/light_grey_background"
-            android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/friday_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="@string/friday"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/fridayRc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/schedule_str_item" />
-
-        </LinearLayout>
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp"
-            android:layout_marginBottom="20dp"
-            android:background="@drawable/grades_collapsed_backgr"
-            android:backgroundTint="@color/light_grey_background"
-            android:orientation="vertical"
-            android:paddingStart="5dp"
-            android:paddingTop="8dp"
-            android:paddingEnd="5dp"
-            android:paddingBottom="8dp">
-
-            <TextView
-                android:id="@+id/saturday_tv"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:fontFamily="@font/inter"
-                android:text="@string/saturday"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/saturdayRc"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                tools:listitem="@layout/schedule_str_item" />
-
-        </LinearLayout>
-
     </LinearLayout>
-</ScrollView>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/scheduleRc"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginTop="15dp" />
+
+</LinearLayout>
