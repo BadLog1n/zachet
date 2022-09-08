@@ -37,14 +37,15 @@
                 android:gravity="center"
                 android:text="@string/high_week" />
 
-            <Switch
+                <Switch
                 android:id="@+id/switchh"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
                 android:fontFamily="@font/inter"
                 android:showText="false"
-                android:switchTextAppearance="@style/SwitchText" />
+                android:switchTextAppearance="@style/SwitchText"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
 
             <TextView
                 android:id="@+id/textView11"
