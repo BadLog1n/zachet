@@ -7,12 +7,16 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FragmentScheduleBinding
+import com.xwray.groupie.GroupAdapter
+import com.xwray.groupie.GroupieViewHolder
+import com.xwray.groupie.Item
 
 
-class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
+class ScheduleFragment : Fragment(R.layout.schedule) {
 
     private var mondayAdapter = ScheduleAdapter()
     private var tuesdayAdapter = ScheduleAdapter()
@@ -22,17 +26,27 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private var saturdayAdapter = ScheduleAdapter()
     private lateinit var binding:FragmentScheduleBinding
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.inflate(layoutInflater)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Расписание"
         var groups: Array<String> = arrayOf("ПО-91б","ПО-92б")
-        val grSpinner = view.findViewById<Spinner>(R.id.groupSpinner)
+        val spinner = view.findViewById<Spinner>(R.id.spinner)
         var arrayAdapter:ArrayAdapter<String> = ArrayAdapter(this.requireContext(),android.R.layout.simple_spinner_item,groups)
         arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        grSpinner.adapter = arrayAdapter
+        spinner.adapter = arrayAdapter
 
-        val mondayRc: RecyclerView = view.findViewById(R.id.mondayRc)
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        val scheduleRc: RecyclerView = view.findViewById(R.id.scheduleRc)
+        adapter.add(WeekDayItem("Понедельник"))
+        adapter.add(ScheduleRecordItem("8.00","Базы данных(лб)","а-207, Аникина Е.И."))
+        adapter.add(WeekDayItem("Понедельник"))
+        adapter.add(ScheduleRecordItem("8.00","Базы данных(лб)","а-207, Аникина Е.И."))
+        scheduleRc.adapter = adapter
+        scheduleRc.layoutManager = LinearLayoutManager(this.context)
+
+        /*val mondayRc: RecyclerView = view.findViewById(R.id.mondayRc)
         //mondayRc.layoutManager = LinearLayoutManager(this.context)
         mondayAdapter.clearRecords()
         mondayAdapter.scheduleRecordsList =  ArrayList()
@@ -44,7 +58,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val tuesdayRc: RecyclerView = view.findViewById(R.id.tuesdayRc)
         //tuesdayRc.layoutManager = LinearLayoutManager(this.context)
         tuesdayAdapter.clearRecords()
-        tuesdayAdapter.scheduleRecordsList =  ArrayList()
         tuesdayAdapter.notifyDataSetChanged()
         tuesdayRc.adapter = tuesdayAdapter
         tuesdayRc.adapter = tuesdayAdapter
@@ -105,7 +118,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
         records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
         records.add(ScheduleRecord("Среда","8.00","Базы данных(лб)","а-217, Аникина Е.И."))
-        initRcs(records)
+        initRcs(records)*/
     }
 
     private fun initRcs(records:MutableList<ScheduleRecord>) {
@@ -147,4 +160,27 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             }
         }
     }
+}
+class WeekDayItem(val text: String) : Item<GroupieViewHolder>() {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv).text = text
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.weekday_item
+    }
+
+}
+
+class ScheduleRecordItem(val time: String, val subject:String, val cabName:String) : Item<GroupieViewHolder>() {
+    override fun bind(viewHolder: GroupieViewHolder, position: Int) {
+        viewHolder.itemView.findViewById<TextView>(R.id.time_tv).text = time
+        viewHolder.itemView.findViewById<TextView>(R.id.subject_and_type_tv).text = subject
+        viewHolder.itemView.findViewById<TextView>(R.id.room_n_fio_tv).text = cabName
+    }
+
+    override fun getLayout(): Int {
+        return R.layout.schedule_str_item
+    }
+
 }
