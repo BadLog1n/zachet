@@ -1,6 +1,7 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -19,7 +20,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private lateinit var database: DatabaseReference
 
 
-    private lateinit var binding:FragmentScheduleBinding
+    private lateinit var binding: FragmentScheduleBinding
 
 
     @SuppressLint("UseSwitchCompatOrMaterialCode")
@@ -29,7 +30,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.inflate(layoutInflater)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Расписание"
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
+            "Расписание"
         getGroups(spinner)
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = view.findViewById(R.id.scheduleRc)
@@ -39,29 +41,32 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         //timetableGet("П")
 
 
-        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener{
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
             }
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
                 val switchState: Boolean = switch.isChecked
                 timetableGet(spinner.selectedItem.toString(), switchState)
             }
         }
 
 
-        switch.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+        switch.setOnCheckedChangeListener { _, _ ->
             val switchState: Boolean = switch.isChecked
-            timetableGet(spinner.selectedItem.toString(), switchState)
-        })
-
-
-
-
+            if (spinner.selectedItem != null){
+                timetableGet(spinner.selectedItem.toString(), switchState)
+            }
+        }
 
 
     }
-
 
 
     private fun getGroups(spinner: Spinner) {
@@ -69,13 +74,20 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         database = FirebaseDatabase.getInstance().getReference("timetable")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
-            for (item in it.children){
+            for (item in it.children) {
                 groups.add(item.key.toString())
             }
-            val arrayAdapter:ArrayAdapter<String> = ArrayAdapter(this.requireContext(),android.R.layout.simple_spinner_item,groups)
-            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spinner.adapter = arrayAdapter
-
+            try {
+                val arrayAdapter: ArrayAdapter<String> =
+                    ArrayAdapter(
+                        this.requireContext(),
+                        android.R.layout.simple_spinner_item,
+                        groups
+                    )
+                arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                spinner.adapter = arrayAdapter
+            }
+            catch (e: IllegalStateException) { }
         }
     }
 
@@ -86,7 +98,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         var upDownText = "up"
         if (upDown) upDownText = "down"
 
-        val rusDay = arrayOf("Понедельник", "Вторник", "Среда","Четверг","Пятница","Суббота")
+        val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
         val day = arrayOf("monday", "tuesday", "wednesday", "thursday", "friday", "saturday")
         database = FirebaseDatabase.getInstance().getReference("timetable/$group/$upDownText")
         val requestToDatabase = database.get()
@@ -104,7 +116,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 subjects = java.util.ArrayList(subjects.sortedWith(compareBy { it.time }))
                 adapter.add(WeekDayItem(rusDay[index]))
                 for (item in subjects) {
-                    adapter.add(ScheduleRecordItem(item.time,  item.cabName, item.subject))
+                    adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
                 }
                 subjects.clear()
             }
@@ -118,11 +130,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
-
-
-
-
-
 class WeekDayItem(val text: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv).text = text
@@ -134,7 +141,8 @@ class WeekDayItem(val text: String) : Item<GroupieViewHolder>() {
 
 }
 
-class ScheduleRecordItem(val time: String, val subject:String, val cabName:String) : Item<GroupieViewHolder>() {
+class ScheduleRecordItem(val time: String, val subject: String, val cabName: String) :
+    Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.time_tv).text = time
         viewHolder.itemView.findViewById<TextView>(R.id.subject_and_type_tv).text = subject

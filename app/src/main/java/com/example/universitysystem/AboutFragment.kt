@@ -41,18 +41,21 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         database = FirebaseDatabase.getInstance().getReference("version")
         val requestToDatabase = database.get()
-        requestToDatabase.addOnSuccessListener {
+/*        requestToDatabase.addOnSuccessListener {
             view.findViewById<TextView>(R.id.version).text = it.value.toString()
 
-            }
+            }*/
 
         val versionName = getAppVersion(requireContext())
+        view.findViewById<TextView>(R.id.version).text = versionName
+
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
             requestToDatabase.addOnSuccessListener {
-                if (versionName != it.value.toString()) {
+                if (versionName < it.value.toString()) {
                     //надо будет добавить alert с предложением скачать обновление
                     download(it.value.toString(), requireContext())
+                    Toast.makeText(this@HelpFragment.context, "Загрузка началась", Toast.LENGTH_SHORT).show()
                 }
                 else {
                     Toast.makeText(this@HelpFragment.context, "Установлена последняя версия", Toast.LENGTH_SHORT).show()
