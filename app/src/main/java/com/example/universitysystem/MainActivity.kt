@@ -110,7 +110,11 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.scheduleFragment)
                 }
-
+                R.id.feed_menu-> {
+                    toolbar.title = "Лента"
+                    supportActionBar?.show()
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.feedFragment)
+                }
             }
             findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.START)
             true
