@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
@@ -38,7 +39,10 @@ class FeedAdapter:RecyclerView.Adapter<FeedAdapter.RecordHolder> (){
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item,parent,false)
         view.findViewById<ImageButton>(R.id.replyToMsgBtn).setOnClickListener {
-            Toast.makeText(parent.context,"Добавить действие добавление новой записи",Toast.LENGTH_SHORT)
+            Toast.makeText(parent.context,"Добавить действие добавление новой записи",Toast.LENGTH_SHORT).show()
+            val newRecText = parent.findViewById<EditText>(R.id.newMessEdittext).text.toString()
+            addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false,true))
+
         }
 
         return RecordHolder(view)
