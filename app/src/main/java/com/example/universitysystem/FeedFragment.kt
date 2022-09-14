@@ -118,7 +118,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     dateTime,
                                     text,
                                     sponsored,
-                                    postId.toLong()
+                                    item.key.toString(),
+                                    author
                                 )
                             )
                             lastPost = postId.toLong()

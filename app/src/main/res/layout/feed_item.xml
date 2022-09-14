@@ -14,6 +14,20 @@
     android:paddingBottom="5dp">
 
     <TextView
+        android:id="@+id/record"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="gone" />
+
+    <TextView
+        android:id="@+id/authorIdChat"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="TextView"
+        android:visibility="gone" />
+
+    <TextView
         android:id="@+id/who_posted_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
