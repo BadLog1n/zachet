@@ -25,23 +25,15 @@ class FeedAdapter:RecyclerView.Adapter<FeedAdapter.RecordHolder> (){
             else {
                 sponsoredTv.visibility = View.INVISIBLE
             }
-            if (feedItem.canAnswer == true){
-                replyToMsgBtn.visibility = View.VISIBLE
-                replyToMsgBtn.isEnabled = true
-            }
-            else {
-                replyToMsgBtn.visibility = View.INVISIBLE
-                replyToMsgBtn.isEnabled = false
-            }
+
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item,parent,false)
+
         view.findViewById<ImageButton>(R.id.replyToMsgBtn).setOnClickListener {
-            Toast.makeText(parent.context,"Добавить действие добавление новой записи",Toast.LENGTH_SHORT).show()
-            val newRecText = parent.findViewById<EditText>(R.id.newMessEdittext).text.toString()
-            addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false,true))
+            Toast.makeText(parent.context,"Добавить открытие чата",Toast.LENGTH_SHORT).show()
 
         }
 

@@ -8,6 +8,9 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
+import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FragmentFeedBinding
@@ -39,7 +42,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         feedRc.adapter = rcAdapter
         addPostEventListener()
         feedRc.adapter = rcAdapter
-        feedRc.layoutManager = LinearLayoutManager(this.context)
+        val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
+        linearLayoutManager.stackFromEnd = true
+        feedRc.layoutManager = linearLayoutManager
 
         view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
@@ -48,14 +53,34 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         view.findViewById<ImageButton>(R.id.addRecord_imgbtn).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
+
+        }
+        view.findViewById<ImageButton>(R.id.closeNewMsgImgBtn).setOnClickListener {
+            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
+            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+            view.hideKeyboard()
         }
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             sendPost(text, false)
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-        }
+            Toast.makeText(this.context,"Добавить действие добавление новой записи", Toast.LENGTH_SHORT).show()
+            val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
+            view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
+            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false))
+            view.hideKeyboard()
+            try {
+                feedRc.scrollToPosition(
+                    feedRc.adapter!!.itemCount - 1
 
+                )}
+            catch (e: NullPointerException) {
+
+            }
+
+
+        }
 
     }
 
@@ -75,7 +100,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                         val sponsored =
                             dataSnapshot.child(postId).child("sponsored").value.toString()
                                 .toBoolean()
-                        rcAdapter.addFeedRecord(FeedRecord(author, dateTime, text, sponsored, true))
+                        rcAdapter.addFeedRecord(FeedRecord(author, dateTime, text, sponsored))
                         Log.w("T", "$author,$dateTime,$text,$sponsored")
                         lastPost = postId.toLong()
                     }
@@ -85,9 +110,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
+
         }
         database = FirebaseDatabase.getInstance().getReference("feed")
         database.addValueEventListener(postListener)
+    }
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
     private fun sendPost(

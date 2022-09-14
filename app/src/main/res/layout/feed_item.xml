@@ -10,14 +10,14 @@
     android:paddingStart="10dp"
     android:paddingTop="10dp"
     android:paddingEnd="10dp"
-    android:paddingBottom="10dp">
+    android:paddingBottom="5dp">
 
     <TextView
         android:id="@+id/who_posted_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="Степан Немченко"
-        android:textColor="@color/black"
+        android:textColor="#52A2E1"
         android:textSize="16sp"
         android:textStyle="bold" />
 
@@ -54,11 +54,12 @@
 
         <ImageButton
             android:id="@+id/replyToMsgBtn"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
             android:layout_gravity="end"
             android:background="@color/light_grey_background"
-            app:srcCompat="@drawable/ic___icon__mail_reply_" />
+            android:tint="@color/light_grey_text"
+            app:srcCompat="@drawable/ic___icon__reply_" />
     </LinearLayout>
 
 </LinearLayout>
