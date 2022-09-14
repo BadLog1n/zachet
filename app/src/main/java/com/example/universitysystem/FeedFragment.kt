@@ -14,6 +14,9 @@ import com.example.universitysystem.databinding.FragmentFeedBinding
 import com.example.universitysystem.databinding.FragmentGradesBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
@@ -53,10 +56,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-            Toast.makeText(this.context,"Добавить действие добавление новой записи", Toast.LENGTH_SHORT).show()
+            Toast.makeText(this.context,"Добавить получение имени автора", Toast.LENGTH_SHORT).show()
             val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
-            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false))
+            val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date()).toString()
+            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", dt,newRecText,false))
+            feedRc.adapter = rcAdapter
+            val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
+            linearLayoutManager.stackFromEnd = true
+            feedRc.layoutManager = linearLayoutManager
             view.hideKeyboard()
             try {
                 feedRc.scrollToPosition(
@@ -87,5 +95,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
+
+
 
 }
