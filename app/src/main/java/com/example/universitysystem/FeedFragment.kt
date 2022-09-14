@@ -1,10 +1,12 @@
 package com.example.universitysystem
 
+import android.content.Context
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
 import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -41,6 +43,12 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         view.findViewById<ImageButton>(R.id.addRecord_imgbtn).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
+
+        }
+        view.findViewById<ImageButton>(R.id.closeNewMsgImgBtn).setOnClickListener {
+            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
+            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+            view.hideKeyboard()
         }
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
@@ -49,6 +57,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
             rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false))
+            view.hideKeyboard()
             try {
                 feedRc.scrollToPosition(
                     feedRc.adapter!!.itemCount - 1
@@ -57,20 +66,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             catch (e: NullPointerException) {
 
             }
-            /*view.findViewById<RecyclerView>(R.id.feedRc).addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
-                if (bottom < oldBottom) {
-                    feedRc.post {
-                        try {
-                            feedRc.scrollToPosition(
-                                feedRc.adapter!!.itemCount - 1
 
-                            )}
-                        catch (e: NullPointerException) {
-
-                        }
-                    }
-                }
-            }*/
 
         }
 
@@ -86,6 +82,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             rcAdapter.addFeedRecord(sg2)
 
         }
+    }
+    private fun View.hideKeyboard() {
+        val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 }
