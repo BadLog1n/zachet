@@ -71,20 +71,17 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             view.hideKeyboard()
         }
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
+
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
-            sendPost(text)
+            if (!text.isBlank()){
+                sendPost(text)
+            }
+            else{
+                Toast.makeText(this.context, "Пожалуйста, введите текст", Toast.LENGTH_SHORT).show()
+            }
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-            //Toast.makeText(this.context,"Добавить получение имени автора", Toast.LENGTH_SHORT).show()
-            //val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
-            /*val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date()).toString()
-            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", dt,newRecText,false))
-            feedRc.adapter = rcAdapter
-            val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
-            linearLayoutManager.stackFromEnd = true
-            feedRc.layoutManager = linearLayoutManager
-            */
             view.hideKeyboard()
 
 
