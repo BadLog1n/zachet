@@ -38,7 +38,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         rcAdapter.recordsList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         feedRc.adapter = rcAdapter
-        addPostEventListener()
+        addPostEventListener(view)
         feedRc.adapter = rcAdapter
         val linearLayoutManager =
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
@@ -66,21 +66,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
             view.hideKeyboard()
-            try {
-                feedRc.scrollToPosition(
-                    feedRc.adapter!!.itemCount
 
-                )
-            } catch (e: NullPointerException) {
-
-            }
 
         }
 
     }
 
 
-    private fun addPostEventListener() {
+    private fun addPostEventListener(view: View) {
         val postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -91,11 +84,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
                         database = FirebaseDatabase.getInstance().getReference("users/$postAuthor")
                         val requestToDatabase = database.get()
-                        requestToDatabase.addOnSuccessListener {
+                        requestToDatabase.addOnSuccessListener { itName ->
                             val name =
-                                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else ""
+                                if (itName.child("name").value.toString() != "null") itName.child("name").value.toString() else ""
                             val surname =
-                                if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
+                                if (itName.child("surname").value.toString() != "null") itName.child("surname").value.toString() else ""
                             val displayName = "$name $surname"
 
                             val dateTime =
@@ -114,14 +107,28 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 )
                             )
                             lastPost = postId.toLong()
+                            Log.w("T", "${item.key.toString().toLong()}")
+                            Log.w("T", "${dataSnapshot.children.last().key.toString().toLong()}")
+
+                            if (item.key.toString().toLong() == dataSnapshot.children.last().key.toString().toLong()) {
+                                val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
+                                feedRc.adapter = rcAdapter
+                                val itemCount = rcAdapter.itemCount
+                                feedRc.smoothScrollToPosition(itemCount);
+
+                            }
+
                         }
                     }
+
                 }
-            }
+                }
+
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
+
         }
         database = FirebaseDatabase.getInstance().getReference("feed")
         database.addValueEventListener(postListener)
