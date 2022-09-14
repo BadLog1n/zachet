@@ -25,6 +25,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var database: DatabaseReference
     private lateinit var author: String
     private var lastPost: Long = 0
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
@@ -39,7 +40,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         rcAdapter.recordsList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         feedRc.adapter = rcAdapter
-        addPostEventListener()
+        addPostEventListener(view)
         feedRc.adapter = rcAdapter
         val linearLayoutManager =
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
@@ -71,7 +72,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
-            sendPost(text, false)
+            sendPost(text)
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
             //Toast.makeText(this.context,"Добавить получение имени автора", Toast.LENGTH_SHORT).show()
@@ -85,21 +86,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             feedRc.layoutManager = linearLayoutManager
             */
             view.hideKeyboard()
-            try {
-                feedRc.scrollToPosition(
-                    feedRc.adapter!!.itemCount
 
-                )
-            } catch (e: NullPointerException) {
-
-            }
 
         }
 
     }
 
 
-    private fun addPostEventListener() {
+    private fun addPostEventListener(view: View) {
         val postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -110,11 +104,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
                         database = FirebaseDatabase.getInstance().getReference("users/$postAuthor")
                         val requestToDatabase = database.get()
-                        requestToDatabase.addOnSuccessListener {
+                        requestToDatabase.addOnSuccessListener { itName ->
                             val name =
-                                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else ""
+                                if (itName.child("name").value.toString() != "null") itName.child("name").value.toString() else ""
                             val surname =
-                                if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
+                                if (itName.child("surname").value.toString() != "null") itName.child(
+                                    "surname"
+                                ).value.toString() else ""
                             val displayName = "$name $surname"
 
                             val dateTime =
@@ -133,14 +129,31 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 )
                             )
                             lastPost = postId.toLong()
+                            Log.w("T", "${item.key.toString().toLong()}")
+                            Log.w("T", "${dataSnapshot.children.last().key.toString().toLong()}")
+
+                            if (item.key.toString()
+                                    .toLong() == dataSnapshot.children.last().key.toString()
+                                    .toLong()
+                            ) {
+                                val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
+                                feedRc.adapter = rcAdapter
+                                val itemCount = rcAdapter.itemCount
+                                feedRc.smoothScrollToPosition(itemCount)
+
+                            }
+
                         }
                     }
+
                 }
             }
+
 
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
+
         }
         database = FirebaseDatabase.getInstance().getReference("feed")
         database.addValueEventListener(postListener)
@@ -154,12 +167,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     private fun sendPost(
         text: String,
-        sponsored: Boolean
     ) {
         database = FirebaseDatabase.getInstance().getReference("feed")
         val message = mapOf(
             "text" to text,
-            "sponsored" to sponsored,
+            "sponsored" to false,
             "author" to author,
         )
         val currentTimestamp = System.currentTimeMillis().toString()
