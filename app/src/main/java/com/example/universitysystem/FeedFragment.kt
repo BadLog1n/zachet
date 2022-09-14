@@ -38,6 +38,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         feedRc.layoutManager = linearLayoutManager
+        try {
+            feedRc.scrollToPosition(
+                feedRc.adapter!!.itemCount - 1
+
+            )}
+        catch (e: NullPointerException) {
+
+        }
 
         view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
