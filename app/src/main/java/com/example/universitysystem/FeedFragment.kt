@@ -24,6 +24,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var database: DatabaseReference
     private lateinit var author: String
     private var lastPost: Long = 0
+    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
@@ -61,7 +62,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
-            sendPost(text, false)
+            sendPost(text)
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
@@ -88,7 +89,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                             val name =
                                 if (itName.child("name").value.toString() != "null") itName.child("name").value.toString() else ""
                             val surname =
-                                if (itName.child("surname").value.toString() != "null") itName.child("surname").value.toString() else ""
+                                if (itName.child("surname").value.toString() != "null") itName.child(
+                                    "surname"
+                                ).value.toString() else ""
                             val displayName = "$name $surname"
 
                             val dateTime =
@@ -110,11 +113,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                             Log.w("T", "${item.key.toString().toLong()}")
                             Log.w("T", "${dataSnapshot.children.last().key.toString().toLong()}")
 
-                            if (item.key.toString().toLong() == dataSnapshot.children.last().key.toString().toLong()) {
+                            if (item.key.toString()
+                                    .toLong() == dataSnapshot.children.last().key.toString()
+                                    .toLong()
+                            ) {
                                 val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
                                 feedRc.adapter = rcAdapter
                                 val itemCount = rcAdapter.itemCount
-                                feedRc.smoothScrollToPosition(itemCount);
+                                feedRc.smoothScrollToPosition(itemCount)
 
                             }
 
@@ -122,7 +128,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                     }
 
                 }
-                }
+            }
 
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -141,12 +147,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     private fun sendPost(
         text: String,
-        sponsored: Boolean
     ) {
         database = FirebaseDatabase.getInstance().getReference("feed")
         val message = mapOf(
             "text" to text,
-            "sponsored" to sponsored,
+            "sponsored" to false,
             "author" to author,
         )
         val currentTimestamp = System.currentTimeMillis().toString()
