@@ -10,7 +10,6 @@ import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.Button
-import android.widget.ImageButton
 import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
@@ -19,7 +18,6 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import org.w3c.dom.Text
 
 class HelpFragment : Fragment(R.layout.fragment_help) {
     private val authCheck = AuthCheck()
@@ -29,7 +27,8 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         super.onViewCreated(view, savedInstanceState)
         authCheck.check(view, this@HelpFragment.context)
 
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "О приложении"
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
+            "О приложении"
 
 
         view.findViewById<Button>(R.id.getSupportBtn).setOnClickListener {
@@ -44,7 +43,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         requestToDatabase.addOnSuccessListener {
             view.findViewById<TextView>(R.id.version).text = it.value.toString()
 
-            }
+        }
 
         val versionName = getAppVersion(requireContext())
         Log.d("version", versionName)
@@ -53,14 +52,16 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
                 if (versionName != it.value.toString()) {
                     //надо будет добавить alert с предложением скачать обновление
                     download(it.value.toString(), requireContext())
-                }
-                else {
-                    Toast.makeText(this@HelpFragment.context, "Установлена последняя версия", Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(
+                        this@HelpFragment.context,
+                        "Установлена последняя версия",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }
     }
-
 
 
     private fun getAppVersion(context: Context?): String {
@@ -74,7 +75,6 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         return version
     }
-
 
 
     private fun download(version: String, context: Context) {

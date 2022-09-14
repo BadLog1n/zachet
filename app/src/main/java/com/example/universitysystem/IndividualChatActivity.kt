@@ -20,7 +20,6 @@ import android.os.Environment.isExternalStorageManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
-import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -31,7 +30,6 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
@@ -79,8 +77,10 @@ class IndividualChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
-            val name = if (it.child("name").value.toString() != "null") it.child("name").value.toString() else getName
-            val surname = if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
+            val name =
+                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else getName
+            val surname =
+                if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
             val displayName = "$name $surname"
             findViewById<TextView>(R.id.receiver_tv).text = displayName
         }

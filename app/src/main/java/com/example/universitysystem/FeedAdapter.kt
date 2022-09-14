@@ -6,7 +6,6 @@ import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.Toast
@@ -14,19 +13,19 @@ import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FeedItemBinding
 
-class FeedAdapter:RecyclerView.Adapter<FeedAdapter.RecordHolder> (){
+class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
     var recordsList = ArrayList<FeedRecord>()
-    class RecordHolder(item: View) : RecyclerView.ViewHolder(item){
+
+    class RecordHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = FeedItemBinding.bind(item)
-        fun bind(feedItem:FeedRecord) = with(binding){
+        fun bind(feedItem: FeedRecord) = with(binding) {
             whoPostedTv.text = feedItem.poster
             timeOfPostTv.text = feedItem.time
             recordTv.text = feedItem.record_text
             sponsoredTv.text = "Спонсировано"
-            if (feedItem.isSponsored == true){
+            if (feedItem.isSponsored) {
                 sponsoredTv.visibility = View.VISIBLE
-            }
-            else {
+            } else {
                 sponsoredTv.visibility = View.INVISIBLE
             }
 
@@ -34,10 +33,10 @@ class FeedAdapter:RecyclerView.Adapter<FeedAdapter.RecordHolder> (){
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item,parent,false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
 
         view.findViewById<ImageButton>(R.id.replyToMsgBtn).setOnClickListener {
-            Toast.makeText(parent.context,"Добавить открытие чата",Toast.LENGTH_SHORT).show()
+            Toast.makeText(parent.context, "Добавить открытие чата", Toast.LENGTH_SHORT).show()
 
         }
         view.findViewById<LinearLayout>(R.id.recordItemLayout).setOnClickListener {
@@ -72,12 +71,12 @@ class FeedAdapter:RecyclerView.Adapter<FeedAdapter.RecordHolder> (){
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    fun addFeedRecord(feedRecord: FeedRecord){
+    fun addFeedRecord(feedRecord: FeedRecord) {
         recordsList.add(feedRecord)
         notifyDataSetChanged()
     }
 
-    fun clearRecords(){
+    fun clearRecords() {
         recordsList.removeAll(recordsList.toSet())
     }
 }
