@@ -75,14 +75,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             if (!text.isBlank()){
                 sendPost(text)
+                view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
+                view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+                view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
+                view.hideKeyboard()
             }
             else{
                 Toast.makeText(this.context, "Пожалуйста, введите текст", Toast.LENGTH_SHORT).show()
             }
-            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
-            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-            view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
-            view.hideKeyboard()
+            
 
 
         }
@@ -124,7 +125,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     dateTime,
                                     text,
                                     sponsored,
-                                    postId.toLong()
+                                    postId.toLong(),
+                                    author
                                 )
                             )
                             lastPost = postId.toLong()
