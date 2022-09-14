@@ -8,7 +8,6 @@ import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment.DIRECTORY_DOWNLOADS
-import android.widget.Button
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -16,7 +15,6 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
-import com.ortiz.touchview.TouchImageView
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -26,13 +24,13 @@ import kotlinx.coroutines.withContext
 class ImageActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         setContentView(R.layout.activity_image)
-        val r:FloatArray = floatArrayOf(00f,00f,00f)
-        window.setBackgroundDrawable(ColorDrawable(Color.HSVToColor(80,r)))
-        val chatName:String = intent.getStringExtra("chatName").toString()
-        val fileName:String = intent.getStringExtra("fileName").toString()
+        val r: FloatArray = floatArrayOf(00f, 00f, 00f)
+        window.setBackgroundDrawable(ColorDrawable(Color.HSVToColor(80, r)))
+        val chatName: String = intent.getStringExtra("chatName").toString()
+        val fileName: String = intent.getStringExtra("fileName").toString()
         super.onCreate(savedInstanceState)
         displayImage(fileName, chatName)
-       findViewById<ImageButton>(R.id.backFromImgBtn).setOnClickListener {
+        findViewById<ImageButton>(R.id.backFromImgBtn).setOnClickListener {
             this.onBackPressed()
         }
         findViewById<ImageButton>(R.id.saveImgBtn).setOnClickListener {
@@ -46,23 +44,25 @@ class ImageActivity : AppCompatActivity() {
      * Функция, которая отображает фотографии с сервера в приложении. [fileName] - имя файла с расширением,
      * [chatName] - имя чата между пользователями.
      * */
-    private fun displayImage(fileName: String, chatName: String) = CoroutineScope(Dispatchers.IO).launch {
-        try {
-            val imageRef = Firebase.storage.reference
-            val imageView = findViewById<SubsamplingScaleImageView>(R.id.bigImg)
-            val maxDownloadSize = 5L * 1024 * 1024 * 1024
-            val bytes = imageRef.child("$chatName/$fileName").getBytes(maxDownloadSize).await()
-            val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
-            withContext(Dispatchers.Main) {
-                imageView?.setImage(ImageSource.bitmap(bmp))
-            }
-        } catch(e: Exception) {
-            withContext(Dispatchers.Main) {
-                Toast.makeText(this@ImageActivity, e.message, Toast.LENGTH_LONG).show()
+    private fun displayImage(fileName: String, chatName: String) =
+        CoroutineScope(Dispatchers.IO).launch {
+            try {
+                val imageRef = Firebase.storage.reference
+                val imageView = findViewById<SubsamplingScaleImageView>(R.id.bigImg)
+                val maxDownloadSize = 5L * 1024 * 1024 * 1024
+                val bytes = imageRef.child("$chatName/$fileName").getBytes(maxDownloadSize).await()
+                val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+                withContext(Dispatchers.Main) {
+                    imageView?.setImage(ImageSource.bitmap(bmp))
+                }
+            } catch (e: Exception) {
+                withContext(Dispatchers.Main) {
+                    Toast.makeText(this@ImageActivity, e.message, Toast.LENGTH_LONG).show()
 
+                }
             }
         }
-    }
+
     /**
      * Функция, позволяющая загружать файлы напрямую в телефон. [filename] - имя файла с расширением,
      * [chatName] - имя чата между пользователями.
