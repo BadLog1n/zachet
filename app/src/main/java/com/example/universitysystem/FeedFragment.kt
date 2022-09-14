@@ -119,16 +119,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     .toBoolean()
                             rcAdapter.addFeedRecord(
                                 FeedRecord(
-                                    "$displayName ($postAuthor)",
+                                    displayName,
+                                    postAuthor,
                                     dateTime,
                                     text,
-                                    sponsored
+                                    sponsored,
+                                    postId.toLong()
                                 )
                             )
                             lastPost = postId.toLong()
-                            Log.w("T", "${item.key.toString().toLong()}")
-                            Log.w("T", "${dataSnapshot.children.last().key.toString().toLong()}")
-
                             if (item.key.toString()
                                     .toLong() == dataSnapshot.children.last().key.toString()
                                     .toLong()

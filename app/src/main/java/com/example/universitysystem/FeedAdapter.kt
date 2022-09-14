@@ -1,27 +1,35 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
+import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FeedItemBinding
 
-class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
-    var recordsList = ArrayList<FeedRecord>()
+private lateinit var authorIdChat: String
 
+class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
+
+    var recordsList = ArrayList<FeedRecord>()
     class RecordHolder(item: View) : RecyclerView.ViewHolder(item) {
+
         private val binding = FeedItemBinding.bind(item)
         fun bind(feedItem: FeedRecord) = with(binding) {
-            whoPostedTv.text = feedItem.poster
+            whoPostedTv.text = feedItem.author
             timeOfPostTv.text = feedItem.time
             recordTv.text = feedItem.record_text
+            authorIdChat = feedItem.authorIdChat
             sponsoredTv.text = "Спонсировано"
             if (feedItem.isSponsored) {
                 sponsoredTv.visibility = View.VISIBLE
@@ -36,7 +44,9 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
 
         view.findViewById<ImageButton>(R.id.replyToMsgBtn).setOnClickListener {
-            Toast.makeText(parent.context, "Добавить открытие чата", Toast.LENGTH_SHORT).show()
+            val intent = Intent(parent.context,IndividualChatActivity::class.java)
+            intent.putExtra("getUser", authorIdChat)
+            parent.context.startActivity(intent)
 
         }
         view.findViewById<LinearLayout>(R.id.recordItemLayout).setOnClickListener {
