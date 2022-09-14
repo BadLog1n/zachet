@@ -75,16 +75,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             sendPost(text)
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-            //Toast.makeText(this.context,"Добавить получение имени автора", Toast.LENGTH_SHORT).show()
-            //val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
-            /*val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date()).toString()
-            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", dt,newRecText,false))
-            feedRc.adapter = rcAdapter
-            val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
-            linearLayoutManager.stackFromEnd = true
-            feedRc.layoutManager = linearLayoutManager
-            */
             view.hideKeyboard()
 
 
@@ -122,16 +113,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     .toBoolean()
                             rcAdapter.addFeedRecord(
                                 FeedRecord(
-                                    "$displayName ($postAuthor)",
+                                    displayName,
+                                    postAuthor,
                                     dateTime,
                                     text,
-                                    sponsored
+                                    sponsored,
+                                    postId.toLong()
                                 )
                             )
                             lastPost = postId.toLong()
-                            Log.w("T", "${item.key.toString().toLong()}")
-                            Log.w("T", "${dataSnapshot.children.last().key.toString().toLong()}")
-
                             if (item.key.toString()
                                     .toLong() == dataSnapshot.children.last().key.toString()
                                     .toLong()
