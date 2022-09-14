@@ -6,11 +6,9 @@ import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
-import androidx.fragment.app.Fragment
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FragmentFeedBinding
@@ -42,7 +40,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         feedRc.adapter = rcAdapter
         addPostEventListener()
         feedRc.adapter = rcAdapter
-        val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
+        val linearLayoutManager =
+            LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         feedRc.layoutManager = linearLayoutManager
 
@@ -65,20 +64,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             sendPost(text, false)
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-            Toast.makeText(this.context,"Добавить действие добавление новой записи", Toast.LENGTH_SHORT).show()
-            val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
-            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false))
             view.hideKeyboard()
             try {
                 feedRc.scrollToPosition(
-                    feedRc.adapter!!.itemCount - 1
+                    feedRc.adapter!!.itemCount
 
-                )}
-            catch (e: NullPointerException) {
+                )
+            } catch (e: NullPointerException) {
 
             }
-
 
         }
 
@@ -92,17 +87,34 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 for (item in dataSnapshot.children) {
                     val postId = item.key.toString()
                     if (lastPost < postId.toLong()) {
-                        val dateTime =
-                            SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(postId.toLong()))
-                                .toString()
-                        val author = dataSnapshot.child(postId).child("author").value.toString()
-                        val text = dataSnapshot.child(postId).child("text").value.toString()
-                        val sponsored =
-                            dataSnapshot.child(postId).child("sponsored").value.toString()
-                                .toBoolean()
-                        rcAdapter.addFeedRecord(FeedRecord(author, dateTime, text, sponsored))
-                        Log.w("T", "$author,$dateTime,$text,$sponsored")
-                        lastPost = postId.toLong()
+                        val postAuthor = dataSnapshot.child(postId).child("author").value.toString()
+
+                        database = FirebaseDatabase.getInstance().getReference("users/$postAuthor")
+                        val requestToDatabase = database.get()
+                        requestToDatabase.addOnSuccessListener {
+                            val name =
+                                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else ""
+                            val surname =
+                                if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
+                            val displayName = "$name $surname"
+
+                            val dateTime =
+                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(postId.toLong()))
+                                    .toString()
+                            val text = dataSnapshot.child(postId).child("text").value.toString()
+                            val sponsored =
+                                dataSnapshot.child(postId).child("sponsored").value.toString()
+                                    .toBoolean()
+                            rcAdapter.addFeedRecord(
+                                FeedRecord(
+                                    "$displayName ($postAuthor)",
+                                    dateTime,
+                                    text,
+                                    sponsored
+                                )
+                            )
+                            lastPost = postId.toLong()
+                        }
                     }
                 }
             }
@@ -110,11 +122,11 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
-
         }
         database = FirebaseDatabase.getInstance().getReference("feed")
         database.addValueEventListener(postListener)
     }
+
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
