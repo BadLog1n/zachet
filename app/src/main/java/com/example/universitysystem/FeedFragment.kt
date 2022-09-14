@@ -12,10 +12,9 @@ import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FragmentFeedBinding
+import com.google.firebase.database.*
 import java.text.SimpleDateFormat
 import java.util.*
-import kotlin.collections.ArrayList
-import com.google.firebase.database.*
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
@@ -25,6 +24,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var database: DatabaseReference
     private lateinit var author: String
     private var lastPost: Long = 0
+
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
@@ -73,17 +73,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
 
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
-            if (!text.isBlank()){
+            if (text.isNotBlank()) {
                 sendPost(text)
                 view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
                 view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
                 view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
                 view.hideKeyboard()
-            }
-            else{
+            } else {
                 Toast.makeText(this.context, "Пожалуйста, введите текст", Toast.LENGTH_SHORT).show()
             }
-            
 
 
         }
@@ -125,7 +123,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     dateTime,
                                     text,
                                     sponsored,
-                                    postId.toLong(),
+                                    item.key.toString(),
                                     author
                                 )
                             )
