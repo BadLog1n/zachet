@@ -1,7 +1,6 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -15,10 +14,8 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.activity.addCallback
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -26,8 +23,6 @@ import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
-import java.text.SimpleDateFormat
-import java.util.*
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private val authCheck = AuthCheck()

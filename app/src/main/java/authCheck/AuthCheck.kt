@@ -15,10 +15,8 @@ class AuthCheck {
     private val saveUserid = "save_userid"
     private val savePassword = "save_password"
     private val checkSettings = "check_settings"
-    private val checkLogin = "check_login"
     private var un = ""
     private var pw = ""
-    private var clickBack = false
     private lateinit var database: DatabaseReference
 
     fun check(view: View, context: Context?){
@@ -28,17 +26,17 @@ class AuthCheck {
         un = sharedPref.getString(saveUserid, "").toString()
         pw = sharedPref.getString(savePassword, "").toString()
 
-        database = FirebaseDatabase.getInstance().getReference("users/$un")
-        val requestToDatabase = database.get()
-        requestToDatabase.addOnSuccessListener {
-            val login = it.child("login").value.toString()
-            val password = it.child("password").value.toString()
-            if (login != un || password != pw) {
-                sharedPref.edit()?.putBoolean(checkSettings, false)?.apply()
-                Toast.makeText(context, "Логин или пароль не верен.", Toast.LENGTH_SHORT).show()
-                findNavController(view).navigate(R.id.loginFragment)
+            database = FirebaseDatabase.getInstance().getReference("users/$un")
+            val requestToDatabase = database.get()
+            requestToDatabase.addOnSuccessListener {
+                val login = it.child("login").value.toString()
+                val password = it.child("password").value.toString()
+                if (login != un || password != pw) {
+                    sharedPref.edit()?.putBoolean(checkSettings, false)?.apply()
+                    Toast.makeText(context, "Логин или пароль не верен.", Toast.LENGTH_SHORT).show()
+                    findNavController(view).navigate(R.id.loginFragment)
+                }
             }
-        }
     }
     }
 

@@ -1,25 +1,16 @@
 package com.example.universitysystem
 
 import android.content.Context
-import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.view.MotionEvent
-import android.widget.ImageButton
-import android.widget.TextView
-import android.widget.Toolbar
-import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.graphics.drawable.toDrawable
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
-
-//internal lateinit var mainActionBar:androidx.appcompat.app.ActionBar private set
 
 class MainActivity : AppCompatActivity() {
     //private val checkSettings = "check_settings"
@@ -53,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             supportActionBar?.show()
 
         }
-        if (intent.getBooleanExtra("from_chats",false)==true){
+        if (intent.getBooleanExtra("from_chats",false)){
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
         }
         /*findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
@@ -64,7 +55,7 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)){
             toolbar.title = "Мои баллы"
             supportActionBar?.show()
-            findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_UNLOCKED)
         }
 
         /**
@@ -77,7 +68,7 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.gradesFragment)
                 }
-                R.id.chats_menu->{
+                R.id.chats_menu ->{
                     findNavController(R.id.nav_host_fragment).navigate(R.id.chatsFragment)
                     toolbar.title = "Чаты"
                     supportActionBar?.show()
@@ -110,7 +101,11 @@ class MainActivity : AppCompatActivity() {
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.scheduleFragment)
                 }
-
+                R.id.feed_menu-> {
+                    toolbar.title = "Лента"
+                    supportActionBar?.show()
+                    findNavController(R.id.nav_host_fragment).navigate(R.id.feedFragment)
+                }
             }
             findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.START)
             true

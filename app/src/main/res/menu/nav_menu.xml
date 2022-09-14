@@ -3,18 +3,24 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
     <item android:title=""/>
-    <item android:title="@string/my_grades"
-        android:id="@+id/grades_menu"
-        android:icon="@drawable/ic___icon__graph_bar_">
-    </item>
-    <item android:title="@string/chats"
-        android:id="@+id/chats_menu"
-        android:icon="@drawable/ic___icon__chat_">
+    <item android:title="@string/feed"
+        android:id="@+id/feed_menu"
+        android:icon="@drawable/ic___icon__news_">
     </item>
     <item android:title="@string/schedule"
         android:id="@+id/schedule_menu"
         android:icon="@drawable/ic___icon__calendar_schedule_">
     </item>
+    <item android:title="@string/my_grades"
+        android:id="@+id/grades_menu"
+        android:icon="@drawable/ic___icon__graph_bar_">
+    </item>
+
+    <item android:title="@string/chats"
+        android:id="@+id/chats_menu"
+        android:icon="@drawable/ic___icon__chat_">
+    </item>
+
     <item android:title="@string/settings"
         android:id="@+id/settings_menu"
         android:icon="@drawable/ic_clarity_settings_line">

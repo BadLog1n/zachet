@@ -45,4 +45,9 @@
         android:name="com.example.universitysystem.ScheduleFragment"
         android:label="fragment_schedule"
         tools:layout="@layout/fragment_schedule" />
+    <fragment
+        android:id="@+id/feedFragment"
+        android:name="com.example.universitysystem.FeedFragment"
+        android:label="fragment_feed"
+        tools:layout="@layout/fragment_feed" />
 </navigation>

@@ -1,7 +1,6 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
-import android.content.Context
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -60,7 +59,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         switch.setOnCheckedChangeListener { _, _ ->
             val switchState: Boolean = switch.isChecked
-            if (spinner.selectedItem != null){
+            if (spinner.selectedItem != null) {
                 timetableGet(spinner.selectedItem.toString(), switchState)
             }
         }
@@ -86,8 +85,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                     )
                 arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = arrayAdapter
+            } catch (e: IllegalStateException) {
             }
-            catch (e: IllegalStateException) { }
+            val arrayAdapter: ArrayAdapter<String> =
+                ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_item, groups)
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = arrayAdapter
         }
     }
 
