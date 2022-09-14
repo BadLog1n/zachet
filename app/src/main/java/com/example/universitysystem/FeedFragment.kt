@@ -5,10 +5,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
-import android.widget.ImageButton
-import android.widget.LinearLayout
-import android.widget.TextView
+import android.widget.*
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FragmentFeedBinding
@@ -33,7 +30,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         feedRc.adapter = rcAdapter
         initFeedRc()
         feedRc.adapter = rcAdapter
-        feedRc.layoutManager = LinearLayoutManager(this.context)
+        val linearLayoutManager = LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
+        linearLayoutManager.stackFromEnd = true
+        feedRc.layoutManager = linearLayoutManager
 
         view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
@@ -46,8 +45,34 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
-        }
+            Toast.makeText(this.context,"Добавить действие добавление новой записи", Toast.LENGTH_SHORT).show()
+            val newRecText =view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
+            view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
+            rcAdapter.addFeedRecord(FeedRecord("Аникина Елена Игоревна", "сегодня 12:10",newRecText,false))
+            try {
+                feedRc.scrollToPosition(
+                    feedRc.adapter!!.itemCount - 1
 
+                )}
+            catch (e: NullPointerException) {
+
+            }
+            /*view.findViewById<RecyclerView>(R.id.feedRc).addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+                if (bottom < oldBottom) {
+                    feedRc.post {
+                        try {
+                            feedRc.scrollToPosition(
+                                feedRc.adapter!!.itemCount - 1
+
+                            )}
+                        catch (e: NullPointerException) {
+
+                        }
+                    }
+                }
+            }*/
+
+        }
 
     }
 
@@ -55,9 +80,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         binding.apply {
 
 
-            val sg = FeedRecord("1","12:00","smthn",true,false)
+            val sg = FeedRecord("1","12:00","smthn",true)
             rcAdapter.addFeedRecord(sg)
-            val sg2 = FeedRecord("2","12:10","smthn2",false,true)
+            val sg2 = FeedRecord("2","12:10","smthn2",false)
             rcAdapter.addFeedRecord(sg2)
 
         }
