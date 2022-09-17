@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:background="@color/white"
-    android:maxHeight="100dp"
+    android:maxHeight="80dp"
     android:minHeight="?attr/actionBarSize"
     app:buttonGravity="center_vertical"
     app:title=""

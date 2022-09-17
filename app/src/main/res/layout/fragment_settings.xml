@@ -5,9 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="10dp"
-    android:layout_marginTop="100dp"
-    android:layout_marginEnd="10dp"
-    android:layout_marginBottom="20dp"
+    android:layout_marginTop="80dp"
     android:orientation="vertical"
     tools:context=".SettingsFragment">
 
@@ -69,34 +67,35 @@
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
 
-            <TextView
-                android:id="@+id/password_sett_tv"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="14dp"
-                android:layout_marginBottom="10dp"
-                android:fontFamily="@font/inter"
-                android:text="@string/password"
-                android:textColor="@color/black"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:orientation="horizontal">
 
-            <ImageButton
-                android:id="@+id/infoPasswordBtn"
-                android:layout_width="25dp"
-                android:layout_height="20dp"
-                android:layout_gravity="top"
-                android:layout_marginStart="5dp"
-                android:layout_marginTop="2dp"
-                android:background="@color/white"
-                android:src="@drawable/ic_baseline_help_outline_24"
-                app:tint="@color/blue" />
-        </LinearLayout>
+                <TextView
+                    android:id="@+id/password_sett_tv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="14dp"
+                    android:layout_marginBottom="10dp"
+                    android:fontFamily="@font/inter"
+                    android:text="@string/password"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:textStyle="bold" />
+
+                <ImageButton
+                    android:id="@+id/infoPasswordBtn"
+                    android:layout_width="25dp"
+                    android:layout_height="20dp"
+                    android:layout_gravity="top"
+                    android:layout_marginStart="5dp"
+                    android:layout_marginTop="2dp"
+                    android:background="@color/white"
+                    android:src="@drawable/ic_baseline_help_outline_24"
+                    app:tint="@color/blue" />
+            </LinearLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/layoutPassword"
@@ -156,6 +155,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <ImageButton
                     android:id="@+id/infoNameBtn"
                     android:layout_width="25dp"
@@ -204,6 +204,7 @@
                     android:textColor="@color/black"
                     android:textSize="16sp"
                     android:textStyle="bold" />
+
                 <ImageButton
                     android:id="@+id/infoSurnameBtn"
                     android:layout_width="25dp"

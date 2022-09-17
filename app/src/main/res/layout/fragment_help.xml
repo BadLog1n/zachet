@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_marginStart="20dp"
-    android:layout_marginTop="100dp"
+    android:layout_marginTop="80dp"
     android:layout_marginEnd="20dp"
     android:layout_marginBottom="20dp"
+    android:gravity="center"
     android:orientation="vertical"
-    tools:context=".HelpFragment"
-    android:gravity="center">
+    tools:context=".HelpFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -66,8 +66,7 @@
         android:textAlignment="textStart"
         app:icon="@drawable/ic___icon__telegram_"
         app:iconTint="@color/white"
-        app:iconTintMode="multiply"
-        />
+        app:iconTintMode="multiply" />
 
     <Button
         android:id="@+id/getSupportBtn"
