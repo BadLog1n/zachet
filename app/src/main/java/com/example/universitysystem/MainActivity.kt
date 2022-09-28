@@ -125,6 +125,7 @@ class MainActivity : AppCompatActivity() {
             findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title = "О приложении"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.settingsFragment) -> toolbar.title = "Настройки"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.scheduleFragment) -> toolbar.title = "Расписание"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.feedFragment) -> toolbar.title = "Лента"
         }
         supportActionBar?.show()
     }
