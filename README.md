@@ -21,11 +21,12 @@
 в одном приложении без затрат на поиски контактов
 - Единое место связи с преподавателями  
 Ознакомиться с работой приложения можно перейдя по ссылке в QR-коде:  
-![image](https://user-images.githubusercontent.com/54963637/192836271-af8da586-cc7a-41d9-9c40-c7a59c46496e.png)  
+![1](https://user-images.githubusercontent.com/54963637/192837449-e031e90b-8863-4357-bf5a-51af39dfd0ae.jpg)
+
 Макет приложения:  
-![image](https://user-images.githubusercontent.com/54963637/192836373-cd557c61-aed8-4329-b6eb-bb63673aaa26.png)  
-![image](https://user-images.githubusercontent.com/54963637/192836394-d73b92c0-90aa-4b16-8a60-2a6177136fb8.png)
-  
+![2](https://user-images.githubusercontent.com/54963637/192837519-33d78e41-3389-433c-b8cd-e74604fa57ab.jpg)  
+![3](https://user-images.githubusercontent.com/54963637/192837536-4467a40b-3115-494f-8015-c507ad79f320.jpg)  
+
 Мы ищем:
 1. экономиста в проект
 2. разработчиков в проект
