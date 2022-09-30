@@ -103,7 +103,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
     private fun message() {
-        Toast.makeText(activity, "$un\n$pw", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(activity, "$un\n$pw", Toast.LENGTH_SHORT).show()
     }
 
     private fun View.hideKeyboard() {

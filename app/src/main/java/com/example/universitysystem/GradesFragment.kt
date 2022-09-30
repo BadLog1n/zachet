@@ -1,8 +1,11 @@
 package com.example.universitysystem
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -10,6 +13,8 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
 import com.example.universitysystem.databinding.FragmentGradesBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
@@ -17,6 +22,7 @@ import kotlin.system.exitProcess
 
 class GradesFragment : Fragment(R.layout.fragment_grades) {
     private val authCheck = AuthCheck()
+    private lateinit var database: DatabaseReference
 
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
@@ -56,7 +62,34 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 exitProcess(0)
             }
         }
+
+        database = FirebaseDatabase.getInstance().getReference("version")
+        val requestToDatabase = database.get()
+        val versionName = getAppVersion(requireContext())
+        requestToDatabase.addOnSuccessListener {
+            if (versionName < it.value.toString()) {
+                Toast.makeText(
+                    this.context,
+                    "Доступна новая версия! Перейдите в \"О приложении\" чтобы её скачать!",
+                    Toast.LENGTH_LONG
+                ).show()
+            }
+        }
     }
+
+
+    private fun getAppVersion(context: Context?): String {
+        var version = ""
+        try {
+            val pInfo = context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+            version = pInfo!!.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return version
+    }
+
 
     private fun initGradesRc(){
         binding.apply {
