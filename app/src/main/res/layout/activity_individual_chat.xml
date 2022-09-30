@@ -20,7 +20,6 @@
         android:ems="10"
         android:hint="@string/message"
         android:inputType="textMultiLine"
-        android:maxLength="200"
         android:maxLines="5"
         android:paddingStart="20dp"
         android:paddingEnd="50dp"

@@ -185,13 +185,7 @@ class IndividualChatActivity : AppCompatActivity() {
             if (text.isBlank() or text.isEmpty()) {
                 Toast.makeText(this, "Пожалуйста, введите сообщение", Toast.LENGTH_SHORT).show()
             } else {
-                chatsPackage.sendMessage(
-                    sendName,
-                    getName,
-                    text.replace("\\s+".toRegex(), " "),
-                    "text",
-                    chatsPackage.getChatName(sendName, getName)
-                )
+                sendMessage(text)
                 findViewById<EditText>(R.id.messageEditText).text.clear()
             }
         }
@@ -199,6 +193,28 @@ class IndividualChatActivity : AppCompatActivity() {
 
     }
 
+    private fun sendMessage(text: String){
+        if (text.length > 200) {
+            val textSub = text.substring(0,200)
+            chatsPackage.sendMessage(
+                sendName,
+                getName,
+                textSub.replace("\\s+".toRegex(), " "),
+                "text",
+                chatsPackage.getChatName(sendName, getName)
+            )
+            sendMessage(text.substring(200))
+        }
+        else {
+            chatsPackage.sendMessage(
+                sendName,
+                getName,
+                text.replace("\\s+".toRegex(), " "),
+                "text",
+                chatsPackage.getChatName(sendName, getName)
+            )
+        }
+    }
 
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
