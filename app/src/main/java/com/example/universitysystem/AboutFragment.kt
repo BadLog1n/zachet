@@ -1,10 +1,12 @@
 package com.example.universitysystem
 
+import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.util.Log
@@ -12,6 +14,7 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
@@ -45,13 +48,37 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
-            requestToDatabase.addOnSuccessListener {
-                if (versionName < it.value.toString()) {
-                    download(it.value.toString(), requireContext())
-                    Toast.makeText(this@HelpFragment.context, "Загрузка началась", Toast.LENGTH_SHORT).show()
-                }
-                else {
-                    Toast.makeText(this@HelpFragment.context, "Установлена последняя версия", Toast.LENGTH_SHORT).show()
+            if ((ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.READ_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED))
+
+            ) {
+                Toast.makeText(
+                    requireContext(),
+                    "У приложения нет доступа к памяти. Пожалуйста," +
+                            "перейдите в настройки и дайте разрешение на работу с памятью",
+                    Toast.LENGTH_SHORT
+                ).show()
+            } else {
+                requestToDatabase.addOnSuccessListener {
+                    if (versionName < it.value.toString()) {
+                        download(it.value.toString(), requireContext())
+                        Toast.makeText(
+                            this@HelpFragment.context,
+                            "Загрузка началась",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@HelpFragment.context,
+                            "Установлена последняя версия",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
         }
