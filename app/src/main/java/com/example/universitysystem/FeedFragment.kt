@@ -24,6 +24,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var database: DatabaseReference
     private lateinit var author: String
     private var lastPost: Long = 0
+    private var firstLoad = true
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -135,7 +136,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
                                 feedRc.adapter = rcAdapter
                                 val itemCount = rcAdapter.itemCount
-                                feedRc.smoothScrollToPosition(itemCount)
+                                if (firstLoad) {
+                                    feedRc.smoothScrollToPosition(itemCount)
+                                    firstLoad = false
+                                }
 
                             }
 
