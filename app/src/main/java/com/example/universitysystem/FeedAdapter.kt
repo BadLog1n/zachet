@@ -43,6 +43,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         }
     }
 
+    @SuppressLint("SetTextI18n")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
 
@@ -71,6 +72,11 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             builder.setNeutralButton("Пожаловаться") { _, _ ->
                 val myRef = database.getReference("warnings").child(record)
                 myRef.setValue(userId)
+                val warning = view.findViewById<TextView>(R.id.sponsored_tv)
+
+                warning.text =  "--- Жалоба отправлена ---"
+                warning.visibility = View.VISIBLE
+
             }
             val alertDialog = builder.create()
             alertDialog.show()
