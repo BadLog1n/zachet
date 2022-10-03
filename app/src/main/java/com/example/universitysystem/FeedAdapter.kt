@@ -10,6 +10,7 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.FeedItemBinding
@@ -73,10 +74,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             builder.setNeutralButton("Пожаловаться") { _, _ ->
                 val myRef = database.getReference("warnings").child(record)
                 myRef.setValue(userId)
-                val warning = view.findViewById<TextView>(R.id.sponsored_tv)
-
-                warning.text =  "--- Жалоба отправлена ---"
-                warning.visibility = View.VISIBLE
+                Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT).show()
 
             }
             val alertDialog = builder.create()

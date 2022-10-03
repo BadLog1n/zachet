@@ -56,15 +56,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         catch (e: NullPointerException) {
 
         }*/
-
-        view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
+        fun addRecordLayoutGone(){
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
         }
+        view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
+            addRecordLayoutGone()
+        }
         view.findViewById<ImageButton>(R.id.addRecord_imgbtn).setOnClickListener {
-            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
-            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
-
+            addRecordLayoutGone()
         }
         view.findViewById<ImageButton>(R.id.closeNewMsgImgBtn).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
@@ -76,8 +76,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
             if (text.isNotBlank()) {
                 sendPost(text)
-                view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
-                view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+                addRecordLayoutGone()
                 view.findViewById<EditText>(R.id.newMessEdittext).text.clear()
                 view.hideKeyboard()
             } else {
@@ -86,6 +85,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
 
         }
+
+
 
     }
 
