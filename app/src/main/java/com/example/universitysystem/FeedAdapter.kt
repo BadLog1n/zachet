@@ -50,7 +50,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         view.findViewById<ImageButton>(R.id.replyToMsgBtn).setOnClickListener {
             val authorIdChat = view.findViewById<TextView>(R.id.authorIdChat).text.toString()
 
-            val intent = Intent(parent.context, IndividualChatActivity::class.java)
+            val intent = Intent(parent.context, IndividualChatActivity::class.java) // что если в теории нет перента
             intent.putExtra("getUser", authorIdChat)
             parent.context.startActivity(intent)
 
@@ -64,7 +64,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
                     val myRef = database.getReference("feed").child(record)
                     myRef.removeValue()
                     val item: FeedRecord =
-                        recordsList.single { (record == it.record) }
+                        recordsList.single { (record == it.record) } // если несколько одинаковых записей
                     removeObject(item)
                 }
             }

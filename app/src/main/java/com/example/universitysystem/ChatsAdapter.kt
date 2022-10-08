@@ -23,13 +23,13 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         @SuppressLint("SimpleDateFormat")
         fun bind(chatPreview: ChatPreview) = with(binding) {
             val dt =
-                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(chatPreview.latestMsgTime))
+                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(chatPreview.latestMsgTime)) // здесь может быть передана пустая строка или не дата в теории
                     .toString()
             receiverName.text = chatPreview.receiverName
             latestMsgTimeTv.text = dt
             latestMsgTv.text = chatPreview.latestMsg
             latestMsgTv.typeface =
-                if (!chatPreview.newMsg) Typeface.DEFAULT_BOLD else Typeface.DEFAULT
+                if (!chatPreview.newMsg) Typeface.DEFAULT_BOLD else Typeface.DEFAULT // здесь можно проверить правильно ли срабатывает иф
             getUser.text = chatPreview.getUser
         }
 
@@ -39,7 +39,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.list_of_chats_item, parent, false)
         view.findViewById<LinearLayout>(R.id.linearLayout).setOnClickListener {
-            val intent = Intent(parent.context, IndividualChatActivity::class.java)
+            val intent = Intent(parent.context, IndividualChatActivity::class.java) // в теории что если нет перента
             intent.putExtra("getUser", view.findViewById<TextView>(R.id.getUser).text)
             parent.context.startActivity(intent)
         }
