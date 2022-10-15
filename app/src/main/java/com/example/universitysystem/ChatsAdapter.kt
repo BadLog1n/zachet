@@ -39,7 +39,7 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.list_of_chats_item, parent, false)
         view.findViewById<LinearLayout>(R.id.linearLayout).setOnClickListener {
-            val intent = Intent(parent.context, IndividualChatActivity::class.java) // в теории что если нет перента
+            val intent = Intent(parent.context, IndividualChatActivity::class.java)
             intent.putExtra("getUser", view.findViewById<TextView>(R.id.getUser).text)
             parent.context.startActivity(intent)
         }

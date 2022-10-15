@@ -7,7 +7,7 @@
     android:background="@color/white"
     android:maxHeight="80dp"
     android:minHeight="?attr/actionBarSize"
-    app:buttonGravity="center_vertical"
+    app:buttonGravity="top"
     app:title=""
     app:titleTextAppearance="@style/ToolbarTitleText">
 
