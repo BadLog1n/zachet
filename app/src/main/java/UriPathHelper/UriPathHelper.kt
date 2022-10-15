@@ -4,7 +4,6 @@ import android.content.ContentUris
 import android.content.Context
 import android.database.Cursor
 import android.net.Uri
-import android.os.Build
 import android.os.Environment
 import android.provider.DocumentsContract
 import android.provider.MediaStore
@@ -38,22 +37,15 @@ class UriPathHelper {
     }
 
     fun getPathFromUri(context: Context, uri: Uri): String? {
-        val isKitKat = Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT
 
         // DocumentProvider
-        if (if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                isKitKat && DocumentsContract.isDocumentUri(context, uri)
-            } else {
-                TODO("VERSION.SDK_INT < KITKAT")
-            }
+        if (
+            DocumentsContract.isDocumentUri(context, uri)
         ) {
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
-                val docId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                val docId =
                     DocumentsContract.getDocumentId(uri)
-                } else {
-                    TODO("VERSION.SDK_INT < KITKAT")
-                }
                 val split = docId.split(":").toTypedArray()
                 val type = split[0]
                 if ("primary".equals(type, ignoreCase = true)) {
@@ -62,21 +54,15 @@ class UriPathHelper {
 
                 // TODO handle non-primary volumes
             } else if (isDownloadsDocument(uri)) {
-                val id = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                val id =
                     DocumentsContract.getDocumentId(uri)
-                } else {
-                    TODO("VERSION.SDK_INT < KITKAT")
-                }
                 val contentUri = ContentUris.withAppendedId(
                     Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
                 )
                 return getDataColumn(context, contentUri, null, null)
             } else if (isMediaDocument(uri)) {
-                val docId = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                val docId =
                     DocumentsContract.getDocumentId(uri)
-                } else {
-                    TODO("VERSION.SDK_INT < KITKAT")
-                }
                 val split = docId.split(":").toTypedArray()
                 val type = split[0]
                 var contentUri: Uri? = null
