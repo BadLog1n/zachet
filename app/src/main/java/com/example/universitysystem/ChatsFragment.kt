@@ -42,7 +42,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         super.onViewCreated(view, savedInstanceState)
         authCheck.check(view, this@ChatsFragment.context)
 
-        rcAdapter.clearRecords()
+
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
             AppCompatActivity.MODE_PRIVATE

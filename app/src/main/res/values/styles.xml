@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <style name="EditTextStyle">
+    <style name="EditTextStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
         <item name="android:colorControlNormal">#ccc</item>
         <item name="android:colorControlActivated">@color/teal_200</item>
 
@@ -14,12 +14,12 @@
     </style>
 
     <style name="AppBottomSheetDialogTheme"
-        parent="Theme.Design.Light.BottomSheetDialog">
+        parent="Theme.MaterialComponents.Light.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ModalBottomSheetDialog</item>
     </style>
 
     <style name="ModalBottomSheet"
-        parent="Theme.Design.Light.BottomSheetDialog">
+        parent="Theme.MaterialComponents.Light.BottomSheetDialog">
 
         <item name="behavior_peekHeight">300dp</item>
         <item name="state_collapsed">true</item>
@@ -30,7 +30,7 @@
     <style name="ModalBottomSheetDialog" parent="ThemeOverlay.MaterialComponents.BottomSheetDialog">
         <item name="bottomSheetStyle">@style/ModalBottomSheet</item>
     </style>
-    <style name="AppTheme" parent="Theme.UniversitySystem">
+    <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
         <item name="bottomSheetDialogTheme">@style/ModalBottomSheetDialog</item>
     </style>
 
