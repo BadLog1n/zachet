@@ -93,11 +93,11 @@ class IndividualChatActivity : AppCompatActivity() {
             if (bottom < oldBottom) {
                 rcView.post {
                     try {
-                    rcView.scrollToPosition(
-                        rcView.adapter!!.itemCount - 1
-                    )}
-                    catch (e: NullPointerException) {
-                        
+                        rcView.scrollToPosition(
+                            rcView.adapter!!.itemCount - 1
+                        )
+                    } catch (e: NullPointerException) {
+
                     }
                 }
             }
@@ -193,26 +193,21 @@ class IndividualChatActivity : AppCompatActivity() {
 
     }
 
-    private fun sendMessage(text: String){
-        if (text.length > 200) {
-            val textSub = text.substring(0,200)
-            chatsPackage.sendMessage(
-                sendName,
-                getName,
-                textSub.replace("\\s+".toRegex(), " "),
-                "text",
-                chatsPackage.getChatName(sendName, getName)
-            )
+    private fun sendMessage(text: String) {
+        var textSub = ""
+        val lenghtTooBig = text.length > 200
+        textSub = if (lenghtTooBig) {
+            text.substring(0, 200)
+        } else text
+        chatsPackage.sendMessage(
+            sendName,
+            getName,
+            textSub.replace("\\s+".toRegex(), " "),
+            "text",
+            chatsPackage.getChatName(sendName, getName)
+        )
+        if (lenghtTooBig) {
             sendMessage(text.substring(200))
-        }
-        else {
-            chatsPackage.sendMessage(
-                sendName,
-                getName,
-                text.replace("\\s+".toRegex(), " "),
-                "text",
-                chatsPackage.getChatName(sendName, getName)
-            )
         }
     }
 
@@ -276,7 +271,8 @@ class IndividualChatActivity : AppCompatActivity() {
                 val text = "text"
                 val type = "type"
                 for (i in dataSnapshot.children) {
-                   val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong())).toString()
+                    val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
+                        .toString()
 
 
                     when (i.child(type).value.toString()) {
@@ -700,6 +696,7 @@ class ChatToImgItem(
                 }
             }
         }
+
     override fun getLayout(): Int {
         return R.layout.to_img_item
     }
