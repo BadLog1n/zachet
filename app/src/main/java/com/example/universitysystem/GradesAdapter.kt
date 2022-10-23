@@ -11,12 +11,13 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.example.universitysystem.databinding.SubjectGradesItemBinding
 
-class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
+class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
-    class GradesHolder(item:View):RecyclerView.ViewHolder (item){
+
+    class GradesHolder(item: View) : RecyclerView.ViewHolder(item) {
 
         private val binding = SubjectGradesItemBinding.bind(item)
-        fun bind(subjectGrades: SubjectGrades) = with(binding){
+        fun bind(subjectGrades: SubjectGrades) = with(binding) {
             tv1Subject.text = subjectGrades.subject
             grAll.text = subjectGrades.allGradesCount.toString()
             expandBtn.setImageResource(R.drawable.ic_arrow_down)
@@ -27,32 +28,31 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             segment2.text = subjectGrades.segments[1]
             segment3.text = subjectGrades.segments[2]
             segment4.text = subjectGrades.segments[3]
-            seg1Visit.text = subjectGrades.grades[0].toString()
-            seg1Academ.text = subjectGrades.grades[1].toString()
-            seg2Visit.text = subjectGrades.grades[2].toString()
-            seg2Academ.text = subjectGrades.grades[3].toString()
-            seg3Visit.text = subjectGrades.grades[4].toString()
-            seg3Academ.text = subjectGrades.grades[5].toString()
-            seg4Visit.text = subjectGrades.grades[6].toString()
-            seg4Academ.text = subjectGrades.grades[7].toString()
+            seg1Visit.text = subjectGrades.grades[0]
+            seg1Academ.text = subjectGrades.grades[1]
+            seg2Visit.text = subjectGrades.grades[2]
+            seg2Academ.text = subjectGrades.grades[3]
+            seg3Visit.text = subjectGrades.grades[4]
+            seg3Academ.text = subjectGrades.grades[5]
+            seg4Visit.text = subjectGrades.grades[6]
+            seg4Academ.text = subjectGrades.grades[7]
             val test = "Баллы за ${subjectGrades.typeOfSubject}:"
             grForTestingTv.text = test
-            grForTestingCount.text = subjectGrades.grades[8].toString()
+            grForTestingCount.text = subjectGrades.grades[8]
             additionalGrTv.text = "Дополнительные баллы:"
-            additionalGrCount.text = subjectGrades.grades[9].toString()
+            additionalGrCount.text = subjectGrades.grades[9]
             premiumGrTv.text = "Премиальные баллы:"
-            premiumGrCount.text = subjectGrades.grades[10].toString()
+            premiumGrCount.text = subjectGrades.grades[10]
             userChatId1Tv.text = subjectGrades.userChatId
-            teacherTv.text = subjectGrades.FIO1
-            teacher2Tv.text = subjectGrades.FIO2
-            userChatId2Tv.text = subjectGrades.userChatId2
+            teacherTv.text = subjectGrades.FIO
         }
 
     }
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GradesHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item,parent,false)
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item, parent, false)
         view.findViewById<ImageButton>(R.id.expandBtn).setOnClickListener {
             val expView = view.findViewById<LinearLayout>(R.id.expandedView)
             expView.visibility = View.VISIBLE
@@ -84,19 +84,10 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         val expView = view.findViewById<LinearLayout>(R.id.expandedView)
         expView.visibility = View.GONE
 
-        view.findViewById<ImageButton>(R.id.spechBubbblesImg).setOnClickListener {
 
-            val intent = Intent(parent.context,IndividualChatActivity::class.java)
-            intent.putExtra("getUser",view.findViewById<TextView>(R.id.teacher_tv).text)
-            parent.context.startActivity(intent)
-        }
-        view.findViewById<TextView>(R.id.connectWTeacher_tv).setOnClickListener {
-            val intent = Intent(parent.context,IndividualChatActivity::class.java)
-            /**Здесь мы значение переменной грубо говоря передаем каждой кнопке в разных окнах.
-             * То есть у каждого окна свой обработчик нажатия засчет того что userChatId - переменная.
-             * Если интересна логика - то метод вверху и этот метод вызывается для каждого элемента списка.
-             * **/
-            intent.putExtra("getUser",view.findViewById<TextView>(R.id.teacher_tv).text)
+        view.findViewById<LinearLayout>(R.id.connectWTeacherLayout).setOnClickListener {
+            val intent = Intent(parent.context, IndividualChatActivity::class.java)
+            intent.putExtra("getUser", view.findViewById<TextView>(R.id.userChatId1_tv).text)
             parent.context.startActivity(intent)
 
         }
@@ -110,13 +101,14 @@ class GradesAdapter:RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     override fun getItemCount(): Int {
         return gradesList.size
     }
+
     @SuppressLint("NotifyDataSetChanged")
-    fun addSubjectGrades(subjectGrades: SubjectGrades){
+    fun addSubjectGrades(subjectGrades: SubjectGrades) {
         gradesList.add(subjectGrades)
         notifyDataSetChanged()
     }
 
-    fun clearRecords(){
+    fun clearRecords() {
         gradesList.removeAll(gradesList.toSet())
     }
 }

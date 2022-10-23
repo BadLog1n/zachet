@@ -34,6 +34,13 @@
             android:baselineAligned="false"
             android:entries="@array/sem_nums_bachelor"
             android:spinnerMode="dropdown" />
+
+        <Button
+            android:id="@+id/button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Button" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
