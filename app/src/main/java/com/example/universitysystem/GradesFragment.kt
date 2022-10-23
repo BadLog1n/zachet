@@ -47,7 +47,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
-        initGradesRc()
+        try {
+            initGradesRc()
+        } catch (e: Exception) {
+        }
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
@@ -100,30 +103,37 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         binding.apply {
             //gradesRcView.adapter = rcAdapter
             authCheck.check(requireView(), this@GradesFragment.context)
-            val executor = Executors.newSingleThreadExecutor()
-            GlobalScope.launch {
-                val connection =
-                    Jsoup.connect("https://info.swsu.ru/scripts/student_diplom/auth.php?act=reiting&uid=19-06-0245&group=Э00000133&semestr=000000008&status=false&fo=000000001&type=json")
-                //val document = connection.get().text()
-                val document = connection.get().text()
+            try {
+                GlobalScope.launch {
+                    var document = ""
+                    val connection =
+                        Jsoup.connect("https://info.swsu.ru/scripts/student_diplom/auth.php?act=reiting&uid=19-06-0245&group=Э00000133&semestr=000000008&status=false&fo=000000001&type=json")
+                    //val document = connection.get().text()
+                    try {
+                        document = connection.get().text()}
+                    catch (e: Exception){
+                        return@launch
+                    }
 
-                val jsonArray = JSONArray(document)
-                val listOfGrades: ArrayList<ArrayList<String>> =
-                    ratingUniversity.gradesCollector(jsonArray)
-                for (item in listOfGrades) {
-                    val sg = SubjectGrades(
-                        item[0],
-                        item[1].toInt(),
-                        item[2],
-                        item[3].split(" ").toList(),
-                        item[4],
-                        item[5]
-                    )
-                    withContext(Dispatchers.Main) {
-                    rcAdapter.addSubjectGrades(sg)
+                    val jsonArray = JSONArray(document)
+                    val listOfGrades: ArrayList<ArrayList<String>> =
+                        ratingUniversity.gradesCollector(jsonArray)
+                    for (item in listOfGrades) {
+                        val sg = SubjectGrades(
+                            item[0],
+                            item[1].toInt(),
+                            item[2],
+                            item[3].split(" ").toList(),
+                            item[4],
+                            item[5]
+                        )
+                        withContext(Dispatchers.Main) {
+                            rcAdapter.addSubjectGrades(sg)
+                        }
                     }
                 }
             }
+            catch (e: Exception){}
         }
     }
 }
