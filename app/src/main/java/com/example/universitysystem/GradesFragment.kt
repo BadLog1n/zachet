@@ -153,8 +153,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                             item[1].toInt(),
                                             item[2],
                                             item[3].split(" ").toList(),
-                                            item[4],
-                                            item[5]
+                                            item[5],
+                                            item[4]
                                         )
                                     )
                                 } } } } }
