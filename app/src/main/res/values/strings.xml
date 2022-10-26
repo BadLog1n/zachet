@@ -51,41 +51,15 @@
     <string-array name="languages">
         <item>Русский</item>
     </string-array>
-    <string name="high_week">Верхняя</string>
+    <string name="high_week">Верхняя</string>-
     <string name="low_week">Нижняя</string>
     <string name="sem">Семестр</string>
     <string-array name="semesters">
         <item>Текущий семестр</item>
         <item>Архивный семестр</item>
     </string-array>
-    <string-array name="sem_nums_bachelor">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-    </string-array>
-    <string-array name="sem_nums_spec">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
-        <item>5</item>
-        <item>6</item>
-        <item>7</item>
-        <item>8</item>
-        <item>9</item>
-        <item>10</item>
-    </string-array>
+    <string-array name="sem_nums">
 
-    <string-array name="sem_nums_mag">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-        <item>4</item>
     </string-array>
 
     <string name="check_versions">Проверить наличие обновлений</string>

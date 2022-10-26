@@ -18,29 +18,14 @@
         android:gravity="end"
         android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/textView2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:text="@string/sem"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
-
         <Spinner
             android:id="@+id/sem_num_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
-            android:entries="@array/sem_nums_bachelor"
+            android:entries="@array/sem_nums"
             android:spinnerMode="dropdown" />
 
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:text="Button" />
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView

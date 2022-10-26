@@ -2,9 +2,14 @@ package com.example.universitysystem
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
+import android.widget.AdapterView
+import android.widget.ArrayAdapter
+import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
@@ -16,7 +21,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.*
 import org.json.JSONArray
+import org.jsoup.Connection
 import org.jsoup.Jsoup
+import ratingUniversity.InfoOfStudent
 import ratingUniversity.RatingUniversity
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
@@ -26,14 +33,19 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private val authCheck = AuthCheck()
     private lateinit var database: DatabaseReference
     private val ratingUniversity = RatingUniversity()
+    private val infoOfStudent = InfoOfStudent()
 
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
     private var clickBack = false
 
+    @OptIn(DelicateCoroutinesApi::class)
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val spinner = requireView().findViewById<Spinner>(R.id.sem_num_spinner)
+
         authCheck.check(view, this@GradesFragment.context)
+
         binding = FragmentGradesBinding.inflate(layoutInflater)
         super.onViewCreated(view, savedInstanceState)
 
@@ -42,15 +54,30 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "Мои баллы"
+        val sharedPref: SharedPreferences? = context?.getSharedPreferences(
+            "Settings",
+            Context.MODE_PRIVATE
+        )
+        val un = sharedPref?.getString("save_userid", "").toString()
 
         rcAdapter.clearRecords()
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
-        try {
-            initGradesRc()
-        } catch (e: Exception) {
+        database = FirebaseDatabase.getInstance().getReference("users/$un")
+        var requestToDatabase = database.get()
+        requestToDatabase.addOnSuccessListener {
+            val login = it.child("login").value.toString()
+            val password = it.child("passwordSWSU").value
+            if (password != null){
+                getDataOfStudent(sharedPref, login, password.toString(), spinner)
+
+            }
         }
+/*        try {
+            //initGradesRc()
+        } catch (e: Exception) {
+        }*/
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
@@ -71,7 +98,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
 
         database = FirebaseDatabase.getInstance().getReference("version")
-        val requestToDatabase = database.get()
+        requestToDatabase = database.get()
         val versionName = getAppVersion(requireContext())
         requestToDatabase.addOnSuccessListener {
             if (versionName < it.value.toString()) {
@@ -82,6 +109,66 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 ).show()
             }
         }
+
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+
+                binding.apply {
+                    GlobalScope.launch {
+                        rcAdapter.clearRecords()
+                        val sharedPref: SharedPreferences? = context?.getSharedPreferences(
+                            "Settings",
+                            Context.MODE_PRIVATE
+                        )
+                        val un = sharedPref?.getString("save_userid", "").toString()
+                        val gr = sharedPref?.getString("groupOfStudent", "").toString()
+                        val fo = sharedPref?.getString("formOfStudent", "").toString()
+                        val ls = sharedPref?.getInt("lastSemester", 0)
+
+                        val result = spinner.selectedItem.toString().filter { it.isDigit() } .toInt() + 1
+
+
+                        var status = "true"
+                        if (result + 1 >= ls!!.toInt()){
+                            status = "false"
+                        }
+                        val semester = result.toString().padStart(9, '0')
+
+                        val listOfGrades = returnRating(un, gr, semester , fo, status)
+                        withContext(Dispatchers.Main) {
+                            if (listOfGrades != null) {
+                                for (item in listOfGrades) {
+                                    rcAdapter.addSubjectGrades(
+                                        SubjectGrades(
+                                            item[0],
+                                            item[1].toInt(),
+                                            item[2],
+                                            item[3].split(" ").toList(),
+                                            item[4],
+                                            item[5]
+                                        )
+                                    )
+                                } } } } }
+
+
+
+                //val switchState: Boolean = switch.isChecked
+                //timetableGet(spinner.selectedItem.toString(), switchState)
+            }
+        }
+
+
+
+
     }
 
 
@@ -97,50 +184,155 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         return version
     }
 
-    @OptIn(DelicateCoroutinesApi::class)
-    @Suppress("BlockingMethodInNonBlockingContext")
-    private fun initGradesRc() {
-        binding.apply {
-            //gradesRcView.adapter = rcAdapter
-            authCheck.check(requireView(), this@GradesFragment.context)
-            try {
-                GlobalScope.launch {
-                    var document = ""
-                    val connection =
-                        Jsoup.connect("https://info.swsu.ru/scripts/student_diplom/auth.php?act=reiting&uid=19-06-0245&group=Э00000133&semestr=000000008&status=false&fo=000000001&type=json")
-                    //val document = connection.get().text()
-                    try {
-                        document = connection.get().text()}
-                    catch (e: Exception){
-                        return@launch
-                    }
 
-                    val jsonArray = JSONArray(document)
-                    val listOfGrades: ArrayList<ArrayList<String>> =
-                        ratingUniversity.gradesCollector(jsonArray)
-                    for (item in listOfGrades) {
-                        val sg = SubjectGrades(
-                            item[0],
-                            item[1].toInt(),
-                            item[2],
-                            item[3].split(" ").toList(),
-                            item[4],
-                            item[5]
-                        )
-                        withContext(Dispatchers.Main) {
-                            rcAdapter.addSubjectGrades(sg)
-                        }
-                    }
-                }
-            }
-            catch (e: Exception){}
+    @OptIn(DelicateCoroutinesApi::class)
+    private fun getDataOfStudent(
+        sharedPref: SharedPreferences?,
+        login: String,
+        password: String,
+        spinner: Spinner
+    ) {
+        binding.apply {
+                GlobalScope.launch {
+
+                    val infoOfStudent = getSemester(login, password)
+                    withContext(Dispatchers.Main) {
+                        if (infoOfStudent != null) {
+                            val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
+                            semester.sort()
+                            semester.reverse()
+                            sharedPref?.edit()?.putInt("lastSemester", semester.first().toInt())
+                                ?.apply()
+                            semester.forEachIndexed { index, element ->
+                                val correctSemester = element.toInt()-1
+                                semester[index] = "Семестр $correctSemester"
+                            }
+                            val arrayAdapter: ArrayAdapter<String> =
+                                ArrayAdapter(
+                                    requireContext(),
+                                    android.R.layout.simple_spinner_dropdown_item,
+                                    semester
+                                )
+                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            spinner.adapter = arrayAdapter
+                            sharedPref?.edit()?.putString("groupOfStudent", infoOfStudent[0][1])
+                                ?.apply()
+                            sharedPref?.edit()?.putString("formOfStudent", infoOfStudent[0][0])
+                                ?.apply()
+                            /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
+                                              .show()*/
+
+                        } } } } }
+
+
+
+
+    /*                           returnRating(
+                                login,
+                                infoOfStudent[0][1],
+                                semester.first(),
+                                infoOfStudent[0][0],
+                                "false"
+                            )*/
+
+
+    private fun getFormAndGroup(login: String, password: String): ArrayList<String>? {
+        try {
+            val arrayToReturn = arrayListOf("", "")
+            val document: String
+            val sitePath =
+                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$login&password=$password&type=array"
+
+            val response: Connection.Response = Jsoup.connect(sitePath)
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .timeout(30000)
+                .execute()
+
+            val statusCode: Int = response.statusCode()
+
+            if (statusCode == 200) {
+                document = Jsoup.connect(sitePath).get().text()
+            } else return null
+            arrayToReturn[0] = infoOfStudent.getFormOfStudy(document)
+            arrayToReturn[1] = infoOfStudent.getGroupOfStudent(document)
+            return arrayToReturn
+
+        } catch (e: Exception) {
+            Log.d("getFormAndGroup", e.toString())
+
+
+            return null
         }
     }
+
+
+    private fun getSemester(login: String, password: String): ArrayList<ArrayList<String>>? {
+        try {
+            val arrayToReturn = arrayListOf<ArrayList<String>>()
+            val infoStudent = getFormAndGroup(login, password) ?: return null
+            arrayToReturn.add(infoStudent)
+            var document: String
+            val sitePath =
+                arrayOf(
+                    "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=false&type=json",
+                    "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=true&type=json"
+                )
+            for (item in sitePath) {
+                val response: Connection.Response = Jsoup.connect(item)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                    .timeout(30000)
+                    .execute()
+                val statusCode: Int = response.statusCode()
+                if (statusCode == 200) {
+                    document = Jsoup.connect(item).get().text()
+                } else return null
+                val jsonArray = JSONArray(document)
+                arrayToReturn.add(infoOfStudent.getSemesterOfStudent(jsonArray))
+            }
+            return arrayToReturn
+        } catch (e: Exception) {
+            Log.d("getFormAndGroup", e.toString())
+
+
+        }
+        return null
+    }
+
+    private fun returnRating(
+        login: String,
+        group: String,
+        semester: String,
+        form: String,
+        status: String
+    ): ArrayList<ArrayList<String>>? {
+        try {
+            val document: String
+            val sitePath =
+                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=reiting&uid=$login&group=$group&semestr=$semester&status=$status&fo=$form&type=json"
+
+            val response: Connection.Response = Jsoup.connect(sitePath)
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .timeout(30000)
+                .execute()
+
+            val statusCode: Int = response.statusCode()
+
+            if (statusCode == 200) {
+                document = Jsoup.connect(sitePath).get().text()
+            } else return null
+
+            val jsonArray = JSONArray(document)
+            return ratingUniversity.gradesCollector(jsonArray)
+
+        } catch (e: Exception) {
+            Log.d("getFormAndGroup", e.toString())
+
+
+        }
+        return null
+    }
 }
-/*public fun startChat(){
-    var intent = Intent(this.context,IndividualChatActivity::class.java)
-    startActivity(intent)
-}*/
+
 
 
 

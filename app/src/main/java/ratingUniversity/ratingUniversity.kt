@@ -10,10 +10,6 @@ class RatingUniversity {
     fun gradesCollector(jsonArray: JSONArray): ArrayList<ArrayList<String>> {
         val globalArrayToReturn = arrayListOf<ArrayList<String>>()
 
-
-
-
-
         for (i in 0 until jsonArray.length()) {
             val localArray = arrayListOf<String>()
 

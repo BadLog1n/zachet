@@ -1,14 +1,9 @@
 package ratingUniversity
 
-import kotlinx.coroutines.DelicateCoroutinesApi
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 import org.json.JSONArray
-import org.jsoup.Jsoup
 
 class InfoOfStudent {
 
-    @OptIn(DelicateCoroutinesApi::class)
     fun getFormOfStudy(authText: String): String {
         return authText.substringAfter("[Code] => ").substringBefore(" [Name]")
     }
@@ -17,14 +12,13 @@ class InfoOfStudent {
         return authText.substringAfter("[GroupCode] => ").substringBefore(" [GroupName]")
     }
 
-    fun getPastSemesterOfStudent(pastSemester: JSONArray): ArrayList<String> {
+    fun getSemesterOfStudent(semester: JSONArray): ArrayList<String> {
         val arrayOfSemester = arrayListOf<String>()
-        for (i in 0 until pastSemester.length()) {
-            arrayOfSemester.add(pastSemester.getJSONObject(i).getString("ID"))
+        for (i in 0 until semester.length()) {
+            arrayOfSemester.add(semester.getJSONObject(i).getString("ID"))
         }
         return arrayOfSemester
     }
-
 
 
     fun getCurrentSemesterOfStudent(currentSemester: JSONArray): ArrayList<String> {
