@@ -12,6 +12,12 @@
     android:orientation="vertical"
     tools:context=".HelpFragment">
 
+    <ImageView
+        android:id="@+id/imageView2"
+        android:layout_width="176dp"
+        android:layout_height="200dp"
+        android:src="@drawable/main_icon" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -72,7 +78,6 @@
         android:id="@+id/getSupportBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:backgroundTint="@color/dark_grey_background"
         android:text="@string/support"
         android:textAllCaps="false"
         android:textColor="@color/black"
