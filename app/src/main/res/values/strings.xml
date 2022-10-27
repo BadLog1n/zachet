@@ -44,6 +44,8 @@
     <string name="friday">Пятница</string>
     <string name="saturday">Суббота</string>
     <string name="language">Язык</string>
+    <string name="updateText">Перейдите в \"О приложении\", чтобы скачать обновление</string>
+    <string name="updateTitle">Обнаружена новая версия</string>
 
     <string name="new_record">Добавить запись</string>
     <string name="publish">Опубликовать</string>

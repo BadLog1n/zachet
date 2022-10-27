@@ -2,9 +2,13 @@ package com.example.universitysystem
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
+import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -12,7 +16,11 @@ import android.widget.ArrayAdapter
 import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
@@ -102,11 +110,32 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         val versionName = getAppVersion(requireContext())
         requestToDatabase.addOnSuccessListener {
             if (versionName < it.value.toString()) {
-                Toast.makeText(
+                /*Toast.makeText(
                     this.context,
                     "Доступна новая версия! Перейдите в \"О приложении\" чтобы её скачать!",
                     Toast.LENGTH_LONG
-                ).show()
+                ).show()*/
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setMessage(R.string.updateText)
+                builder.setTitle(R.string.updateTitle)
+                builder.setPositiveButton("Ок") { _, _ ->
+
+                }
+                builder.setNeutralButton("Перейти") { _, _ ->
+                    findNavController().navigate(R.id.helpFragment)
+                }
+                val alertDialog = builder.create()
+                alertDialog.show()
+
+                val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                with(autoBtn) {
+                    setTextColor(Color.BLACK)
+                }
+                val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+                with(userBtn) {
+                    setTextColor(Color.BLACK)
+                }
+
             }
         }
 

@@ -20,6 +20,7 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         fun bind(subjectGrades: SubjectGrades) = with(binding) {
             tv1Subject.text = subjectGrades.subject
             grAll.text = subjectGrades.allGradesCount.toString()
+            grAll3.text = subjectGrades.allGradesCount.toString()
             expandBtn.setImageResource(R.drawable.ic_arrow_down)
             tv2Subject.text = subjectGrades.subject
             collapseBtn.setImageResource(R.drawable.ic_arrow_up)
@@ -36,7 +37,7 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             seg3Academ.text = subjectGrades.grades[5]
             seg4Visit.text = subjectGrades.grades[6]
             seg4Academ.text = subjectGrades.grades[7]
-            val test = "Баллы за ${subjectGrades.typeOfSubject}:"
+            val test = "Баллы за ${subjectGrades.typeOfSubject.lowercase()}:"
             grForTestingTv.text = test
             grForTestingCount.text = subjectGrades.grades[8]
             additionalGrTv.text = "Дополнительные баллы:"
