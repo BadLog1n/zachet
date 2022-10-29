@@ -24,8 +24,10 @@ import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
 
+//import org.robolectric.RobolectricTestRunner
 
 @RunWith(AndroidJUnit4::class)
+//@RunWith(RobolectricTestRunner::class)
 @LargeTest
 class ChatsAdapterViewTest {
 
@@ -46,6 +48,21 @@ class ChatsAdapterViewTest {
     fun setUp() {
         // chA = ChatsAdapter()
         //chA?.chatsList?.add(ChatPreview("", 18, "", true, ""))
+        /*val scenario = launchFragmentInContainer<ChatsFragment>()
+        try {
+            Thread.sleep(2000)
+        } catch (e: InterruptedException) {
+            e.printStackTrace()
+        }
+        scenario.withFragment {
+            val rView = this.view?.findViewById<RecyclerView>(com.example.universitysystem.R.id.chatsRcView)!!
+            for (rView.)
+            rcAdapter.removeObject(item)
+            list.remove(item)
+            list.add(chat)
+            rcAdapter.addChatPreview(chat)
+            //попробовать добавить один элемент в тот же адаптер
+        }*/
 
     }
     @Test
