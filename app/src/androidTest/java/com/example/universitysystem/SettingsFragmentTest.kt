@@ -42,7 +42,8 @@ class SettingsFragmentTest {
         }
         mdb = Mockito.mock(MyDatabase::class.java)
        mdbref = Mockito.mock(DatabaseReference::class.java)
-       Mockito.`when`(mdb.getSettingsInfo(mdbref,mun,mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
+        mdb.dbref = mdbref
+       Mockito.`when`(mdb.getSettingsInfo(mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
             mset.setText("surname")
             mpet.setText("password")
             mnet.setText("name")
@@ -61,13 +62,20 @@ class SettingsFragmentTest {
 
     @Test
     fun getDbInfo() {
-        Mockito.`when`(mdb.getSettingsInfo(mdbref,mun,mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
+       /* Mockito.`when`(mdb.getSettingsInfo(mdbref,mun,mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
             mset.setText("surname")
             mpet.setText("password")
             mnet.setText("name")
             mlet.setText("login")
         })
-       fr.getDbInfo(mdbref,mdb,mun,mnet,mset,mlet,mpet)
+       fr.getDbInfo(mdbref,mdb,mun,mnet,mset,mlet,mpet)*/
+        Mockito.`when`(mdb.getSettingsInfo(mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
+            mset.setText("surname")
+            mpet.setText("password")
+            mnet.setText("name")
+            mlet.setText("login")
+        })
+        fr.getDbInfo(mdb,mnet,mset,mlet,mpet)
         try {
             Thread.sleep(5000)
         } catch (e: InterruptedException) {

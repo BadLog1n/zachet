@@ -5,13 +5,14 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
 
-open class MyDatabase (){
+open class MyDatabase (var dbref:DatabaseReference){
+//open class MyDatabase (){
+    //public val dbref:DatabaseReference
 
-
-    open public fun getSettingsInfo(db: DatabaseReference, path:String, nameET: EditText, surnameET: EditText, loginET: EditText, passwordET: EditText) {
-    //open public fun getSettingsInfo(path:String, nameET: EditText, surnameET: EditText, loginET: EditText, passwordET: EditText) {
+    //open public fun getSettingsInfo(db: DatabaseReference, path:String, nameET: EditText, surnameET: EditText, loginET: EditText, passwordET: EditText) {
+    open public fun getSettingsInfo(nameET: EditText, surnameET: EditText, loginET: EditText, passwordET: EditText) {
         //val db= FirebaseDatabase.getInstance().getReference(path)
-        val requestToDatabase = db.get()
+        val requestToDatabase = dbref.get()
 
        requestToDatabase.addOnSuccessListener {
             if (it.child("name").value.toString() != "null")

@@ -32,11 +32,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         )
 
         val un = sharedPref?.getString("save_userid", "").toString()
-        val db = MyDatabase()
-        //val dbref= FirebaseDatabase.getInstance().getReference("users/$un")
-        val dbref= FirebaseDatabase.getInstance().getReference("users")
+        val dbref= FirebaseDatabase.getInstance().getReference("users/$un")
+        val db = MyDatabase(dbref)
+
         var arr:Array<String> = arrayOf("","","","")
-        getDbInfo(dbref,db,un,nameEditText,surnameEditText,loginEditText,passwordEditText)
+        getDbInfo(db,nameEditText,surnameEditText,loginEditText,passwordEditText)
+        //getDbInfo(db.dbref,db,un,nameEditText,surnameEditText,loginEditText,passwordEditText)
         //getDbInfo(db,un,nameEditText,surnameEditText,loginEditText,passwordEditText)
         /*nameEditText.setText(arr[0])
         surnameEditText.setText(arr[1])
@@ -81,11 +82,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
 
-   public fun getDbInfo(dbref:DatabaseReference, db:MyDatabase,un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
+   public fun getDbInfo(db:MyDatabase,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
    //public fun getDbInfo( db:MyDatabase,un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
     {
 
-       db.getSettingsInfo(dbref,"users/$un",nameET,surnameET,loginET,passwordET)
+       db.getSettingsInfo(nameET,surnameET,loginET,passwordET)
         //db.getSettingsInfo("users/$un",nameET,surnameET,loginET,passwordET)
 
     }
