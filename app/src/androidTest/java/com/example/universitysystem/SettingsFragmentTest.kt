@@ -76,20 +76,12 @@ class SettingsFragmentTest {
             mlet.setText("login")
         })
         fr.getDbInfo(mdb,mnet,mset,mlet,mpet)
-        try {
-            Thread.sleep(5000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+
         assertEquals("name",mnet.text.toString())
         assertEquals("surname",mset.text.toString())
         assertEquals("login",mlet.text.toString())
         assertEquals("password",mpet.text.toString())
-        try {
-            Thread.sleep(5000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
+
     }
 
     @Test
