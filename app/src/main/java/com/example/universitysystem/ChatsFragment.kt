@@ -24,7 +24,7 @@ import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
 
-class ChatsFragment : Fragment(R.layout.fragment_chats) {
+open class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private val authCheck = AuthCheck()
 
     private val chatsPackage = ChatsPackage()

@@ -13,7 +13,7 @@ import com.example.universitysystem.databinding.ListOfChatsItemBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
-class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
+open class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
     var chatsList = ArrayList<ChatPreview>()
 
     class ChatsHolder(item: View) : RecyclerView.ViewHolder(item) {
