@@ -5,8 +5,6 @@ import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
 import android.view.View
 import android.widget.Toast
-import androidx.navigation.Navigation.findNavController
-import com.example.universitysystem.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
@@ -34,7 +32,7 @@ class AuthCheck {
                 if (login != un || password != pw) {
                     sharedPref.edit()?.putBoolean(checkSettings, false)?.apply()
                     Toast.makeText(context, "Логин или пароль не верен.", Toast.LENGTH_SHORT).show()
-                    findNavController(view).navigate(R.id.loginFragment)
+                    //findNavController(view).navigate(R.id.loginFragment)
                 }
             }
     }

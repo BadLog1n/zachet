@@ -72,8 +72,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     }
 
-    fun changePassword(){
+    fun changePassword(passwordEditText: EditText){
+        if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
+            db.changePassword(passwordEditText.text.toString())
+            //database.child("password").setValue(passwordEditText.text.toString())
 
+        }
     }
     fun saveSettings(passwordEditText: EditText, nameEditText: EditText, surnameEditText: EditText) {
         if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){

@@ -43,17 +43,33 @@ class SettingsFragmentTest {
         mdb = Mockito.mock(MyDatabase::class.java)
        mdbref = Mockito.mock(DatabaseReference::class.java)
         mdb.dbref = mdbref
-       Mockito.`when`(mdb.getSettingsInfo(mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
+        Mockito.`when`(mdb.getSettingsInfo(mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
             mset.setText("surname")
             mpet.setText("password")
             mnet.setText("name")
             mlet.setText("login")
+            mdb.settingsMap = mutableMapOf("name" to "","surname" to "","login" to "","password" to "")
+            mdb.settingsMap["name"] = "name"
+            mdb.settingsMap["surname"] = "surname"
+            mdb.settingsMap["password"] = "password"
         })
+        Mockito.`when`(mdb.saveName("name")).thenAnswer(Answer { invocation ->
+            mdb.settingsMap["name"] = "name"
+        })
+        Mockito.`when`(mdb.saveSurname("surname")).thenAnswer(Answer { invocation ->
+            mdb.settingsMap["surname"] = "surname"
+        })
+        Mockito.`when`(mdb.savePassword("password")).thenAnswer(Answer { invocation ->
+            mdb.settingsMap["password"] = "password"
+        })
+        Mockito.`when`(mdb.changePassword("password")).thenReturn(true)
        //fr.getDbInfo(mdbref,mdb,mun,mnet,mset,mlet,mpet)
     }
     @Test
     fun changePassword(){
-        fr.changePassword()
+        Mockito.`when`(mdb.changePassword("password")).thenReturn(true)
+        fr.changePassword(mpet)
+        assertEquals(true,mdb.changePassword("password"))
     }
 
     @After
@@ -62,6 +78,7 @@ class SettingsFragmentTest {
 
     @Test
     fun getDbInfo() {
+
        /* Mockito.`when`(mdb.getSettingsInfo(mdbref,mun,mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
             mset.setText("surname")
             mpet.setText("password")
@@ -74,6 +91,10 @@ class SettingsFragmentTest {
             mpet.setText("password")
             mnet.setText("name")
             mlet.setText("login")
+            mdb.settingsMap = mutableMapOf("name" to "","surname" to "","login" to "","password" to "")
+            mdb.settingsMap["name"] = "name"
+            mdb.settingsMap["surname"] = "surname"
+            mdb.settingsMap["password"] = "password"
         })
         fr.getDbInfo(mdb,mnet,mset,mlet,mpet)
 
@@ -86,5 +107,23 @@ class SettingsFragmentTest {
 
     @Test
     fun saveSettings() {
+
+        //getDbInfo()
+
+        //Log.d("saveSettingsTest",mdb.settingsMap.toString())
+        mdb.settingsMap = mutableMapOf("name" to "","surname" to "","login" to "","password" to "")
+        assertEquals( "",mdb.settingsMap["password"])
+        assertEquals( "",mdb.settingsMap["name"])
+        assertEquals( "",mdb.settingsMap["surname"])
+        Mockito.`when`(mdb.saveName("name")).thenAnswer(Answer { invocation ->
+            mdb.settingsMap["name"] = "name"
+        })
+        Mockito.`when`(mdb.saveSurname("surname")).thenAnswer(Answer { invocation ->
+            mdb.settingsMap["surname"] = "surname"
+        })
+        Mockito.`when`(mdb.savePassword("password")).thenAnswer(Answer { invocation ->
+            mdb.settingsMap["password"] = "password"
+        })
+        fr.saveSettings(mpet,mnet,mset)
     }
 }
