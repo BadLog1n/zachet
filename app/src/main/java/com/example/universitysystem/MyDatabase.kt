@@ -23,6 +23,17 @@ open class MyDatabase (var dbref:DatabaseReference){
             passwordET.setText(it.child("password").value.toString())
         }
     }
+    open fun savePassword(password:String){
+        dbref.child("password").setValue(password)
+    }
+
+    open fun saveName(name:String){
+        dbref.child("name").setValue(name)
+    }
+
+    open fun saveSurname(surname:String){
+        dbref.child("surname").setValue(surname)
+    }
 
     private fun requestListener(requestToDatabase: Task<DataSnapshot>, arr: Array<String>) {
         requestToDatabase.addOnSuccessListener {

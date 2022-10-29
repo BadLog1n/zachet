@@ -14,6 +14,7 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 private lateinit var database: DatabaseReference
+private lateinit var db: MyDatabase
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
@@ -33,36 +34,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         val un = sharedPref?.getString("save_userid", "").toString()
         val dbref= FirebaseDatabase.getInstance().getReference("users/$un")
-        val db = MyDatabase(dbref)
+        db = MyDatabase(dbref)
 
-        var arr:Array<String> = arrayOf("","","","")
         getDbInfo(db,nameEditText,surnameEditText,loginEditText,passwordEditText)
-        //getDbInfo(db.dbref,db,un,nameEditText,surnameEditText,loginEditText,passwordEditText)
-        //getDbInfo(db,un,nameEditText,surnameEditText,loginEditText,passwordEditText)
-        /*nameEditText.setText(arr[0])
-        surnameEditText.setText(arr[1])
-        loginEditText.setText(arr[2])
-        passwordEditText.setText(arr[3])*/
         nameEditText.isEnabled = true
         surnameEditText.isEnabled = true
         passwordEditText.isEnabled = true
 
-        //database = FirebaseDatabase.getInstance().getReference("users/$un")
-       // val requestToDatabase = database.get()
-        //requestToDatabase.addOnSuccessListener {
-        /*rb.addOnSuccessListener {
-            nameEditText.setText(if (it.child("name").value.toString() != "null") it.child("name").value.toString() else "")
-            surnameEditText.setText(if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else "")
-            loginEditText.setText(it.child("login").value.toString())
-            passwordEditText.setText(it.child("password").value.toString())
-            nameEditText.isEnabled = true
-            surnameEditText.isEnabled = true
-            passwordEditText.isEnabled = true
-        }*/
-
-
-        view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
-            if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
+            view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
+            /*if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
                 database.child("password").setValue(passwordEditText.text.toString())
 
             }
@@ -72,7 +52,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
             if (surnameEditText.text.isNotBlank() && surnameEditText.text.isNotEmpty()){
                 database.child("surname").setValue(surnameEditText.text.toString())
-            }
+            }*/
+                saveSettings(passwordEditText,nameEditText,surnameEditText)
             Toast.makeText(this@SettingsFragment.context, "Успешно сохранено", Toast.LENGTH_SHORT).show()
             findNavController().navigate(R.id.gradesFragment)
 
@@ -94,7 +75,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     fun changePassword(){
 
     }
-    fun saveSettings(){
+    fun saveSettings(passwordEditText: EditText, nameEditText: EditText, surnameEditText: EditText) {
+        if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
+            db.savePassword(passwordEditText.text.toString())
+            //database.child("password").setValue(passwordEditText.text.toString())
+
+        }
+        if (nameEditText.text.isNotBlank() && nameEditText.text.isNotEmpty()){
+            db.saveName(nameEditText.text.toString())
+            //database.child("name").setValue(nameEditText.text.toString())
+
+        }
+        if (surnameEditText.text.isNotBlank() && surnameEditText.text.isNotEmpty()){
+            db.saveSurname(surnameEditText.text.toString())
+            //database.child("surname").setValue(surnameEditText.text.toString())
+        }
 
     }
 
