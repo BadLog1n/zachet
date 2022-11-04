@@ -74,7 +74,7 @@
             android:layout_height="30dp"
             android:layout_gravity="end"
             android:background="@color/light_grey_background"
-            android:tint="@color/light_grey_text"
+            app:tint="@color/light_grey_text"
             app:srcCompat="@drawable/ic___icon__reply_" />
     </LinearLayout>
 
