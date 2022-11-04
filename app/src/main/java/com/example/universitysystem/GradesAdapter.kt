@@ -54,35 +54,29 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GradesHolder {
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item, parent, false)
-        view.findViewById<ImageButton>(R.id.expandBtn).setOnClickListener {
-            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
-            expView.visibility = View.VISIBLE
-            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
-            collView.visibility = View.GONE
-        }
+        val expView = view.findViewById<LinearLayout>(R.id.expandedView)
+        val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
 
         view.findViewById<LinearLayout>(R.id.collapsedView).setOnClickListener {
-            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
             expView.visibility = View.VISIBLE
-            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
             collView.visibility = View.GONE
         }
-
-
-        view.findViewById<TextView>(R.id.tv2_subject).setOnClickListener {
-            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
-            expView.visibility = View.GONE
-            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
-            collView.visibility = View.VISIBLE
+        //TODO("Изменить ImageButton в ImageView")
+        view.findViewById<ImageButton>(R.id.expandBtn).setOnClickListener {
+            expView.visibility = View.VISIBLE
+            collView.visibility = View.GONE
         }
-
+        //TODO("Изменить ImageButton в ImageView")
         view.findViewById<ImageButton>(R.id.collapseBtn).setOnClickListener {
-            val expView = view.findViewById<LinearLayout>(R.id.expandedView)
             expView.visibility = View.GONE
-            val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
             collView.visibility = View.VISIBLE
         }
-        val expView = view.findViewById<LinearLayout>(R.id.expandedView)
+
+        view.findViewById<LinearLayout>(R.id.linearLayoutOpenUp).setOnClickListener {
+            expView.visibility = View.GONE
+            collView.visibility = View.VISIBLE
+        }
+
         expView.visibility = View.GONE
 
 

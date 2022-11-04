@@ -66,6 +66,8 @@
         android:visibility="visible">
 
         <LinearLayout
+            android:id="@+id/linearLayoutOpenUp"
+
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
 
