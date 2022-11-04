@@ -1,17 +1,23 @@
 package com.example.universitysystem
 
 import android.content.Context
+import android.content.DialogInterface
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.View
-import android.widget.*
+import android.widget.Button
+import android.widget.EditText
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 
 private lateinit var database: DatabaseReference
+
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
 
@@ -19,12 +25,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         authCheck.check(view, this@SettingsFragment.context)
 
         super.onViewCreated(view, savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Настройки"
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
+            "Настройки"
         val loginEditText = view.findViewById<EditText>(R.id.loginText)
         val passwordEditText = view.findViewById<EditText>(R.id.passText)
         val nameEditText = view.findViewById<EditText>(R.id.nameText)
         val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
-        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings",
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+            "Settings",
             Context.MODE_PRIVATE
         )
         val un = sharedPref?.getString("save_userid", "").toString()
@@ -42,19 +50,41 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
         view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
-            if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
-                database.child("password").setValue(passwordEditText.text.toString())
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Сохранить изменения?")
+            builder.setPositiveButton("Да") { _, _ ->
+                if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()) {
+                    database.child("password").setValue(passwordEditText.text.toString())
 
-            }
-            if (nameEditText.text.isNotBlank() && nameEditText.text.isNotEmpty()){
-                database.child("name").setValue(nameEditText.text.toString())
+                }
+                if (nameEditText.text.isNotBlank() && nameEditText.text.isNotEmpty()) {
+                    database.child("name").setValue(nameEditText.text.toString())
 
+                }
+                if (surnameEditText.text.isNotBlank() && surnameEditText.text.isNotEmpty()) {
+                    database.child("surname").setValue(surnameEditText.text.toString())
+                }
+                Toast.makeText(
+                    this@SettingsFragment.context,
+                    "Успешно сохранено",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(R.id.gradesFragment)
             }
-            if (surnameEditText.text.isNotBlank() && surnameEditText.text.isNotEmpty()){
-                database.child("surname").setValue(surnameEditText.text.toString())
+            builder.setNeutralButton("Нет") { _, _ ->
             }
-            Toast.makeText(this@SettingsFragment.context, "Успешно сохранено", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.gradesFragment)
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            with(autoBtn) {
+                setTextColor(Color.GREEN)
+            }
+            val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+            with(userBtn) {
+                setTextColor(Color.RED)
+            }
+
 
         }
 
