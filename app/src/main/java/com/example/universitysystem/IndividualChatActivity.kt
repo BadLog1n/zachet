@@ -59,7 +59,7 @@ class IndividualChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val arguments = intent.extras
-        getName = arguments!!["getUser"].toString()
+        getName = arguments!!.getString("getUser").toString()
         val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)
         sendName = sharedPref?.getString("save_userid", "").toString()
         super.onCreate(savedInstanceState)
@@ -85,7 +85,7 @@ class IndividualChatActivity : AppCompatActivity() {
             findViewById<TextView>(R.id.receiver_tv).text = displayName
         }
         findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
-            onBackPressed()
+            onBackPressedDispatcher.onBackPressed()
         }
 
 

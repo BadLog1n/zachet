@@ -31,7 +31,8 @@ class ImageActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         displayImage(fileName, chatName)
         findViewById<ImageButton>(R.id.backFromImgBtn).setOnClickListener {
-            this.onBackPressed()
+            this.onBackPressedDispatcher.onBackPressed()
+
         }
         findViewById<ImageButton>(R.id.saveImgBtn).setOnClickListener {
             download(fileName, chatName)

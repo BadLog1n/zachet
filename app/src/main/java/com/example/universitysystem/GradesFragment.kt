@@ -6,6 +6,7 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -193,11 +194,15 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
     }
 
-
+    @Suppress("DEPRECATION")
     private fun getAppVersion(context: Context?): String {
         var version = ""
         try {
-            val pInfo = context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+            val pInfo = if (Build.VERSION.SDK_INT >= 33) {
+                context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
+            } else {
+                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+            }
             version = pInfo!!.versionName
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
