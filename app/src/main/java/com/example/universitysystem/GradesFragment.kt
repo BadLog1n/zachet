@@ -199,7 +199,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         var version = ""
         try {
             val pInfo = if (Build.VERSION.SDK_INT >= 33) {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
+                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                //TODO "Добавить следующий код когда будет переведено на новую версию проекта")
+                //context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
             } else {
                 context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
