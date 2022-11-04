@@ -4,6 +4,7 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.TextView
 import android.widget.Toast
@@ -104,6 +105,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val jsonArray = JSONArray(document)
             val listOfGrades: ArrayList<ArrayList<String>> =
                 ratingUniversity.gradesCollector(jsonArray)
+            Log.d("text", listOfGrades.toString())
             for (item in listOfGrades) {
                 val sg = SubjectGrades(
                     item[0],

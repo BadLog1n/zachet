@@ -1,6 +1,5 @@
 package ratingUniversity
 
-import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
 
@@ -35,7 +34,7 @@ class RatingUniversity {
             }
             val additional = getDopolPbZed(jsonArray, i)
 
-            for (item in additional){
+            for (item in additional) {
                 ratingScore += item.toInt()
                 rating += "$item "
             }
@@ -54,87 +53,72 @@ class RatingUniversity {
     }
 
 
-    private fun getDopolPbZed(jsonArray: JSONArray, index: Int): Array<String> {
+    fun getDopolPbZed(jsonArray: JSONArray, index: Int): Array<String> {
         val arrayToReturn: Array<String> = arrayOf("0", "0", "0")
+        val ratingArray = jsonArray.getJSONObject(index).getJSONObject("ReitingCode")
         try {
-
-            val ratingArray = jsonArray.getJSONObject(index).getJSONObject("ReitingCode")
-            try {
-                val exam = ratingArray.getJSONArray("zed").getJSONObject(0).getString("Ball")
-                arrayToReturn[0] = exam
-            } catch (e: JSONException) {
-                Log.d("e", e.toString())
-            }
-            try {
-                val additional =
-                    ratingArray.getJSONArray("dopol").getJSONObject(0).getString("Ball")
-                arrayToReturn[1] = additional
-            } catch (e: JSONException) {
-                Log.d("e", e.toString())
-            }
-            try {
-                val premium = ratingArray.getJSONArray("pb").getJSONObject(0).getString("Ball")
-                arrayToReturn[2] = premium
-
-            } catch (e: JSONException) {
-                Log.d("e", e.toString())
-            }
-
+            val exam = ratingArray.getJSONArray("zed").getJSONObject(0).getString("Ball")
+            arrayToReturn[0] = exam
+        } catch (e: JSONException) {
+            arrayToReturn[0] = "Error"
+            return arrayToReturn
+        }
+        try {
+            val additional =
+                ratingArray.getJSONArray("dopol").getJSONObject(0).getString("Ball")
+            arrayToReturn[1] = additional
+        } catch (e: JSONException) {
+            arrayToReturn[1] = "Error"
+            return arrayToReturn
+        }
+        try {
+            val premium = ratingArray.getJSONArray("pb").getJSONObject(0).getString("Ball")
+            arrayToReturn[2] = premium
 
         } catch (e: JSONException) {
-            Log.d("e", e.toString())
+            arrayToReturn[2] = "Error"
 
+            return arrayToReturn
         }
         return arrayToReturn
     }
 
-    private fun getRating(jsonArray: JSONArray, index: Int): String {
+    fun getRating(jsonArray: JSONArray, index: Int): String {
+
         var stringToReturn = ""
         try {
             val ratingArray = jsonArray.getJSONObject(index).getJSONObject("ReitingCode")
-            // val ratingArray = JSONArray(ratingArrayString)
-
-            //val ratingArray = ratingArrayString.getJSONObject(index).getString("ReitingCode")
-
             val arrayKt = arrayOf("1kt", "2kt", "3kt", "4kt")
             for (item in arrayKt) {
-                try {
-                    val ratingObject = ratingArray.getJSONObject(item)
-                    val visitScore = ratingObject.getJSONObject("pos").getString("Ball")
-                    val recordScore = ratingObject.getJSONObject("usp").getString("Ball")
-                    stringToReturn += "$visitScore $recordScore "
-                } catch (e: JSONException) {
-                }
+
+                val ratingObject = ratingArray.getJSONObject(item)
+                val visitScore = ratingObject.getJSONObject("pos").getString("Ball")
+                val recordScore = ratingObject.getJSONObject("usp").getString("Ball")
+                stringToReturn += "$visitScore $recordScore "
+
             }
         } catch (e: JSONException) {
-            Log.d("e", e.toString())
+            stringToReturn = "Error"
+            return stringToReturn
         }
+
         return stringToReturn
     }
 
 
-    private fun getSubjectType(jsonArray: JSONArray, index: Int): String {
+    fun getSubjectType(jsonArray: JSONArray, index: Int): String {
         return jsonArray.getJSONObject(index).getString("LoadName")
     }
 
 
-    private fun getSubjectName(jsonArray: JSONArray, index: Int): String {
+    fun getSubjectName(jsonArray: JSONArray, index: Int): String {
         return jsonArray.getJSONObject(index).getString("SubjName")
     }
 
 
-    private fun getTutorNameAndID(jsonArray: JSONArray, index: Int): ArrayList<String> {
+    fun getTutorNameAndID(jsonArray: JSONArray, index: Int): ArrayList<String> {
         val localArray = arrayListOf<String>()
         val tutorArray = jsonArray.getJSONObject(index).getJSONArray("TutorArr")
-
-/*
-        val document: JSONArray = JSONArray("[{\"ID\":\"2520\",\"FIO\":\"Аникина Елена Игоревна\",\"Email\":\"elenaanikina@inbox.ru\",\"KafedrUrl\":[\"https:\\/\\/swsu.ru\\/structura\\/up\\/fivt\\/povt\\/index.php\"]}]")
-        //val tutorArray = tutorArrayString.getJSONObject(index).getJSONObject("TutorArr")
-        val tutorJSON = JSONArray(tutorArrayString)
-        //val tutorArray = tutorJSON.getJSONObject(index).getJSONObject("TutorArr")
-        val additional = ratingArray.getJSONObject("dopol").getJSONObject("0").getString("Ball")
-*/
-
         val tutorFirst = tutorArray.getJSONObject(0)
         localArray.add(tutorFirst.getString("FIO"))
         localArray.add(tutorFirst.getString("ID"))
@@ -143,14 +127,3 @@ class RatingUniversity {
 
 
 }
-
-/*            sg = SubjectGrades(
-                "Экономика",
-                36,
-                "зачет",
-                grArray,
-                arrayTest[1],
-                "Иванов Петр Петрович",
-                arrayTest[0],
-                "Аникина Елена Игоревна"
-            )*/
