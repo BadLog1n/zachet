@@ -41,6 +41,12 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             startActivity(intent)
         }
 
+        view.findViewById<Button>(R.id.telegramBtn).setOnClickListener {
+            val openTelegram = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
+            startActivity(openTelegram)
+        }
+
+
         database = FirebaseDatabase.getInstance().getReference("version")
         val requestToDatabase = database.get()
         val versionName = getAppVersion(requireContext())
