@@ -194,9 +194,8 @@ class IndividualChatActivity : AppCompatActivity() {
     }
 
     private fun sendMessage(text: String) {
-        var textSub = ""
-        val lenghtTooBig = text.length > 200
-        textSub = if (lenghtTooBig) {
+        val lengthTooBig = text.length > 200
+        val textSub = if (lengthTooBig) {
             text.substring(0, 200)
         } else text
         chatsPackage.sendMessage(
@@ -206,7 +205,7 @@ class IndividualChatActivity : AppCompatActivity() {
             "text",
             chatsPackage.getChatName(sendName, getName)
         )
-        if (lenghtTooBig) {
+        if (lengthTooBig) {
             sendMessage(text.substring(200))
         }
     }

@@ -5,7 +5,6 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,7 +46,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             "Settings",
             AppCompatActivity.MODE_PRIVATE
         )
-        val linearLayoutManager = LinearLayoutManager(this@ChatsFragment.context, LinearLayoutManager.VERTICAL, true)
+        val linearLayoutManager =
+            LinearLayoutManager(this@ChatsFragment.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         val userName = sharedPref?.getString("save_userid", "").toString()
         val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
@@ -60,11 +60,12 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         recyclerView.layoutManager = linearLayoutManager
 
 
-        view.findViewById<EditText>(R.id.searchTxtInput).setOnEditorActionListener { _, actionId, _ ->
-            userSearch()
-            actionId == EditorInfo.IME_ACTION_GO
+        view.findViewById<EditText>(R.id.searchTxtInput)
+            .setOnEditorActionListener { _, actionId, _ ->
+                userSearch()
+                actionId == EditorInfo.IME_ACTION_GO
 
-        }
+            }
         view.findViewById<ImageButton>(R.id.findChatButton).setOnClickListener {
             userSearch()
         }
@@ -76,10 +77,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     }
 
 
-
-
-
-    private fun userSearch(){
+    private fun userSearch() {
 
         val user = view?.findViewById<EditText>(R.id.searchTxtInput)?.text.toString()
         database = FirebaseDatabase.getInstance().getReference("users")
@@ -99,10 +97,12 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             }
         }
     }
+
     var isFirstTry = true
     private fun addPostEventListener(userName: String) {
         val postListener = object : ValueEventListener {
             var count = 0
+
             @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (member in dataSnapshot.children) {
@@ -115,8 +115,10 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     database = FirebaseDatabase.getInstance().getReference("users/$getUser")
                     var requestToDatabase = database.get()
                     requestToDatabase.addOnSuccessListener { itData ->
-                        val name = if (itData.child("name").value.toString() != "null") itData.child("name").value.toString() else getUser
-                        val surname = if (itData.child("surname").value.toString() != "null") itData.child("surname").value.toString() else ""
+                        val name =
+                            if (itData.child("name").value.toString() != "null") itData.child("name").value.toString() else getUser
+                        val surname =
+                            if (itData.child("surname").value.toString() != "null") itData.child("surname").value.toString() else ""
                         database =
                             FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
                         requestToDatabase = database.limitToLast(1).get()
@@ -134,7 +136,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
                                     "text" -> {
                                         val chat =
-                                            ChatPreview("$name $surname", dtLong, tx, isRead, getUser)
+                                            ChatPreview(
+                                                "$name $surname",
+                                                dtLong,
+                                                tx,
+                                                isRead,
+                                                getUser
+                                            )
                                         if (!isFirstTry) {
                                             try {
                                                 val item: ChatPreview =
@@ -247,12 +255,15 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                 }
                                 count += 1
                             }
-                            Log.d("member", member.toString())
-                            Log.d("snapshot", dataSnapshot.children.last().toString())
-                            Log.d("check", (dataSnapshot.children.last().toString() == member.toString()).toString())
-                            if (member.toString() == dataSnapshot.children.last().toString() && isFirstTry) {
+                            /* Log.d("member", member.toString())
+                             Log.d("snapshot", dataSnapshot.children.last().toString())
+                             Log.d("check", (dataSnapshot.children.last().toString() == member.toString()).toString())
+                             */
+                            if (member.toString() == dataSnapshot.children.last()
+                                    .toString() && isFirstTry
+                            ) {
                                 list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
-                                Log.d("list", list.toString())
+                                //Log.d("list", list.toString())
 
                                 // list.reverse()
                                 rcAdapter.clearRecords()
@@ -268,7 +279,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("T", "loadPost:onCancelled", databaseError.toException())
+                //  Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
         }
         database = FirebaseDatabase.getInstance().getReference("chatMembers/$userName")

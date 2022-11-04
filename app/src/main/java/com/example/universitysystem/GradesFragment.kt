@@ -6,9 +6,7 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
-import android.os.Environment
 import android.util.Log
 import android.view.View
 import android.widget.AdapterView
@@ -18,8 +16,6 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -77,7 +73,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         requestToDatabase.addOnSuccessListener {
             val login = it.child("login").value.toString()
             val password = it.child("passwordSWSU").value
-            if (password != null){
+            if (password != null) {
                 getDataOfStudent(sharedPref, login, password.toString(), spinner)
 
             }
@@ -154,25 +150,21 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 binding.apply {
                     GlobalScope.launch {
                         rcAdapter.clearRecords()
-                        val sharedPref: SharedPreferences? = context?.getSharedPreferences(
-                            "Settings",
-                            Context.MODE_PRIVATE
-                        )
-                        val un = sharedPref?.getString("save_userid", "").toString()
                         val gr = sharedPref?.getString("groupOfStudent", "").toString()
                         val fo = sharedPref?.getString("formOfStudent", "").toString()
                         val ls = sharedPref?.getInt("lastSemester", 0)
 
-                        val result = spinner.selectedItem.toString().filter { it.isDigit() } .toInt() + 1
+                        val result =
+                            spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
 
 
                         var status = "true"
-                        if (result + 1 >= ls!!.toInt()){
+                        if (result + 1 >= ls!!.toInt()) {
                             status = "false"
                         }
                         val semester = result.toString().padStart(9, '0')
 
-                        val listOfGrades = returnRating(un, gr, semester , fo, status)
+                        val listOfGrades = returnRating(un, gr, semester, fo, status)
                         withContext(Dispatchers.Main) {
                             if (listOfGrades != null) {
                                 for (item in listOfGrades) {
@@ -186,16 +178,17 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                             item[4]
                                         )
                                     )
-                                } } } } }
-
+                                }
+                            }
+                        }
+                    }
+                }
 
 
                 //val switchState: Boolean = switch.isChecked
                 //timetableGet(spinner.selectedItem.toString(), switchState)
             }
         }
-
-
 
 
     }
@@ -222,38 +215,40 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         spinner: Spinner
     ) {
         binding.apply {
-                GlobalScope.launch {
+            GlobalScope.launch {
 
-                    val infoOfStudent = getSemester(login, password)
-                    withContext(Dispatchers.Main) {
-                        if (infoOfStudent != null) {
-                            val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
-                            semester.sort()
-                            semester.reverse()
-                            sharedPref?.edit()?.putInt("lastSemester", semester.first().toInt())
-                                ?.apply()
-                            semester.forEachIndexed { index, element ->
-                                val correctSemester = element.toInt()-1
-                                semester[index] = "Семестр $correctSemester"
-                            }
-                            val arrayAdapter: ArrayAdapter<String> =
-                                ArrayAdapter(
-                                    requireContext(),
-                                    android.R.layout.simple_spinner_dropdown_item,
-                                    semester
-                                )
-                            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                            spinner.adapter = arrayAdapter
-                            sharedPref?.edit()?.putString("groupOfStudent", infoOfStudent[0][1])
-                                ?.apply()
-                            sharedPref?.edit()?.putString("formOfStudent", infoOfStudent[0][0])
-                                ?.apply()
-                            /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
-                                              .show()*/
+                val infoOfStudent = getSemester(login, password)
+                withContext(Dispatchers.Main) {
+                    if (infoOfStudent != null) {
+                        val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
+                        semester.sort()
+                        semester.reverse()
+                        sharedPref?.edit()?.putInt("lastSemester", semester.first().toInt())
+                            ?.apply()
+                        semester.forEachIndexed { index, element ->
+                            val correctSemester = element.toInt() - 1
+                            semester[index] = "Семестр $correctSemester"
+                        }
+                        val arrayAdapter: ArrayAdapter<String> =
+                            ArrayAdapter(
+                                requireContext(),
+                                android.R.layout.simple_spinner_dropdown_item,
+                                semester
+                            )
+                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                        spinner.adapter = arrayAdapter
+                        sharedPref?.edit()?.putString("groupOfStudent", infoOfStudent[0][1])
+                            ?.apply()
+                        sharedPref?.edit()?.putString("formOfStudent", infoOfStudent[0][0])
+                            ?.apply()
+                        /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
+                                          .show()*/
 
-                        } } } } }
-
-
+                    }
+                }
+            }
+        }
+    }
 
 
     /*                           returnRating(
