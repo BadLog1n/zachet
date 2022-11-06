@@ -38,3 +38,5 @@
 vk: @captianfrog @sokhinasofia   
 telegram: @sssofi01 @captianfrog  
 будем рады всем, кто заинтересовался проектом и хочет дать обратную связь
+
+Актуальная версия 1.3.4
