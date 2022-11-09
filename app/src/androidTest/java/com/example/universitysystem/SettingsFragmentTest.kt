@@ -39,15 +39,26 @@ class SettingsFragmentTest {
             mpet = this.view?.findViewById<EditText>(R.id.passText)!!
             mnet = this.view?.findViewById<EditText>(R.id.nameText)!!
             mset = this.view?.findViewById<EditText>(R.id.surnameText)!!
+            /*mdb = Mockito.mock(MyDatabase::class.java)
+            Mockito.`when`(mdb.getSettingsInfo(mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
+                mset.setText("surname")
+                mpet.setText("password")
+                mnet.setText("name")
+                mlet.setText("login")
+                mdb.settingsMap = mutableMapOf("name" to "","surname" to "","login" to "","password" to "")
+                mdb.settingsMap["name"] = "name"
+                mdb.settingsMap["surname"] = "surname"
+                mdb.settingsMap["password"] = "password"
+            })*/
         }
         mdb = Mockito.mock(MyDatabase::class.java)
        mdbref = Mockito.mock(DatabaseReference::class.java)
         mdb.dbref = mdbref
         Mockito.`when`(mdb.getSettingsInfo(mnet,mset,mlet,mpet)).thenAnswer(Answer { invocation ->
-            mset.setText("surname")
+            /*mset.setText("surname")
             mpet.setText("password")
             mnet.setText("name")
-            mlet.setText("login")
+            mlet.setText("login")*/
             mdb.settingsMap = mutableMapOf("name" to "","surname" to "","login" to "","password" to "")
             mdb.settingsMap["name"] = "name"
             mdb.settingsMap["surname"] = "surname"
@@ -96,7 +107,7 @@ class SettingsFragmentTest {
             mdb.settingsMap["surname"] = "surname"
             mdb.settingsMap["password"] = "password"
         })
-        fr.getDbInfo(mdb,mnet,mset,mlet,mpet)
+       // fr.getDbInfo(mdb,mnet,mset,mlet,mpet)
 
         assertEquals("name",mnet.text.toString())
         assertEquals("surname",mset.text.toString())

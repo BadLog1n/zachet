@@ -33,10 +33,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         )
 
         val un = sharedPref?.getString("save_userid", "").toString()
-        val dbref= FirebaseDatabase.getInstance().getReference("users/$un")
-        db = MyDatabase(dbref)
 
-        getDbInfo(db,nameEditText,surnameEditText,loginEditText,passwordEditText)
+
+        getDbInfo(un,nameEditText,surnameEditText,loginEditText,passwordEditText)
         nameEditText.isEnabled = true
         surnameEditText.isEnabled = true
         passwordEditText.isEnabled = true
@@ -62,14 +61,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     }
 
-
-   public fun getDbInfo(db:MyDatabase,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
+   public fun getDbInfo(un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
    //public fun getDbInfo( db:MyDatabase,un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
     {
-
-       db.getSettingsInfo(nameET,surnameET,loginET,passwordET)
+        val dbref= FirebaseDatabase.getInstance().getReference("users/$un")
+        db = MyDatabase(dbref)
+        db.getSettingsInfo(nameET,surnameET,loginET,passwordET)
         //db.getSettingsInfo("users/$un",nameET,surnameET,loginET,passwordET)
 
+    }
+
+    public fun getDb():MyDatabase{
+        return db
     }
 
     fun changePassword(passwordEditText: EditText){
