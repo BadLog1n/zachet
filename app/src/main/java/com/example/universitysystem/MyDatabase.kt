@@ -58,17 +58,17 @@ open class MyDatabase (var dbref:DatabaseReference){
     }
     open fun savePassword(password:String){
         dbref.child("password").setValue(password)
-        settingsMap["password"] = password
+
     }
 
     open fun saveName(name:String){
         dbref.child("name").setValue(name)
-        settingsMap["name"] =  name
+
     }
 
     open fun saveSurname(surname:String){
         dbref.child("surname").setValue(surname)
-        settingsMap["surname"] = surname
+
     }
 
     private fun requestListener(requestToDatabase: Task<DataSnapshot>, arr: Array<String>) {

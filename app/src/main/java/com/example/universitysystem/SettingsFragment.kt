@@ -8,7 +8,6 @@ import android.widget.Button
 import android.widget.EditText
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -54,7 +53,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }*/
                 saveSettings(passwordEditText,nameEditText,surnameEditText)
             Toast.makeText(this@SettingsFragment.context, "Успешно сохранено", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.gradesFragment)
+            //findNavController().navigate(R.id.gradesFragment)
 
         }
 
