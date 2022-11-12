@@ -22,33 +22,33 @@ import org.junit.runner.RunWith
 @RunWith(AndroidJUnit4::class)
 class SettingsDbIntegrTest {
     private var scenario: FragmentScenario<SettingsFragment>? = null
-    var fr: SettingsFragment = SettingsFragment()
-    private lateinit var mnet:EditText
-    private lateinit var mset:EditText
-    private lateinit var mlet:EditText
-    private lateinit var mpet:EditText
-    private lateinit var mdb:MyDatabase
-    private lateinit var mun:String
+    private lateinit var mnet: EditText
+    private lateinit var mset: EditText
+    private lateinit var mlet: EditText
+    private lateinit var mpet: EditText
+    private lateinit var mdb: MyDatabase
+    private lateinit var mun: String
 
     @Before
     fun setUp() {
         mun = "someUn"
-        scenario = launchFragmentInContainer<SettingsFragment>()
+        scenario = launchFragmentInContainer()
         try {
             Thread.sleep(2000)
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
         scenario?.withFragment {
-            mlet = this.view?.findViewById<EditText>(R.id.loginText)!!
-            mpet = this.view?.findViewById<EditText>(R.id.passText)!!
-            mnet = this.view?.findViewById<EditText>(R.id.nameText)!!
-            mset = this.view?.findViewById<EditText>(R.id.surnameText)!!
+            mlet = this.view?.findViewById(R.id.loginText)!!
+            mpet = this.view?.findViewById(R.id.passText)!!
+            mnet = this.view?.findViewById(R.id.nameText)!!
+            mset = this.view?.findViewById(R.id.surnameText)!!
             mdb = this.getDb()
 
         }
 
     }
+
     @Test
     fun dbAndActualInfo() {
         try {
@@ -56,7 +56,7 @@ class SettingsDbIntegrTest {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        if (mdb.isInfoGot){
+        if (mdb.isInfoGot) {
             mdb.extractInfo()
         }
         try {
@@ -64,10 +64,10 @@ class SettingsDbIntegrTest {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        val dbName:String? = mdb.settingsMap["name"]
-        val dbSurname:String? = mdb.settingsMap["surname"]
-        val dbLogin:String? = mdb.settingsMap["login"]
-        val dbPassword:String? = mdb.settingsMap["password"]
+        val dbName: String? = mdb.settingsMap["name"]
+        val dbSurname: String? = mdb.settingsMap["surname"]
+        val dbLogin: String? = mdb.settingsMap["login"]
+        val dbPassword: String? = mdb.settingsMap["password"]
         Assert.assertEquals(dbName, mnet.text.toString())
         Assert.assertEquals(dbSurname, mset.text.toString())
         Assert.assertEquals(dbLogin, mlet.text.toString())
@@ -108,14 +108,14 @@ class SettingsDbIntegrTest {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        val dbPassword:String? = mdb.settingsMap["password"]
+        val dbPassword: String? = mdb.settingsMap["password"]
         Assert.assertEquals("password", dbPassword)
-
         onView(withId(R.id.passText)).perform(replaceText("1"))
         onView(withId(R.id.settingsLinearLayout)).perform(closeSoftKeyboard())
         onView(withId(R.id.saveSettingsBtn)).perform(scrollTo())
         onView(withId(R.id.saveSettingsBtn)).perform(click())
     }
+
     @Test
     fun changeLoginActual() {
         onView(withId(R.id.loginText)).check(matches(isNotEnabled()))
@@ -156,7 +156,7 @@ class SettingsDbIntegrTest {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        val dbPassword:String? = mdb.settingsMap["name"]
+        val dbPassword: String? = mdb.settingsMap["name"]
         Assert.assertEquals("имя", dbPassword)
 
         onView(withId(R.id.nameText)).perform(replaceText("Е"))
@@ -166,7 +166,7 @@ class SettingsDbIntegrTest {
     }
 
     @Test
-    fun changeSurameActual() {
+    fun changeSurnameActual() {
         onView(withId(R.id.surnameText)).perform(clearText())
         //onView(withId(R.id.surnameText)).perform(typeText("фамилия"))
         onView(withId(R.id.surnameText)).perform(replaceText("фамилия"))
@@ -200,7 +200,7 @@ class SettingsDbIntegrTest {
         } catch (e: InterruptedException) {
             e.printStackTrace()
         }
-        val dbPassword:String? = mdb.settingsMap["surname"]
+        val dbPassword: String? = mdb.settingsMap["surname"]
         Assert.assertEquals("фамилия", dbPassword)
         onView(withId(R.id.surnameText)).perform(replaceText("А"))
         onView(withId(R.id.settingsLinearLayout)).perform(closeSoftKeyboard())
