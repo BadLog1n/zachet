@@ -10,6 +10,7 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.matcher.ViewMatchers.isNotEnabled
 import androidx.test.espresso.matcher.ViewMatchers.withId
 import androidx.test.ext.junit.runners.AndroidJUnit4
+import com.example.universitysystem.Message
 import com.example.universitysystem.MyDatabase
 import com.example.universitysystem.R
 import com.example.universitysystem.SettingsFragment
@@ -26,53 +27,18 @@ class SettingsDbIntegrTest {
     private lateinit var mset: EditText
     private lateinit var mlet: EditText
     private lateinit var mpet: EditText
-    private lateinit var mdb: MyDatabase
+    private lateinit var mdb: Message
     private lateinit var mun: String
 
-    @Before
-    fun setUp() {
-        mun = "someUn"
-        scenario = launchFragmentInContainer()
-        try {
-            Thread.sleep(2000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-        scenario?.withFragment {
-            mlet = this.view?.findViewById(R.id.loginText)!!
-            mpet = this.view?.findViewById(R.id.passText)!!
-            mnet = this.view?.findViewById(R.id.nameText)!!
-            mset = this.view?.findViewById(R.id.surnameText)!!
-            mdb = this.getDb()
-
-        }
-
-    }
 
     @Test
     fun dbAndActualInfo() {
-        try {
-            Thread.sleep(3000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-        if (mdb.isInfoGot) {
-            mdb.extractInfo()
-        }
-        try {
-            Thread.sleep(3000)
-        } catch (e: InterruptedException) {
-            e.printStackTrace()
-        }
-        val dbName: String? = mdb.settingsMap["name"]
-        val dbSurname: String? = mdb.settingsMap["surname"]
-        val dbLogin: String? = mdb.settingsMap["login"]
-        val dbPassword: String? = mdb.settingsMap["password"]
-        Assert.assertEquals(dbName, mnet.text.toString())
-        Assert.assertEquals(dbSurname, mset.text.toString())
-        Assert.assertEquals(dbLogin, mlet.text.toString())
-        Assert.assertEquals(dbPassword, mpet.text.toString())
-    }
+        val result = mdb.sendMessage("1", "1", "1", "text")
+        Thread.sleep(3000)
+
+        Assert.assertEquals(true, result)
+
+/*
 
     @Test
     fun changePasswordActual() {
@@ -210,6 +176,7 @@ class SettingsDbIntegrTest {
 
     @After
     fun tearDown() {
+*/
 
         /*onView(withId(R.id.nameText)).perform(replaceText("Е"))
 

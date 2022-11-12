@@ -1,5 +1,6 @@
 package com.example.universitysystem
 
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -11,9 +12,13 @@ import androidx.fragment.app.Fragment
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import java.text.SimpleDateFormat
+import java.util.*
 
 private lateinit var database: DatabaseReference
 private lateinit var db: MyDatabase
+private val chatName = ChatName()
+
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
@@ -22,45 +27,62 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         authCheck.check(view, this@SettingsFragment.context)
 
         super.onViewCreated(view, savedInstanceState)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title = "Настройки"
-        val loginEditText = view.findViewById<EditText>(R.id.loginText)
-        val passwordEditText = view.findViewById<EditText>(R.id.passText)
-        val nameEditText = view.findViewById<EditText>(R.id.nameText)
-        val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
-        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings",
-            Context.MODE_PRIVATE
-        )
-
-        val un = sharedPref?.getString("save_userid", "").toString()
 
 
-        getDbInfo(un,nameEditText,surnameEditText,loginEditText,passwordEditText)
-        nameEditText.isEnabled = true
-        surnameEditText.isEnabled = true
-        passwordEditText.isEnabled = true
 
-            view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
-            /*if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()){
-                database.child("password").setValue(passwordEditText.text.toString())
 
-            }
-            if (nameEditText.text.isNotBlank() && nameEditText.text.isNotEmpty()){
-                database.child("name").setValue(nameEditText.text.toString())
 
-            }
-            if (surnameEditText.text.isNotBlank() && surnameEditText.text.isNotEmpty()){
-                database.child("surname").setValue(surnameEditText.text.toString())
-            }*/
-                saveSettings(passwordEditText,nameEditText,surnameEditText)
-            Toast.makeText(this@SettingsFragment.context, "Успешно сохранено", Toast.LENGTH_SHORT).show()
-            //findNavController().navigate(R.id.gradesFragment)
-
-        }
 
 
     }
 
-   public fun getDbInfo(un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
+
+
+    fun sendMessage(
+        sendUser: String,
+        text: String,
+        type: String,
+        chatName: String
+    ): Boolean {
+        database = FirebaseDatabase.getInstance().getReference("chatMessages")
+        val message = mapOf(
+            "text" to text,
+            "type" to type,
+            "username" to sendUser,
+        )
+        val currentTimestamp = System.currentTimeMillis().toString()
+        database.child(chatName).child(currentTimestamp).updateChildren(message)
+        return true
+    }
+
+    @SuppressLint("SimpleDateFormat")
+    fun getMessage(sendUser: String, getUser: String, timestamp: String) {
+        val requestToDatabase = database.get()
+        val chatName = chatName.getChatName(sendUser, getUser)
+        database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName/$timestamp")
+
+        requestToDatabase.addOnSuccessListener {
+            val username = "username"
+            val text = "text"
+            val type = "type"
+            for (i in it.children) {
+                val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
+                    .toString()
+                when (i.child(type).value.toString()) {
+                    "text" -> {
+                        val tx = i.child(text).value.toString()
+
+                        if (i.child(username).value.toString() == sendUser) {
+                            // adapter.add(ChatToItem(tx, dt))
+                        } else {
+                            // adapter.add(ChatFromItem(tx, dt))
+                        }
+                    }
+                }
+            }
+        }
+    }
+   /*public fun getDbInfo(un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
    //public fun getDbInfo( db:MyDatabase,un:String,nameET: EditText,surnameET: EditText,loginET: EditText,passwordET: EditText)
     {
         val dbref= FirebaseDatabase.getInstance().getReference("users/$un")
@@ -98,7 +120,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
     }
-
+*/
 }
 
 
