@@ -15,6 +15,7 @@ import com.example.universitysystem.R
 import com.example.universitysystem.SettingsFragment
 import org.junit.After
 import org.junit.Assert
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
@@ -49,7 +50,17 @@ class SettingsDbIntegrTest {
         }
 
     }
+
     @Test
+    fun sendMessage() {
+        val result = mdb.sendMessage("1", "text", "1", "text")
+        Thread.sleep(3000)
+
+        assertEquals(true,result)
+    }
+
+
+   /* @Test
     fun dbAndActualInfo() {
         try {
             Thread.sleep(3000)
@@ -206,7 +217,7 @@ class SettingsDbIntegrTest {
         onView(withId(R.id.settingsLinearLayout)).perform(closeSoftKeyboard())
         onView(withId(R.id.saveSettingsBtn)).perform(scrollTo())
         onView(withId(R.id.saveSettingsBtn)).perform(click())
-    }
+    }*/
 
     @After
     fun tearDown() {

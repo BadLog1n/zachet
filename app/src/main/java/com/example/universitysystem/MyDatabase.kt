@@ -4,6 +4,7 @@ import android.widget.EditText
 import com.google.android.gms.tasks.Task
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 open class MyDatabase (var dbref:DatabaseReference){
 //open class MyDatabase (){
@@ -81,5 +82,29 @@ open class MyDatabase (var dbref:DatabaseReference){
             arr[2] = it.child("login").value.toString()
             arr[3] = it.child("password").value.toString()
         }
+    }
+
+
+    private val chatName = ChatName()
+
+
+    private lateinit var database: DatabaseReference
+
+    fun sendMessage(
+        sendUser: String,
+        getUser: String,
+        text: String,
+        type: String,
+    ): Boolean {
+        val chatNameString = chatName.getChatName(sendUser, getUser)
+        database = FirebaseDatabase.getInstance().getReference("chatMessages")
+        val message = mapOf(
+            "text" to text,
+            "type" to type,
+            "username" to sendUser,
+        )
+        val currentTimestamp = System.currentTimeMillis().toString()
+        database.child(chatNameString).child(currentTimestamp).updateChildren(message)
+        return true
     }
 }
