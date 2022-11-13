@@ -24,8 +24,8 @@ class MessageTest {
 
     @Test
     fun sendMessage() {
-        Mockito.`when`(mdb.sendMessage("1", "1", "1", "text")).thenReturn(true)
-        assertEquals(true, mdb.sendMessage("1", "1", "1", "text"))
+        Mockito.`when`(mdb.sendMessage("1", "text", "1", "text")).thenReturn(true)
+        assertEquals(true, mdb.sendMessage("1", "text", "1", "text"))
     }
 
     @Test

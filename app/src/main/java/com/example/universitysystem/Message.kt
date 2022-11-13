@@ -17,10 +17,11 @@ open class Message(var dbref: DatabaseReference? = null) {
 
     fun sendMessage(
         sendUser: String,
+        getUser: String,
         text: String,
         type: String,
-        chatName: String
     ): Boolean {
+        val chatNameString = chatName.getChatName(sendUser, getUser)
         database = FirebaseDatabase.getInstance().getReference("chatMessages")
         val message = mapOf(
             "text" to text,
@@ -28,7 +29,7 @@ open class Message(var dbref: DatabaseReference? = null) {
             "username" to sendUser,
         )
         val currentTimestamp = System.currentTimeMillis().toString()
-        database.child(chatName).child(currentTimestamp).updateChildren(message)
+        database.child(chatNameString).child(currentTimestamp).updateChildren(message)
         return true
     }
 
