@@ -120,7 +120,7 @@ class RatingUniversity {
 
 
     private fun getTutorNameAndID(jsonArray: JSONArray, index: Int): ArrayList<String> {
-        val localArray = arrayListOf<String>()
+        val localArray = arrayListOf("", "")
         val tutorArray = jsonArray.getJSONObject(index).getJSONArray("TutorArr")
 
 /*
@@ -131,10 +131,13 @@ class RatingUniversity {
         val additional = ratingArray.getJSONObject("dopol").getJSONObject("0").getString("Ball")
 */
 
-        val tutorFirst = tutorArray.getJSONObject(0)
-        localArray.add(tutorFirst.getString("FIO"))
-        localArray.add(tutorFirst.getString("ID"))
-        return localArray
+        return if (tutorArray.length() != 0) {
+            val tutorFirst = tutorArray.getJSONObject(0)
+            localArray[0] = tutorFirst.getString("FIO")
+            localArray[1] = tutorFirst.getString("ID")
+            localArray
+
+        } else localArray
     }
 
 
