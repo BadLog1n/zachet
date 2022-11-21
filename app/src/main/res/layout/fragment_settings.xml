@@ -126,7 +126,7 @@
                     android:background="@drawable/settings_edittext"
                     android:digits="@string/login_password_input"
                     android:ems="10"
-                    android:enabled="true"
+                    android:enabled="false"
                     android:focusable="true"
                     android:fontFamily="@font/inter"
                     android:inputType="textPassword"
