@@ -30,6 +30,9 @@ import org.jsoup.Connection
 import org.jsoup.Jsoup
 import ratingUniversity.InfoOfStudent
 import ratingUniversity.RatingUniversity
+import java.text.DateFormat
+import java.text.SimpleDateFormat
+import java.util.*
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
@@ -158,16 +161,13 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         val result =
                             spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
 
+                        val status = if (result + 1 >= ls!!.toInt()) "false" else "true"
 
-                        var status = "true"
-                        if (result + 1 >= ls!!.toInt()) {
-                            status = "false"
-                        }
                         val semester = result.toString().padStart(9, '0')
 
                         val listOfGrades = returnRating(un, gr, semester, fo, status)
                         withContext(Dispatchers.Main) {
-                            if (listOfGrades != null) {
+                            if (listOfGrades != null && listOfGrades.size != 0) {
                                 for (item in listOfGrades) {
                                     rcAdapter.addSubjectGrades(
                                         SubjectGrades(
@@ -214,6 +214,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     }
 
 
+    @SuppressLint("SimpleDateFormat")
     @OptIn(DelicateCoroutinesApi::class)
     private fun getDataOfStudent(
         sharedPref: SharedPreferences?,
@@ -227,6 +228,14 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 val infoOfStudent = getSemester(login, password)
                 withContext(Dispatchers.Main) {
                     if (infoOfStudent != null) {
+
+                        val dateFormat: DateFormat = SimpleDateFormat("MM")
+                        val date = Date()
+                        val month = dateFormat.format(date)
+                        val arrayOfSemester = arrayOf("1", "9", "10", "11", "12")
+                        val semesterCurrent = month in arrayOfSemester
+
+
                         val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
                         semester.sort()
                         semester.reverse()
@@ -236,6 +245,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                             val correctSemester = element.toInt() - 1
                             semester[index] = "Семестр $correctSemester"
                         }
+                        if (semesterCurrent) semester.removeFirst()
+
                         val arrayAdapter: ArrayAdapter<String> =
                             ArrayAdapter(
                                 requireContext(),
