@@ -11,7 +11,9 @@
     <string name="login_failed">"Не удалось выполнить вход"</string>
     <string name="enter">Вход</string>
     <string name="login">Логин</string>
+    <string name="loginWeb">Логин от info.swsu</string>
     <string name="password">Пароль</string>
+    <string name="passwordWeb">Пароль от info.swsu</string>
     <string name="to_enter">Войти</string>
     <string name="my_grades">Мои баллы</string>
     <string name="feed">Лента</string>
@@ -28,6 +30,7 @@
     <string name="connect_with_teacher">Связаться с преподавателем</string>
     <string name="message">Сообщение</string>
     <string name="save">Сохранить</string>
+    <string name="confirm">Подтвердить</string>
     <string name="chats">Чаты</string>
     <string name="schedule">Расписание</string>
     <string name="search_hint">Поиск</string>

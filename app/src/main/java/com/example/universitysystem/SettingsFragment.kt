@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
@@ -15,12 +16,17 @@ import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlinx.coroutines.*
+import org.jsoup.Connection
+import org.jsoup.Jsoup
+import kotlin.math.log
 
 private lateinit var database: DatabaseReference
 
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
 
+    @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         authCheck.check(view, this@SettingsFragment.context)
 
@@ -31,10 +37,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val passwordEditText = view.findViewById<EditText>(R.id.passText)
         val nameEditText = view.findViewById<EditText>(R.id.nameText)
         val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
+        val loginWebInput = view.findViewById<EditText>(R.id.loginWebInput)
+        val passwordWebInput = view.findViewById<EditText>(R.id.passwordWebInput)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
             Context.MODE_PRIVATE
         )
+        val loginWeb = sharedPref?.getString("loginWeb", "").toString()
+        loginWebInput.setText(loginWeb)
+        val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
+        passwordWebInput.setText(passwordWeb)
+
         val un = sharedPref?.getString("save_userid", "").toString()
         database = FirebaseDatabase.getInstance().getReference("users/$un")
         val requestToDatabase = database.get()
@@ -87,7 +100,71 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
         }
+        view.findViewById<Button>(R.id.submitBtn).setOnClickListener {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setMessage("Подтвердить аккаунт?")
+            builder.setPositiveButton("Да") { _, _ ->
+                try {
+                    GlobalScope.launch {
 
+                        val loginWebInputString = loginWebInput.text.toString()
+                        val passwordWebInputString = passwordWebInput.text.toString()
+                        val sitePath =
+                            "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$loginWebInputString&password=$passwordWebInputString&type=array"
+
+                        val response: Connection.Response = Jsoup.connect(sitePath)
+                            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                            .timeout(30000)
+                            .execute()
+
+                        val statusCode: Int = response.statusCode()
+                            val document =
+                                if (statusCode == 200) Jsoup.connect(sitePath).get()
+                                    .text() else ""
+                        withContext(Dispatchers.Main) {
+
+                        if (document != "") {
+                                sharedPref?.edit()?.putString("loginWeb", loginWebInputString)
+                                    ?.apply()
+                                sharedPref?.edit()
+                                    ?.putString("passwordWeb", passwordWebInputString)
+                                    ?.apply()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Подтверждено!",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                            } else Toast.makeText(
+                                requireContext(), "Не удается авторизоваться на сайте," +
+                                        " проверьте вводимый логин и пароль", Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
+                    }
+                } catch (e: Exception) {
+                    Log.d("tag", e.toString())
+                    // Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT).show()
+
+
+                }
+            }
+            builder.setNeutralButton("Нет") { _, _ ->
+            }
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            with(autoBtn) {
+                setTextColor(Color.GREEN)
+            }
+            val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+            with(userBtn) {
+                setTextColor(Color.RED)
+            }
+
+
+        }
 
     }
 

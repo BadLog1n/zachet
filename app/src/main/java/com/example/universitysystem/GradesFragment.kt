@@ -66,22 +66,19 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             "Settings",
             Context.MODE_PRIVATE
         )
-        val un = sharedPref?.getString("save_userid", "").toString()
 
         rcAdapter.clearRecords()
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
-        database = FirebaseDatabase.getInstance().getReference("users/$un")
-        var requestToDatabase = database.get()
-        requestToDatabase.addOnSuccessListener {
-            val login = it.child("login").value.toString()
-            val password = it.child("passwordSWSU").value
-            if (password != null) {
-                getDataOfStudent(sharedPref, login, password.toString(), spinner)
 
-            }
+        val loginWeb = sharedPref?.getString("loginWeb", "").toString()
+        val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
+        if (loginWeb != "" && passwordWeb != "") {
+            getDataOfStudent(sharedPref, loginWeb, passwordWeb, spinner)
         }
+
+
 /*        try {
             //initGradesRc()
         } catch (e: Exception) {
@@ -106,9 +103,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
 
         database = FirebaseDatabase.getInstance().getReference("version")
-        requestToDatabase = database.get()
         val versionName = getAppVersion(requireContext())
-        requestToDatabase.addOnSuccessListener {
+        database.get().addOnSuccessListener {
             if (versionName < it.value.toString()) {
                 /*Toast.makeText(
                     this.context,
@@ -164,7 +160,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                         val semester = result.toString().padStart(9, '0')
 
-                        val listOfGrades = returnRating(un, gr, semester, fo, status)
+                        val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
                         withContext(Dispatchers.Main) {
                             if (listOfGrades != null && listOfGrades.size != 0) {
                                 rcAdapter.clearRecords()
