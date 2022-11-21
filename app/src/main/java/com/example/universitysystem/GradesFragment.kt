@@ -153,7 +153,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                 binding.apply {
                     GlobalScope.launch {
-                        rcAdapter.clearRecords()
                         val gr = sharedPref?.getString("groupOfStudent", "").toString()
                         val fo = sharedPref?.getString("formOfStudent", "").toString()
                         val ls = sharedPref?.getInt("lastSemester", 0)
@@ -168,6 +167,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         val listOfGrades = returnRating(un, gr, semester, fo, status)
                         withContext(Dispatchers.Main) {
                             if (listOfGrades != null && listOfGrades.size != 0) {
+                                rcAdapter.clearRecords()
                                 for (item in listOfGrades) {
                                     rcAdapter.addSubjectGrades(
                                         SubjectGrades(
