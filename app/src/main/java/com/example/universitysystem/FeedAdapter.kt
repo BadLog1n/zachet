@@ -63,7 +63,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             val record = view.findViewById<TextView>(R.id.record).text.toString()
             val builder = AlertDialog.Builder(parent.context)
             if (userId == authorIdChat) {
-                builder.setPositiveButton("Удалить") { _, _ ->
+                builder.setNeutralButton("Удалить") { _, _ ->
                     val myRef = database.getReference("feed").child(record)
                     myRef.removeValue()
                     val item: FeedRecord =
@@ -71,20 +71,18 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
                     removeObject(item)
                 }
             }
-            builder.setNeutralButton("Пожаловаться") { _, _ ->
-                val myRef = database.getReference("warnings").child(record)
-                myRef.setValue(userId)
-                Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT).show()
-
+            else {
+                builder.setNeutralButton("Пожаловаться") { _, _ ->
+                    val myRef = database.getReference("warnings").child(record)
+                    myRef.setValue(userId)
+                    Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT).show()
+                }
             }
+
             val alertDialog = builder.create()
             alertDialog.show()
-            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
             with(autoBtn) {
-                setTextColor(Color.BLACK)
-            }
-            val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-            with(userBtn) {
                 setTextColor(Color.BLACK)
             }
         }
