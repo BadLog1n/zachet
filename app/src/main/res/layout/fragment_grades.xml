@@ -24,7 +24,8 @@
             android:layout_height="wrap_content"
             android:baselineAligned="false"
             android:entries="@array/sem_nums"
-            android:spinnerMode="dropdown" />
+            android:spinnerMode="dropdown"
+            android:visibility="invisible" />
 
     </LinearLayout>
 

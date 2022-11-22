@@ -74,6 +74,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         val loginWeb = sharedPref?.getString("loginWeb", "").toString()
         val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
         if (loginWeb != "" && passwordWeb != "") {
+            spinner.visibility = View.VISIBLE
+
             getDataOfStudent(sharedPref, loginWeb, passwordWeb, spinner)
         }
 
