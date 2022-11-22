@@ -56,6 +56,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRcView)
         val progressBar:ProgressBar = view.findViewById(R.id.gradesProgressBar)
+        val textviewNoAuthData: TextView = view.findViewById(R.id.textviewNeedAuth)
 
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
@@ -75,8 +76,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
         if (loginWeb != "" && passwordWeb != "") {
             spinner.visibility = View.VISIBLE
-
+            textviewNoAuthData.visibility = View.GONE
             getDataOfStudent(sharedPref, loginWeb, passwordWeb, spinner)
+        }
+        else {
+            textviewNoAuthData.visibility = View.VISIBLE
         }
 
 
