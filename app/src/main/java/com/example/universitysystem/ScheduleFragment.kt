@@ -34,6 +34,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         getGroups(spinner)
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = view.findViewById(R.id.scheduleRc)
+        val progressBar:ProgressBar = view.findViewById(R.id.scheduleProgressBar)
         //timetableGet(view.findViewById<Spinner>(R.id.spinner).selectedItem.toString(), "up")
         scheduleRc.adapter = adapter
         scheduleRc.layoutManager = LinearLayoutManager(this.context)
@@ -51,8 +52,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 position: Int,
                 id: Long
             ) {
+                progressBar.visibility = View.VISIBLE
                 val switchState: Boolean = switch.isChecked
                 timetableGet(spinner.selectedItem.toString(), switchState)
+                progressBar.visibility = View.GONE
             }
         }
 

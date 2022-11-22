@@ -55,7 +55,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRcView)
-        val progerssBar:ProgressBar = view.findViewById(R.id.gradesProgressBar)
+        val progressBar:ProgressBar = view.findViewById(R.id.gradesProgressBar)
 
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
@@ -145,7 +145,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 position: Int,
                 id: Long
             ) {
-                progerssBar.visibility = View.VISIBLE
+                progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
                     GlobalScope.launch {
@@ -176,7 +176,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                         )
                                     )
                                 }
-                                progerssBar.visibility = View.GONE
+                                progressBar.visibility = View.GONE
                                 recyclerView.visibility = View.VISIBLE
                             }
                         }
