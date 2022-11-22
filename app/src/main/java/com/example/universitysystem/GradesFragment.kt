@@ -112,8 +112,33 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
+        val versionCurrent = sharedPref?.getString("version", "0").toString()
+
+
         database = FirebaseDatabase.getInstance().getReference("version")
         val versionName = getAppVersion(requireContext())
+        if (versionCurrent < versionName)
+        {
+            val builder = AlertDialog.Builder(
+                requireActivity()
+            )
+            builder
+                .setTitle("Обновление $versionName")
+                .setView(R.layout.dialog_update)
+                .setPositiveButton("OK", null)
+                .setNegativeButton("Отмена", null)
+                .create()
+            val alertDialog = builder.create()
+            alertDialog.show()
+
+            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            with(autoBtn) {
+                setTextColor(Color.BLACK)
+            }
+        }
+
+        sharedPref?.edit()?.putString("version", versionName)
+            ?.apply()
         database.get().addOnSuccessListener {
             if (versionName < it.value.toString()) {
                 /*Toast.makeText(
