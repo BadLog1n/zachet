@@ -45,6 +45,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
         val loginWebInput = view.findViewById<EditText>(R.id.loginWebInput)
         val passwordWebInput = view.findViewById<EditText>(R.id.passwordWebInput)
+        val updateBtn = view.findViewById<Button>(R.id.updateBtn)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
             Context.MODE_PRIVATE
@@ -123,7 +124,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                                 .timeout(30000)
                                 .execute()
-               
+
 
 
                         val statusCode: Int = response.statusCode()
@@ -148,7 +149,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     "Подтверждено!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-
+                                updateBtn.visibility = View.VISIBLE
                             } else Toast.makeText(
                                 requireContext(), "Не удается авторизоваться на сайте," +
                                         " проверьте вводимый логин и пароль", Toast.LENGTH_SHORT
@@ -177,7 +178,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 setTextColor(Color.BLACK)
             }
         }
-        view.findViewById<Button>(R.id.updateBtn).setOnClickListener {
+        updateBtn.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Обновить данные о семестрах?")
             builder.setPositiveButton("Да") { _, _ ->

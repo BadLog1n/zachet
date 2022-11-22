@@ -112,12 +112,12 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
-        val versionCurrent = sharedPref?.getString("version", "0").toString()
+        val versionCurrent = sharedPref?.getString("version", "").toString()
 
 
         database = FirebaseDatabase.getInstance().getReference("version")
         val versionName = getAppVersion(requireContext())
-        if (versionCurrent < versionName)
+        if (versionCurrent < versionName && versionCurrent != "")
         {
             val builder = AlertDialog.Builder(
                 requireActivity()
