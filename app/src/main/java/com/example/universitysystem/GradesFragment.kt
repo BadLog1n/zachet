@@ -10,10 +10,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.AdapterView
-import android.widget.ArrayAdapter
-import android.widget.Spinner
-import android.widget.Toast
+import android.widget.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -58,6 +55,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRcView)
+        val progerssBar:ProgressBar = view.findViewById(R.id.gradesProgressBar)
+
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
@@ -146,7 +145,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 position: Int,
                 id: Long
             ) {
-
+                progerssBar.visibility = View.VISIBLE
+                recyclerView.visibility = View.INVISIBLE
                 binding.apply {
                     GlobalScope.launch {
                         val gr = sharedPref?.getString("groupOfStudent", "").toString()
@@ -176,6 +176,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                         )
                                     )
                                 }
+                                progerssBar.visibility = View.GONE
+                                recyclerView.visibility = View.VISIBLE
                             }
                         }
                     }

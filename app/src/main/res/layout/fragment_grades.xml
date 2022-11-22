@@ -28,9 +28,18 @@
 
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/gradesProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:visibility="gone" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/gradesRcView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/subject_grades_item" />
+        tools:listitem="@layout/subject_grades_item" >
+
+    </androidx.recyclerview.widget.RecyclerView>
 </LinearLayout>
