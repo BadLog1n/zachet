@@ -25,10 +25,7 @@ import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
 import org.jsoup.Jsoup
-import ratingUniversity.InfoOfStudent
 import ratingUniversity.RatingUniversity
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
@@ -38,7 +35,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private val authCheck = AuthCheck()
     private lateinit var database: DatabaseReference
     private val ratingUniversity = RatingUniversity()
-    private val infoOfStudent = InfoOfStudent()
 
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
@@ -55,7 +51,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         super.onViewCreated(view, savedInstanceState)
 
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRcView)
-        val progressBar:ProgressBar = view.findViewById(R.id.gradesProgressBar)
+        val progressBar: ProgressBar = view.findViewById(R.id.gradesProgressBar)
         val textviewNoAuthData: TextView = view.findViewById(R.id.textviewNeedAuth)
 
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
@@ -74,12 +70,21 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         val loginWeb = sharedPref?.getString("loginWeb", "").toString()
         val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
-        if (loginWeb != "" && passwordWeb != "") {
+        val strSemester = sharedPref?.getString("listOfSemester", "").toString()
+
+        if (loginWeb != "" && passwordWeb != "" && strSemester != "") {
+            val semester = strSemester.split(",").toTypedArray()
             spinner.visibility = View.VISIBLE
             textviewNoAuthData.visibility = View.GONE
-            getDataOfStudent(sharedPref, loginWeb, passwordWeb, spinner)
-        }
-        else {
+            val arrayAdapter: ArrayAdapter<String> =
+                ArrayAdapter(
+                    requireContext(),
+                    android.R.layout.simple_spinner_dropdown_item,
+                    semester
+                )
+            arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spinner.adapter = arrayAdapter
+        } else {
             textviewNoAuthData.visibility = View.VISIBLE
         }
 
@@ -217,132 +222,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         return version
     }
 
-
-    @SuppressLint("SimpleDateFormat")
-    @OptIn(DelicateCoroutinesApi::class)
-    private fun getDataOfStudent(
-        sharedPref: SharedPreferences?,
-        login: String,
-        password: String,
-        spinner: Spinner
-    ) {
-        binding.apply {
-            GlobalScope.launch {
-
-                val infoOfStudent = getSemester(login, password)
-                withContext(Dispatchers.Main) {
-                    if (infoOfStudent != null) {
-
-                        val dateFormat: DateFormat = SimpleDateFormat("MM")
-                        val date = Date()
-                        val month = dateFormat.format(date)
-                        val arrayOfSemester = arrayOf("1", "9", "10", "11", "12")
-                        val semesterCurrent = month in arrayOfSemester
-
-
-                        val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
-                        semester.sort()
-                        semester.reverse()
-                        sharedPref?.edit()?.putInt("lastSemester", semester.first().toInt())
-                            ?.apply()
-                        semester.forEachIndexed { index, element ->
-                            val correctSemester = element.toInt() - 1
-                            semester[index] = "Семестр $correctSemester"
-                        }
-                        if (semesterCurrent) semester.removeFirst()
-
-                        val arrayAdapter: ArrayAdapter<String> =
-                            ArrayAdapter(
-                                requireContext(),
-                                android.R.layout.simple_spinner_dropdown_item,
-                                semester
-                            )
-                        arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                        spinner.adapter = arrayAdapter
-                        sharedPref?.edit()?.putString("groupOfStudent", infoOfStudent[0][1])
-                            ?.apply()
-                        sharedPref?.edit()?.putString("formOfStudent", infoOfStudent[0][0])
-                            ?.apply()
-                        /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
-                                          .show()*/
-
-                    }
-                }
-            }
-        }
-    }
-
-
-    /*                           returnRating(
-                                login,
-                                infoOfStudent[0][1],
-                                semester.first(),
-                                infoOfStudent[0][0],
-                                "false"
-                            )*/
-
-
-    private fun getFormAndGroup(login: String, password: String): ArrayList<String>? {
-        try {
-            val arrayToReturn = arrayListOf("", "")
-            val document: String
-            val sitePath =
-                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$login&password=$password&type=array"
-
-            val response: Connection.Response = Jsoup.connect(sitePath)
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(30000)
-                .execute()
-
-            val statusCode: Int = response.statusCode()
-
-            if (statusCode == 200) {
-                document = Jsoup.connect(sitePath).get().text()
-            } else return null
-            arrayToReturn[0] = infoOfStudent.getFormOfStudy(document)
-            arrayToReturn[1] = infoOfStudent.getGroupOfStudent(document)
-            return arrayToReturn
-
-        } catch (e: Exception) {
-            Log.d("getFormAndGroup", e.toString())
-
-
-            return null
-        }
-    }
-
-
-    private fun getSemester(login: String, password: String): ArrayList<ArrayList<String>>? {
-        try {
-            val arrayToReturn = arrayListOf<ArrayList<String>>()
-            val infoStudent = getFormAndGroup(login, password) ?: return null
-            arrayToReturn.add(infoStudent)
-            var document: String
-            val sitePath =
-                arrayOf(
-                    "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=false&type=json",
-                    "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=true&type=json"
-                )
-            for (item in sitePath) {
-                val response: Connection.Response = Jsoup.connect(item)
-                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                    .timeout(30000)
-                    .execute()
-                val statusCode: Int = response.statusCode()
-                if (statusCode == 200) {
-                    document = Jsoup.connect(item).get().text()
-                } else return null
-                val jsonArray = JSONArray(document)
-                arrayToReturn.add(infoOfStudent.getSemesterOfStudent(jsonArray))
-            }
-            return arrayToReturn
-        } catch (e: Exception) {
-            Log.d("getFormAndGroup", e.toString())
-
-
-        }
-        return null
-    }
 
     private fun returnRating(
         login: String,

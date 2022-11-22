@@ -381,6 +381,18 @@
                 android:textSize="16sp"
                 app:cornerRadius="100dp" />
 
+            <Button
+                android:id="@+id/updateBtn"
+                android:layout_width="match_parent"
+                android:layout_height="51dp"
+                android:layout_marginTop="20dp"
+                android:backgroundTint="@color/black"
+                android:text="@string/updateSemester"
+                android:textAllCaps="false"
+                android:textColor="@color/blue"
+                android:textSize="16sp"
+                app:cornerRadius="100dp" />
+
         </LinearLayout>
     </ScrollView>
 
