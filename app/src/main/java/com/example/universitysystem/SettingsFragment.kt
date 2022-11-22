@@ -110,18 +110,21 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Подтвердить аккаунт?")
             builder.setPositiveButton("Да") { _, _ ->
-                try {
-                    GlobalScope.launch {
+                GlobalScope.launch {
+                    try {
 
                         val loginWebInputString = loginWebInput.text.toString()
                         val passwordWebInputString = passwordWebInput.text.toString()
                         val sitePath =
                             "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$loginWebInputString&password=$passwordWebInputString&type=array"
 
-                        val response: Connection.Response = Jsoup.connect(sitePath)
-                            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                            .timeout(30000)
-                            .execute()
+
+                            val response: Connection.Response = Jsoup.connect(sitePath)
+                                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                                .timeout(30000)
+                                .execute()
+               
+
 
                         val statusCode: Int = response.statusCode()
                         val document =
@@ -152,12 +155,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             ).show()
 
                         }
+
+                    } catch (e: Exception) {
+                        Log.d("tag", e.toString())
+                        // Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT).show()
+
                     }
-                } catch (e: Exception) {
-                    Log.d("tag", e.toString())
-                    // Toast.makeText(requireContext(), e.toString(), Toast.LENGTH_SHORT).show()
-
-
                 }
             }
             builder.setNeutralButton("Нет") { _, _ ->
