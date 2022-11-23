@@ -86,6 +86,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             spinner.adapter = arrayAdapter
         } else {
             textviewNoAuthData.visibility = View.VISIBLE
+            spinner.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
 
