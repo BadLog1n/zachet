@@ -26,7 +26,6 @@ import org.json.JSONArray
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import ratingUniversity.RatingUniversity
-import java.util.*
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
@@ -67,6 +66,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
+        progressBar.visibility = View.VISIBLE
 
         val loginWeb = sharedPref?.getString("loginWeb", "").toString()
         val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
@@ -86,6 +86,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             spinner.adapter = arrayAdapter
         } else {
             textviewNoAuthData.visibility = View.VISIBLE
+            progressBar.visibility = View.GONE
         }
 
 

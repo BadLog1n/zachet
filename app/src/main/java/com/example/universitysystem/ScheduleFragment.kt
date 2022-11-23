@@ -38,6 +38,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         //timetableGet(view.findViewById<Spinner>(R.id.spinner).selectedItem.toString(), "up")
         scheduleRc.adapter = adapter
         scheduleRc.layoutManager = LinearLayoutManager(this.context)
+        progressBar.visibility = View.VISIBLE
         //timetableGet("П")
 
 
@@ -63,7 +64,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         switch.setOnCheckedChangeListener { _, _ ->
             val switchState: Boolean = switch.isChecked
             if (spinner.selectedItem != null) {
+                progressBar.visibility = View.VISIBLE
                 timetableGet(spinner.selectedItem.toString(), switchState)
+                progressBar.visibility = View.GONE
             }
         }
 
