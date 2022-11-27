@@ -54,6 +54,13 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                     //mainActionBar.show()
 
+                    if (it.child("teacher").value.toString() != "null")
+                    {
+                        sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), true)?.apply()
+                    }
+                    else {
+                        sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), false)?.apply()
+                    }
                     //activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
                     findNavController().navigate(R.id.gradesFragment)
 

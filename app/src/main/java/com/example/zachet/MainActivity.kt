@@ -36,14 +36,17 @@ class MainActivity : AppCompatActivity() {
         findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
 
         supportActionBar?.hide()
-        val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
+        val sharedPref: SharedPreferences? =
+            this.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
+
 
         /*findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
         }*/
 
         if (findNavController(R.id.nav_host_fragment).currentDestination ==
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)){
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)
+        ) {
             toolbar.title = "Мои баллы"
             supportActionBar?.show()
             findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_UNLOCKED)
@@ -53,11 +56,23 @@ class MainActivity : AppCompatActivity() {
          * Навигация по нажатию в боковом меню
          */
         findViewById<NavigationView>(R.id.navViewGrades).setNavigationItemSelectedListener {
-            when (it.itemId){
-                R.id.grades_menu-> {
-                    toolbar.title = "Мои баллы"
-                    supportActionBar?.show()
-                    findNavController(R.id.nav_host_fragment).navigate(R.id.gradesFragment)
+            val isTeacher = sharedPref?.getBoolean(getString(R.string.isTeacher), false)
+
+
+            when (it.itemId) {
+                R.id.grades_menu -> {
+                    if (isTeacher != true) {
+                        toolbar.title = "Мои баллы"
+                        supportActionBar?.show()
+                        findNavController(R.id.nav_host_fragment).navigate(R.id.gradesFragment)
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Этот раздел закрыт для преподавателей",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
+
                 }
                 R.id.chats_menu ->{
                     findNavController(R.id.nav_host_fragment).navigate(R.id.chatsFragment)
@@ -85,17 +100,25 @@ class MainActivity : AppCompatActivity() {
                     //findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
                     //supportActionBar?.hide()
 
-                    sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
+
                 }
-                R.id.schedule_menu->{
+                R.id.schedule_menu -> {
                     toolbar.title = "Расписание"
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.scheduleFragment)
                 }
-                R.id.feed_menu-> {
-                    toolbar.title = "Лента"
-                    supportActionBar?.show()
-                    findNavController(R.id.nav_host_fragment).navigate(R.id.feedFragment)
+                R.id.feed_menu -> {
+                    if (isTeacher != true) {
+                        toolbar.title = "Лента"
+                        supportActionBar?.show()
+                        findNavController(R.id.nav_host_fragment).navigate(R.id.feedFragment)
+                    } else {
+                        Toast.makeText(
+                            this,
+                            "Этот раздел закрыт для преподавателей",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 }
             }
             findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.START)
