@@ -24,14 +24,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private lateinit var binding: FragmentScheduleBinding
 
 
+
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.spinner)
         val switch = requireView().findViewById<Switch>(R.id.switchh)
-        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-            "Settings",
-            Context.MODE_PRIVATE
-        )
+
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.inflate(layoutInflater)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
@@ -59,8 +57,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 position: Int,
                 id: Long
             ) {
+                val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+                    getString(R.string.settingsShared),
+                    Context.MODE_PRIVATE
+                )
                     val spinnerElement = spinner.selectedItem.toString()
-                    sharedPref?.edit()?.putString("groupSpinner", spinnerElement)
+                    sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
                         ?.apply()
                     progressBar.visibility = View.VISIBLE
                     val switchState: Boolean = switch.isChecked
@@ -93,10 +95,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 groups.add(item.key.toString())
             }
             val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-                "Settings",
+                getString(R.string.settingsShared),
                 Context.MODE_PRIVATE
             )
-            val groupLoad = sharedPref?.getString("groupSpinner", "").toString()
+            val groupLoad = sharedPref?.getString(getString(R.string.groupSpinner), "").toString()
 
             if (groupLoad != ""){
                 groups.remove(groupLoad)

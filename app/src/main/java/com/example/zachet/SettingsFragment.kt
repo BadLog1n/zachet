@@ -48,19 +48,23 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
 
 
-
-        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-            "Settings",
+        val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
+            getString(R.string.gradesShared),
             Context.MODE_PRIVATE
         )
-        val loginWeb = sharedPref?.getString("loginWeb", "").toString()
+        val sharedPrefSettings: SharedPreferences? = activity?.getSharedPreferences(
+            getString(R.string.settingsShared),
+            Context.MODE_PRIVATE
+        )
+        val loginWeb = sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
         loginWebInput.setText(loginWeb)
-        val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
+        val passwordWeb =
+            sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
         passwordWebInput.setText(passwordWeb)
-        if (loginWebInput.text.toString() != ""){
+        if (loginWebInput.text.toString() != "") {
             updateBtn.visibility = View.VISIBLE
         }
-        val un = sharedPref?.getString("save_userid", "").toString()
+        val un = sharedPrefSettings?.getString(getString(R.string.saveUserId), "").toString()
         database = FirebaseDatabase.getInstance().getReference("users/$un")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
@@ -125,11 +129,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$loginWebInputString&password=$passwordWebInputString&type=array"
 
 
-                            val response: Connection.Response = Jsoup.connect(sitePath)
-                                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                                .timeout(30000)
-                                .execute()
-
+                        val response: Connection.Response = Jsoup.connect(sitePath)
+                            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                            .timeout(30000)
+                            .execute()
 
 
                         val statusCode: Int = response.statusCode()
@@ -139,13 +142,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         withContext(Dispatchers.Main) {
 
                             if (document != "") {
-                                sharedPref?.edit()?.putString("loginWeb", loginWebInputString)
+                                sharedPrefGrades?.edit()?.putString(
+                                    getString(R.string.loginWebShared),
+                                    loginWebInputString
+                                )
                                     ?.apply()
-                                sharedPref?.edit()
-                                    ?.putString("passwordWeb", passwordWebInputString)
+                                sharedPrefGrades?.edit()
+                                    ?.putString(
+                                        getString(R.string.passwordWebShared),
+                                        passwordWebInputString
+                                    )
                                     ?.apply()
                                 getDataOfStudent(
-                                    sharedPref,
+                                    sharedPrefGrades,
                                     loginWebInputString,
                                     passwordWebInputString
                                 )
@@ -191,7 +200,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     GlobalScope.launch {
                         withContext(Dispatchers.Main) {
                             getDataOfStudent(
-                                sharedPref,
+                                sharedPrefGrades,
                                 loginWeb,
                                 passwordWeb
                             )
@@ -254,7 +263,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
                     semester.sort()
                     semester.reverse()
-                    sharedPref?.edit()?.putInt("lastSemester", semester.first().toInt())
+                    sharedPref?.edit()
+                        ?.putInt(getString(R.string.lastSemester), semester.first().toInt())
                         ?.apply()
                     semester.forEachIndexed { index, element ->
                         val correctSemester = element.toInt() - 1
@@ -264,11 +274,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val stringSemester = semester.joinToString(separator = ",")
 
 
-                    sharedPref?.edit()?.putString("listOfSemester", stringSemester)
+                    sharedPref?.edit()
+                        ?.putString(getString(R.string.listOfSemester), stringSemester)
                         ?.apply()
-                    sharedPref?.edit()?.putString("groupOfStudent", infoOfStudent[0][1])
+                    sharedPref?.edit()
+                        ?.putString(getString(R.string.groupOfStudent), infoOfStudent[0][1])
                         ?.apply()
-                    sharedPref?.edit()?.putString("formOfStudent", infoOfStudent[0][0])
+                    sharedPref?.edit()
+                        ?.putString(getString(R.string.formOfStudent), infoOfStudent[0][0])
                         ?.apply()
                     /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
                                       .show()*/

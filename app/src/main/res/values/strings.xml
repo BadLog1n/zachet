@@ -10,7 +10,7 @@
     <string name="invalid_password">Пароль должен содержать >5 символов</string>
     <string name="login_failed">"Не удалось выполнить вход"</string>
     <string name="enter">Вход</string>
-    <string name="login">Логин (недоступно для изменения)</string>
+    <string name="login">Логин</string>
     <string name="loginWeb">Логин от info.swsu</string>
     <string name="password">Пароль</string>
     <string name="passwordWeb">Пароль от info.swsu</string>
@@ -70,12 +70,7 @@
 
 
 
-
-    <string name="updateVersion">
-
-
-
-
+    <string name="updateList">
 Мы улучшили приложение так, что теперь баллы загружаются ещё быстрее!\n
 \n
 Добавлено: \n
@@ -91,27 +86,29 @@
 Другое:\n
 - Исправлены мелкие ошибки.\n
 - Улучшена стабильность работы приложения.\n
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     </string>
+
+
+
+    <string name="getUser">getUser</string>
+
+    (Для sharedPref)
+    <string name="saveUserId">save_userid</string> логин пользователя
+    <string name="settingsShared">Settings</string> обращение к shared настройкам
+    <string name="gradesShared">Grades</string> обращение к shared баллам
+    <string name="loginWebShared">loginWeb</string> логин пользователя в info.swsu
+    <string name="passwordWebShared">passwordWeb</string> пароль пользователя в info.swsu
+    <string name="listOfSemester">listOfSemester</string> список семестров пользователя
+    <string name="versionShared">version</string> нынешняя версия приложения
+    <string name="groupOfStudent">groupOfStudent</string> группа пользователя
+    <string name="formOfStudent">formOfStudent</string> форма обучения пользователя
+    <string name="lastSemester">lastSemester</string> последний доступный семестр на info.swsu
+    <string name="checkLogin">checkLogin</string> проверка авторизации (true - если авторизован)
+    <string name="checkSettings">check_settings</string> скорее всего, как и сверху
+    <string name="savePassword">save_password</string>
+    <string name="groupSpinner">groupSpinner</string>
+
+
 
 
 </resources>

@@ -49,7 +49,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         val linearLayoutManager =
             LinearLayoutManager(this@ChatsFragment.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
-        val userName = sharedPref?.getString("save_userid", "").toString()
+        val userName = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
         val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
         recyclerView.layoutManager = linearLayoutManager
 
@@ -85,7 +85,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             if (it.exists() && user != "") {
                 val intent =
                     Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
-                intent.putExtra("getUser", user)
+                intent.putExtra(getString(R.string.getUser), user)
                 startActivity(intent)
                 view?.findViewById<EditText>(R.id.searchTxtInput)?.setText("")
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as

@@ -14,7 +14,6 @@ import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
     //private val checkSettings = "check_settings"
-    private val checkLogin = "check_login"
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -39,14 +38,6 @@ class MainActivity : AppCompatActivity() {
         supportActionBar?.hide()
         val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
 
-        if (sharedPref?.getBoolean(checkLogin, false) == true){
-            findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_UNLOCKED)
-            supportActionBar?.show()
-
-        }
-        if (intent.getBooleanExtra("from_chats",false)){
-            findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
-        }
         /*findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
         }*/
@@ -94,7 +85,7 @@ class MainActivity : AppCompatActivity() {
                     //findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
                     //supportActionBar?.hide()
 
-                    sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
+                    sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
                 }
                 R.id.schedule_menu->{
                     toolbar.title = "Расписание"

@@ -37,7 +37,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         view.findViewById<Button>(R.id.getSupportBtn).setOnClickListener {
             val intent =
                 Intent(this@HelpFragment.context, IndividualChatActivity::class.java)
-            intent.putExtra("getUser", "11")
+            intent.putExtra(getString(R.string.getUser), "11")
             startActivity(intent)
         }
 

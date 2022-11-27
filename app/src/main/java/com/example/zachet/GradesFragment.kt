@@ -58,8 +58,12 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "Мои баллы"
-        val sharedPref: SharedPreferences? = context?.getSharedPreferences(
-            "Settings",
+        val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
+            getString(R.string.settingsShared),
+            Context.MODE_PRIVATE
+        )
+        val sharedPrefGrades: SharedPreferences? = context?.getSharedPreferences(
+            getString(R.string.gradesShared),
             Context.MODE_PRIVATE
         )
 
@@ -69,9 +73,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         recyclerView.adapter = rcAdapter
         progressBar.visibility = View.VISIBLE
 
-        val loginWeb = sharedPref?.getString("loginWeb", "").toString()
-        val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
-        val strSemester = sharedPref?.getString("listOfSemester", "").toString()
+        val loginWeb = sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
+        val passwordWeb = sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
+        val strSemester = sharedPrefGrades?.getString(getString(R.string.listOfSemester), "").toString()
 
         if (loginWeb != "" && passwordWeb != "" && strSemester != "") {
             val semester = strSemester.split(",").toTypedArray()
@@ -115,7 +119,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
-        val versionCurrent = sharedPref?.getString("version", "").toString()
+        val versionCurrent = sharedPrefSetting?.getString(getString(R.string.versionShared), "").toString()
 
 
         database = FirebaseDatabase.getInstance().getReference("version")
@@ -140,7 +144,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
-        sharedPref?.edit()?.putString("version", versionName)
+        sharedPrefSetting?.edit()?.putString(getString(R.string.versionShared), versionName)
             ?.apply()
         database.get().addOnSuccessListener {
             if (versionName < it.value.toString()) {
@@ -188,9 +192,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
                     GlobalScope.launch {
-                        val gr = sharedPref?.getString("groupOfStudent", "").toString()
-                        val fo = sharedPref?.getString("formOfStudent", "").toString()
-                        val ls = sharedPref?.getInt("lastSemester", 0)
+                        val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "").toString()
+                        val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "").toString()
+                        val ls = sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0)
 
                         val result =
                             spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1

@@ -59,9 +59,9 @@ class IndividualChatActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val arguments = intent.extras
-        getName = arguments!!.getString("getUser").toString()
-        val sharedPref: SharedPreferences? = this.getSharedPreferences("Settings", MODE_PRIVATE)
-        sendName = sharedPref?.getString("save_userid", "").toString()
+        getName = arguments!!.getString(getString(R.string.getUser)).toString()
+        val sharedPref: SharedPreferences? = this.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
+        sendName = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_individual_chat)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM

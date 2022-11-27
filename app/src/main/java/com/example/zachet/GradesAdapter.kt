@@ -97,7 +97,8 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
                     parent.context.startActivity(intent)
                 }
                 else {
-                    view.findViewById<TextView>(R.id.connectWTeacher_tv).text = "Преподаватель не зарегистрирован в приложении"
+                    Toast.makeText(parent.context, "Преподаватель не зарегистрирован в приложении", Toast.LENGTH_SHORT).show()
+                  //  view.findViewById<TextView>(R.id.connectWTeacher_tv).text = "Преподаватель не зарегистрирован в приложении"
                 }
 
             }

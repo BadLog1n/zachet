@@ -17,7 +17,6 @@ import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 
 class LogoutFragment : BottomSheetDialogFragment() {
 
-    private val checkSettings = "check_settings"
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
@@ -27,10 +26,10 @@ class LogoutFragment : BottomSheetDialogFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Button>(R.id.bs_logoutButton).setOnClickListener {
-            val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings",
+            val sharedPref: SharedPreferences? = activity?.getSharedPreferences(getString(R.string.settingsShared),
                 Context.MODE_PRIVATE
             )
-            sharedPref?.edit()?.putBoolean(checkSettings, false)?.apply()
+            sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
             findNavController().navigate(R.id.loginFragment)
             dismiss()
         }

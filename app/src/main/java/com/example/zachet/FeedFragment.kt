@@ -32,7 +32,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             "Settings",
             Context.MODE_PRIVATE
         )
-        author = sharedPref?.getString("save_userid", "").toString()
+        author = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFeedBinding.inflate(layoutInflater)
         val feedRc: RecyclerView = view.findViewById(R.id.feedRc)

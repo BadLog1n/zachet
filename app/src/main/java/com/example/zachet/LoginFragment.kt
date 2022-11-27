@@ -20,26 +20,23 @@ import kotlin.system.exitProcess
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
-    private val saveUserid = "save_userid"
-    private val savePassword = "save_password"
-    private val checkSettings = "check_settings"
-    private val checkLogin = "check_login"
+
     private var un = ""
     private var pw = ""
     private var clickBack = false
     private lateinit var database: DatabaseReference
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
-        sharedPref?.edit()?.putBoolean(checkLogin, false)?.apply()
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
+        sharedPref?.edit()?.putBoolean(getString(R.string.checkLogin), false)?.apply()
 
         //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         //requireActivity().actionBar?.hide()
 
-        if (sharedPref?.getBoolean(checkSettings, false) == true) {
+        if (sharedPref?.getBoolean(getString(R.string.checkSettings), false) == true) {
             loadSettings()
             view.hideKeyboard()
-            sharedPref.edit()?.putBoolean(checkLogin, true)?.apply()
+            sharedPref.edit()?.putBoolean(getString(R.string.checkLogin), true)?.apply()
             //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             findNavController().navigate(R.id.gradesFragment)
         }
@@ -53,7 +50,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 if (pw == it.child("password").value.toString()){
                     saveSettings(un, pw)
                     view.hideKeyboard()
-                    sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()
+                    sharedPref?.edit()?.putBoolean(getString(R.string.checkLogin), true)?.apply()
                     activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                     //mainActionBar.show()
 
@@ -89,16 +86,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
     private fun saveSettings(un: String, pw: String) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
-        sharedPref?.edit()?.putString(saveUserid, un)?.apply()
-        sharedPref?.edit()?.putString(savePassword, pw)?.apply()
-        sharedPref?.edit()?.putBoolean(checkSettings, true)?.apply()
+        sharedPref?.edit()?.putString(getString(R.string.saveUserId), un)?.apply()
+        sharedPref?.edit()?.putString(getString(R.string.savePassword), pw)?.apply()
+        sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), true)?.apply()
 
     }
 
     private fun loadSettings() {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
-        un = sharedPref?.getString(saveUserid, "").toString()
-        pw = sharedPref?.getString(savePassword, "").toString()
+        un = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
+        pw = sharedPref?.getString(getString(R.string.savePassword), "").toString()
         message()
     }
 
