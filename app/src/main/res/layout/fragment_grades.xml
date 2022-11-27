@@ -33,7 +33,7 @@
             android:baselineAligned="false"
             android:entries="@array/sem_nums"
             android:spinnerMode="dropdown"
-            android:visibility="invisible" />
+            android:visibility="gone" />
 
     </LinearLayout>
 
