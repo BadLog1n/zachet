@@ -59,9 +59,8 @@
                 android:background="@drawable/settings_edittext"
                 android:digits="@string/login_password_input"
                 android:ems="10"
-                android:enabled="false"
-                android:fontFamily="@font/inter"
-                android:inputType="text"
+                android:inputType="none"
+
                 android:maxLength="20"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"

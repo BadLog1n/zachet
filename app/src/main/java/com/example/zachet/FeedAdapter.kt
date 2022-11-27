@@ -38,8 +38,6 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             sponsoredTv.text = "Спонсировано"
             if (feedItem.isSponsored) {
                 sponsoredTv.visibility = View.VISIBLE
-            } else {
-                sponsoredTv.visibility = View.INVISIBLE
             }
 
         }
