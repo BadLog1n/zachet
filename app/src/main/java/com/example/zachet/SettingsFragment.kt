@@ -46,6 +46,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val loginWebInput = view.findViewById<EditText>(R.id.loginWebInput)
         val passwordWebInput = view.findViewById<EditText>(R.id.passwordWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
+
+
+
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
             Context.MODE_PRIVATE
@@ -54,14 +57,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         loginWebInput.setText(loginWeb)
         val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
         passwordWebInput.setText(passwordWeb)
-
+        if (loginWebInput.text.toString() != ""){
+            updateBtn.visibility = View.VISIBLE
+        }
         val un = sharedPref?.getString("save_userid", "").toString()
         database = FirebaseDatabase.getInstance().getReference("users/$un")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
             nameEditText.setText(if (it.child("name").value.toString() != "null") it.child("name").value.toString() else "")
             surnameEditText.setText(if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else "")
-            loginEditText.setText(it.child("login").value.toString())
+            loginEditText.setText(it.key.toString())
             passwordEditText.setText(it.child("password").value.toString())
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
@@ -98,11 +103,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
             with(autoBtn) {
-                setTextColor(Color.GREEN)
+                setTextColor(Color.BLACK)
             }
             val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
             with(userBtn) {
-                setTextColor(Color.RED)
+                setTextColor(Color.BLACK)
             }
 
 
@@ -149,7 +154,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     "Подтверждено!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                updateBtn.visibility = View.VISIBLE
+                                findNavController().navigate(R.id.gradesFragment)
+
                             } else Toast.makeText(
                                 requireContext(), "Не удается авторизоваться на сайте," +
                                         " проверьте вводимый логин и пароль", Toast.LENGTH_SHORT
@@ -199,7 +205,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                 "Успешно обновлено!",
                                 Toast.LENGTH_SHORT
                             ).show()
-
 
                         }
                     }

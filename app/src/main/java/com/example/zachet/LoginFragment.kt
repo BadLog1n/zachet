@@ -50,7 +50,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             database = FirebaseDatabase.getInstance().getReference("users/$un")
             val requestToDatabase = database.get()
             requestToDatabase.addOnSuccessListener {
-                if (un == it.child("login").value.toString() && pw == it.child("password").value.toString()){
+                if (pw == it.child("password").value.toString()){
                     saveSettings(un, pw)
                     view.hideKeyboard()
                     sharedPref?.edit()?.putBoolean(checkLogin, true)?.apply()

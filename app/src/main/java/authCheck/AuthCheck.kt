@@ -29,9 +29,8 @@ class AuthCheck {
             database = FirebaseDatabase.getInstance().getReference("users/$un")
             val requestToDatabase = database.get()
             requestToDatabase.addOnSuccessListener {
-                val login = it.child("login").value.toString()
                 val password = it.child("password").value.toString()
-                if (login != un || password != pw) {
+                if (password != pw) {
                     sharedPref.edit()?.putBoolean(checkSettings, false)?.apply()
                     Toast.makeText(context, "Логин или пароль не верен.", Toast.LENGTH_SHORT).show()
                     findNavController(view).navigate(R.id.loginFragment)
