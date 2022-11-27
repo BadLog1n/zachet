@@ -42,7 +42,8 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         }
 
         view.findViewById<Button>(R.id.telegramBtn).setOnClickListener {
-            val openTelegram = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
+            val openTelegram =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
             startActivity(openTelegram)
         }
 
@@ -54,14 +55,13 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
-            if ((ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.READ_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
+            if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED))
-
+                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED
             ) {
                 Toast.makeText(
                     requireContext(),
@@ -101,7 +101,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             } else {
                 context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
-            version = pInfo!!.versionName
+            version = pInfo?.versionName ?: "0"
         } catch (e: PackageManager.NameNotFoundException) {
             e.printStackTrace()
         }
