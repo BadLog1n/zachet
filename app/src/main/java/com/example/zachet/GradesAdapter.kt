@@ -8,11 +8,15 @@ import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.example.zachet.databinding.SubjectGradesItemBinding
+import com.google.firebase.database.DatabaseReference
+import com.google.firebase.database.FirebaseDatabase
 
 class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
+    private lateinit var database: DatabaseReference
 
     class GradesHolder(item: View) : RecyclerView.ViewHolder(item) {
 
@@ -56,6 +60,8 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item, parent, false)
         val expView = view.findViewById<LinearLayout>(R.id.expandedView)
         val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+        expView.visibility = View.GONE
+        collView.visibility = View.VISIBLE
 
         view.findViewById<LinearLayout>(R.id.collapsedView).setOnClickListener {
             expView.visibility = View.VISIBLE
@@ -81,10 +87,20 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
 
 
         view.findViewById<LinearLayout>(R.id.connectWTeacherLayout).setOnClickListener {
-            val intent = Intent(parent.context, IndividualChatActivity::class.java)
-            intent.putExtra("getUser", view.findViewById<TextView>(R.id.userChatId1_tv).text)
-            parent.context.startActivity(intent)
 
+            val user = view.findViewById<TextView>(R.id.userChatId1_tv).text.toString()
+            database = FirebaseDatabase.getInstance().getReference("users")
+            database.child(user).get().addOnSuccessListener {
+                if (it.exists()) {
+                    val intent = Intent(parent.context, IndividualChatActivity::class.java)
+                    intent.putExtra("getUser", user)
+                    parent.context.startActivity(intent)
+                }
+                else {
+                    view.findViewById<TextView>(R.id.connectWTeacher_tv).text = "Преподаватель не зарегистрирован в приложении"
+                }
+
+            }
         }
         return GradesHolder(view)
     }

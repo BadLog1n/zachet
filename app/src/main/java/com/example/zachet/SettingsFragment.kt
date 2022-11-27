@@ -154,7 +154,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     "Подтверждено!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                findNavController().navigate(R.id.gradesFragment)
 
                             } else Toast.makeText(
                                 requireContext(), "Не удается авторизоваться на сайте," +
