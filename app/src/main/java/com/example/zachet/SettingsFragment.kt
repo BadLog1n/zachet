@@ -190,15 +190,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             builder.setPositiveButton("Да") { _, _ ->
                 try {
                     GlobalScope.launch {
-
-                        val loginWebInputString = loginWebInput.text.toString()
-                        val passwordWebInputString = passwordWebInput.text.toString()
-
                         withContext(Dispatchers.Main) {
                             getDataOfStudent(
                                 sharedPref,
-                                loginWebInputString,
-                                passwordWebInputString
+                                loginWeb,
+                                passwordWeb
                             )
                             Toast.makeText(
                                 requireContext(),
