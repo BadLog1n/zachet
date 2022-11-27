@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -18,7 +18,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
-import com.example.universitysystem.databinding.FragmentGradesBinding
+import com.example.zachet.databinding.FragmentGradesBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.coroutines.*

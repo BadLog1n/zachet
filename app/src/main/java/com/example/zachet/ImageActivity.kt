@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 import android.app.DownloadManager
 import android.content.Context

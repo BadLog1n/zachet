@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -7,7 +7,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.universitysystem.databinding.FragmentScheduleBinding
+import com.example.zachet.databinding.FragmentScheduleBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter

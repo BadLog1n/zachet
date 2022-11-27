@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 import android.annotation.SuppressLint
 import android.content.DialogInterface
@@ -13,7 +13,7 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.example.universitysystem.databinding.FeedItemBinding
+import com.example.zachet.databinding.FeedItemBinding
 import com.google.firebase.database.FirebaseDatabase
 
 

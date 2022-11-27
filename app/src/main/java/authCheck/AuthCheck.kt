@@ -6,7 +6,7 @@ import android.content.SharedPreferences
 import android.view.View
 import android.widget.Toast
 import androidx.navigation.Navigation.findNavController
-import com.example.universitysystem.R
+import com.example.zachet.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 

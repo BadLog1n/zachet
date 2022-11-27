@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 data class FeedRecord(
     val author: String,

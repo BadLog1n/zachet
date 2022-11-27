@@ -13,5 +13,5 @@ dependencyResolutionManagement {
         maven { url 'https://jitpack.io' }
     }
 }
-rootProject.name = "UniversitySystem"
+rootProject.name = "zachet"
 include ':app'

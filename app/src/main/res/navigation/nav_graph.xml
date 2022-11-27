@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.example.universitysystem.LoginFragment"
+        android:name="com.example.zachet.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -17,37 +17,37 @@
     </fragment>
     <fragment
         android:id="@+id/gradesFragment"
-        android:name="com.example.universitysystem.GradesFragment"
+        android:name="com.example.zachet.GradesFragment"
         android:label="fragment_grades"
         tools:layout="@layout/fragment_grades" />
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.example.universitysystem.HelpFragment"
+        android:name="com.example.zachet.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.example.universitysystem.SettingsFragment"
+        android:name="com.example.zachet.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/logoutFragment"
-        android:name="com.example.universitysystem.LogoutFragment"
+        android:name="com.example.zachet.LogoutFragment"
         android:label="fragment_logout"
         tools:layout="@layout/fragment_logout" />
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.example.universitysystem.ChatsFragment"
+        android:name="com.example.zachet.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" />
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.example.universitysystem.ScheduleFragment"
+        android:name="com.example.zachet.ScheduleFragment"
         android:label="fragment_schedule"
         tools:layout="@layout/fragment_schedule" />
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.example.universitysystem.FeedFragment"
+        android:name="com.example.zachet.FeedFragment"
         android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" />
 </navigation>

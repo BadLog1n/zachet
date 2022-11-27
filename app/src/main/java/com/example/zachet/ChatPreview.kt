@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 //Необходимо добавить параметр с названием чата, чтобы удалять не через конкретный объект, а через поиск с именем чата
 

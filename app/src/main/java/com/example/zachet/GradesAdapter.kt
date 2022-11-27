@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.widget.ImageButton
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.universitysystem.databinding.SubjectGradesItemBinding
+import com.example.zachet.databinding.SubjectGradesItemBinding
 
 class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()

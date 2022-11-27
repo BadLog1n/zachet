@@ -1,4 +1,4 @@
-package com.example.universitysystem
+package com.example.zachet
 
 import android.annotation.SuppressLint
 import android.content.Intent
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.universitysystem.databinding.ListOfChatsItemBinding
+import com.example.zachet.databinding.ListOfChatsItemBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
