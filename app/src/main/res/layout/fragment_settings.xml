@@ -57,10 +57,8 @@
                 android:layout_marginEnd="5dp"
                 android:layout_marginBottom="10dp"
                 android:background="@drawable/settings_edittext"
-                android:digits="@string/login_password_input"
                 android:ems="10"
-                android:inputType="none"
-
+                android:enabled="false"
                 android:maxLength="20"
                 android:paddingStart="20dp"
                 android:paddingEnd="20dp"

@@ -10,7 +10,7 @@
     <string name="invalid_password">Пароль должен содержать >5 символов</string>
     <string name="login_failed">"Не удалось выполнить вход"</string>
     <string name="enter">Вход</string>
-    <string name="login">Логин</string>
+    <string name="login">Логин (недоступно для изменения)</string>
     <string name="loginWeb">Логин от info.swsu</string>
     <string name="password">Пароль</string>
     <string name="passwordWeb">Пароль от info.swsu</string>
