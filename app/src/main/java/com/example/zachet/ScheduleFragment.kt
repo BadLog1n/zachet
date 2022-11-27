@@ -1,6 +1,8 @@
 package com.example.zachet
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.view.View
 import android.widget.*
@@ -26,7 +28,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.spinner)
         val switch = requireView().findViewById<Switch>(R.id.switchh)
-
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+            "Settings",
+            Context.MODE_PRIVATE
+        )
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.inflate(layoutInflater)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
@@ -54,11 +59,15 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 position: Int,
                 id: Long
             ) {
-                progressBar.visibility = View.VISIBLE
-                val switchState: Boolean = switch.isChecked
-                timetableGet(spinner.selectedItem.toString(), switchState)
-                progressBar.visibility = View.GONE
-            }
+                    val spinnerElement = spinner.selectedItem.toString()
+                    sharedPref?.edit()?.putString("groupSpinner", spinnerElement)
+                        ?.apply()
+                    progressBar.visibility = View.VISIBLE
+                    val switchState: Boolean = switch.isChecked
+                    timetableGet(spinnerElement, switchState)
+                    progressBar.visibility = View.GONE
+                }
+
         }
 
 
@@ -82,6 +91,16 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         requestToDatabase.addOnSuccessListener {
             for (item in it.children) {
                 groups.add(item.key.toString())
+            }
+            val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+                "Settings",
+                Context.MODE_PRIVATE
+            )
+            val groupLoad = sharedPref?.getString("groupSpinner", "").toString()
+
+            if (groupLoad != ""){
+                groups.remove(groupLoad)
+                groups.add(0, groupLoad)
             }
             try {
                 val arrayAdapter: ArrayAdapter<String> =
