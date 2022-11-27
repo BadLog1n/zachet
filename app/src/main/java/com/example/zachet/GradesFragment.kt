@@ -67,6 +67,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyDataSetChanged()
         recyclerView.adapter = rcAdapter
+        progressBar.visibility = View.VISIBLE
 
         val loginWeb = sharedPref?.getString("loginWeb", "").toString()
         val passwordWeb = sharedPref?.getString("passwordWeb", "").toString()
