@@ -67,7 +67,7 @@
             app:boxStrokeColor="#00FFFFFF"
             app:boxStrokeWidth="0dp"
             app:hintTextColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/enterButton"
+            app:layout_constraintBottom_toTopOf="@+id/forgot_passw_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutLogin"
@@ -84,7 +84,21 @@
                 android:minHeight="50dp"
                 android:textColorHint="@color/black"
                 android:textSize="18sp" />
+
         </com.google.android.material.textfield.TextInputLayout>
+
+        <TextView
+            android:id="@+id/forgot_passw_btn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="15dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:text="@string/forgot_password"
+            app:layout_constraintBottom_toTopOf="@+id/enterButton"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/layoutPassword" />
 
         <Button
             android:id="@+id/enterButton"
@@ -97,13 +111,13 @@
             android:fontFamily="@font/inter_semibold"
             android:minHeight="51dp"
             android:text="@string/to_enter"
-            android:textColorHint="@color/black"
             android:textAllCaps="false"
+            android:textColorHint="@color/black"
             android:textSize="16sp"
             app:cornerRadius="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutPassword" />
+            app:layout_constraintTop_toBottomOf="@+id/forgot_passw_btn" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </layout>
