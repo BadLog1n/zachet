@@ -55,21 +55,33 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
+
+            Log.d(
+                "first",
+                "${
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED
+                }"
+            )
+            Log.d(
+                "second",
+                "${
+                    ContextCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                    ) != PackageManager.PERMISSION_GRANTED
+                }"
+            )
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED || ContextCompat.checkSelfPermission(
+                ) == PackageManager.PERMISSION_GRANTED || (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED
+                ) == PackageManager.PERMISSION_GRANTED)
             ) {
-                Toast.makeText(
-                    requireContext(),
-                    "У приложения нет доступа к памяти. Пожалуйста," +
-                            "перейдите в настройки и дайте разрешение на работу с памятью",
-                    Toast.LENGTH_SHORT
-                ).show()
-            } else {
                 requestToDatabase.addOnSuccessListener {
                     if (versionName < it.value.toString()) {
                         download(it.value.toString(), requireContext())
@@ -86,6 +98,14 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
                         ).show()
                     }
                 }
+
+            } else {
+                Toast.makeText(
+                    requireContext(),
+                    "У приложения нет доступа к памяти. Пожалуйста," +
+                            "перейдите в настройки и дайте разрешение на работу с памятью",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     }
