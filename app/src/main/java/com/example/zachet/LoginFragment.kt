@@ -2,11 +2,14 @@ package com.example.zachet
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.drawerlayout.widget.DrawerLayout
@@ -75,6 +78,11 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     Toast.makeText(activity, "Логин или пароль введён неверно.", Toast.LENGTH_SHORT).show()
                 }
             }
+            view.findViewById<TextView>(R.id.forgot_passw_btn).setOnClickListener {
+                val openTelegram =
+                    Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
+                startActivity(openTelegram)
+                }
         }
 
 
