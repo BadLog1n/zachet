@@ -11,10 +11,11 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
         android:layout_marginBottom="15dp"
         android:background="@drawable/ic_others_message"
+        android:focusable="true"
         android:fontFamily="@font/inter"
+        android:longClickable="true"
         android:maxWidth="240dp"
         android:paddingStart="22dp"
         android:paddingTop="10dp"
@@ -22,15 +23,13 @@
         android:paddingBottom="30dp"
         android:text="TextViewsncksnkckcdnkcnkcnkcncnkdcnkcn nskxnc vk"
         android:textColor="@color/black"
-        android:textSize="14sp"
         android:textIsSelectable="true"
-        android:focusable="true"
-        android:longClickable="true"
+        android:textSize="14sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.01"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/from_ms_name"
         app:layout_constraintVertical_bias="0.0" />
 
     <TextView
@@ -41,11 +40,27 @@
         android:maxLines="1"
         android:text="12.20"
         android:textSize="12sp"
+        app:layout_constraintBottom_toTopOf="@+id/from_ms_name"
+        app:layout_constraintEnd_toEndOf="@+id/from_ms_tv"
+        app:layout_constraintHorizontal_bias="0.055"
+        app:layout_constraintStart_toStartOf="@+id/from_ms_tv"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/from_ms_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:maxWidth="200dp"
+        android:maxLines="1"
+        android:text="Имя Фамилия"
+        android:textColor="#000000"
+        android:textSize="14sp"
         app:layout_constraintBottom_toTopOf="@+id/from_ms_tv"
         app:layout_constraintEnd_toEndOf="@+id/from_ms_tv"
         app:layout_constraintHorizontal_bias="0.085"
         app:layout_constraintStart_toStartOf="@+id/from_ms_tv"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/from_ms_time_tv"
         app:layout_constraintVertical_bias="0.0" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

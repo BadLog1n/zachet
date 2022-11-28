@@ -27,6 +27,19 @@
             android:text="12.20"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/from_fl_uname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="18dp"
+            android:layout_marginBottom="3dp"
+            android:fontFamily="@font/inter"
+            android:maxWidth="200dp"
+            android:maxLines="1"
+            android:text="Имя Фамилия"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
         <LinearLayout
             android:id="@+id/from_file_layout"
             android:layout_width="wrap_content"

@@ -29,6 +29,18 @@
             android:text="12.20"
             android:textSize="12sp" />
 
+        <TextView
+            android:id="@+id/from_img_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="25dp"
+            android:layout_marginBottom="3dp"
+            android:maxWidth="200dp"
+            android:maxLines="1"
+            android:text="Имя Фамилия"
+            android:textColor="#000000"
+            android:textSize="14sp" />
+
         <LinearLayout
             android:id="@+id/from_img_layout"
             android:layout_width="match_parent"
