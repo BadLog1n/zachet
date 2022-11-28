@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="320dp">
+    android:layout_height="390dp">
 
 
     <LinearLayout
@@ -28,17 +28,34 @@
                 android:id="@+id/to_img_time_tv"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
                 android:layout_marginEnd="25dp"
                 android:layout_marginBottom="3dp"
                 android:maxWidth="200dp"
                 android:maxLines="1"
                 android:text="12.20"
                 android:textSize="12sp"
-                app:layout_constraintBottom_toTopOf="@+id/to_img_layout"
+                app:layout_constraintBottom_toTopOf="@+id/to_img_name_tv"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/to_img_name_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="23dp"
+                android:fontFamily="@font/inter"
+                android:gravity="center"
+                android:maxLines="1"
+                android:text="Имя Фамилия"
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                app:layout_constraintBottom_toTopOf="@id/to_img_layout"
+                app:layout_constraintEnd_toEndOf="@id/to_img_layout"
+                app:layout_constraintHorizontal_bias="0.96"
+                app:layout_constraintStart_toStartOf="@id/to_img_layout"
+                app:layout_constraintTop_toBottomOf="@id/to_img_time_tv"
+                app:layout_constraintVertical_bias="1.0" />
 
             <LinearLayout
                 android:id="@+id/to_img_layout"
@@ -49,7 +66,7 @@
                 android:paddingBottom="10dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/to_img_time_tv">
+                app:layout_constraintTop_toBottomOf="@+id/to_img_name_tv">
 
                 <ImageView
                     android:id="@+id/to_img"
