@@ -38,7 +38,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             view.hideKeyboard()
             sharedPref.edit()?.putBoolean(getString(R.string.checkLogin), true)?.apply()
             //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            val isTeacher = sharedPref.getBoolean(getString(R.string.isTeacher), false)
             findNavController().navigate(R.id.gradesFragment)
+            if (isTeacher)
+            {
+                findNavController().navigate(R.id.chatsFragment)
+            }
         }
 
         view.findViewById<Button>(R.id.enterButton).setOnClickListener {
@@ -53,16 +58,17 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     sharedPref?.edit()?.putBoolean(getString(R.string.checkLogin), true)?.apply()
                     activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                     //mainActionBar.show()
+                    sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), false)?.apply()
 
                     if (it.child("teacher").value.toString() != "null")
                     {
                         sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), true)?.apply()
+                        findNavController().navigate(R.id.chatsFragment)
                     }
                     else {
-                        sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), false)?.apply()
+                        findNavController().navigate(R.id.gradesFragment)
                     }
                     //activity?.findViewById<TextView>(R.id.header_tv)?.text = "Мои баллы"
-                    findNavController().navigate(R.id.gradesFragment)
 
                 }
                 else{
@@ -103,7 +109,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         un = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
         pw = sharedPref?.getString(getString(R.string.savePassword), "").toString()
-        message()
     }
 
     private fun message() {

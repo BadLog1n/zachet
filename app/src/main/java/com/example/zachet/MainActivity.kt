@@ -34,7 +34,7 @@ class MainActivity : AppCompatActivity() {
         toggle.syncState()
 
         //mainActionBar = supportActionBar!!
-        findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+        findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_UNLOCKED)
 
         supportActionBar?.hide()
         val sharedPref: SharedPreferences? =
@@ -46,11 +46,16 @@ class MainActivity : AppCompatActivity() {
         }*/
 
         if (findNavController(R.id.nav_host_fragment).currentDestination ==
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment)
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.loginFragment)
         ) {
-            toolbar.title = "Мои баллы"
             supportActionBar?.show()
-            findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_UNLOCKED)
+            findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+        }
+
+        if (findNavController(R.id.nav_host_fragment).currentDestination ==
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment)
+        ) {
+            toolbar.title = "Чаты"
         }
 
         /**

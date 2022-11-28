@@ -22,6 +22,8 @@ import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
 import com.google.firebase.database.*
+import java.util.concurrent.Executors
+import kotlin.system.exitProcess
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private val authCheck = AuthCheck()
@@ -30,6 +32,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
 
     private lateinit var database: DatabaseReference
+    private var clickBack = false
 
 
     private var rcAdapter = ChatsAdapter()
@@ -70,9 +73,28 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             userSearch()
         }
         addPostEventListener(userName)
+        val isTeacher = sharedPref?.getBoolean(getString(R.string.isTeacher), false)
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-            findNavController().navigate(R.id.gradesFragment)
+
+            if (isTeacher == true) {
+                if (!clickBack) {
+                    Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT)
+                        .show()
+                    clickBack = true
+                    val executor = Executors.newSingleThreadExecutor()
+                    executor.execute {
+                        Thread.sleep(2000)
+                        clickBack = false
+                    }
+                } else {
+                    Thread.sleep(150)
+                    exitProcess(0)
+                }
+            }
+            else {
+                findNavController().navigate(R.id.gradesFragment)
+            }
         }
     }
 
