@@ -9,6 +9,7 @@ import androidx.navigation.Navigation.findNavController
 import com.example.zachet.R
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import kotlin.system.exitProcess
 
 
 class AuthCheck {
@@ -34,6 +35,8 @@ class AuthCheck {
                     sharedPref.edit()?.putBoolean(checkSettings, false)?.apply()
                     Toast.makeText(context, "Логин или пароль не верен.", Toast.LENGTH_SHORT).show()
                     findNavController(view).navigate(R.id.loginFragment)
+                    Thread.sleep(250)
+                    exitProcess(0)
                 }
             }
     }
