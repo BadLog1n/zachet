@@ -78,14 +78,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     Toast.makeText(activity, "Логин или пароль введён неверно.", Toast.LENGTH_SHORT).show()
                 }
             }
-            view.findViewById<TextView>(R.id.forgot_passw_btn).setOnClickListener {
-                val openTelegram =
-                    Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
-                startActivity(openTelegram)
-                }
+
         }
 
-
+        view.findViewById<TextView>(R.id.forgot_passw_btn).setOnClickListener {
+            val openTelegram =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
+            startActivity(openTelegram)
+        }
+        
         /*В случае нажатия кнопки назад просит повторить действие для успешного выхода из приложения
 * В случае если в течение следующих 2-х секунд пользователь не нажал кнопку назад, в следующий раз,
 * при нажатии кнопки "назад", пользователю это будеты предложено вновь*/
