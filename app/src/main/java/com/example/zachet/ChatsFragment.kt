@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -131,7 +132,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     val getUser = member.key.toString()
 
                     val isRead = member.child("isRead").value.toString().toBooleanStrict()
-                    val chatName = chatsPackage.getChatName(userName, getUser)
+                    val chatName = if (getUser.contains("group")) getUser else chatsPackage.getChatName(userName, getUser)
                     val text = "text"
                     val type = "type"
                     database = FirebaseDatabase.getInstance().getReference("users/$getUser")

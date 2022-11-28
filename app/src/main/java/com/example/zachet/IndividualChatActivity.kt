@@ -198,12 +198,13 @@ class IndividualChatActivity : AppCompatActivity() {
         val textSub = if (lengthTooBig) {
             text.substring(0, 200)
         } else text
+        val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
         chatsPackage.sendMessage(
             sendName,
             getName,
             textSub.replace("\\s+".toRegex(), " "),
             "text",
-            chatsPackage.getChatName(sendName, getName)
+            chatName
         )
         if (lengthTooBig) {
             sendMessage(text.substring(200))
@@ -240,14 +241,14 @@ class IndividualChatActivity : AppCompatActivity() {
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriPathHelper.getPathFromUri(this, data.data!!)!!.toString()
                     val subFile = filePath.substring(filePath.lastIndexOf("/") + 1)
-                    val chatName = chatsPackage.getChatName(sendName, getName)
+                    val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
                     val currentTimestamp = System.currentTimeMillis().toString()
 
                     chatsPackage.putFile(filePath, chatName, currentTimestamp)
                     chatsPackage.sendMessage(
                         sendName,
                         getName,
-                        chatName = chatsPackage.getChatName(sendName, getName),
+                        chatName = chatName,
                         type = typeOfFile,
                         text = "$currentTimestamp/$subFile"
                     )
@@ -258,8 +259,9 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
 
-    private fun addPostEventListener(sendUser: String, getUser: String) {
-        val chatName = chatsPackage.getChatName(sendUser, getUser)
+    private fun addPostEventListener(sendUser: String, getName: String) {
+        val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
+        val displayName = if (getName.contains("group")) sendName else ""
         val postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -279,9 +281,9 @@ class IndividualChatActivity : AppCompatActivity() {
                             val tx = i.child(text).value.toString()
 
                             if (i.child(username).value.toString() == sendUser) {
-                                adapter.add(ChatToItem(tx, dt))
+                                adapter.add(ChatToItem(tx, dt, displayName))
                             } else {
-                                adapter.add(ChatFromItem(tx, dt))
+                                adapter.add(ChatFromItem(tx, dt, displayName))
                             }
                         }
                         "file" -> {
@@ -292,7 +294,8 @@ class IndividualChatActivity : AppCompatActivity() {
                                         tx,
                                         dt,
                                         chatName,
-                                        this@IndividualChatActivity
+                                        this@IndividualChatActivity,
+                                        displayName
                                     )
                                 )
                             } else {
@@ -301,7 +304,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                         tx,
                                         dt,
                                         chatName,
-                                        this@IndividualChatActivity
+                                        this@IndividualChatActivity, displayName
                                     )
                                 )
                             }
@@ -316,7 +319,8 @@ class IndividualChatActivity : AppCompatActivity() {
                                         dt,
                                         chatName,
                                         this@IndividualChatActivity,
-                                        this@IndividualChatActivity
+                                        this@IndividualChatActivity,
+                                        displayName
                                     )
                                 )
                             } else {
@@ -326,7 +330,8 @@ class IndividualChatActivity : AppCompatActivity() {
                                         dt,
                                         chatName,
                                         this@IndividualChatActivity,
-                                        this@IndividualChatActivity
+                                        this@IndividualChatActivity,
+                                        displayName
                                     )
                                 )
                             }
@@ -369,10 +374,10 @@ class IndividualChatActivity : AppCompatActivity() {
 /**
  * Класс с конструктором для отображения данных входящего сообщения.
  */
-class ChatFromItem(val text: String, private val time: String) : Item<GroupieViewHolder>() {
+class ChatFromItem(val text: String, private val time: String, private val displayUser: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_tv).text = text
-        viewHolder.itemView.findViewById<TextView>(R.id.from_ms_time_tv).text = time
+        viewHolder.itemView.findViewById<TextView>(R.id.from_ms_time_tv).text = time + displayUser
     }
 
     override fun getLayout(): Int {
@@ -384,10 +389,10 @@ class ChatFromItem(val text: String, private val time: String) : Item<GroupieVie
 /**
  * Класс с конструктором для отображения данных исходящего сообщения.
  */
-class ChatToItem(val text: String, private val time: String) : Item<GroupieViewHolder>() {
+class ChatToItem(val text: String, private val time: String, private val displayUser: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
-        viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time
+        viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time + displayUser
     }
 
     override fun getLayout(): Int {
@@ -403,13 +408,14 @@ class ChatToFileItem(
     val text: String,
     private val time: String,
     private val chatName: String,
-    val context: Context
+    val context: Context,
+    private val displayUser: String
 
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text =
             text.substringAfter("/")
-        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
+        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time + displayUser
         viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img)
             .setImageResource(R.drawable.ic_file_icon)
 
@@ -473,12 +479,13 @@ class ChatFromFileItem(
     val text: String,
     private val time: String,
     private val chatName: String,
-    val context: Context
+    val context: Context,
+    private val displayUser: String
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text =
             text.substringAfter("/")
-        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
+        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time + displayUser
         viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img)
             .setImageResource(R.drawable.ic_file_icon)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
@@ -539,7 +546,8 @@ class ChatFromImgItem(
     private val time: String,
     private val chatName: String,
     val context: Context,
-    private val activity: Activity?
+    private val activity: Activity?,
+    private val displayUser: String
 ) : Item<GroupieViewHolder>() {
     private var trying = 3
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -599,7 +607,7 @@ class ChatFromImgItem(
                 withContext(Dispatchers.Main) {
                     viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
                         .setImageBitmap(bmp)
-                    viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
+                    viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time + displayUser
                     trying = -1
 
                 }
@@ -625,7 +633,8 @@ class ChatToImgItem(
     private val time: String,
     private val chatName: String,
     val context: Context,
-    private val activity: Activity?
+    private val activity: Activity?,
+    private val displayUser: String
 ) :
     Item<GroupieViewHolder>() {
     private var trying = 3
@@ -686,7 +695,7 @@ class ChatToImgItem(
                     viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
                         .setImageBitmap(bmp)
                     //imageView?.setImageBitmap(bmp)
-                    viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
+                    viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time + displayUser
                     trying = -1
 
                 }
