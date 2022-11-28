@@ -46,13 +46,15 @@ class ChatsPackage {
         getUser: String,
         text: String,
         type: String,
-        chatName: String
+        chatName: String,
+        sendName: String
     ) {
         database = FirebaseDatabase.getInstance().getReference("chatMessages")
         val message = mapOf(
             "text" to text,
             "type" to type,
             "username" to sendUser,
+            "sendName" to sendName,
         )
         val currentTimestamp = System.currentTimeMillis().toString()
         database.child(chatName).child(currentTimestamp).updateChildren(message)

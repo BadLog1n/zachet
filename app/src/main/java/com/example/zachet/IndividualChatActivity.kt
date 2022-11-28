@@ -54,7 +54,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private lateinit var database: DatabaseReference
     private val storagePermissionCode = 0
     private val chatsPackage = ChatsPackage()
-
+    private var userName = ""
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -73,9 +73,8 @@ class IndividualChatActivity : AppCompatActivity() {
         findViewById<TextView>(R.id.receiver_tv).text = ""
 
 
-
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
-        val requestToDatabase = database.get()
+        var requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
             val name =
                 if (it.child("name").value.toString() != "null") it.child("name").value.toString() else getName
@@ -84,6 +83,17 @@ class IndividualChatActivity : AppCompatActivity() {
             val displayName = "$name $surname"
             findViewById<TextView>(R.id.receiver_tv).text = displayName
         }
+
+        database = FirebaseDatabase.getInstance().getReference("users/$sendName")
+        requestToDatabase = database.get()
+        requestToDatabase.addOnSuccessListener {
+            val name =
+                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else ""
+            val surname =
+                if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
+            userName = "$name $surname"
+        }
+
         findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
@@ -204,7 +214,8 @@ class IndividualChatActivity : AppCompatActivity() {
             getName,
             textSub.replace("\\s+".toRegex(), " "),
             "text",
-            chatName
+            chatName,
+            userName
         )
         if (lengthTooBig) {
             sendMessage(text.substring(200))
@@ -250,7 +261,8 @@ class IndividualChatActivity : AppCompatActivity() {
                         getName,
                         chatName = chatName,
                         type = typeOfFile,
-                        text = "$currentTimestamp/$subFile"
+                        text = "$currentTimestamp/$subFile",
+                        sendName = userName
                     )
                 }
             }
@@ -261,7 +273,6 @@ class IndividualChatActivity : AppCompatActivity() {
 
     private fun addPostEventListener(sendUser: String, getName: String) {
         val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
-        val displayName = if (getName.contains("group")) sendName else ""
         val postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -274,16 +285,18 @@ class IndividualChatActivity : AppCompatActivity() {
                 for (i in dataSnapshot.children) {
                     val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
                         .toString()
-
+                    val usernameId = i.child("username").value.toString()
+                    val sendNameUser = i.child("sendName").value.toString()
+                    val displaySendName = "$usernameId $sendNameUser"
 
                     when (i.child(type).value.toString()) {
                         "text" -> {
                             val tx = i.child(text).value.toString()
 
                             if (i.child(username).value.toString() == sendUser) {
-                                adapter.add(ChatToItem(tx, dt, displayName))
+                                adapter.add(ChatToItem(tx, dt, displaySendName))
                             } else {
-                                adapter.add(ChatFromItem(tx, dt, displayName))
+                                adapter.add(ChatFromItem(tx, dt, displaySendName))
                             }
                         }
                         "file" -> {
@@ -295,7 +308,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                         dt,
                                         chatName,
                                         this@IndividualChatActivity,
-                                        displayName
+                                        displaySendName
                                     )
                                 )
                             } else {
@@ -304,7 +317,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                         tx,
                                         dt,
                                         chatName,
-                                        this@IndividualChatActivity, displayName
+                                        this@IndividualChatActivity, displaySendName
                                     )
                                 )
                             }
@@ -320,7 +333,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                         chatName,
                                         this@IndividualChatActivity,
                                         this@IndividualChatActivity,
-                                        displayName
+                                        displaySendName
                                     )
                                 )
                             } else {
@@ -331,7 +344,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                         chatName,
                                         this@IndividualChatActivity,
                                         this@IndividualChatActivity,
-                                        displayName
+                                        displaySendName
                                     )
                                 )
                             }
