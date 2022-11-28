@@ -20,6 +20,7 @@ import android.os.Environment.isExternalStorageManager
 import android.os.Handler
 import android.os.Looper
 import android.util.Log
+import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RequiresApi
@@ -287,7 +288,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         .toString()
                     val usernameId = i.child("username").value.toString()
                     val sendNameUser = i.child("sendName").value.toString()
-                    val displaySendName = "$usernameId $sendNameUser"
+                    val displaySendName = if (getName.contains("group")) "$sendNameUser ($usernameId)" else ""
 
                     when (i.child(type).value.toString()) {
                         "text" -> {
@@ -390,7 +391,12 @@ class IndividualChatActivity : AppCompatActivity() {
 class ChatFromItem(val text: String, private val time: String, private val displayUser: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_tv).text = text
-        viewHolder.itemView.findViewById<TextView>(R.id.from_ms_time_tv).text = time + displayUser
+        viewHolder.itemView.findViewById<TextView>(R.id.from_ms_time_tv).text = time
+        if (displayUser != ""){
+            val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_ms_name)
+            viewName.text = displayUser
+            viewName.visibility = View.VISIBLE
+        }
     }
 
     override fun getLayout(): Int {
@@ -405,7 +411,12 @@ class ChatFromItem(val text: String, private val time: String, private val displ
 class ChatToItem(val text: String, private val time: String, private val displayUser: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
-        viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time + displayUser
+        viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time
+        if (displayUser != ""){
+            val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_msg_name_tv)
+            viewName.text = displayUser
+            viewName.visibility = View.VISIBLE
+        }
     }
 
     override fun getLayout(): Int {
@@ -428,7 +439,14 @@ class ChatToFileItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text =
             text.substringAfter("/")
-        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time + displayUser
+        viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
+        if (displayUser != ""){
+            val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_fl_uname_tv)
+            viewName.text = displayUser
+            viewName.visibility = View.VISIBLE
+        }
+
+
         viewHolder.itemView.findViewById<ImageView>(R.id.to_file_img)
             .setImageResource(R.drawable.ic_file_icon)
 
@@ -498,7 +516,14 @@ class ChatFromFileItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_fileName_tv).text =
             text.substringAfter("/")
-        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time + displayUser
+        viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
+
+        if (displayUser != ""){
+            val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_fl_uname)
+            viewName.text = displayUser
+            viewName.visibility = View.VISIBLE
+        }
+
         viewHolder.itemView.findViewById<ImageView>(R.id.from_file_img)
             .setImageResource(R.drawable.ic_file_icon)
         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_file_layout).setOnClickListener {
@@ -620,7 +645,14 @@ class ChatFromImgItem(
                 withContext(Dispatchers.Main) {
                     viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
                         .setImageBitmap(bmp)
-                    viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time + displayUser
+                    viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
+
+                    if (displayUser != ""){
+                        val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
+                        viewName.text = displayUser
+                        viewName.visibility = View.VISIBLE
+                    }
+
                     trying = -1
 
                 }
@@ -708,7 +740,13 @@ class ChatToImgItem(
                     viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
                         .setImageBitmap(bmp)
                     //imageView?.setImageBitmap(bmp)
-                    viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time + displayUser
+                    viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
+
+                    if (displayUser != ""){
+                        val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
+                        viewName.text = displayUser
+                        viewName.visibility = View.VISIBLE
+                    }
                     trying = -1
 
                 }

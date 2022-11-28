@@ -115,7 +115,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                         InputMethodManager
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
             } else {
-                Toast.makeText(activity, "Пользователя не существует", Toast.LENGTH_SHORT)
+                Toast.makeText(activity, "Пользователя или беседы не существует", Toast.LENGTH_SHORT)
                     .show()
             }
         }

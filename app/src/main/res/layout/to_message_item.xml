@@ -16,6 +16,7 @@
         android:text="Имя Фамилия"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/to_ms_tv"
         app:layout_constraintEnd_toEndOf="@+id/to_ms_tv"
         app:layout_constraintHorizontal_bias="0.96"
