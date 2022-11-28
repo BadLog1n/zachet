@@ -55,25 +55,6 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
-
-            Log.d(
-                "first",
-                "${
-                    ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
-                }"
-            )
-            Log.d(
-                "second",
-                "${
-                    ContextCompat.checkSelfPermission(
-                        requireContext(),
-                        Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED
-                }"
-            )
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
