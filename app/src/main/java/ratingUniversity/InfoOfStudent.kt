@@ -20,15 +20,6 @@ class InfoOfStudent {
         return arrayOfSemester
     }
 
-
-    fun getCurrentSemesterOfStudent(currentSemester: JSONArray): ArrayList<String> {
-        val arrayOfSemester = arrayListOf<String>()
-        for (i in 0 until currentSemester.length()) {
-            arrayOfSemester.add(currentSemester.getJSONObject(i).getString("ID"))
-        }
-        return arrayOfSemester
-    }
-
 }
 
 

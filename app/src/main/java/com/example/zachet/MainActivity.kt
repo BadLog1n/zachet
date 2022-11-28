@@ -1,6 +1,5 @@
 package com.example.zachet
 
-import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
 import android.widget.Toast
@@ -21,10 +20,16 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
         setSupportActionBar(toolbar)
 
-        val toggle = ActionBarDrawerToggle(this,findViewById(R.id.drawer),toolbar,R.string.drawer_open,R.string.drawer_closed)
+        val toggle = ActionBarDrawerToggle(
+            this,
+            findViewById(R.id.drawer),
+            toolbar,
+            R.string.drawer_open,
+            R.string.drawer_closed
+        )
         toggle.onDrawerOpened(findViewById<DrawerLayout>(R.id.drawer)).apply {
             supportActionBar?.hide()
         }
@@ -79,26 +84,27 @@ class MainActivity : AppCompatActivity() {
                     }
 
                 }
-                R.id.chats_menu ->{
+                R.id.chats_menu -> {
                     findNavController(R.id.nav_host_fragment).navigate(R.id.chatsFragment)
                     toolbar.title = "Чаты"
                     supportActionBar?.show()
 
                 }
-                R.id.settings_menu-> {
+                R.id.settings_menu -> {
                     findNavController(R.id.nav_host_fragment).navigate(R.id.settingsFragment)
                     toolbar.title = "Настройки"
                     supportActionBar?.show()
                 }
-                R.id.help_menu->{
+                R.id.help_menu -> {
                     toolbar.title = "О приложении"
                     supportActionBar?.show()
                     findNavController(R.id.nav_host_fragment).navigate(R.id.helpFragment)
                 }
 
-                R.id.logout_menu-> {
+                R.id.logout_menu -> {
                     LogoutFragment().show(
-                        this.supportFragmentManager, LogoutFragment.TAG)
+                        this.supportFragmentManager, LogoutFragment.TAG
+                    )
                     //val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
                     //haredPref?.edit()?.putBoolean(checkSettings, false)?.apply()
                     //findNavController(R.id.nav_host_fragment).navigate(R.id.loginFragment)
@@ -137,14 +143,20 @@ class MainActivity : AppCompatActivity() {
         /**
          * Меняем заголовок экрана в toolbar при восстановлении фрагментов
          */
-        val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
-        when (findNavController(R.id.nav_host_fragment).currentDestination){
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment) -> toolbar.title = "Мои баллы"
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment) -> toolbar.title = "Чаты"
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title = "О приложении"
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.settingsFragment) -> toolbar.title = "Настройки"
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.scheduleFragment) -> toolbar.title = "Расписание"
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.feedFragment) -> toolbar.title = "Лента"
+        val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
+        when (findNavController(R.id.nav_host_fragment).currentDestination) {
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment) -> toolbar.title =
+                "Мои баллы"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment) -> toolbar.title =
+                "Чаты"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.helpFragment) -> toolbar.title =
+                "О приложении"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.settingsFragment) -> toolbar.title =
+                "Настройки"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.scheduleFragment) -> toolbar.title =
+                "Расписание"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.feedFragment) -> toolbar.title =
+                "Лента"
         }
         supportActionBar?.show()
     }

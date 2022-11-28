@@ -120,9 +120,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         pw = sharedPref?.getString(getString(R.string.savePassword), "").toString()
     }
 
-    private fun message() {
-        //Toast.makeText(activity, "$un\n$pw", Toast.LENGTH_SHORT).show()
-    }
 
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
