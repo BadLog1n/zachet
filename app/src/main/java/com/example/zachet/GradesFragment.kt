@@ -133,7 +133,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 .setTitle("Обновление $versionName")
                 .setView(R.layout.dialog_update)
                 .setPositiveButton("OK", null)
-                .setNegativeButton("Отмена", null)
                 .create()
             val alertDialog = builder.create()
             alertDialog.show()

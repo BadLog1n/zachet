@@ -22,7 +22,6 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val toolbar:androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
-        toolbar.title = "Мои баллы"
         setSupportActionBar(toolbar)
 
         val toggle = ActionBarDrawerToggle(this,findViewById(R.id.drawer),toolbar,R.string.drawer_open,R.string.drawer_closed)
