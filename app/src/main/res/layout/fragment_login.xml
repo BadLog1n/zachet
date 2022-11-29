@@ -42,6 +42,8 @@
             app:layout_constraintTop_toBottomOf="@+id/textView">
 
             <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/loginText"
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
@@ -76,6 +78,7 @@
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
+                android:id="@+id/passwordText"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"

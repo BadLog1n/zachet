@@ -1,15 +1,15 @@
 package com.example.zachet
 
 import android.annotation.SuppressLint
-import android.content.Context
-import android.content.DialogInterface
-import android.content.SharedPreferences
+import android.content.*
+import android.content.Context.CLIPBOARD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
 import android.widget.EditText
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
@@ -46,6 +46,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val loginWebInput = view.findViewById<EditText>(R.id.loginWebInput)
         val passwordWebInput = view.findViewById<EditText>(R.id.passwordWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
+        val copyLoginBtn = view.findViewById<ImageButton>(R.id.copyLoginBtn)
 
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
@@ -77,6 +78,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             passwordEditText.isEnabled = true
         }
 
+
+
+        copyLoginBtn.setOnClickListener {
+
+            val myClipboard: ClipboardManager = activity?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val myClip: ClipData? = ClipData.newPlainText("text", loginEditText.text.toString())
+            if (myClip != null) {
+                myClipboard.setPrimaryClip(myClip)
+                Toast.makeText(requireContext(), "Скопировано", Toast.LENGTH_SHORT).show()
+            }
+
+        }
 
         view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
