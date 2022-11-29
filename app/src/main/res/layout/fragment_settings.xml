@@ -311,7 +311,7 @@
             </LinearLayout>
 
             <EditText
-                android:id="@+id/loginWebInput"
+                android:id="@+id/lWebInput"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
@@ -364,7 +364,7 @@
                 app:passwordToggleTint="@color/black">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/passwordWebInput"
+                    android:id="@+id/pWebInput"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@drawable/settings_edittext"

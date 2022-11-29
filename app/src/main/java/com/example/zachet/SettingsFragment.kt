@@ -43,8 +43,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val passwordEditText = view.findViewById<EditText>(R.id.passText)
         val nameEditText = view.findViewById<EditText>(R.id.nameText)
         val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
-        val loginWebInput = view.findViewById<EditText>(R.id.loginWebInput)
-        val passwordWebInput = view.findViewById<EditText>(R.id.passwordWebInput)
+        val loginWebInput = view.findViewById<EditText>(R.id.lWebInput)
+        val passwordWebInput = view.findViewById<EditText>(R.id.pWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
         val copyLoginBtn = view.findViewById<ImageButton>(R.id.copyLoginBtn)
 
