@@ -7,10 +7,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.Button
-import android.widget.EditText
-import android.widget.ImageButton
-import android.widget.Toast
+import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -32,6 +29,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
     private val infoOfStudent = InfoOfStudent()
 
+    @SuppressLint("UseSwitchCompatOrMaterialCode")
     @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         authCheck.check(view, this@SettingsFragment.context)
@@ -47,6 +45,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val passwordWebInput = view.findViewById<EditText>(R.id.pWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
         val copyLoginBtn = view.findViewById<ImageButton>(R.id.copyLoginBtn)
+        val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
 
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
@@ -57,7 +56,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             getString(R.string.settingsShared),
             Context.MODE_PRIVATE
         )
-        val loginWeb = sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
+        val loginWeb =
+            sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
         loginWebInput.setText(loginWeb)
         val passwordWeb =
             sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
@@ -80,9 +80,36 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
 
+        switch.setOnCheckedChangeListener { _, _ ->
+            database = FirebaseDatabase.getInstance().getReference("users/$un")
+            database.get().addOnSuccessListener {
+                val switchState: Boolean = switch.isChecked
+
+                if (switchState) {
+                    loginWebInput.setText("")
+                    passwordWebInput.setText("")
+                    loginWebInput.isEnabled = false
+                    passwordWebInput.isEnabled = false
+                    if (it.child("loginWeb").exists()) {
+                        loginWebInput.setText(it.child("loginWeb").value.toString())
+                        passwordWebInput.setText(it.child("passwordWeb").value.toString())
+                    }
+
+                } else {
+                    loginWebInput.isEnabled = true
+                    passwordWebInput.isEnabled = true
+                    val loginWebSwitch = sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
+                    val passwordWebSwitch = sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
+                    loginWebInput.setText(loginWebSwitch)
+                    passwordWebInput.setText(passwordWebSwitch)
+                }
+            }
+        }
+
         copyLoginBtn.setOnClickListener {
 
-            val myClipboard: ClipboardManager = activity?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
+            val myClipboard: ClipboardManager =
+                activity?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
             val myClip: ClipData? = ClipData.newPlainText("text", loginEditText.text.toString())
             if (myClip != null) {
                 myClipboard.setPrimaryClip(myClip)
@@ -176,6 +203,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     "Подтверждено!",
                                     Toast.LENGTH_SHORT
                                 ).show()
+                                database = FirebaseDatabase.getInstance().getReference("users/$un")
+                                val loginPassWeb = mapOf(
+                                    "loginWeb" to loginWebInputString,
+                                    "passwordWeb" to passwordWebInputString,
+                                )
+                                database.updateChildren(loginPassWeb)
+
 
                             } else Toast.makeText(
                                 requireContext(), "Не удается авторизоваться на сайте," +

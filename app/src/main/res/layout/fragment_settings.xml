@@ -36,7 +36,7 @@
                     android:textSize="16sp"
                     android:textStyle="bold" />
 
-                cccc<ImageButton
+                <ImageButton
                     android:id="@+id/copyLoginBtn"
                     android:layout_width="25dp"
                     android:layout_height="20dp"
@@ -291,6 +291,23 @@
                 android:textSize="16sp"
                 app:cornerRadius="100dp" />
 
+            <Switch
+                android:id="@+id/loadFromServerWeb"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="10dp"
+                android:fontFamily="@font/inter"
+                android:text="@string/loadFromServerWeb"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textColorLink="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:theme="@style/Theme.UniversitySystem"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -381,6 +398,7 @@
                     android:textColor="@color/black"
                     android:textColorHint="@color/black"
                     android:textSize="16sp" />
+
             </com.google.android.material.textfield.TextInputLayout>
 
             <Button
