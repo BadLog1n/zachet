@@ -1,0 +1,20 @@
+{
+  "version": 1.5,
+  "artifactType": {
+    "type": "APK",
+    "kind": "Directory"
+  },
+  "applicationId": "com.example.zachet",
+  "variantName": "debug",
+  "elements": [
+    {
+      "type": "SINGLE",
+      "filters": [],
+      "attributes": [],
+      "versionCode": 5,
+      "versionName": "1.5",
+      "outputFile": "1.5.apk"
+    }
+  ],
+  "elementType": "File"
+}

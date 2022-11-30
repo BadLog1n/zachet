@@ -48,23 +48,28 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         }
 
 
-        database = FirebaseDatabase.getInstance().getReference("version")
-        val requestToDatabase = database.get()
         val versionName = getAppVersion(requireContext())
         view.findViewById<TextView>(R.id.version).text = versionName
 
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
+            database = FirebaseDatabase.getInstance().getReference("version")
+            val requestToDatabase = database.get()
+            var getDataMemory = true
+            if (Build.VERSION.SDK_INT >= 30) {
+                getDataMemory = ((ContextCompat.checkSelfPermission(
+                    requireContext(),
+                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
+                ) != PackageManager.PERMISSION_GRANTED))
+            }
             if (ContextCompat.checkSelfPermission(
                     requireContext(),
                     Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED || (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED)
+                ) == PackageManager.PERMISSION_GRANTED && getDataMemory
             ) {
                 requestToDatabase.addOnSuccessListener {
                     if (versionName < it.value.toString()) {
+                        Log.d("it.value.toString()", it.value.toString())
                         download(it.value.toString(), requireContext())
                         Toast.makeText(
                             this@HelpFragment.context,

@@ -74,8 +74,8 @@
             android:layout_height="30dp"
             android:layout_gravity="end"
             android:background="@color/light_grey_background"
-            app:tint="@color/light_grey_text"
-            app:srcCompat="@drawable/ic___icon__reply_" />
+            app:srcCompat="@drawable/ic_baseline_chat_24"
+            app:tint="@color/light_grey_text" />
     </LinearLayout>
 
 </LinearLayout>

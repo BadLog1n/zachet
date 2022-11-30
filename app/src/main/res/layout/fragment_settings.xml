@@ -45,9 +45,9 @@
                     android:layout_marginStart="5dp"
                     android:layout_marginTop="2dp"
                     android:background="@color/white"
-                    android:src="@drawable/ic__save"
+                    android:src="?attr/actionModeCopyDrawable"
                     android:visibility="visible"
-                    app:tint="@color/blue" />
+                    app:tint="@color/black" />
             </LinearLayout>
 
             <EditText
@@ -285,6 +285,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
                 android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/save"
                 android:textAllCaps="false"
