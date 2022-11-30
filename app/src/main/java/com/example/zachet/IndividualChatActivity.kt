@@ -56,12 +56,14 @@ class IndividualChatActivity : AppCompatActivity() {
     private val storagePermissionCode = 0
     private val chatsPackage = ChatsPackage()
     private var userName = ""
+
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val arguments = intent.extras
         getName = arguments!!.getString(getString(R.string.getUser)).toString()
-        val sharedPref: SharedPreferences? = this.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
+        val sharedPref: SharedPreferences? =
+            this.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
         sendName = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_individual_chat)
@@ -209,7 +211,8 @@ class IndividualChatActivity : AppCompatActivity() {
         val textSub = if (lengthTooBig) {
             text.substring(0, 200)
         } else text
-        val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
+        val chatName =
+            if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
         chatsPackage.sendMessage(
             sendName,
             getName,
@@ -253,7 +256,11 @@ class IndividualChatActivity : AppCompatActivity() {
                     val uriPathHelper = UriPathHelper()
                     val filePath = uriPathHelper.getPathFromUri(this, data.data!!)!!.toString()
                     val subFile = filePath.substring(filePath.lastIndexOf("/") + 1)
-                    val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
+                    val chatName =
+                        if (getName.contains("group")) getName else chatsPackage.getChatName(
+                            sendName,
+                            getName
+                        )
                     val currentTimestamp = System.currentTimeMillis().toString()
 
                     chatsPackage.putFile(filePath, chatName, currentTimestamp)
@@ -271,90 +278,100 @@ class IndividualChatActivity : AppCompatActivity() {
 
         }
 
+    var lastTimeMessage: Long = 0
 
     private fun addPostEventListener(sendUser: String, getName: String) {
-        val chatName = if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
+        val chatName =
+            if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
+        val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
+        rcView.layoutManager = LinearLayoutManager(this@IndividualChatActivity)
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        rcView.adapter = adapter
         val postListener = object : ValueEventListener {
-            @SuppressLint("SimpleDateFormat")
+            @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
-                rcView.layoutManager = LinearLayoutManager(this@IndividualChatActivity)
-                val adapter = GroupAdapter<GroupieViewHolder>()
                 val username = "username"
                 val text = "text"
                 val type = "type"
                 for (i in dataSnapshot.children) {
-                    val dt = SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
-                        .toString()
-                    val usernameId = i.child("username").value.toString()
-                    val sendNameUser = i.child("sendName").value.toString()
-                    val displaySendName = if (getName.contains("group")) "$sendNameUser ($usernameId)" else ""
+                    if (lastTimeMessage < i.key!!.toLong()) {
+                        lastTimeMessage = i.key!!.toLong()
+                       //Log.d("timestamp", i.key!!.toLong().toString())
 
-                    when (i.child(type).value.toString()) {
-                        "text" -> {
-                            val tx = i.child(text).value.toString()
+                        val dt =
+                            SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
+                                .toString()
+                        val usernameId = i.child("username").value.toString()
+                        val sendNameUser = i.child("sendName").value.toString()
+                        val displaySendName =
+                            if (getName.contains("group")) "$sendNameUser ($usernameId)" else ""
 
-                            if (i.child(username).value.toString() == sendUser) {
-                                adapter.add(ChatToItem(tx, dt, displaySendName))
-                            } else {
-                                adapter.add(ChatFromItem(tx, dt, displaySendName))
+                        when (i.child(type).value.toString()) {
+                            "text" -> {
+                                val tx = i.child(text).value.toString()
+
+                                if (i.child(username).value.toString() == sendUser) {
+                                    adapter.add(ChatToItem(tx, dt, displaySendName))
+                                } else {
+                                    adapter.add(ChatFromItem(tx, dt, displaySendName))
+                                }
                             }
-                        }
-                        "file" -> {
-                            val tx = i.child(text).value.toString()
-                            if (i.child(username).value.toString() == sendUser) {
-                                adapter.add(
-                                    ChatToFileItem(
-                                        tx,
-                                        dt,
-                                        chatName,
-                                        this@IndividualChatActivity,
-                                        displaySendName
+                            "file" -> {
+                                val tx = i.child(text).value.toString()
+                                if (i.child(username).value.toString() == sendUser) {
+                                    adapter.add(
+                                        ChatToFileItem(
+                                            tx,
+                                            dt,
+                                            chatName,
+                                            this@IndividualChatActivity,
+                                            displaySendName
+                                        )
                                     )
-                                )
-                            } else {
-                                adapter.add(
-                                    ChatFromFileItem(
-                                        tx,
-                                        dt,
-                                        chatName,
-                                        this@IndividualChatActivity, displaySendName
+                                } else {
+                                    adapter.add(
+                                        ChatFromFileItem(
+                                            tx,
+                                            dt,
+                                            chatName,
+                                            this@IndividualChatActivity, displaySendName
+                                        )
                                     )
-                                )
+                                }
+                                Log.d("Message", "Новый файл")
                             }
-                            Log.d("Message", "Новый файл")
-                        }
-                        "photo" -> {
-                            val tx = i.child(text).value.toString()
-                            if (i.child(username).value.toString() == sendUser) {
-                                adapter.add(
-                                    ChatToImgItem(
-                                        tx,
-                                        dt,
-                                        chatName,
-                                        this@IndividualChatActivity,
-                                        this@IndividualChatActivity,
-                                        displaySendName
+                            "photo" -> {
+                                val tx = i.child(text).value.toString()
+                                if (i.child(username).value.toString() == sendUser) {
+                                    adapter.add(
+                                        ChatToImgItem(
+                                            tx,
+                                            dt,
+                                            chatName,
+                                            this@IndividualChatActivity,
+                                            this@IndividualChatActivity,
+                                            displaySendName
+                                        )
                                     )
-                                )
-                            } else {
-                                adapter.add(
-                                    ChatFromImgItem(
-                                        tx,
-                                        dt,
-                                        chatName,
-                                        this@IndividualChatActivity,
-                                        this@IndividualChatActivity,
-                                        displaySendName
+                                } else {
+                                    adapter.add(
+                                        ChatFromImgItem(
+                                            tx,
+                                            dt,
+                                            chatName,
+                                            this@IndividualChatActivity,
+                                            this@IndividualChatActivity,
+                                            displaySendName
+                                        )
                                     )
-                                )
+                                }
+                                Log.d("Message", "Скачать фото")
                             }
-                            Log.d("Message", "Скачать фото")
                         }
                     }
+                    rcView.adapter?.notifyDataSetChanged()
+                    rcView.scrollToPosition(adapter.itemCount - 1)
                 }
-                rcView.adapter = adapter
-                rcView.scrollToPosition(adapter.itemCount - 1)
             }
 
             override fun onCancelled(databaseError: DatabaseError) {
@@ -388,11 +405,12 @@ class IndividualChatActivity : AppCompatActivity() {
 /**
  * Класс с конструктором для отображения данных входящего сообщения.
  */
-class ChatFromItem(val text: String, private val time: String, private val displayUser: String) : Item<GroupieViewHolder>() {
+class ChatFromItem(val text: String, private val time: String, private val displayUser: String) :
+    Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_tv).text = text
         viewHolder.itemView.findViewById<TextView>(R.id.from_ms_time_tv).text = time
-        if (displayUser != ""){
+        if (displayUser != "") {
             val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_ms_name)
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
@@ -408,11 +426,12 @@ class ChatFromItem(val text: String, private val time: String, private val displ
 /**
  * Класс с конструктором для отображения данных исходящего сообщения.
  */
-class ChatToItem(val text: String, private val time: String, private val displayUser: String) : Item<GroupieViewHolder>() {
+class ChatToItem(val text: String, private val time: String, private val displayUser: String) :
+    Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_tv).text = text
         viewHolder.itemView.findViewById<TextView>(R.id.to_ms_time_tv).text = time
-        if (displayUser != ""){
+        if (displayUser != "") {
             val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_msg_name_tv)
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
@@ -440,7 +459,7 @@ class ChatToFileItem(
         viewHolder.itemView.findViewById<TextView>(R.id.to_fileName_tv).text =
             text.substringAfter("/")
         viewHolder.itemView.findViewById<TextView>(R.id.to_file_time_tv).text = time
-        if (displayUser != ""){
+        if (displayUser != "") {
             val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_fl_uname_tv)
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
@@ -518,7 +537,7 @@ class ChatFromFileItem(
             text.substringAfter("/")
         viewHolder.itemView.findViewById<TextView>(R.id.from_file_time_tv).text = time
 
-        if (displayUser != ""){
+        if (displayUser != "") {
             val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_fl_uname)
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
@@ -647,8 +666,9 @@ class ChatFromImgItem(
                         .setImageBitmap(bmp)
                     viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
 
-                    if (displayUser != ""){
-                        val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
+                    if (displayUser != "") {
+                        val viewName =
+                            viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
                         viewName.text = displayUser
                         viewName.visibility = View.VISIBLE
                     }
@@ -742,8 +762,9 @@ class ChatToImgItem(
                     //imageView?.setImageBitmap(bmp)
                     viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
 
-                    if (displayUser != ""){
-                        val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
+                    if (displayUser != "") {
+                        val viewName =
+                            viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
                         viewName.text = displayUser
                         viewName.visibility = View.VISIBLE
                     }
