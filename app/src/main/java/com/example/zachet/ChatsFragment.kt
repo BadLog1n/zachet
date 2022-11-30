@@ -104,6 +104,18 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         database = FirebaseDatabase.getInstance().getReference("users")
         database.child(user).get().addOnSuccessListener {
             if (it.exists() && user != "") {
+
+                val memberslist: Array<String> = if (it.child("members").exists())
+                    it.child("members").value.toString().split(";").toTypedArray() else (arrayOf(""))
+                val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+                    "Settings",
+                    AppCompatActivity.MODE_PRIVATE
+                )
+                val userName = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
+                if (memberslist[0] != "" && userName !in memberslist) {
+                    Toast.makeText(requireContext(), "У вас нет доступа к чату", Toast.LENGTH_SHORT).show()
+                    return@addOnSuccessListener
+                }
                 val intent =
                     Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
                 intent.putExtra(getString(R.string.getUser), user)
