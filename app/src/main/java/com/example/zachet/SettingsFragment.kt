@@ -46,6 +46,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
         val copyLoginBtn = view.findViewById<ImageButton>(R.id.copyLoginBtn)
         val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
+        val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
@@ -203,14 +204,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     "Подтверждено!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                database = FirebaseDatabase.getInstance().getReference("users/$un")
-                                val loginPassWeb = mapOf(
-                                    "loginWeb" to loginWebInputString,
-                                    "passwordWeb" to passwordWebInputString,
-                                )
-                                database.updateChildren(loginPassWeb)
+                                if ( saveOnServerWebCheckBox.isChecked) {
+                                    database = FirebaseDatabase.getInstance().getReference("users/$un")
+                                    val loginPassWeb = mapOf(
+                                        "loginWeb" to loginWebInputString,
+                                        "passwordWeb" to passwordWebInputString,
+                                    )
+                                    database.updateChildren(loginPassWeb)
 
-
+                                }
                             } else Toast.makeText(
                                 requireContext(), "Не удается авторизоваться на сайте," +
                                         " проверьте вводимый логин и пароль", Toast.LENGTH_SHORT

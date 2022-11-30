@@ -119,6 +119,7 @@
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
     <string name="loadFromServerWeb">Загрузить с сервера</string>
+    <string name="saveOnServerWeb">Сохранить на сервере</string>
 
 
 </resources>
