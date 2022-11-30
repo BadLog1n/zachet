@@ -14,7 +14,7 @@ android {
         applicationId "com.example.zachet"
         minSdk 21
         targetSdk 32
-        versionCode 6
+        versionCode 7
         versionName "1.5.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"

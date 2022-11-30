@@ -2,8 +2,12 @@ package com.example.zachet
 
 import android.annotation.SuppressLint
 import android.content.Context
+import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
+import android.content.pm.PackageManager
+import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +18,7 @@ import android.widget.EditText
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.addCallback
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
@@ -95,6 +100,54 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                 findNavController().navigate(R.id.gradesFragment)
             }
         }
+
+        val versionName = getAppVersion(requireContext())
+
+        database = FirebaseDatabase.getInstance().getReference("version")
+        database.get().addOnSuccessListener {
+            if (versionName < it.value.toString() && isTeacher == true) {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setMessage(R.string.updateText)
+                builder.setTitle(R.string.updateTitle)
+                builder.setPositiveButton("Ок") { _, _ ->
+
+                }
+                builder.setNeutralButton("Перейти") { _, _ ->
+                    findNavController().navigate(R.id.helpFragment)
+                }
+                val alertDialog = builder.create()
+                alertDialog.show()
+
+                val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                with(autoBtn) {
+                    setTextColor(Color.BLACK)
+                }
+                val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+                with(userBtn) {
+                    setTextColor(Color.BLACK)
+                }
+
+            }
+        }
+    }
+
+    @Suppress("DEPRECATION")
+    private fun getAppVersion(context: Context?): String {
+        var version = ""
+        try {
+            val pInfo = if (Build.VERSION.SDK_INT >= 33) {
+                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                //TODO "Добавить следующий код когда будет переведено на новую версию проекта")
+                //context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
+            } else {
+                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+            }
+            version = pInfo!!.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return version
     }
 
 
