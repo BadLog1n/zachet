@@ -57,6 +57,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private val chatsPackage = ChatsPackage()
     private var userName = ""
 
+    //@SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
