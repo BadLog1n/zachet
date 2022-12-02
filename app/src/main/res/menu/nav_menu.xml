@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn = "navigation_view">
     <item android:title=""/>
@@ -26,6 +27,12 @@
         android:icon="@drawable/ic_clarity_settings_line">
     </item>
 
+    <item
+        android:id="@+id/app_bar_switch"
+        android:icon="@drawable/ic_baseline_mode_night_24"
+        android:title="Темная тема"
+        app:actionLayout="@layout/menu_switch"
+        app:showAsAction="always" />
     <item
         android:enabled="false"
         android:title="" />
