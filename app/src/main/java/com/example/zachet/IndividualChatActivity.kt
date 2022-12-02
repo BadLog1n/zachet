@@ -107,11 +107,10 @@ class IndividualChatActivity : AppCompatActivity() {
             if (bottom < oldBottom) {
                 rcView.post {
                     try {
-                        rcView.scrollToPosition(
+                        rcView.smoothScrollToPosition(
                             rcView.adapter!!.itemCount - 1
                         )
                     } catch (e: NullPointerException) {
-
                     }
                 }
             }
