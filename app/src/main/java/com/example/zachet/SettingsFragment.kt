@@ -48,6 +48,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
+        val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
+        val emailHelpBtn = view.findViewById<ImageButton>(R.id.emailHelpBtn)
+
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.gradesShared),
@@ -74,9 +77,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             surnameEditText.setText(if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else "")
             loginEditText.setText(it.key.toString())
             passwordEditText.setText(it.child("password").value.toString())
+
+            emailInputText.setText(if (it.child("email").value.toString() != "null") it.child("email").value.toString() else "")
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
             passwordEditText.isEnabled = true
+            emailInputText.isEnabled = true
         }
 
 
@@ -99,8 +105,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 } else {
                     loginWebInput.isEnabled = true
                     passwordWebInput.isEnabled = true
-                    val loginWebSwitch = sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
-                    val passwordWebSwitch = sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
+                    val loginWebSwitch =
+                        sharedPrefGrades?.getString(getString(R.string.loginWebShared), "")
+                            .toString()
+                    val passwordWebSwitch =
+                        sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "")
+                            .toString()
                     loginWebInput.setText(loginWebSwitch)
                     passwordWebInput.setText(passwordWebSwitch)
                 }
@@ -119,20 +129,26 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         }
 
+        emailHelpBtn.setOnClickListener {
+            Toast.makeText(
+                requireContext(), "Почта необходима для возможности " +
+                        "восстановления аккаунта", Toast.LENGTH_SHORT
+            ).show()
+        }
+
         view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Сохранить изменения?")
             builder.setPositiveButton("Да") { _, _ ->
                 if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()) {
                     database.child("password").setValue(passwordEditText.text.toString())
-
                 }
-                if (nameEditText.text.isNotBlank() && nameEditText.text.isNotEmpty()) {
-                    database.child("name").setValue(nameEditText.text.toString())
-
-                }
-                if (surnameEditText.text.isNotBlank() && surnameEditText.text.isNotEmpty()) {
-                    database.child("surname").setValue(surnameEditText.text.toString())
+                database.child("name").setValue(nameEditText.text.toString())
+                database.child("surname").setValue(surnameEditText.text.toString())
+                if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
+                        .matches()
+                ) {
+                    database.child("email").setValue(emailInputText.text.toString())
                 }
                 Toast.makeText(
                     this@SettingsFragment.context,
@@ -140,6 +156,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     Toast.LENGTH_SHORT
                 ).show()
                 findNavController().navigate(R.id.gradesFragment)
+
             }
             builder.setNeutralButton("Нет") { _, _ ->
             }
@@ -204,8 +221,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     "Подтверждено!",
                                     Toast.LENGTH_SHORT
                                 ).show()
-                                if ( saveOnServerWebCheckBox.isChecked) {
-                                    database = FirebaseDatabase.getInstance().getReference("users/$un")
+                                if (saveOnServerWebCheckBox.isChecked) {
+                                    database =
+                                        FirebaseDatabase.getInstance().getReference("users/$un")
                                     val loginPassWeb = mapOf(
                                         "loginWeb" to loginWebInputString,
                                         "passwordWeb" to passwordWebInputString,
