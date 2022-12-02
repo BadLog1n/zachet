@@ -90,7 +90,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     }
 
-
+    var isFirstLoad = true
     private fun addPostEventListener(view: View) {
         val postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
@@ -130,19 +130,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 )
                             )
                             lastPost = postId.toLong()
-                            if (item.key.toString()
-                                    .toLong() == dataSnapshot.children.last().key.toString()
-                                    .toLong()
-                            ) {
+
+
+                            if (isFirstLoad && item.toString() == dataSnapshot.children.last().toString())
+                            {
                                 val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
                                 feedRc.adapter = rcAdapter
-                                val itemCount = rcAdapter.itemCount
-                                if (firstLoad) {
-                                    feedRc.smoothScrollToPosition(itemCount)
-                                    firstLoad = false
-                                }
-
+                                feedRc.scrollToPosition(rcAdapter.itemCount - 1)
+                                isFirstLoad = false
                             }
+                            
 
                         }
                     }
