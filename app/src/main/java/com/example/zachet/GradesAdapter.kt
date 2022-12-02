@@ -50,6 +50,9 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             premiumGrCount.text = subjectGrades.grades[10]
             userChatId1Tv.text = subjectGrades.userChatId
             teacherTv.text = subjectGrades.FIO
+            expandedView.visibility = View.GONE
+            collapsedView.visibility = View.VISIBLE
+
         }
 
     }
@@ -122,5 +125,6 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
 
     fun clearRecords() {
         gradesList.removeAll(gradesList.toSet())
+        gradesList.clear()
     }
 }
