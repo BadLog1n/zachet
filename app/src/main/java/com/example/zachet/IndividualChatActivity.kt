@@ -109,8 +109,8 @@ class IndividualChatActivity : AppCompatActivity() {
             if (bottom < oldBottom) {
                 rcView.post {
                     try {
-                        rcView.scrollToPosition((rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() + 2)
-                    } catch (e: NullPointerException) {
+                        rcView.smoothScrollToPosition((rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() + 2)
+                    } catch (_: NullPointerException) {
                     }
                 }
             }
