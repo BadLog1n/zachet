@@ -57,7 +57,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private val chatsPackage = ChatsPackage()
     private var userName = ""
 
-    //@SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -264,15 +264,36 @@ class IndividualChatActivity : AppCompatActivity() {
                         )
                     val currentTimestamp = System.currentTimeMillis().toString()
 
-                    chatsPackage.putFile(filePath, chatName, currentTimestamp)
-                    chatsPackage.sendMessage(
-                        sendName,
-                        getName,
-                        chatName = chatName,
-                        type = typeOfFile,
-                        text = "$currentTimestamp/$subFile",
-                        sendName = userName
-                    )
+                    val builder = AlertDialog.Builder(this)
+                    builder.setTitle("Отправить файл?")
+                    builder.setPositiveButton("Да") { _, _ ->
+                        chatsPackage.putFile(filePath, chatName, currentTimestamp)
+                        chatsPackage.sendMessage(
+                            sendName,
+                            getName,
+                            chatName = chatName,
+                            type = typeOfFile,
+                            text = "$currentTimestamp/$subFile",
+                            sendName = userName
+                        )
+                    }
+                    builder.setNeutralButton("Отмена") { _, _ ->
+
+                    }
+                    val alertDialog = builder.create()
+                    alertDialog.show()
+
+                    val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    with(autoBtn) {
+                        setTextColor(Color.BLACK)
+                    }
+                    val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+                    with(userBtn) {
+                        setTextColor(Color.BLACK)
+
+                    }
+
+
                 }
             }
 
@@ -297,7 +318,7 @@ class IndividualChatActivity : AppCompatActivity() {
                 for (i in dataSnapshot.children) {
                     if (lastTimeMessage < i.key!!.toLong()) {
                         lastTimeMessage = i.key!!.toLong()
-                       //Log.d("timestamp", i.key!!.toLong().toString())
+                        //Log.d("timestamp", i.key!!.toLong().toString())
 
                         val dt =
                             SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
