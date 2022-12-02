@@ -47,6 +47,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 
+
 class IndividualChatActivity : AppCompatActivity() {
 
     private var typeOfFile = ""
@@ -58,6 +59,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private var userName = ""
 
     //@SuppressLint("MissingInflatedId")
+    @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -107,9 +109,40 @@ class IndividualChatActivity : AppCompatActivity() {
             if (bottom < oldBottom) {
                 rcView.post {
                     try {
-                        rcView.scrollToPosition(
-                            rcView.adapter!!.itemCount - 1
-                        )
+                        rcView.scrollToPosition((rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()+2)
+                        //rcView.scrollToPosition((rcView.layoutManager as LinearLayoutManager).findFirstVisibleItemPosition()+2)
+                        //rcView.scrollToPosition((rcView.layoutManager as LinearLayoutManager).findLastCompletelyVisibleItemPosition())
+                        /*val child = (rcView.layoutManager as LinearLayoutManager).focusedChild
+                        val pos = rcView.getChildAdapterPosition(child!!)
+                        rcView.scrollToPosition(pos)*/
+                        //rcView.scrollToPosition(bottom-oldBottom)
+                        //RecyclerView.ItemDecoration
+                        //rcView.scrollToPosition(rcView.itemDecorationCount - (bottom+oldBottom))
+                        //rcView.scrollToPosition(oldBottom-1)
+                        //val topChild: View = rcView.getChildAt(1)
+                        //val topChildPosition: Int = rcView.getChildAdapterPosition(topChild)
+                        //rcView.scrollToPosition(
+                          //  topChildPosition)
+                        /*if (rcView.verticalScrollbarPosition==rcView.adapter!!.itemCount){
+                            rcView.scrollToPosition(
+                                    rcView.adapter!!.itemCount - 1)
+                        }
+                        else{
+                            rcView.scrollToPosition(
+                                rcView.verticalScrollbarPosition- 5)
+                        }*/
+                        /*rcView.scrollToPosition(
+                            if (rcView.verticalScrollbarPosition!=rcView.adapter!!.itemCount){
+                                rcView.adapter!!.itemCount - 1
+                            //rcView.adapter!!.itemCount - 1
+                           // rcView.addOnScrollListener{
+                                //rcView.verticalScrollbarPosition
+                            }
+                            else{
+
+                            }
+                            //rcView.verticalScrollbarPosition - 5
+                        )*/
                     } catch (e: NullPointerException) {
 
                     }

@@ -13,6 +13,5 @@
         android:minHeight="48dp"
         android:showText="false"
         android:splitTrack="false"
-        android:textAlignment="viewEnd"
-        app:trackTint="@color/black" />
+        android:textAlignment="viewEnd" />
 </RelativeLayout>
