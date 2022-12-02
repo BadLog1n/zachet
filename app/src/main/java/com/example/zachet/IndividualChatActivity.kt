@@ -301,7 +301,7 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
     var lastTimeMessage: Long = 0
-
+    var isFirstLoad = true
     private fun addPostEventListener(sendUser: String, getName: String) {
         val chatName =
             if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
@@ -392,7 +392,11 @@ class IndividualChatActivity : AppCompatActivity() {
                         }
                     }
                     rcView.adapter?.notifyDataSetChanged()
-                    rcView.scrollToPosition(adapter.itemCount - 1)
+                    if (isFirstLoad && i.toString() == dataSnapshot.children.last().toString())
+                    {
+                        rcView.scrollToPosition(adapter.itemCount - 1)
+                        isFirstLoad = false
+                    }
                 }
             }
 
