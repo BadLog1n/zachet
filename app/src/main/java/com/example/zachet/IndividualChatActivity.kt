@@ -47,6 +47,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 
+
 class IndividualChatActivity : AppCompatActivity() {
 
     private var typeOfFile = ""
@@ -56,6 +57,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private val storagePermissionCode = 0
     private val chatsPackage = ChatsPackage()
     private var userName = ""
+
 
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -107,9 +109,7 @@ class IndividualChatActivity : AppCompatActivity() {
             if (bottom < oldBottom) {
                 rcView.post {
                     try {
-                        rcView.smoothScrollToPosition(
-                            rcView.adapter!!.itemCount - 1
-                        )
+                        rcView.scrollToPosition((rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() + 2)
                     } catch (e: NullPointerException) {
                     }
                 }
@@ -391,8 +391,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         }
                     }
                     rcView.adapter?.notifyDataSetChanged()
-                    if (isFirstLoad && i.toString() == dataSnapshot.children.last().toString())
-                    {
+                    if (isFirstLoad && i.toString() == dataSnapshot.children.last().toString()) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                         isFirstLoad = false
                     }
