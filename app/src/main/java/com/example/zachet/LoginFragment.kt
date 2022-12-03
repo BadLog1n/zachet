@@ -31,6 +31,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
+        activity?.findViewById<DrawerLayout>(R.id.drawer)
+            ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         sharedPref?.edit()?.putBoolean(getString(R.string.checkLogin), false)?.apply()
 
         //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)

@@ -32,9 +32,6 @@ class LogoutFragment : BottomSheetDialogFragment() {
             sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
             findNavController().navigate(R.id.loginFragment)
             dismiss()
-            Thread.sleep(250)
-            exitProcess(0)
-
         }
         view.findViewById<Button>(R.id.bs_cancelButton).setOnClickListener {
             view.findViewById<FrameLayout>(R.id.standard_bottom_sheet).apply {
