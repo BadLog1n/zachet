@@ -1,4 +1,4 @@
-package com.example.zachet
+package com.oneseed.zachet
 
 import android.content.SharedPreferences
 import android.os.Bundle

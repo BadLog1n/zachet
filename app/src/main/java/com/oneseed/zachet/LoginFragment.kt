@@ -1,4 +1,4 @@
-package com.example.zachet
+package com.oneseed.zachet
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE

@@ -1,4 +1,4 @@
-package com.example.zachet
+package com.oneseed.zachet
 
 import android.annotation.SuppressLint
 import android.content.Context
@@ -9,7 +9,7 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.zachet.databinding.FragmentScheduleBinding
+import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.xwray.groupie.GroupAdapter

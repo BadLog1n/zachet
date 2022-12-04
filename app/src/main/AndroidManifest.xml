@@ -25,16 +25,16 @@
         
 
         <activity
-            android:name="com.example.zachet.ImageActivity"
+            android:name="com.oneseed.zachet.ImageActivity"
             android:exported="false"
             android:theme="@style/Theme.UniversitySystem" />
         <activity
-            android:name="com.example.zachet.IndividualChatActivity"
+            android:name="com.oneseed.zachet.IndividualChatActivity"
             android:exported="false"
             android:windowSoftInputMode="stateVisible"
             android:theme="@style/Theme.UniversitySystem.ActionBar"/>
         <activity
-            android:name="com.example.zachet.MainActivity"
+            android:name="com.oneseed.zachet.MainActivity"
             android:exported="true"
             android:theme="@style/Theme.UniversitySystem"
             >
@@ -50,7 +50,7 @@
             android:resource="@array/preloaded_fonts" />
         <meta-data
             android:name="firebase_crashlytics_collection_enabled"
-            android:value="true" />
+            android:value="false" />
     </application>
 
 </manifest>

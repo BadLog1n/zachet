@@ -1,4 +1,4 @@
-package com.example.zachet
+package com.oneseed.zachet
 
 
 
@@ -12,7 +12,6 @@ import android.widget.Button
 import android.widget.FrameLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
-import kotlin.system.exitProcess
 
 
 class LogoutFragment : BottomSheetDialogFragment() {

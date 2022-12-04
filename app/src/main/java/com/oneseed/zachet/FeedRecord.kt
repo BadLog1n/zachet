@@ -1,4 +1,4 @@
-package com.example.zachet
+package com.oneseed.zachet
 
 data class FeedRecord(
     val author: String,
