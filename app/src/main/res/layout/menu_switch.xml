@@ -9,6 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:cursorVisible="true"
+        android:enabled="false"
         android:minWidth="48dp"
         android:minHeight="48dp"
         android:showText="false"

@@ -4,7 +4,7 @@
     "type": "APK",
     "kind": "Directory"
   },
-  "applicationId": "com.example.zachet",
+  "applicationId": "com.oneseed.zachet",
   "variantName": "release",
   "elements": [
     {
@@ -12,7 +12,7 @@
       "filters": [],
       "attributes": [],
       "versionCode": 7,
-      "versionName": "1.5.2",
+      "versionName": "1.5.3",
       "outputFile": "app-release.apk"
     }
   ],
