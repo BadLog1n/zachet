@@ -35,6 +35,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             recordTv.text = feedItem.record_text
             record.text = feedItem.record
             authorIdChat.text = feedItem.authorIdChat
+            replyToMsgBtn.visibility = View.VISIBLE
+
             userId = feedItem.userId
             sponsoredTv.text = "Спонсировано"
             if (feedItem.isSponsored) {
