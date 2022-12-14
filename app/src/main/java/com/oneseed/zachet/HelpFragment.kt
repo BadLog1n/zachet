@@ -43,7 +43,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         view.findViewById<Button>(R.id.telegramBtn).setOnClickListener {
             val openTelegram =
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/+R5UnUTwVUEI1MjVi"))
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/zacheet"))
             startActivity(openTelegram)
         }
 
