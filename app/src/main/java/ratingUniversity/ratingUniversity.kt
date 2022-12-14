@@ -7,11 +7,20 @@ import org.json.JSONException
 
 class RatingUniversity {
 
-    fun gradesCollector(jsonArray: JSONArray): ArrayList<ArrayList<String>> {
-        val globalArrayToReturn = arrayListOf<ArrayList<String>>()
+    fun gradesCollector(jsonArray: JSONArray): ArrayList<MutableMap<String, String>> {
+        val globalArrayToReturn = arrayListOf<MutableMap<String, String>>()
 
         for (i in 0 until jsonArray.length()) {
-            val localArray = arrayListOf<String>()
+            //val localArray = arrayListOf<String>()
+            val localArray = mutableMapOf(
+                "getSubjectName" to "",
+                "ratingScore" to "",
+                "subjectType" to "",
+                "rating" to "",
+                "tutorName" to "",
+                "tutorId" to "",
+            )
+
 
             // ID
             val subjectType = getSubjectType(jsonArray, i)
@@ -31,18 +40,18 @@ class RatingUniversity {
             }
             val additional = getDopolPbZed(jsonArray, i)
 
-            for (item in additional){
+            for (item in additional) {
                 ratingScore += item.toInt()
                 rating += "$item "
             }
 
             rating.dropLast(1)
-            localArray.add(getSubjectName)
-            localArray.add(ratingScore.toString())
-            localArray.add(subjectType)
-            localArray.add(rating)
-            localArray.add(tutorName)
-            localArray.add(tutorId)
+            localArray["getSubjectName"] = getSubjectName
+            localArray["ratingScore"] = ratingScore.toString()
+            localArray["subjectType"] = subjectType
+            localArray["rating"] = rating
+            localArray["tutorName"] = tutorName
+            localArray["tutorId"] = tutorId
             globalArrayToReturn.add(localArray)
         }
         return globalArrayToReturn

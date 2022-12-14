@@ -216,17 +216,17 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                 for (item in listOfGrades) {
                                     rcAdapter.addSubjectGrades(
                                         SubjectGrades(
-                                            item[0],
-                                            item[1].toInt(),
-                                            item[2],
-                                            item[3].split(" ").toList(),
-                                            item[5],
-                                            item[4]
+                                            item["getSubjectName"].toString(),
+                                            item["ratingScore"].toString().toInt(),
+                                            item["subjectType"].toString(),
+                                            item["rating"].toString().split(" ").toList(),
+                                            item["tutorName"].toString(),
+                                            item["tutorId"].toString(),
                                         )
                                     )
-                                    allGrades += "${item[1]} "
-                                    if (result + 1 == ls.toInt() && item[1] !in actualGrades && actualGrades[0] != "") {
-                                        Toast.makeText(requireContext(), "Обновлены баллы в ${item[0]}", Toast.LENGTH_SHORT).show()
+                                    allGrades += "${item["ratingScore"].toString().toInt()} "
+                                    if (result + 1 == ls.toInt() && item["ratingScore"].toString() !in actualGrades && actualGrades[0] != "") {
+                                        Toast.makeText(requireContext(), "Обновлены баллы в ${item["getSubjectName"].toString()}", Toast.LENGTH_SHORT).show()
                                     }
 
 
@@ -278,7 +278,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         semester: String,
         form: String,
         status: String
-    ): ArrayList<ArrayList<String>>? {
+    ): ArrayList<MutableMap<String, String>>? {
         try {
             val document: String
             val sitePath =
