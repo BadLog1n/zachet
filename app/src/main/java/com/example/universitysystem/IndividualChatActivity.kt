@@ -90,19 +90,23 @@ class IndividualChatActivity : AppCompatActivity() {
 
 
         findViewById<RecyclerView>(R.id.messagesRcView).addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+            var lastVisPosition = -1
             if (bottom < oldBottom) {
+                lastVisPosition = (rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
                 rcView.post {
                     try {
-                    rcView.scrollToPosition(
-                        rcView.adapter!!.itemCount - 1
-                    )}
-                    catch (e: NullPointerException) {
-                        
+                        rcView.smoothScrollToPosition((rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()-1)
+                            /*rcView.smoothScrollToPosition(
+                            rcView.adapter!!.itemCount - 1
+                        )*/
+
+                    } catch (_: NullPointerException) {
                     }
                 }
+                lastVisPosition = (rcView.layoutManager as LinearLayoutManager).findLastVisibleItemPosition()
             }
-        }
 
+        }
 
         findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
             try {
