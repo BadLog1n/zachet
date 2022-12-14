@@ -50,6 +50,11 @@
     <string-array name="languages">
         <item>Русский</item>
     </string-array>
+    <string-array name="fileFormat">
+        <item>Отмена</item>
+        <item>Изображение</item>
+        <item>Файл</item>
+    </string-array>
     <string name="high_week">Верхняя</string>-
     <string name="low_week">Нижняя</string>
     <string-array name="sem_nums">

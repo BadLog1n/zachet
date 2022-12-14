@@ -116,80 +116,88 @@ class IndividualChatActivity : AppCompatActivity() {
             }
         }
 
+        val spinner = this.findViewById<Spinner>(R.id.spinner2)
 
-        findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
-            try {
-                if ((ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.READ_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
-                        this,
-                        Manifest.permission.WRITE_EXTERNAL_STORAGE
-                    ) != PackageManager.PERMISSION_GRANTED))
-                ) {
-                    ActivityCompat.requestPermissions(
-                        this,
-                        arrayOf(
-                            Manifest.permission.READ_EXTERNAL_STORAGE,
-                            Manifest.permission.WRITE_EXTERNAL_STORAGE
-                        ),
-                        storagePermissionCode
-                    )
-                } else {
+        spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onNothingSelected(parent: AdapterView<*>?) {
 
-                    //Toast.makeText(this, "Здесь будет диалог для выбора вложения", Toast.LENGTH_SHORT).show()
-                    val builder = AlertDialog.Builder(this)
-                    builder.setPositiveButton("Фото") { _, _ ->
+            }
 
-                        pickFileOrPhoto(false)
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
 
-                    }
-                    builder.setNeutralButton("Файл") { _, _ ->
-                        try {
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                                if (!isExternalStorageManager()) {
-                                    Toast.makeText(
-                                        this,
-                                        "Вам необходимо выдать разрешение на работу с памятью в настройках," +
-                                                "чтобы загружать файлы",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                } else {
-                                    pickFileOrPhoto(true)
-                                }
-                            }
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                this, "Нет доступа к памяти", Toast.LENGTH_SHORT
-                            ).show()
+                val spinnerElement = spinner.selectedItem.toString()
 
+                if (spinnerElement == "Изображение") {
+                    try {
+                        if ((ContextCompat.checkSelfPermission(
+                                this@IndividualChatActivity,
+                                Manifest.permission.READ_EXTERNAL_STORAGE
+                            ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
+                                this@IndividualChatActivity,
+                                Manifest.permission.WRITE_EXTERNAL_STORAGE
+                            ) != PackageManager.PERMISSION_GRANTED))
+                        ) {
+                            ActivityCompat.requestPermissions(
+                                this@IndividualChatActivity,
+                                arrayOf(
+                                    Manifest.permission.READ_EXTERNAL_STORAGE,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ),
+                                storagePermissionCode
+                            )
+                        } else {
+                            pickFileOrPhoto(false)
                         }
-
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this@IndividualChatActivity,
+                            "Вам необходимо выдать разрешение на работу с памятью в настройках, " +
+                                    "чтобы загружать изображения",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
-                    val alertDialog = builder.create()
-                    alertDialog.show()
 
-                    val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                    with(autoBtn) {
-                        setTextColor(Color.BLACK)
-                    }
-                    val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-                    with(userBtn) {
-                        setTextColor(Color.BLACK)
+                } else if (spinnerElement == "Файл") {
+                    try {
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                            if (!isExternalStorageManager()) {
+                                Toast.makeText(
+                                    this@IndividualChatActivity,
+                                    "Вам необходимо выдать разрешение на работу с памятью в настройках," +
+                                            "чтобы загружать файлы",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                pickFileOrPhoto(true)
+                            }
+                        }
+                    } catch (e: Exception) {
+                        Toast.makeText(
+                            this@IndividualChatActivity, "Нет доступа к памяти", Toast.LENGTH_SHORT
+                        ).show()
+
                     }
                 }
-            } catch (e: Exception) {
-                Toast.makeText(
-                    this, "Нет доступа к памяти", Toast.LENGTH_SHORT
-                ).show()
+
             }
+
+        }
+
+        findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
 
 
         }
-        findViewById<ImageButton>(R.id.clipButton).setOnLongClickListener {
+
+        spinner.setOnLongClickListener {
             pickFileOrPhoto(false)
             return@setOnLongClickListener true
         }
+
         addPostEventListener(sendName, getName)
 
         findViewById<ImageButton>(R.id.sendButton).setOnClickListener {

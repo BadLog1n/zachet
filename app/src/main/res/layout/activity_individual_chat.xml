@@ -37,6 +37,7 @@
         android:layout_marginEnd="33dp"
         android:layout_marginBottom="16dp"
         android:background="@color/grey_mes_edittext"
+        android:clickable="false"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/sendButton"
         app:layout_constraintHorizontal_bias="1.0"
@@ -44,6 +45,17 @@
         app:layout_constraintTop_toTopOf="@+id/messageEditText"
         app:srcCompat="@drawable/ic___icon__paper_clip_"
         app:tint="@color/light_grey_text" />
+
+    <Spinner
+        android:id="@+id/spinner2"
+        android:layout_width="41dp"
+        android:layout_height="24dp"
+
+        android:entries="@array/fileFormat"
+        app:layout_constraintBottom_toBottomOf="@+id/clipButton"
+        app:layout_constraintEnd_toEndOf="@+id/clipButton"
+        app:layout_constraintStart_toStartOf="@+id/clipButton"
+        app:layout_constraintTop_toTopOf="@+id/clipButton" />
 
     <ImageButton
         android:id="@+id/sendButton"
