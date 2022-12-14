@@ -18,9 +18,9 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
-import com.oneseed.zachet.databinding.FragmentGradesBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.oneseed.zachet.databinding.FragmentGradesBinding
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
@@ -73,9 +73,12 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         recyclerView.adapter = rcAdapter
         progressBar.visibility = View.VISIBLE
 
-        val loginWeb = sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
-        val passwordWeb = sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
-        val strSemester = sharedPrefGrades?.getString(getString(R.string.listOfSemester), "").toString()
+        val loginWeb =
+            sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
+        val passwordWeb =
+            sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
+        val strSemester =
+            sharedPrefGrades?.getString(getString(R.string.listOfSemester), "").toString()
 
         if (loginWeb != "" && passwordWeb != "" && strSemester != "") {
             val semester = strSemester.split(",").toTypedArray()
@@ -119,13 +122,13 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
-        val versionCurrent = sharedPrefSetting?.getString(getString(R.string.versionShared), "").toString()
+        val versionCurrent =
+            sharedPrefSetting?.getString(getString(R.string.versionShared), "").toString()
 
 
         database = FirebaseDatabase.getInstance().getReference("version")
         val versionName = getAppVersion(requireContext())
-        if (versionCurrent < versionName && versionCurrent != "")
-        {
+        if (versionCurrent < versionName && versionCurrent != "") {
             val builder = AlertDialog.Builder(
                 requireActivity()
             )
@@ -191,8 +194,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
                     GlobalScope.launch {
-                        val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "").toString()
-                        val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "").toString()
+                        val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
+                            .toString()
+                        val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
+                            .toString()
                         val ls = sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0)
 
                         val result =
@@ -201,9 +206,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         val status = if (result + 1 >= ls!!.toInt()) "false" else "true"
 
                         val semester = result.toString().padStart(9, '0')
-
+                        val actualGrades = sharedPrefGrades.getString(getString(R.string.actualGrades), "")
+                            .toString().split(" ").toList()
                         val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
                         withContext(Dispatchers.Main) {
+                            var allGrades = ""
                             if (listOfGrades != null && listOfGrades.size != 0) {
                                 rcAdapter.clearRecords()
                                 for (item in listOfGrades) {
@@ -217,7 +224,18 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                             item[4]
                                         )
                                     )
+                                    allGrades += "${item[1]} "
+                                    if (result + 1 == ls.toInt() && item[1] !in actualGrades && actualGrades[0] != "") {
+                                        Toast.makeText(requireContext(), "Обновлены баллы в ${item[0]}", Toast.LENGTH_SHORT).show()
+                                    }
+
+
                                 }
+                                if (result + 1 == ls.toInt()){
+                                    sharedPrefGrades.edit()
+                                        ?.putString(getString(R.string.actualGrades), allGrades)?.apply()
+                                }
+
                                 progressBar.visibility = View.GONE
                                 recyclerView.visibility = View.VISIBLE
                             }

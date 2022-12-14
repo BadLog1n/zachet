@@ -110,6 +110,11 @@ UPDATE - версия 1.5.3 \n
     <string name="savePassword">save_password</string>
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
+    <string name="actualGrades">actualGrades</string> собирает баллы за последний семестр
+
+
+
+
     <string name="loadFromServerWeb">Загрузить с сервера</string>
     <string name="saveOnServerWeb">Сохранить на сервере</string>
     <string name="email">Электронная почта</string>
