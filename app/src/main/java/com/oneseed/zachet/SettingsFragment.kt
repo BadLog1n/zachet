@@ -125,10 +125,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         view.findViewById<Button>(R.id.saveSettingsBtn).setOnClickListener {
+
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Сохранить изменения?")
             builder.setPositiveButton("Да") { _, _ ->
                 database.child("name").setValue(nameEditText.text.toString())
+                database.child("login").setValue(loginEditText.text.toString())
+                FirebaseDatabase.getInstance().getReference("login/badlogin").setValue(loginEditText.text.toString())
+                TODO("Добваить ссылку на логин выше")
+                TODO("Добваить проверку на существующий логин")
                 database.child("surname").setValue(surnameEditText.text.toString())
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
                         .matches()

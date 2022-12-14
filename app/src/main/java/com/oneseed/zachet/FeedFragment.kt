@@ -2,7 +2,6 @@ package com.oneseed.zachet
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -11,8 +10,10 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.oneseed.zachet.databinding.FragmentFeedBinding
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.databinding.FragmentFeedBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -22,17 +23,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private var rcAdapter = FeedAdapter()
     private lateinit var binding: FragmentFeedBinding
     private lateinit var database: DatabaseReference
-    private lateinit var author: String
     private var lastPost: Long = 0
-    private var firstLoad = true
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-            "Settings",
-            Context.MODE_PRIVATE
-        )
-        author = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFeedBinding.inflate(layoutInflater)
         val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
@@ -56,7 +50,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         catch (e: NullPointerException) {
 
         }*/
-        fun addRecordLayoutGone(){
+        fun addRecordLayoutGone() {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
         }
@@ -87,7 +81,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
 
 
-
     }
 
     var isFirstLoad = true
@@ -98,7 +91,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 for (item in dataSnapshot.children) {
                     val postId = item.key.toString()
                     if (lastPost < postId.toLong()) {
-                        val postAuthor = dataSnapshot.child(postId).child("author").value.toString()
+                        val postAuthor = item.child("author").value.toString()
 
                         database = FirebaseDatabase.getInstance().getReference("users/$postAuthor")
                         val requestToDatabase = database.get()
@@ -110,14 +103,18 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     "surname"
                                 ).value.toString() else ""
                             val displayName = "$name $surname"
+                            val displayLogin = itName.child("login").value.toString()
 
                             val dateTime =
                                 SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(postId.toLong()))
                                     .toString()
-                            val text = dataSnapshot.child(postId).child("text").value.toString()
+                            val text = item.child("text").value.toString()
                             val sponsored =
-                                dataSnapshot.child(postId).child("sponsored").value.toString()
+                                item.child("sponsored").value.toString()
                                     .toBoolean()
+                            val user = Firebase.auth.currentUser
+
+                            val uid = user?.uid
                             rcAdapter.addFeedRecord(
                                 FeedRecord(
                                     displayName,
@@ -126,20 +123,22 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                     text,
                                     sponsored,
                                     item.key.toString(),
-                                    author
+                                    uid.toString(),
+                                    displayLogin
                                 )
                             )
                             lastPost = postId.toLong()
 
 
-                            if (isFirstLoad && item.toString() == dataSnapshot.children.last().toString())
-                            {
+                            if (isFirstLoad && item.toString() == dataSnapshot.children.last()
+                                    .toString()
+                            ) {
                                 val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
                                 feedRc.adapter = rcAdapter
                                 feedRc.scrollToPosition(rcAdapter.itemCount - 1)
                                 isFirstLoad = false
                             }
-                            
+
 
                         }
                     }
@@ -166,11 +165,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private fun sendPost(
         text: String,
     ) {
+        val user = Firebase.auth.currentUser
+
+        val uid = user?.uid
         database = FirebaseDatabase.getInstance().getReference("feed")
         val message = mapOf(
             "text" to text,
             "sponsored" to false,
-            "author" to author,
+            "author" to uid.toString(),
         )
         val currentTimestamp = System.currentTimeMillis().toString()
         database.child(currentTimestamp).updateChildren(message)

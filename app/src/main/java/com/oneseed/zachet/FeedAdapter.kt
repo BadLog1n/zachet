@@ -30,7 +30,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         @SuppressLint("SetTextI18n")
         fun bind(feedItem: FeedRecord) = with(binding) {
 
-            whoPostedTv.text = "${feedItem.author} (${feedItem.authorIdChat})"
+            whoPostedTv.text = "${feedItem.author} (${feedItem.displayLogin})"
             timeOfPostTv.text = feedItem.time
             recordTv.text = feedItem.record_text
             record.text = feedItem.record

@@ -7,5 +7,6 @@ data class FeedRecord(
     val record_text: String,
     val isSponsored: Boolean,
     val record: String,
-    val userId: String
+    val userId: String,
+    val displayLogin: String
 )

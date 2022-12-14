@@ -26,8 +26,8 @@ class RatingUniversity {
             val subjectType = getSubjectType(jsonArray, i)
             val getSubjectName = getSubjectName(jsonArray, i)
             val tutorArr = getTutorNameAndID(jsonArray, i)
-            val tutorName = tutorArr[0]
-            val tutorId = tutorArr[1]
+            val tutorName = tutorArr[1]
+            val tutorId = tutorArr[0]
             var rating = getRating(jsonArray, i)
             while (rating.length < 16) {
                 rating += "0 0 "
