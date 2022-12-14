@@ -113,6 +113,8 @@ UPDATE - версия 1.5.3 \n
     <string name="checkLogin">checkLogin</string> проверка авторизации (true - если авторизован)
     <string name="checkSettings">check_settings</string> скорее всего, как и сверху
     <string name="savePassword">save_password</string>
+    <string name="uid">uid</string>
+    <string name="emailShared">email</string>
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
     <string name="actualGrades">actualGrades</string> собирает баллы за последний семестр
