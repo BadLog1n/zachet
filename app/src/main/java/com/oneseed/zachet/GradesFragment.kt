@@ -206,14 +206,15 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         val status = if (result + 1 >= ls!!.toInt()) "false" else "true"
 
                         val semester = result.toString().padStart(9, '0')
-                        val actualGrades = sharedPrefGrades.getString(getString(R.string.actualGrades), "")
-                            .toString().split(" ").toList()
+                        val actualGrades =
+                            sharedPrefGrades.getString(getString(R.string.actualGrades), "")
+                                .toString().split(" ").toList()
                         val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
                         withContext(Dispatchers.Main) {
                             var allGrades = ""
                             if (listOfGrades != null && listOfGrades.size != 0) {
                                 rcAdapter.clearRecords()
-                                for (item in listOfGrades) {
+                                listOfGrades.forEachIndexed { index, item ->
                                     rcAdapter.addSubjectGrades(
                                         SubjectGrades(
                                             item["getSubjectName"].toString(),
@@ -225,15 +226,20 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                         )
                                     )
                                     allGrades += "${item["ratingScore"].toString().toInt()} "
-                                    if (result + 1 == ls.toInt() && item["ratingScore"].toString() !in actualGrades && actualGrades[0] != "") {
-                                        Toast.makeText(requireContext(), "Обновлены баллы в ${item["getSubjectName"].toString()}", Toast.LENGTH_SHORT).show()
+                                    if (result + 1 == ls.toInt() && item["ratingScore"].toString() != actualGrades[index] && actualGrades[0] != "") {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Обновлены баллы в ${item["getSubjectName"].toString()}",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
                                     }
 
 
                                 }
-                                if (result + 1 == ls.toInt()){
+                                if (result + 1 == ls.toInt()) {
                                     sharedPrefGrades.edit()
-                                        ?.putString(getString(R.string.actualGrades), allGrades)?.apply()
+                                        ?.putString(getString(R.string.actualGrades), allGrades)
+                                        ?.apply()
                                 }
 
                                 progressBar.visibility = View.GONE
