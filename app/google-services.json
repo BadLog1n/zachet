@@ -8,64 +8,6 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:201460069253:android:4f00db31c342fc12da0aec",
-        "android_client_info": {
-          "package_name": "com.example.messanger"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "201460069253-mirfjaihgujedf7m46ddl3fb3c44psud.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdiW8ikOfHrkDagy6Q-qbBGMYKUeqWV_k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "201460069253-mirfjaihgujedf7m46ddl3fb3c44psud.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
-        "mobilesdk_app_id": "1:201460069253:android:33f51ddd4056dde4da0aec",
-        "android_client_info": {
-          "package_name": "com.example.realtimedatabasekotlin"
-        }
-      },
-      "oauth_client": [
-        {
-          "client_id": "201460069253-mirfjaihgujedf7m46ddl3fb3c44psud.apps.googleusercontent.com",
-          "client_type": 3
-        }
-      ],
-      "api_key": [
-        {
-          "current_key": "AIzaSyDdiW8ikOfHrkDagy6Q-qbBGMYKUeqWV_k"
-        }
-      ],
-      "services": {
-        "appinvite_service": {
-          "other_platform_oauth_client": [
-            {
-              "client_id": "201460069253-mirfjaihgujedf7m46ddl3fb3c44psud.apps.googleusercontent.com",
-              "client_type": 3
-            }
-          ]
-        }
-      }
-    },
-    {
-      "client_info": {
         "mobilesdk_app_id": "1:201460069253:android:256f62fcb2fe26ecda0aec",
         "android_client_info": {
           "package_name": "com.oneseed.zachet"
