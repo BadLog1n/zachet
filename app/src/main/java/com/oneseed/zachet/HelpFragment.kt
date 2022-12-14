@@ -55,22 +55,13 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
             database = FirebaseDatabase.getInstance().getReference("version")
             val requestToDatabase = database.get()
-            var getDataMemory = true
-            if (Build.VERSION.SDK_INT >= 30) {
-                getDataMemory = ((ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.MANAGE_EXTERNAL_STORAGE
-                ) != PackageManager.PERMISSION_GRANTED))
-            }
-            if (ContextCompat.checkSelfPermission(
-                    requireContext(),
-                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                ) == PackageManager.PERMISSION_GRANTED && getDataMemory
-            ) {
                 requestToDatabase.addOnSuccessListener {
                     if (versionName < it.value.toString()) {
                         Log.d("it.value.toString()", it.value.toString())
-                        download(it.value.toString(), requireContext())
+                        val newVersion = it.value.toString()
+                        val openDownloadFile =
+                            Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$newVersion/$newVersion.apk"))
+                        startActivity(openDownloadFile)
                         Toast.makeText(
                             this@HelpFragment.context,
                             "Загрузка началась",
@@ -85,14 +76,6 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
                     }
                 }
 
-            } else {
-                Toast.makeText(
-                    requireContext(),
-                    "У приложения нет доступа к памяти. Пожалуйста," +
-                            "перейдите в настройки и дайте разрешение на работу с памятью",
-                    Toast.LENGTH_SHORT
-                ).show()
-            }
         }
     }
 
