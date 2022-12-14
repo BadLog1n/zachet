@@ -2,7 +2,6 @@ package com.oneseed.zachet
 
 import android.annotation.SuppressLint
 import android.content.*
-import android.content.Context.CLIPBOARD_SERVICE
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -12,8 +11,10 @@ import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
@@ -38,13 +39,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "Настройки"
         val loginEditText = view.findViewById<EditText>(R.id.loginText)
-        val passwordEditText = view.findViewById<EditText>(R.id.passText)
         val nameEditText = view.findViewById<EditText>(R.id.nameText)
         val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
         val loginWebInput = view.findViewById<EditText>(R.id.lWebInput)
         val passwordWebInput = view.findViewById<EditText>(R.id.pWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
-        val copyLoginBtn = view.findViewById<ImageButton>(R.id.copyLoginBtn)
         val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
@@ -69,26 +68,26 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         if (loginWebInput.text.toString() != "") {
             updateBtn.visibility = View.VISIBLE
         }
-        val un = sharedPrefSettings?.getString(getString(R.string.saveUserId), "").toString()
-        database = FirebaseDatabase.getInstance().getReference("users/$un")
+        val user = Firebase.auth.currentUser
+
+        val uid = user?.uid
+
+        database = FirebaseDatabase.getInstance().getReference("users/$uid")
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
             nameEditText.setText(if (it.child("name").value.toString() != "null") it.child("name").value.toString() else "")
             surnameEditText.setText(if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else "")
-            loginEditText.setText(it.key.toString())
-            passwordEditText.setText(it.child("password").value.toString())
-
-            emailInputText.setText(if (it.child("email").value.toString() != "null") it.child("email").value.toString() else "")
+            loginEditText.setText(it.child("login").value.toString())
+            emailInputText.setText(user?.email.toString())
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
-            passwordEditText.isEnabled = true
             emailInputText.isEnabled = true
         }
 
 
 
         switch.setOnCheckedChangeListener { _, _ ->
-            database = FirebaseDatabase.getInstance().getReference("users/$un")
+            database = FirebaseDatabase.getInstance().getReference("users/$uid")
             database.get().addOnSuccessListener {
                 val switchState: Boolean = switch.isChecked
 
@@ -117,17 +116,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         }
 
-        copyLoginBtn.setOnClickListener {
-
-            val myClipboard: ClipboardManager =
-                activity?.getSystemService(CLIPBOARD_SERVICE) as ClipboardManager
-            val myClip: ClipData? = ClipData.newPlainText("text", loginEditText.text.toString())
-            if (myClip != null) {
-                myClipboard.setPrimaryClip(myClip)
-                Toast.makeText(requireContext(), "Скопировано", Toast.LENGTH_SHORT).show()
-            }
-
-        }
 
         emailHelpBtn.setOnClickListener {
             Toast.makeText(
@@ -140,16 +128,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Сохранить изменения?")
             builder.setPositiveButton("Да") { _, _ ->
-                if (passwordEditText.text.isNotBlank() && passwordEditText.text.isNotEmpty()) {
-                    database.child("password").setValue(passwordEditText.text.toString())
-                }
                 database.child("name").setValue(nameEditText.text.toString())
                 database.child("surname").setValue(surnameEditText.text.toString())
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
                         .matches()
                 ) {
-                    database.child("email").setValue(emailInputText.text.toString())
+                    user!!.updateEmail(emailInputText.text.toString())
                 }
+                sharedPrefSettings?.edit()?.putString(getString(R.string.emailShared), emailInputText.text.toString())?.apply()
                 Toast.makeText(
                     this@SettingsFragment.context,
                     "Успешно сохранено",
@@ -223,7 +209,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                 ).show()
                                 if (saveOnServerWebCheckBox.isChecked) {
                                     database =
-                                        FirebaseDatabase.getInstance().getReference("users/$un")
+                                        FirebaseDatabase.getInstance().getReference("users/$uid")
                                     val loginPassWeb = mapOf(
                                         "loginWeb" to loginWebInputString,
                                         "passwordWeb" to passwordWebInputString,
