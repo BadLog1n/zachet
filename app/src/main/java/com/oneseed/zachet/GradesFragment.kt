@@ -226,12 +226,16 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                         )
                                     )
                                     allGrades += "${item["ratingScore"].toString().toInt()} "
-                                    if (result + 1 == ls.toInt() && item["ratingScore"].toString() != actualGrades[index] && actualGrades[0] != "") {
-                                        Toast.makeText(
-                                            requireContext(),
-                                            "Обновлены баллы в ${item["getSubjectName"].toString()}",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
+                                    if (actualGrades.size > index) {
+                                        if (result + 1 == ls.toInt()
+                                            && item["ratingScore"].toString() != actualGrades[index]
+                                            && actualGrades[0] != "") {
+                                            Toast.makeText(
+                                                requireContext(),
+                                                "Обновлены баллы в ${item["getSubjectName"].toString()}",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
                                     }
 
 
