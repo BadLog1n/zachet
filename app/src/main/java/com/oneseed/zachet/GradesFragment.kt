@@ -196,26 +196,28 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
 
-                        val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
-                            .toString()
-                        val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
-                            .toString()
-                        val ls = sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0)
+                    val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
+                        .toString()
+                    val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
+                        .toString()
+                    val ls = sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0)
 
-                        val result =
-                            spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
+                    val result =
+                        spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
 
-                        val status = if (result + 1 >= ls!!.toInt()) "false" else "true"
+                    val status = if (result + 1 >= ls!!.toInt()) "false" else "true"
 
-                        val semester = result.toString().padStart(9, '0')
-                        val actualGrades =
-                            sharedPrefGrades.getString(getString(R.string.actualGrades), "")
-                                .toString().split(" ").toList()
+                    val semester = result.toString().padStart(9, '0')
+                    val actualGrades =
+                        sharedPrefGrades.getString(getString(R.string.actualGrades), "")
+                            .toString().split(" ").toList()
                     GlobalScope.launch {
                         val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
                         val isDownWeek = async { checkIsDownWeek() }
 
-                        sharedPrefSetting?.edit()?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())?.apply()
+                        sharedPrefSetting?.edit()
+                            ?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())
+                            ?.apply()
                         withContext(Dispatchers.Main) {
                             var allGrades = ""
                             if (listOfGrades != null && listOfGrades.size != 0) {
@@ -235,7 +237,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                     if (actualGrades.size > index) {
                                         if (result + 1 == ls.toInt()
                                             && item["ratingScore"].toString() != actualGrades[index]
-                                            && actualGrades[0] != "") {
+                                            && actualGrades[0] != ""
+                                        ) {
                                             Toast.makeText(
                                                 requireContext(),
                                                 "Обновлены баллы в ${item["getSubjectName"].toString()}",
@@ -270,23 +273,27 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
     private fun checkIsDownWeek(): Boolean {
 
-        val sitePath =
-            "https://swsu.ru/rzs/"
+        try {
+            val sitePath =
+                "https://swsu.ru/rzs/"
 
-        val response: Connection.Response = Jsoup.connect(sitePath)
-            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-            .timeout(5000)
-            .execute()
+            val response: Connection.Response = Jsoup.connect(sitePath)
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .timeout(5000)
+                .execute()
 
-        val statusCode: Int = response.statusCode()
+            val statusCode: Int = response.statusCode()
 
-        val document: Document? = if (statusCode == 200) Jsoup.connect(sitePath).get() else null
+            val document: Document? = if (statusCode == 200) Jsoup.connect(sitePath).get() else null
 
-        val masthead: Element? = document?.select("div.current-week")?.select("b")?.first()
+            val masthead: Element? = document?.select("div.current-week")?.select("b")?.first()
 
-        Log.d("tag", masthead.toString())
-        return "нижняя" in masthead.toString()
+            Log.d("tag", masthead.toString())
+            return "нижняя" in masthead.toString()
+        } catch (_: Exception) {
 
+        }
+        return false
 
     }
 
