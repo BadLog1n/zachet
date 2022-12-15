@@ -57,6 +57,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private val storagePermissionCode = 0
     private val chatsPackage = ChatsPackage()
     private var userName = ""
+    private var userLogin = ""
 
 
     @SuppressLint("MissingInflatedId")
@@ -98,6 +99,7 @@ class IndividualChatActivity : AppCompatActivity() {
             val surname =
                 if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
             userName = "$name $surname"
+            userLogin = it.child("login").value.toString()
         }
 
         findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
@@ -227,7 +229,8 @@ class IndividualChatActivity : AppCompatActivity() {
             textSub.replace("\\s+".toRegex(), " "),
             "text",
             chatName,
-            userName
+            userName,
+            userLogin
         )
         if (lengthTooBig) {
             sendMessage(text.substring(200))
@@ -281,7 +284,8 @@ class IndividualChatActivity : AppCompatActivity() {
                             chatName = chatName,
                             type = typeOfFile,
                             text = "$currentTimestamp/$subFile",
-                            sendName = userName
+                            sendName = userName,
+                            userLogin = userLogin
                         )
                     }
                     builder.setNeutralButton("Отмена") { _, _ ->
@@ -330,7 +334,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         val dt =
                             SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
                                 .toString()
-                        val usernameId = i.child("username").value.toString()
+                        val usernameId = i.child("userLogin").value.toString()
                         val sendNameUser = i.child("sendName").value.toString()
                         val displaySendName =
                             if (getName.contains("group")) "$sendNameUser ($usernameId)" else ""

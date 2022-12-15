@@ -148,6 +148,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
+
+
+
         sharedPrefSetting?.edit()?.putString(getString(R.string.versionShared), versionName)
             ?.apply()
         database.get().addOnSuccessListener {
@@ -180,6 +183,19 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
             }
         }
+
+        database = FirebaseDatabase.getInstance().getReference("minVersion")
+        database.get().addOnSuccessListener {
+            if (versionName < it.value.toString()) {
+                Toast.makeText(
+                    this.context,
+                    "Чтобы пользоваться приложением, необходимо установить последнюю версию",
+                    Toast.LENGTH_LONG
+                ).show()
+                exitProcess(0)
+            }
+        }
+
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {

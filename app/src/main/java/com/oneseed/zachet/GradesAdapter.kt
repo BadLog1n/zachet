@@ -10,9 +10,9 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
-import com.oneseed.zachet.databinding.SubjectGradesItemBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.oneseed.zachet.databinding.SubjectGradesItemBinding
 
 class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>()
@@ -92,18 +92,24 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         view.findViewById<LinearLayout>(R.id.connectWTeacherLayout).setOnClickListener {
 
             val user = view.findViewById<TextView>(R.id.userChatId1_tv).text.toString()
-            database = FirebaseDatabase.getInstance().getReference("users")
-            database.child(user).get().addOnSuccessListener {
-                if (it.exists()) {
+            database = FirebaseDatabase.getInstance().getReference("login")
+            database.child(user).get().addOnSuccessListener { itLogin ->
+                val getUser = if (itLogin.exists()) {
+                    itLogin.value.toString()
+                } else {
+                    Toast.makeText(
+                        parent.context,
+                        "Преподаватель не зарегистрирован в приложении", Toast.LENGTH_SHORT
+                    ).show()
+                    return@addOnSuccessListener
+                }
+                database = FirebaseDatabase.getInstance().getReference("users")
+                database.child(user).get().addOnSuccessListener {
                     val intent = Intent(parent.context, IndividualChatActivity::class.java)
-                    intent.putExtra("getUser", user)
+                    intent.putExtra("getUser", getUser)
                     parent.context.startActivity(intent)
+                    //  view.findViewById<TextView>(R.id.connectWTeacher_tv).text = "Преподаватель не зарегистрирован в приложении"
                 }
-                else {
-                    Toast.makeText(parent.context, "Преподаватель не зарегистрирован в приложении", Toast.LENGTH_SHORT).show()
-                  //  view.findViewById<TextView>(R.id.connectWTeacher_tv).text = "Преподаватель не зарегистрирован в приложении"
-                }
-
             }
         }
         return GradesHolder(view)

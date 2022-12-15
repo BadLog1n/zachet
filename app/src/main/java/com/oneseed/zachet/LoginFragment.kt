@@ -62,7 +62,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         database = FirebaseDatabase.getInstance()
                             .getReference("users/${firebaseAuth.uid.toString()}")
                         val requestToDatabase = database.get()
-                        saveSettings(email, pw, firebaseAuth.uid.toString())
                         view.hideKeyboard()
                         activity?.findViewById<DrawerLayout>(R.id.drawer)
                             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -80,6 +79,8 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 findNavController().navigate(R.id.gradesFragment)
 
                             }
+
+                            saveSettings(email, pw, firebaseAuth.uid.toString(), it.child("login").value.toString())
 
                         }
                     } else {
@@ -150,12 +151,14 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
-    private fun saveSettings(email: String, pw: String, uid: String) {
+    private fun saveSettings(email: String, pw: String, uid: String, saveUserId: String) {
         val sharedPref: SharedPreferences? =
             activity?.getSharedPreferences("Settings", MODE_PRIVATE)
         sharedPref?.edit()?.putString(getString(R.string.emailShared), email)?.apply()
         sharedPref?.edit()?.putString(getString(R.string.savePassword), pw)?.apply()
         sharedPref?.edit()?.putString(getString(R.string.uid), uid)?.apply()
+        sharedPref?.edit()?.putString(getString(R.string.saveUserId), saveUserId)?.apply()
+
         sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), true)?.apply()
 
     }
