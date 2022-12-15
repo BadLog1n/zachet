@@ -9,12 +9,13 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
+import kotlinx.coroutines.*
 
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
@@ -23,13 +24,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private lateinit var binding: FragmentScheduleBinding
 
-
-
     @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.spinner)
         val switch = requireView().findViewById<Switch>(R.id.switchh)
-
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+            getString(R.string.settingsShared),
+            Context.MODE_PRIVATE
+        )
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.inflate(layoutInflater)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
@@ -41,10 +43,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         //timetableGet(view.findViewById<Spinner>(R.id.spinner).selectedItem.toString(), "up")
         scheduleRc.adapter = adapter
         scheduleRc.layoutManager = LinearLayoutManager(this.context)
-        val progressBar:ProgressBar = view.findViewById(R.id.scheduleProgressBar)
+        val progressBar: ProgressBar = view.findViewById(R.id.scheduleProgressBar)
         progressBar.visibility = View.VISIBLE
         //timetableGet("П")
-
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -57,20 +58,27 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 position: Int,
                 id: Long
             ) {
-                val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-                    getString(R.string.settingsShared),
-                    Context.MODE_PRIVATE
-                )
-                    val spinnerElement = spinner.selectedItem.toString()
-                    sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
-                        ?.apply()
-                    progressBar.visibility = View.VISIBLE
-                    val switchState: Boolean = switch.isChecked
-                    timetableGet(spinnerElement, switchState)
-                    progressBar.visibility = View.GONE
+
+                val spinnerElement = spinner.selectedItem.toString()
+                sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
+                    ?.apply()
+                val isDownWeek = sharedPref?.getBoolean(getString(R.string.isDownWeek), false)
+
+                progressBar.visibility = View.VISIBLE
+
+                if (isDownWeek == true) {
+                    switch.isChecked = true
                 }
+                val switchState: Boolean = switch.isChecked
+                timetableGet(spinnerElement, switchState)
+                progressBar.visibility = View.GONE
+            }
+
 
         }
+
+
+        // div with class=masthead
 
 
         switch.setOnCheckedChangeListener { _, _ ->
@@ -100,7 +108,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             )
             val groupLoad = sharedPref?.getString(getString(R.string.groupSpinner), "").toString()
 
-            if (groupLoad != ""){
+            if (groupLoad != "") {
                 groups.remove(groupLoad)
                 groups.add(0, groupLoad)
             }
@@ -126,8 +134,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private fun timetableGet(group: String, upDown: Boolean) {
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
-        var upDownText = "up"
-        if (upDown) upDownText = "down"
+        val upDownText = if (upDown) "down" else "up"
 
         val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
         val day = arrayOf("monday", "tuesday", "wednesday", "thursday", "friday", "saturday")

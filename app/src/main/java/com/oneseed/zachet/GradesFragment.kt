@@ -25,6 +25,8 @@ import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Document
+import org.jsoup.nodes.Element
 import ratingUniversity.RatingUniversity
 import java.util.*
 import java.util.concurrent.Executors
@@ -193,7 +195,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
-                    GlobalScope.launch {
+
                         val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
                             .toString()
                         val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
@@ -209,7 +211,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         val actualGrades =
                             sharedPrefGrades.getString(getString(R.string.actualGrades), "")
                                 .toString().split(" ").toList()
+                    GlobalScope.launch {
                         val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
+                        val isDownWeek = async { checkIsDownWeek() }
+
+                        sharedPrefSetting?.edit()?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())?.apply()
                         withContext(Dispatchers.Main) {
                             var allGrades = ""
                             if (listOfGrades != null && listOfGrades.size != 0) {
@@ -261,6 +267,29 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
 
     }
+
+    private fun checkIsDownWeek(): Boolean {
+
+        val sitePath =
+            "https://swsu.ru/rzs/"
+
+        val response: Connection.Response = Jsoup.connect(sitePath)
+            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+            .timeout(5000)
+            .execute()
+
+        val statusCode: Int = response.statusCode()
+
+        val document: Document? = if (statusCode == 200) Jsoup.connect(sitePath).get() else null
+
+        val masthead: Element? = document?.select("div.current-week")?.select("b")?.first()
+
+        Log.d("tag", masthead.toString())
+        return "нижняя" in masthead.toString()
+
+
+    }
+
 
     @Suppress("DEPRECATION")
     private fun getAppVersion(context: Context?): String {

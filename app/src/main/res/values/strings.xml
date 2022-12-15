@@ -112,6 +112,7 @@ UPDATE - версия 1.5.3 \n
     <string name="lastSemester">lastSemester</string> последний доступный семестр на info.swsu
     <string name="checkLogin">checkLogin</string> проверка авторизации (true - если авторизован)
     <string name="checkSettings">check_settings</string> скорее всего, как и сверху
+    <string name="isDownWeek">check_settings</string> скорее всего, как и сверху
     <string name="savePassword">save_password</string>
     <string name="uid">uid</string>
     <string name="emailShared">email</string>
