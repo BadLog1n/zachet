@@ -9,6 +9,7 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -57,7 +58,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         val linearLayoutManager =
             LinearLayoutManager(this@ChatsFragment.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
-        val userName = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
+        val userName = sharedPref?.getString(getString(R.string.uid), "").toString()
         val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
         recyclerView.layoutManager = linearLayoutManager
 
@@ -154,36 +155,46 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private fun userSearch() {
 
         val user = view?.findViewById<EditText>(R.id.searchTxtInput)?.text.toString()
-        database = FirebaseDatabase.getInstance().getReference("users")
-        database.child(user).get().addOnSuccessListener {
-            if (it.exists() && user != "") {
+        database = FirebaseDatabase.getInstance().getReference("login")
+        database.child(user).get().addOnSuccessListener { itLogin ->
+            val getUser = if (itLogin.exists() && user != "") {
+                itLogin.value.toString()
+            } else {
+                Toast.makeText(
+                    activity,
+                    "Пользователя или беседы не существует", Toast.LENGTH_SHORT).show()
+                return@addOnSuccessListener
+            }
 
-                val memberslist: Array<String> = if (it.child("members").exists())
-                    it.child("members").value.toString().split(";").toTypedArray() else (arrayOf(""))
+            database = FirebaseDatabase.getInstance().getReference("users")
+            database.child(user).get().addOnSuccessListener {
+
+
+                val membersList: Array<String> = if (it.child("members").exists())
+                    it.child("members").value.toString().split(";")
+                        .toTypedArray() else (arrayOf(""))
                 val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
                     "Settings",
                     AppCompatActivity.MODE_PRIVATE
                 )
-                val userName = sharedPref?.getString(getString(R.string.saveUserId), "").toString()
-                if (memberslist[0] != "" && userName !in memberslist) {
-                    Toast.makeText(requireContext(), "У вас нет доступа к чату", Toast.LENGTH_SHORT).show()
+                val userName = sharedPref?.getString(getString(R.string.uid), "").toString()
+                if (membersList[0] != "" && userName !in membersList) {
+                    Toast.makeText(
+                        requireContext(),
+                        "У вас нет доступа к чату",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
                     return@addOnSuccessListener
                 }
                 val intent =
                     Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
-                intent.putExtra(getString(R.string.getUser), user)
+                intent.putExtra(getString(R.string.getUser), getUser)
                 startActivity(intent)
                 view?.findViewById<EditText>(R.id.searchTxtInput)?.setText("")
                 val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as
                         InputMethodManager
                 imm.hideSoftInputFromWindow(view?.windowToken, 0)
-            } else {
-                Toast.makeText(
-                    activity,
-                    "Пользователя или беседы не существует",
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
             }
         }
     }
@@ -199,11 +210,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     val getUser = member.key.toString()
 
                     val isRead = member.child("isRead").value.toString().toBooleanStrict()
-                    val chatName =
-                        if (getUser.contains("group")) getUser else chatsPackage.getChatName(
-                            userName,
-                            getUser
-                        )
+
                     val text = "text"
                     val type = "type"
                     database = FirebaseDatabase.getInstance().getReference("users/$getUser")
@@ -211,6 +218,12 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     requestToDatabase.addOnSuccessListener { itData ->
                         val name =
                             if (itData.child("name").value.toString() != "null") itData.child("name").value.toString() else getUser
+                        val chatName =
+                            if (itData.child("group").value.toString() == "true") getUser else chatsPackage.getChatName(
+                                userName,
+                                getUser
+                            )
+                        Log.d("text", itData.child("group").value.toString())
                         val surname =
                             if (itData.child("surname").value.toString() != "null") itData.child("surname").value.toString() else ""
                         database =
