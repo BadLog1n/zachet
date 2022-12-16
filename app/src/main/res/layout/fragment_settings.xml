@@ -57,16 +57,17 @@
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
             <Button
                 android:id="@+id/changePasswordBtn"
                 android:layout_width="match_parent"
-                android:layout_height="51dp"
+                android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="20dp"
-                android:backgroundTint="@color/black"
+                android:backgroundTint="@color/blue"
                 android:text="@string/change_password"
                 android:textAllCaps="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/black"
                 android:textSize="16sp"
                 app:cornerRadius="100dp" />
 
@@ -217,6 +218,19 @@
                 android:singleLine="true"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
+            <Button
+                android:id="@+id/changeEmailBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginBottom="20dp"
+                android:backgroundTint="@color/blue"
+                android:text="@string/change_email"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                app:cornerRadius="100dp" />
 
             <TextView
                 android:id="@+id/language_sett_tv"
@@ -398,6 +412,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
                 android:layout_marginTop="10dp"
+                android:layout_marginBottom="20dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/confirm"
                 android:textAllCaps="false"
