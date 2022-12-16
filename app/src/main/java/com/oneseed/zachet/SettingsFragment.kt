@@ -122,7 +122,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             )
             builder
                 .setTitle("Изменение пароля")
-                .setView(R.layout.dialog_update)
+                .setView(R.layout.dialog_change_password)
                 .setPositiveButton("OK", null)
                 .setNeutralButton("Отмена",null)
                 .create()
