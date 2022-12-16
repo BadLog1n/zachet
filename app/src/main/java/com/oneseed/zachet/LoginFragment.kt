@@ -160,7 +160,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         sharedPref?.edit()?.putString(getString(R.string.emailShared), email)?.apply()
         sharedPref?.edit()?.putString(getString(R.string.savePassword), pw)?.apply()
         sharedPref?.edit()?.putString(getString(R.string.uid), uid)?.apply()
-        sharedPref?.edit()?.putString(getString(R.string.saveUserId), saveUserId)?.apply()
+        sharedPref?.edit()?.putString(getString(R.string.loginShared), saveUserId)?.apply()
 
         sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), true)?.apply()
 

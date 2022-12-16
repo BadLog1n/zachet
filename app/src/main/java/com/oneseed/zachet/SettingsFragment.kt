@@ -9,7 +9,6 @@ import android.view.View
 import android.widget.*
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -23,6 +22,7 @@ import ratingUniversity.InfoOfStudent
 import java.text.DateFormat
 import java.text.SimpleDateFormat
 import java.util.*
+
 
 private lateinit var database: DatabaseReference
 
@@ -81,7 +81,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             emailInputText.setText(user?.email.toString())
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
-            emailInputText.isEnabled = true
         }
 
 
@@ -124,7 +123,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 .setTitle("Изменение пароля")
                 .setView(R.layout.dialog_change_password)
                 .setPositiveButton("OK", null)
-                .setNeutralButton("Отмена",null)
+                .setNeutralButton("Отмена", null)
                 .create()
             val alertDialog = builder.create()
             alertDialog.show()
@@ -133,34 +132,36 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val cancelBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
             with(autoBtn) {
                 setTextColor(Color.BLACK)
+                setOnClickListener {
+                    val oldPassword = alertDialog.findViewById<EditText>(R.id.oldPasswordEt)
+                    val newPassword = alertDialog.findViewById<EditText>(R.id.newPasswordEt)
+                    val password =
+                        sharedPrefSettings?.getString(getString(R.string.savePassword), "null")
+                            .toString()
+                    if (password == oldPassword?.text.toString()) {
+                        sharedPrefSettings?.edit()
+                            ?.putString(
+                                getString(R.string.savePassword),
+                                newPassword?.text.toString()
+                            )
+                            ?.apply()
+                        user!!.updatePassword(newPassword?.text.toString())
+                        Toast.makeText(activity, "Успешно обновлено", Toast.LENGTH_SHORT).show()
+
+                        alertDialog.cancel()
+                    }
+                    else {
+                        Toast.makeText(activity, "Предыдущий пароль не совпадает", Toast.LENGTH_SHORT).show()
+                    }
+                }
             }
             with(cancelBtn) {
                 setTextColor(Color.BLACK)
             }
+
         }
 
-        view.findViewById<Button>(R.id.changeEmailBtn).setOnClickListener {
-            val builder = AlertDialog.Builder(
-                requireActivity()
-            )
-            builder
-                .setTitle("Изменение адреса электронной почты")
-                .setView(R.layout.dialog_change_password)
-                .setPositiveButton("OK", null)
-                .setNeutralButton("Отмена",null)
-                .create()
-            val alertDialog = builder.create()
-            alertDialog.show()
 
-            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            val cancelBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-            with(autoBtn) {
-                setTextColor(Color.BLACK)
-            }
-            with(cancelBtn) {
-                setTextColor(Color.BLACK)
-            }
-        }
 
         emailHelpBtn.setOnClickListener {
             Toast.makeText(
@@ -175,23 +176,56 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             builder.setMessage("Сохранить изменения?")
             builder.setPositiveButton("Да") { _, _ ->
                 database.child("name").setValue(nameEditText.text.toString())
-                database.child("login").setValue(loginEditText.text.toString())
-                FirebaseDatabase.getInstance().getReference("login/badlogin").setValue(loginEditText.text.toString())
-                TODO("Добваить ссылку на логин выше")
-                TODO("Добваить проверку на существующий логин")
+                val login = sharedPrefSettings?.getString(getString(R.string.loginShared), "null")
+                    .toString()
+
+                val databaseRef = FirebaseDatabase.getInstance().getReference("login")
+                    .child(loginEditText.text.toString()).get()
+                databaseRef.addOnSuccessListener { item ->
+                    if (!item.exists()) {
+                        FirebaseDatabase.getInstance().getReference("login")
+                            .child(loginEditText.text.toString()).setValue(uid)
+                        FirebaseDatabase.getInstance().getReference("login")
+                            .child(login).removeValue()
+                        database.child("login").setValue(loginEditText.text.toString())
+                        sharedPrefSettings?.edit()
+                            ?.putString(
+                                getString(R.string.loginShared),
+                                loginEditText.text.toString()
+                            )
+                            ?.apply()
+
+                    } else if (login != loginEditText.text.toString()){
+                        Toast.makeText(requireContext(), "Логин уже занят", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+
+                }
                 database.child("surname").setValue(surnameEditText.text.toString())
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
                         .matches()
                 ) {
                     user!!.updateEmail(emailInputText.text.toString())
+                    sharedPrefSettings?.edit()
+                        ?.putString(getString(R.string.emailShared), emailInputText.text.toString())
+                        ?.apply()
+                } else {
+                    Toast.makeText(
+                        requireContext(),
+                        "Ввденная почта некорректна",
+                        Toast.LENGTH_SHORT
+                    ).show()
+
+
                 }
-                sharedPrefSettings?.edit()?.putString(getString(R.string.emailShared), emailInputText.text.toString())?.apply()
+
                 Toast.makeText(
                     this@SettingsFragment.context,
-                    "Успешно сохранено",
+                    "Сохранено",
                     Toast.LENGTH_SHORT
                 ).show()
-                findNavController().navigate(R.id.gradesFragment)
+
 
             }
             builder.setNeutralButton("Нет") { _, _ ->
