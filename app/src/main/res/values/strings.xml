@@ -75,7 +75,6 @@
     <string name="updateSemester">Обновить список семестров</string>
 
 
-
     <string name="updateList">
 UPDATE - версия 1.5.3 \n
 \n
@@ -94,7 +93,6 @@ UPDATE - версия 1.5.3 \n
 - Меню не открывается при выходе из аккаунта\n
 - Из приложения не выкидывает при выходе\n
     </string>
-
 
 
     <string name="getUser">getUser</string>
@@ -118,14 +116,19 @@ UPDATE - версия 1.5.3 \n
     <string name="emailShared">email</string>
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
-    <string name="actualGrades">actualGrades</string> собирает баллы за последний семестр
-
-
+    <string name="actualGrades">actualGrades</string>
+    собирает баллы за последний семестр
 
 
     <string name="loadFromServerWeb">Загрузить с сервера</string>
     <string name="saveOnServerWeb">Сохранить на сервере</string>
     <string name="email">Электронная почта</string>
+    <string name="registration">Регистрация</string>
+    <string name="registerOffer">Нет аккаунта? Зарегистрироваться</string>
+    <string name="code">Код</string>
+    <string name="to_register">Зарегистрироваться</string>
+    <string name="change_password">Смена пароля</string>
+    <string name="change_email">Поменять адрес электронной почты</string>
 
 
 </resources>

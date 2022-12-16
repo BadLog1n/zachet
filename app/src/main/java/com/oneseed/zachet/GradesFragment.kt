@@ -13,6 +13,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -60,6 +61,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "Мои баллы"
+        activity?.findViewById<DrawerLayout>(R.id.drawer)
+            ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
             getString(R.string.settingsShared),
             Context.MODE_PRIVATE
