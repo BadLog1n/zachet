@@ -121,7 +121,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                     )
                 arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = arrayAdapter
-            } catch (e: IllegalStateException) {
+            } catch (_: IllegalStateException) {
             }
             val arrayAdapter: ArrayAdapter<String> =
                 ArrayAdapter(this.requireContext(), android.R.layout.simple_spinner_item, groups)
