@@ -116,7 +116,28 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         }
 
+        view.findViewById<Button>(R.id.changePasswordBtn).setOnClickListener {
+            val builder = AlertDialog.Builder(
+                requireActivity()
+            )
+            builder
+                .setTitle("Изменение пароля")
+                .setView(R.layout.dialog_update)
+                .setPositiveButton("OK", null)
+                .setNeutralButton("Отмена",null)
+                .create()
+            val alertDialog = builder.create()
+            alertDialog.show()
 
+            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+            val cancelBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+            with(autoBtn) {
+                setTextColor(Color.BLACK)
+            }
+            with(cancelBtn) {
+                setTextColor(Color.BLACK)
+            }
+        }
         emailHelpBtn.setOnClickListener {
             Toast.makeText(
                 requireContext(), "Почта необходима для возможности " +

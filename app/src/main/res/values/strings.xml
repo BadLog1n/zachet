@@ -140,6 +140,7 @@ UPDATE - версия 1.5.3 \n
     <string name="registerOffer">Нет аккаунта? Зарегистрироваться</string>
     <string name="code">Код</string>
     <string name="to_register">Зарегистрироваться</string>
+    <string name="change_password">Поменять пароль</string>
 
 
 </resources>
