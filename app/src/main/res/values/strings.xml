@@ -75,7 +75,6 @@
     <string name="updateSemester">Обновить список семестров</string>
 
 
-
     <string name="updateList">
 UPDATE - версия 1.5.3 \n
 \n
@@ -96,36 +95,51 @@ UPDATE - версия 1.5.3 \n
     </string>
 
 
-
     <string name="getUser">getUser</string>
 
     (Для sharedPref)
-    <string name="saveUserId">save_userid</string> логин пользователя
-    <string name="settingsShared">Settings</string> обращение к shared настройкам
-    <string name="gradesShared">Grades</string> обращение к shared баллам
-    <string name="loginWebShared">loginWeb</string> логин пользователя в info.swsu
-    <string name="passwordWebShared">passwordWeb</string> пароль пользователя в info.swsu
-    <string name="listOfSemester">listOfSemester</string> список семестров пользователя
-    <string name="versionShared">version</string> нынешняя версия приложения
-    <string name="groupOfStudent">groupOfStudent</string> группа пользователя
-    <string name="formOfStudent">formOfStudent</string> форма обучения пользователя
-    <string name="lastSemester">lastSemester</string> последний доступный семестр на info.swsu
-    <string name="checkLogin">checkLogin</string> проверка авторизации (true - если авторизован)
-    <string name="checkSettings">check_settings</string> скорее всего, как и сверху
-    <string name="isDownWeek">check_settings</string> скорее всего, как и сверху
+    <string name="saveUserId">save_userid</string>
+    логин пользователя
+    <string name="settingsShared">Settings</string>
+    обращение к shared настройкам
+    <string name="gradesShared">Grades</string>
+    обращение к shared баллам
+    <string name="loginWebShared">loginWeb</string>
+    логин пользователя в info.swsu
+    <string name="passwordWebShared">passwordWeb</string>
+    пароль пользователя в info.swsu
+    <string name="listOfSemester">listOfSemester</string>
+    список семестров пользователя
+    <string name="versionShared">version</string>
+    нынешняя версия приложения
+    <string name="groupOfStudent">groupOfStudent</string>
+    группа пользователя
+    <string name="formOfStudent">formOfStudent</string>
+    форма обучения пользователя
+    <string name="lastSemester">lastSemester</string>
+    последний доступный семестр на info.swsu
+    <string name="checkLogin">checkLogin</string>
+    проверка авторизации (true - если авторизован)
+    <string name="checkSettings">check_settings</string>
+    скорее всего, как и сверху
+    <string name="isDownWeek">check_settings</string>
+    скорее всего, как и сверху
     <string name="savePassword">save_password</string>
     <string name="uid">uid</string>
     <string name="emailShared">email</string>
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
-    <string name="actualGrades">actualGrades</string> собирает баллы за последний семестр
-
-
+    <string name="actualGrades">actualGrades</string>
+    собирает баллы за последний семестр
 
 
     <string name="loadFromServerWeb">Загрузить с сервера</string>
     <string name="saveOnServerWeb">Сохранить на сервере</string>
     <string name="email">Электронная почта</string>
+    <string name="registration">Регистрация</string>
+    <string name="registerOffer">Нет аккаунта? Зарегистрироваться</string>
+    <string name="code">Код</string>
+    <string name="to_register">Зарегистрироваться</string>
 
 
 </resources>
