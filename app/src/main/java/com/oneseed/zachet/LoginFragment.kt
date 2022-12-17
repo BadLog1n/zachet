@@ -63,8 +63,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             .getReference("users/${firebaseAuth.uid.toString()}")
                         val requestToDatabase = database.get()
                         view.hideKeyboard()
-                        activity?.findViewById<DrawerLayout>(R.id.drawer)
-                            ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+
                         //mainActionBar.show()
                         sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), false)
                             ?.apply()

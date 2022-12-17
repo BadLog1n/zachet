@@ -149,9 +149,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         Toast.makeText(activity, "Успешно обновлено", Toast.LENGTH_SHORT).show()
 
                         alertDialog.cancel()
-                    }
-                    else {
-                        Toast.makeText(activity, "Предыдущий пароль не совпадает", Toast.LENGTH_SHORT).show()
+                    } else {
+                        Toast.makeText(
+                            activity,
+                            "Предыдущий пароль не совпадает",
+                            Toast.LENGTH_SHORT
+                        ).show()
                     }
                 }
             }
@@ -178,6 +181,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 database.child("name").setValue(nameEditText.text.toString())
                 val login = sharedPrefSettings?.getString(getString(R.string.loginShared), "null")
                     .toString()
+                val loginText =
+                    loginEditText.text.toString().lowercase()
+                if (loginText.toIntOrNull()?.let { true } == true) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Логин не должен состоять только из цифр",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    return@setPositiveButton
+                }
 
                 val databaseRef = FirebaseDatabase.getInstance().getReference("login")
                     .child(loginEditText.text.toString()).get()
@@ -195,7 +208,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             )
                             ?.apply()
 
-                    } else if (login != loginEditText.text.toString()){
+                    } else if (login != loginEditText.text.toString()) {
                         Toast.makeText(requireContext(), "Логин уже занят", Toast.LENGTH_SHORT)
                             .show()
                     }
