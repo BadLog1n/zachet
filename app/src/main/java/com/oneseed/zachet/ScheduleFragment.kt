@@ -63,18 +63,22 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         swipeRefreshLayout.setOnRefreshListener {
 
+            try {
+                val spinnerElement = spinner.selectedItem.toString()
+                val switchState: Boolean = switch.isChecked
 
-            val spinnerElement = spinner.selectedItem.toString()
-            val switchState: Boolean = switch.isChecked
-
-            if (spinnerElement != "") {
-                progressBar.visibility = View.VISIBLE
-                timetableGet(spinnerElement, switchState)
-                progressBar.visibility = View.GONE
+                if (spinnerElement != "") {
+                    progressBar.visibility = View.VISIBLE
+                    timetableGet(spinnerElement, switchState)
+                    progressBar.visibility = View.GONE
+                }
+                Handler(Looper.getMainLooper()).postDelayed({
+                    swipeRefreshLayout.isRefreshing = false
+                }, 1000)
             }
-            Handler(Looper.getMainLooper()).postDelayed({
+            catch (_: Exception) {
                 swipeRefreshLayout.isRefreshing = false
-            }, 1000)
+            }
         }
 
 
@@ -156,7 +160,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 timetableGetCache(loadSchedule)
             }
         }
-    
+
 
     }
 
@@ -261,13 +265,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 scheduleArray.add(scheduleTextLocal.substringBefore(item))
                 scheduleTextLocal = scheduleTextLocal.substringAfter(item)
             } else {
-                scheduleArray.add(scheduleTextLocal.substringBeforeLast(item))
+                scheduleTextLocal = scheduleTextLocal.substringBeforeLast(item) + " "
+                scheduleArray.add(scheduleTextLocal)
             }
         }
 
         var index = 0
         for (timeCabSub in scheduleArray) {
-            if (timeCabSub.isNotEmpty()) {
+            if (timeCabSub.isNotEmpty() && timeCabSub != " ") {
                 val scheduleTextArray =
                     timeCabSub.substring(0, timeCabSub.length - 1).split(";").toTypedArray()
                 println(scheduleTextArray.size)
