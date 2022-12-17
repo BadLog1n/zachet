@@ -56,37 +56,6 @@
                 android:textSize="18sp" />
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:id="@+id/layoutRegLogin"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="12dp"
-            android:layout_marginTop="16dp"
-            android:layout_marginEnd="12dp"
-            android:minHeight="50dp"
-            android:textColorHint="@color/grey_hint"
-            android:theme="@style/EditTextStyle"
-            app:boxStrokeColor="#00FFFFFF"
-            app:boxStrokeWidth="0dp"
-            app:hintTextColor="@color/black"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutRegEmail">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/regLoginText"
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@drawable/rounded_edittext"
-                android:ems="10"
-                android:hint="@string/login"
-                android:minHeight="50dp"
-                android:textColorHint="@color/black"
-                android:textColorLink="#afdafc"
-                android:textSize="18sp" />
-        </com.google.android.material.textfield.TextInputLayout>
-
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/layoutRegPassword"
@@ -104,13 +73,13 @@
             app:layout_constraintBottom_toTopOf="@+id/layoutRegCode"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutRegLogin"
+            app:layout_constraintTop_toBottomOf="@+id/layoutRegEmail"
             app:passwordToggleEnabled="true"
             app:passwordToggleTint="@color/black">
 
             <com.google.android.material.textfield.TextInputEditText
-                android:layout_width="match_parent"
                 android:id="@+id/regPasswordText"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
@@ -136,7 +105,6 @@
             app:boxStrokeColor="#00FFFFFF"
             app:boxStrokeWidth="0dp"
             app:hintTextColor="@color/black"
-            app:layout_constraintBottom_toTopOf="@+id/forgot_passw_btn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/layoutRegPassword">
