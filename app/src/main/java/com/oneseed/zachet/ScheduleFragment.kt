@@ -67,8 +67,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             val spinnerElement = spinner.selectedItem.toString()
             val switchState: Boolean = switch.isChecked
 
-            if (spinnerElement != "")
-            {
+            if (spinnerElement != "") {
                 progressBar.visibility = View.VISIBLE
                 timetableGet(spinnerElement, switchState)
                 progressBar.visibility = View.GONE
@@ -91,7 +90,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 id: Long
             ) {
 
-                progressBar.visibility = View.VISIBLE
 
                 val spinnerElement = spinner.selectedItem.toString()
                 sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
@@ -151,14 +149,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
 
                 }
+            }
 
-                if (loadSchedule.isNotEmpty()) {
-                    progressBar.visibility = View.GONE
-                    timetableGetCache(loadSchedule)
-                }
+            if (loadSchedule.isNotEmpty()) {
+                progressBar.visibility = View.GONE
+                timetableGetCache(loadSchedule)
             }
         }
-
+    
 
     }
 
@@ -256,16 +254,15 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
         val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
-        val dayForSplit = arrayOf("tuesday;", "wednesday;", "thursday;", "friday;", "saturday;", ";")
+        val dayForSplit =
+            arrayOf("tuesday;", "wednesday;", "thursday;", "friday;", "saturday;", ";")
         for (item in dayForSplit) {
-            if (item != ";"){
             if (item != ";") {
                 scheduleArray.add(scheduleTextLocal.substringBefore(item))
                 scheduleTextLocal = scheduleTextLocal.substringAfter(item)
             } else {
                 scheduleArray.add(scheduleTextLocal.substringBeforeLast(item))
             }
-
         }
 
         var index = 0
