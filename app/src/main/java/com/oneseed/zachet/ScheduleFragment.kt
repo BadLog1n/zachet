@@ -44,8 +44,18 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         scheduleRc.adapter = adapter
         scheduleRc.layoutManager = LinearLayoutManager(this.context)
         val progressBar: ProgressBar = view.findViewById(R.id.scheduleProgressBar)
-        progressBar.visibility = View.VISIBLE
         //timetableGet("П")
+        val isDownWeekFirstLoad = sharedPref?.getBoolean(getString(R.string.isDownWeek), false)
+
+        val upDownTextFirstLoad = if (isDownWeekFirstLoad == true) "down" else "up"
+
+        val loadScheduleFirstLoad =
+            sharedPref?.getString("scheduleShared$upDownTextFirstLoad", "").toString()
+
+        if (loadScheduleFirstLoad.isNotEmpty()) {
+            timetableGetCache(loadScheduleFirstLoad)
+        }
+
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -59,19 +69,35 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 id: Long
             ) {
 
+                progressBar.visibility = View.VISIBLE
+
                 val spinnerElement = spinner.selectedItem.toString()
                 sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
                     ?.apply()
+
+
                 val isDownWeek = sharedPref?.getBoolean(getString(R.string.isDownWeek), false)
 
-                progressBar.visibility = View.VISIBLE
+                val upDownText = if (isDownWeek == true) "down" else "up"
+
+                val loadSchedule =
+                    sharedPref?.getString("scheduleShared$upDownText", "").toString()
+                val group =
+                    sharedPref?.getString("groupShared$upDownText", "").toString()
+
 
                 if (isDownWeek == true) {
                     switch.isChecked = true
                 }
                 val switchState: Boolean = switch.isChecked
-                timetableGet(spinnerElement, switchState)
-                progressBar.visibility = View.GONE
+                if (loadSchedule.isNotEmpty() && group == spinnerElement) {
+                    timetableGetCache(loadSchedule)
+                } else {
+                    progressBar.visibility = View.VISIBLE
+                    timetableGet(spinnerElement, switchState)
+                    progressBar.visibility = View.GONE
+
+                }
             }
 
 
@@ -83,10 +109,33 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         switch.setOnCheckedChangeListener { _, _ ->
             val switchState: Boolean = switch.isChecked
+            val upDownText = if (switchState) "down" else "up"
+            val loadSchedule =
+                sharedPref?.getString("scheduleShared$upDownText", "").toString()
+
             if (spinner.selectedItem != null) {
                 progressBar.visibility = View.VISIBLE
-                timetableGet(spinner.selectedItem.toString(), switchState)
-                progressBar.visibility = View.GONE
+
+
+                val group =
+                    sharedPref?.getString("groupShared$upDownText", "").toString()
+                if (loadSchedule.isNotEmpty() && group == spinner.selectedItem.toString()) {
+                    timetableGetCache(loadSchedule)
+                    progressBar.visibility = View.GONE
+
+                } else {
+                    timetableGet(spinner.selectedItem.toString(), switchState)
+                    progressBar.visibility = View.GONE
+
+
+                }
+
+            }
+            else {
+                if (loadSchedule.isNotEmpty()) {
+                    progressBar.visibility = View.GONE
+                    timetableGetCache(loadSchedule)
+                }
             }
         }
 
@@ -132,6 +181,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private var subjects = arrayListOf<ScheduleRecordItem>()
     private fun timetableGet(group: String, upDown: Boolean) {
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+            getString(R.string.settingsShared),
+            Context.MODE_PRIVATE
+        )
+        var stringOfSchedule = ""
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
         val upDownText = if (upDown) "down" else "up"
@@ -142,6 +196,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener { gets ->
             day.forEachIndexed { index, element ->
+                stringOfSchedule += "$element;"
                 for (timeCabSub in gets.child(element).children) {
                     val subject =
                         ScheduleRecordItem(
@@ -149,9 +204,17 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                             timeCabSub.child("cabName").value.toString(),
                             timeCabSub.child("subject").value.toString()
                         )
+                    stringOfSchedule += timeCabSub.key.toString() + ";"
+                    stringOfSchedule += timeCabSub.child("cabName").value.toString() + ";"
+                    stringOfSchedule += timeCabSub.child("subject").value.toString() + ";"
                     subjects.add(subject)
                 }
-                subjects = java.util.ArrayList(subjects.sortedWith(compareBy { it.time }))
+                sharedPref?.edit()?.putString("scheduleShared$upDownText", stringOfSchedule)
+                    ?.apply()
+                sharedPref?.edit()?.putString("groupShared$upDownText", group)
+                    ?.apply()
+
+                subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
                 adapter.add(WeekDayItem(rusDay[index]))
                 for (item in subjects) {
                     adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
@@ -164,6 +227,69 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
 
     }
+
+    private fun timetableGetCache(scheduleText: String) {
+        var scheduleTextLocal = scheduleText
+        scheduleTextLocal = scheduleTextLocal.substringAfter("monday;")
+
+        val scheduleArray = arrayListOf<String>()
+        val adapter = GroupAdapter<GroupieViewHolder>()
+        val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
+        val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
+        val day = arrayOf("monday", "tuesday", "wednesday", "thursday", "friday", "saturday")
+        val dayForSplit = arrayOf("tuesday;", "wednesday;", "thursday;", "friday;", "saturday;", ";")
+        for (item in dayForSplit) {
+            if (item != ";"){
+                scheduleArray.add(scheduleTextLocal.substringBefore(item))
+                scheduleTextLocal = scheduleTextLocal.substringAfter(item)
+            }
+            else {
+                scheduleArray.add(scheduleTextLocal.substringBeforeLast(item))
+            }
+
+        }
+
+        var index = 0
+        for (timeCabSub in scheduleArray) {
+            if (timeCabSub.isNotEmpty()) {
+                val scheduleTextArray =
+                    timeCabSub.substring(0, timeCabSub.length - 1).split(";").toTypedArray()
+                println(scheduleTextArray.size)
+                for (item in scheduleTextArray) {
+                    println(item)
+                }
+                //  println(scheduleTextArray[7])
+                var indexLocal = 0
+                while (indexLocal < scheduleTextArray.size) {
+                    val subject =
+                        ScheduleRecordItem(
+                            scheduleTextArray[indexLocal],
+                            scheduleTextArray[indexLocal + 1],
+                            scheduleTextArray[indexLocal + 2]
+                        )
+                    indexLocal += 3
+                    subjects.add(subject)
+                }
+                subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
+                adapter.add(WeekDayItem(rusDay[index]))
+                for (item in subjects) {
+                    adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
+                }
+                subjects.clear()
+                index += 1
+            }
+            else{
+                adapter.add(WeekDayItem(rusDay[index]))
+                index += 1
+            }
+        }
+
+        scheduleRc.adapter = adapter
+        scheduleRc.layoutManager = LinearLayoutManager(this.context)
+
+
+    }
+
 
 }
 

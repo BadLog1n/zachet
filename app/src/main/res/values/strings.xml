@@ -113,6 +113,10 @@ UPDATE - версия 1.5.3 \n
     <string name="isDownWeek">isDownWeek</string> скорее всего, как и сверху
     <string name="savePassword">save_password</string>
     <string name="uid">uid</string>
+    <string name="scheduleSharedup">scheduleUp</string>
+    <string name="scheduleShareddown">scheduleDown</string>
+    <string name="groupSharedup">groupUp</string>
+    <string name="groupShareddown">groupDown</string>
     <string name="emailShared">email</string>
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
