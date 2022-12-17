@@ -180,7 +180,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Сохранить изменения?")
             builder.setPositiveButton("Да") { _, _ ->
-                database.child("name").setValue(nameEditText.text.toString())
                 val login = sharedPrefSettings?.getString(getString(R.string.loginShared), "null")
                     .toString()
                 val loginText =
@@ -217,7 +216,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
                 }
-                database.child("surname").setValue(surnameEditText.text.toString())
+
+                val surname = surnameEditText.text.toString()
+                val name = surnameEditText.text.toString()
+                if (surname.isNotEmpty() && surname.isNotBlank()) {
+                    database.child("surname").setValue(surname)
+
+                }
+                if (name.isNotEmpty() && name.isNotBlank()) {
+                    database.child("name").setValue(name)
+
+                }
                 if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
                         .matches()
                 ) {
