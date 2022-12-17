@@ -185,6 +185,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
                     }
                 }
+                spinner.setSelection(0)
 
             }
 
