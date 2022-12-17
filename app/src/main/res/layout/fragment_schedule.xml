@@ -11,10 +11,15 @@
     android:orientation="vertical"
     tools:context=".ScheduleFragment">
 
+
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal">
+
+
+
 
         <Spinner
             android:id="@+id/spinner"
@@ -55,7 +60,9 @@
                 android:text="@string/low_week" />
 
         </LinearLayout>
+
     </LinearLayout>
+
 
     <ProgressBar
         android:id="@+id/scheduleProgressBar"
@@ -65,10 +72,15 @@
         android:layout_marginTop="10dp"
         android:visibility="gone" />
 
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scheduleRc"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_marginTop="15dp" />
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
 </LinearLayout>

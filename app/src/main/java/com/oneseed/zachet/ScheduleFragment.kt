@@ -4,11 +4,14 @@ import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.view.View
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.oneseed.zachet.databinding.FragmentScheduleBinding
@@ -28,6 +31,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.spinner)
         val switch = requireView().findViewById<Switch>(R.id.switchh)
+        val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swipe)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.settingsShared),
             Context.MODE_PRIVATE
@@ -54,6 +58,24 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         if (loadScheduleFirstLoad.isNotEmpty()) {
             timetableGetCache(loadScheduleFirstLoad)
+        }
+
+
+        swipeRefreshLayout.setOnRefreshListener {
+
+
+            val spinnerElement = spinner.selectedItem.toString()
+            val switchState: Boolean = switch.isChecked
+
+            if (spinnerElement != "")
+            {
+                progressBar.visibility = View.VISIBLE
+                timetableGet(spinnerElement, switchState)
+                progressBar.visibility = View.GONE
+            }
+            Handler(Looper.getMainLooper()).postDelayed({
+                swipeRefreshLayout.isRefreshing = false
+            }, 1000)
         }
 
 
@@ -130,8 +152,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
                 }
 
-            }
-            else {
                 if (loadSchedule.isNotEmpty()) {
                     progressBar.visibility = View.GONE
                     timetableGetCache(loadSchedule)
@@ -236,14 +256,13 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
         val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
-        val day = arrayOf("monday", "tuesday", "wednesday", "thursday", "friday", "saturday")
         val dayForSplit = arrayOf("tuesday;", "wednesday;", "thursday;", "friday;", "saturday;", ";")
         for (item in dayForSplit) {
             if (item != ";"){
+            if (item != ";") {
                 scheduleArray.add(scheduleTextLocal.substringBefore(item))
                 scheduleTextLocal = scheduleTextLocal.substringAfter(item)
-            }
-            else {
+            } else {
                 scheduleArray.add(scheduleTextLocal.substringBeforeLast(item))
             }
 
@@ -277,8 +296,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 }
                 subjects.clear()
                 index += 1
-            }
-            else{
+            } else {
                 adapter.add(WeekDayItem(rusDay[index]))
                 index += 1
             }
