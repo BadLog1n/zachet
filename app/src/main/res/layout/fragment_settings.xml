@@ -402,7 +402,7 @@
                 android:backgroundTint="@color/black"
                 android:text="@string/confirm"
                 android:textAllCaps="false"
-                android:textColor="@color/blue"
+                android:textColor="@color/white"
                 android:textSize="16sp"
                 app:cornerRadius="100dp" />
 
