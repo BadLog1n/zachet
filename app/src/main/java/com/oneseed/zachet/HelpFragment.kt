@@ -33,10 +33,15 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
 
         view.findViewById<Button>(R.id.getSupportBtn).setOnClickListener {
-            val intent =
-                Intent(this@HelpFragment.context, IndividualChatActivity::class.java)
-            intent.putExtra(getString(R.string.uid), "11")
-            startActivity(intent)
+            database = FirebaseDatabase.getInstance().getReference("login")
+            database.child("support").get().addOnSuccessListener { itLogin ->
+                val support =
+                    if (itLogin.exists()) itLogin.value.toString() else return@addOnSuccessListener
+                val intent =
+                    Intent(this@HelpFragment.context, IndividualChatActivity::class.java)
+                intent.putExtra(getString(R.string.getUser), support)
+                startActivity(intent)
+            }
         }
 
         view.findViewById<Button>(R.id.telegramBtn).setOnClickListener {
@@ -99,7 +104,10 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         var version = ""
         try {
             val pInfo = if (Build.VERSION.SDK_INT >= 33) {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
+                context?.packageManager?.getPackageInfo(
+                    requireContext().packageName,
+                    PackageManager.PackageInfoFlags.of(0)
+                )
             } else {
                 context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
