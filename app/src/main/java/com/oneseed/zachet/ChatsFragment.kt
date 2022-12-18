@@ -168,9 +168,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             }
 
             database = FirebaseDatabase.getInstance().getReference("users")
-            database.child(user).get().addOnSuccessListener {
-
-
+            database.child(getUser).get().addOnSuccessListener {
                 val membersList: Array<String> = if (it.child("members").exists())
                     it.child("members").value.toString().split(";")
                         .toTypedArray() else (arrayOf(""))
