@@ -13,8 +13,8 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.recyclerview.widget.RecyclerView
-import com.oneseed.zachet.databinding.FeedItemBinding
 import com.google.firebase.database.FirebaseDatabase
+import com.oneseed.zachet.databinding.FeedItemBinding
 
 
 private lateinit var userId: String
@@ -30,7 +30,10 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         @SuppressLint("SetTextI18n")
         fun bind(feedItem: FeedRecord) = with(binding) {
 
-            whoPostedTv.text = "${feedItem.author} (${feedItem.displayLogin})"
+
+            whoPostedTv.text =
+                if (feedItem.displayLogin != "null") "${feedItem.author} (${feedItem.displayLogin})"
+                else feedItem.author
             timeOfPostTv.text = feedItem.time
             recordTv.text = feedItem.record_text
             record.text = feedItem.record
