@@ -27,7 +27,10 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
 import chatsPackage.ChatsPackage
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.*
+import com.google.firebase.ktx.Firebase
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
 
@@ -154,6 +157,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private fun userSearch() {
 
+        Firebase.analytics.logEvent("userSearch") {
+            param("userSearch", "")
+        }
         val user = view?.findViewById<EditText>(R.id.searchTxtInput)?.text.toString()
         database = FirebaseDatabase.getInstance().getReference("login")
         database.child(user).get().addOnSuccessListener { itLogin ->
@@ -216,7 +222,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     var requestToDatabase = database.get()
                     requestToDatabase.addOnSuccessListener { itData ->
                         val name =
-                            if (itData.child("name").value.toString() != "null") itData.child("name").value.toString() else getUser
+                            if (itData.child("name").value.toString() != "null") itData.child("name").value.toString() else ""
                         val chatName =
                             if (itData.child("group").value.toString() == "true") getUser else chatsPackage.getChatName(
                                 userName,
@@ -225,6 +231,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                         Log.d("text", itData.child("group").value.toString())
                         val surname =
                             if (itData.child("surname").value.toString() != "null") itData.child("surname").value.toString() else ""
+                        val displayName: String = if (name.isNotEmpty() || surname.isNotEmpty()) "$name $surname" else itData.child("login").value.toString()
+
                         database =
                             FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
                         requestToDatabase = database.limitToLast(1).get()
@@ -243,7 +251,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     "text" -> {
                                         val chat =
                                             ChatPreview(
-                                                "$name $surname",
+                                                displayName,
                                                 dtLong,
                                                 tx,
                                                 isRead,
@@ -284,7 +292,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     "file" -> {
                                         val chat =
                                             ChatPreview(
-                                                "$name $surname",
+                                                displayName,
                                                 dtLong,
                                                 "Файл",
                                                 isRead,
@@ -322,7 +330,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     }
                                     "photo" -> {
                                         val chat = ChatPreview(
-                                            "$name $surname",
+                                            displayName,
                                             dtLong,
                                             "Изображение",
                                             isRead,
