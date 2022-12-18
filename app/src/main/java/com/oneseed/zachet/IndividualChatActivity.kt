@@ -83,11 +83,12 @@ class IndividualChatActivity : AppCompatActivity() {
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
         var requestToDatabase = database.get()
         requestToDatabase.addOnSuccessListener {
+
             val name =
-                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else getName
+                if (it.child("name").value.toString() != "null") it.child("name").value.toString() else ""
             val surname =
                 if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
-            val displayName = "$name $surname"
+            val displayName: String = if (name.isNotEmpty() || surname.isNotEmpty()) name + surname else it.child("login").value.toString()
             findViewById<TextView>(R.id.receiver_tv).text = displayName
         }
 
