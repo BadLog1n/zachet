@@ -162,7 +162,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             } else {
                 Toast.makeText(
                     activity,
-                    "Пользователя или беседы не существует", Toast.LENGTH_SHORT).show()
+                    "Пользователя или беседы не существует", Toast.LENGTH_SHORT
+                ).show()
                 return@addOnSuccessListener
             }
 
@@ -185,16 +186,16 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                         Toast.LENGTH_SHORT
                     )
                         .show()
-                    return@addOnSuccessListener
+                } else {
+                    val intent =
+                        Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
+                    intent.putExtra(getString(R.string.getUser), getUser)
+                    startActivity(intent)
+                    view?.findViewById<EditText>(R.id.searchTxtInput)?.setText("")
+                    val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as
+                            InputMethodManager
+                    imm.hideSoftInputFromWindow(view?.windowToken, 0)
                 }
-                val intent =
-                    Intent(this@ChatsFragment.context, IndividualChatActivity::class.java)
-                intent.putExtra(getString(R.string.getUser), getUser)
-                startActivity(intent)
-                view?.findViewById<EditText>(R.id.searchTxtInput)?.setText("")
-                val imm = context?.getSystemService(Context.INPUT_METHOD_SERVICE) as
-                        InputMethodManager
-                imm.hideSoftInputFromWindow(view?.windowToken, 0)
             }
         }
     }

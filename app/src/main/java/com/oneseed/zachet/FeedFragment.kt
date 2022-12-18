@@ -7,7 +7,9 @@ import android.util.Log
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.auth.ktx.auth
@@ -81,7 +83,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
 
 
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            findNavController().navigate(R.id.gradesFragment)
+        }
+
+
     }
+
 
     var isFirstLoad = true
     private fun addPostEventListener(view: View) {

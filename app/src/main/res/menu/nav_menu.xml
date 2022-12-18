@@ -28,6 +28,7 @@
     </item>
 
     <item
+        android:enabled="false"
         android:id="@+id/app_bar_switch"
         android:icon="@drawable/ic_baseline_mode_night_24"
         android:title="Темная тема"

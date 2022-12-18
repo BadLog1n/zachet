@@ -7,8 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
@@ -83,6 +85,15 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             surnameEditText.isEnabled = true
             emailInputText.isEnabled = true
 
+        }
+
+        val isTeacher = sharedPrefSettings?.getBoolean(getString(R.string.isTeacher), false)
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (isTeacher == true) {
+                findNavController().navigate(R.id.chatsFragment)
+            } else {
+                findNavController().navigate(R.id.gradesFragment)
+            }
         }
 
 
@@ -218,7 +229,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 }
 
                 val surname = surnameEditText.text.toString()
-                val name = surnameEditText.text.toString()
+                val name = nameEditText.text.toString()
                 if (surname.isNotEmpty() && surname.isNotBlank()) {
                     database.child("surname").setValue(surname)
 

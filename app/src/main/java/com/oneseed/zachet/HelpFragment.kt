@@ -1,9 +1,9 @@
 package com.oneseed.zachet
 
-import android.Manifest
 import android.app.DownloadManager
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Build
@@ -14,13 +14,17 @@ import android.view.View
 import android.widget.Button
 import android.widget.TextView
 import android.widget.Toast
-import androidx.core.content.ContextCompat
+import androidx.activity.addCallback
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import java.util.concurrent.Executors
+import kotlin.system.exitProcess
 
 class HelpFragment : Fragment(R.layout.fragment_help) {
     private val authCheck = AuthCheck()
@@ -48,33 +52,50 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         }
 
 
+        val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+            "Settings",
+            AppCompatActivity.MODE_PRIVATE
+        )
+        val isTeacher = sharedPref?.getBoolean(getString(R.string.isTeacher), false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (isTeacher == true) {
+                findNavController().navigate(R.id.chatsFragment)
+            } else {
+                findNavController().navigate(R.id.gradesFragment)
+            }
+        }
+
+
         val versionName = getAppVersion(requireContext())
         view.findViewById<TextView>(R.id.version).text = versionName
 
         Log.d("version", versionName)
         view.findViewById<Button>(R.id.checkVersionsBtn).setOnClickListener {
             database = FirebaseDatabase.getInstance().getReference("version")
-            val requestToDatabase = database.get()
-                requestToDatabase.addOnSuccessListener {
-                    if (versionName < it.value.toString()) {
-                        Log.d("it.value.toString()", it.value.toString())
-                        val newVersion = it.value.toString()
-                        val openDownloadFile =
-                            Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$newVersion/$newVersion.apk"))
-                        startActivity(openDownloadFile)
-                        Toast.makeText(
-                            this@HelpFragment.context,
-                            "Загрузка началась",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this@HelpFragment.context,
-                            "Установлена последняя версия",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
+            database.get().addOnSuccessListener {
+                if (versionName < it.value.toString()) {
+                    Log.d("it.value.toString()", it.value.toString())
+                    val newVersion = it.value.toString()
+                    val openDownloadFile =
+                        Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$newVersion/$newVersion.apk")
+                        )
+                    startActivity(openDownloadFile)
+                    Toast.makeText(
+                        this@HelpFragment.context,
+                        "Загрузка началась",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                } else {
+                    Toast.makeText(
+                        this@HelpFragment.context,
+                        "Установлена последняя версия",
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
+            }
 
         }
     }
@@ -84,9 +105,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         var version = ""
         try {
             val pInfo = if (Build.VERSION.SDK_INT >= 33) {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
-                //TODO "Добавить следующий код когда будет переведено на новую версию проекта")
-                //context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
+                context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
             } else {
                 context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
@@ -98,41 +117,4 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         return version
     }
 
-
-    private fun download(version: String, context: Context) {
-        Log.d("version", version)
-
-        val storageRef = Firebase.storage.reference
-
-        val fileRef = storageRef.child("app").child("$version.apk")
-        Log.d("version", fileRef.toString())
-        fileRef.downloadUrl
-            .addOnSuccessListener { uri ->
-                val url = uri.toString()
-                Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
-                downloadFile(context, "$version.apk", Environment.DIRECTORY_DOWNLOADS, url)
-            }.addOnFailureListener { }
-
-
-    }
-
-    /**
-     * Расширение функции загрузки фото
-     * */
-    private fun downloadFile(
-        context: Context,
-        fileName: String,
-        destinationDirectory: String?,
-        url: String?
-    ) {
-        val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
-        val uri = Uri.parse(url)
-        val request = DownloadManager.Request(uri)
-        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
-        request.setDestinationInExternalPublicDir(
-            destinationDirectory,
-            fileName
-        )
-        downloadManager.enqueue(request)
-    }
 }

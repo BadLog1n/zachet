@@ -8,7 +8,9 @@ import android.os.Handler
 import android.os.Looper
 import android.view.View
 import android.widget.*
+import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -61,6 +63,16 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
 
+        val isTeacher = sharedPref?.getBoolean(getString(R.string.isTeacher), false)
+
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
+            if (isTeacher == true) {
+                findNavController().navigate(R.id.chatsFragment)
+            } else {
+                findNavController().navigate(R.id.gradesFragment)
+            }
+        }
+
         swipeRefreshLayout.setOnRefreshListener {
 
             try {
@@ -80,6 +92,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 swipeRefreshLayout.isRefreshing = false
             }
         }
+
 
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
