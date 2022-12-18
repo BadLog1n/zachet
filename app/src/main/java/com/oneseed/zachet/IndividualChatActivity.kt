@@ -1,6 +1,6 @@
 package com.oneseed.zachet
 
-import UriPathHelper.UriPathHelper
+import uriPathHelper.UriPathHelper
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity

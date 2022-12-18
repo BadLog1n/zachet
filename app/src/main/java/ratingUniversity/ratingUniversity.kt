@@ -108,7 +108,7 @@ class RatingUniversity {
                     val visitScore = ratingObject.getJSONObject("pos").getString("Ball")
                     val recordScore = ratingObject.getJSONObject("usp").getString("Ball")
                     stringToReturn += "$visitScore $recordScore "
-                } catch (e: JSONException) {
+                } catch (_: JSONException) {
                 }
             }
         } catch (e: JSONException) {

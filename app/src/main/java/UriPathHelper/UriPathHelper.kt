@@ -1,4 +1,4 @@
-package UriPathHelper
+package uriPathHelper
 
 import android.content.ContentUris
 import android.content.Context

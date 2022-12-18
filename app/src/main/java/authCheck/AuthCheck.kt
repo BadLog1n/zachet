@@ -46,7 +46,7 @@ class AuthCheck {
         }
     }
 
-    
+    @Suppress("DEPRECATION")
     private fun isNetworkAvailable(context: Context?): Boolean {
         if (context == null) return false
         val connectivityManager =
