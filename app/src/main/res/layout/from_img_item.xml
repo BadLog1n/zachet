@@ -70,7 +70,7 @@
                 android:paddingEnd="5dp"
                 android:paddingBottom="5dp"
                 android:scaleType="centerInside"
-                app:srcCompat="@drawable/aesthetic_desert_2560_x_1440" />
+                app:srcCompat="@drawable/main_icon" />
 
         </LinearLayout>
     </LinearLayout>

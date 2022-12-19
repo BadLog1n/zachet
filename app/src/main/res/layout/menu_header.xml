@@ -40,7 +40,7 @@
             android:layout_gravity="center"
             android:adjustViewBounds="false"
             android:cropToPadding="false"
-            app:srcCompat="@drawable/aesthetic_desert_2560_x_1440"
-            tools:srcCompat="@drawable/aesthetic_desert_2560_x_1440" />
+            app:srcCompat="@drawable/main_icon"
+            tools:srcCompat="@drawable/main_icon" />
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>

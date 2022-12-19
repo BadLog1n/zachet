@@ -81,7 +81,7 @@
                     android:maxWidth="240dp"
                     android:maxHeight="280dp"
                     android:visibility="visible"
-                    app:srcCompat="@drawable/aesthetic_desert_2560_x_1440" />
+                    app:srcCompat="@drawable/main_icon" />
 
             </LinearLayout>
 
