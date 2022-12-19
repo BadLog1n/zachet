@@ -157,7 +157,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private fun userSearch() {
 
-        Firebase.analytics.logEvent("userSearch") {
+        Firebase.analytics.logEvent("user_search") {
             param("userSearch", "")
         }
         val user = view?.findViewById<EditText>(R.id.searchTxtInput)?.text.toString()

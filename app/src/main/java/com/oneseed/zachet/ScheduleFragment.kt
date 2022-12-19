@@ -14,8 +14,11 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
@@ -87,6 +90,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 Handler(Looper.getMainLooper()).postDelayed({
                     swipeRefreshLayout.isRefreshing = false
                 }, 1000)
+                Firebase.analytics.logEvent("schedule_update") {
+                    param("schedule_update", "")
+                }
             }
             catch (_: Exception) {
                 swipeRefreshLayout.isRefreshing = false

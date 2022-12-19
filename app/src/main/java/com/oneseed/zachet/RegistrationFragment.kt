@@ -75,7 +75,7 @@ class RegistrationFragment : Fragment() {
                         if (task.isSuccessful) {
                             val uid = Firebase.auth.currentUser?.uid
 
-                            val userLogin = uid.toString().lowercase().take(6) + ("a..z").random()
+                            val userLogin = uid.toString().lowercase().take(6) + ('a'..'z').random()
                             
                             FirebaseDatabase.getInstance().getReference("login")
                                 .child(userLogin).setValue(uid)

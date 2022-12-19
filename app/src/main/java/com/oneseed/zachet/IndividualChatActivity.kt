@@ -32,6 +32,8 @@ import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import chatsPackage.ChatsPackage
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
@@ -408,6 +410,9 @@ class IndividualChatActivity : AppCompatActivity() {
                     if (isFirstLoad && i.toString() == dataSnapshot.children.last().toString()) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                         isFirstLoad = false
+                        Firebase.analytics.logEvent("chats_upload") {
+                            param("chats_upload", "")
+                        }
                     }
                 }
             }

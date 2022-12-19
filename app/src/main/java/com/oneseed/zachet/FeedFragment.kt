@@ -12,6 +12,8 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
@@ -145,6 +147,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 feedRc.adapter = rcAdapter
                                 feedRc.scrollToPosition(rcAdapter.itemCount - 1)
                                 isFirstLoad = false
+                                Firebase.analytics.logEvent("feed_upload") {
+                                    param("feed_upload", "")
+                                }
                             }
 
 
