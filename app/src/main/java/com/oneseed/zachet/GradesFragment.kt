@@ -21,7 +21,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.oneseed.zachet.databinding.FragmentGradesBinding
@@ -32,8 +31,6 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import ratingUniversity.RatingUniversity
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
@@ -235,6 +232,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
+                    println(strSemester)
+                    val semesterAll = spinner.selectedItem.toString() + "," + strSemester.replace("${spinner.selectedItem},", "")
+                    sharedPrefGrades?.edit()?.putString(getString(R.string.listOfSemester), semesterAll)
+                        ?.apply()
 
                     val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
                         .toString()
@@ -297,7 +298,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                 recyclerView.visibility = View.VISIBLE
                             }
                             if (isChange) {
-                                Toast.makeText(requireContext(), "Некоторые баллы были обновлены", Toast.LENGTH_SHORT).show()
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Некоторые баллы были обновлены",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
                         }
                     }
@@ -344,7 +349,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         var version = ""
         try {
             val pInfo = if (Build.VERSION.SDK_INT >= 33) {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, PackageManager.PackageInfoFlags.of(0))
+                context?.packageManager?.getPackageInfo(
+                    requireContext().packageName,
+                    PackageManager.PackageInfoFlags.of(0)
+                )
             } else {
                 context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }

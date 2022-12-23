@@ -21,8 +21,6 @@ import org.json.JSONArray
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import ratingUniversity.InfoOfStudent
-import java.text.DateFormat
-import java.text.SimpleDateFormat
 import java.util.*
 
 
@@ -412,7 +410,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     }
 
-    @SuppressLint("SimpleDateFormat")
     @OptIn(DelicateCoroutinesApi::class)
     private fun getDataOfStudent(
         sharedPref: SharedPreferences?,
@@ -425,12 +422,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             withContext(Dispatchers.Main) {
                 if (infoOfStudent != null) {
 
-                    val dateFormat: DateFormat = SimpleDateFormat("MM")
-                    val date = Date()
-                    val month = dateFormat.format(date)
-                    val arrayOfSemester = arrayOf("01", "09", "10", "11", "12")
-                    val semesterCurrent = month in arrayOfSemester
-
 
                     val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
                     semester.sort()
@@ -442,7 +433,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         val correctSemester = element.toInt() - 1
                         semester[index] = "Семестр $correctSemester"
                     }
-                    if (semesterCurrent) semester.removeFirst()
                     val stringSemester = semester.joinToString(separator = ",")
 
 
