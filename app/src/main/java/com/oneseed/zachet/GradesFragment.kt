@@ -15,10 +15,13 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import authCheck.AuthCheck
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.oneseed.zachet.databinding.FragmentGradesBinding
@@ -29,6 +32,8 @@ import org.jsoup.Jsoup
 import org.jsoup.nodes.Document
 import org.jsoup.nodes.Element
 import ratingUniversity.RatingUniversity
+import java.text.DateFormat
+import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.Executors
 import kotlin.system.exitProcess
@@ -38,6 +43,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private val authCheck = AuthCheck()
     private lateinit var database: DatabaseReference
     private val ratingUniversity = RatingUniversity()
+    private lateinit var firebaseAuth: FirebaseAuth
 
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
@@ -73,6 +79,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             Context.MODE_PRIVATE
         )
 
+
         rcAdapter.clearRecords()
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyDataSetChanged()
@@ -81,6 +88,19 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         val loginWeb =
             sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
+
+        firebaseAuth = FirebaseAuth.getInstance()
+
+        if (firebaseAuth.uid == null) {
+            sharedPrefSetting?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
+            Toast.makeText(
+                context,
+                "Логин или пароль не верен.",
+                Toast.LENGTH_SHORT
+            )
+                .show()
+            Navigation.findNavController(view).navigate(R.id.loginFragment)
+        }
         val passwordWeb =
             sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
         val strSemester =
