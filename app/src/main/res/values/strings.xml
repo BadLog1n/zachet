@@ -107,6 +107,7 @@
     <string name="loginWebShared">loginWeb</string> логин пользователя в info.swsu
     <string name="passwordWebShared">passwordWeb</string> пароль пользователя в info.swsu
     <string name="listOfSemester">listOfSemester</string> список семестров пользователя
+    <string name="listOfSemesterToChange">listOfSemesterToChange</string> список семестров пользователя измененные
     <string name="versionShared">version</string> нынешняя версия приложения
     <string name="groupOfStudent">groupOfStudent</string> группа пользователя
     <string name="formOfStudent">formOfStudent</string> форма обучения пользователя

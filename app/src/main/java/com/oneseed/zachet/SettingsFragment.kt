@@ -436,9 +436,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     }
                     val stringSemester = semester.joinToString(separator = ",")
 
-
                     sharedPref?.edit()
                         ?.putString(getString(R.string.listOfSemester), stringSemester)
+                        ?.apply()
+                    sharedPref?.edit()
+                        ?.putString(getString(R.string.listOfSemesterToChange), stringSemester)
                         ?.apply()
                     sharedPref?.edit()
                         ?.putString(getString(R.string.groupOfStudent), infoOfStudent[0][1])

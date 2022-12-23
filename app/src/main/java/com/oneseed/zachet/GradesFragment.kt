@@ -100,8 +100,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
         val passwordWeb =
             sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
-        val strSemester =
+        val strSemesterOriginal =
             sharedPrefGrades?.getString(getString(R.string.listOfSemester), "").toString()
+        val strSemester =
+            sharedPrefGrades?.getString(getString(R.string.listOfSemesterToChange), "").toString()
 
         if (loginWeb != "" && passwordWeb != "" && strSemester != "") {
             val semester = strSemester.split(",").toTypedArray()
@@ -233,8 +235,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
                     println(strSemester)
-                    val semesterAll = spinner.selectedItem.toString() + "," + strSemester.replace("${spinner.selectedItem},", "")
-                    sharedPrefGrades?.edit()?.putString(getString(R.string.listOfSemester), semesterAll)
+                    val semesterAll = spinner.selectedItem.toString() + "," + strSemesterOriginal.replace("${spinner.selectedItem},", "")
+                    sharedPrefGrades?.edit()?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
                         ?.apply()
 
                     val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
