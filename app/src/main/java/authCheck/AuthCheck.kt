@@ -34,13 +34,12 @@ class AuthCheck {
         GlobalScope.launch {
             try {
                 val sitePath =
-                    "https://vk.com/"
+                    "https://ya.ru/"
                 val response: Connection.Response = Jsoup.connect(sitePath)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                     .timeout(10000)
                     .execute()
                 val statusCode: Int = response.statusCode()
-                Log.d("dat", "$statusCode")
                 val document =
                     if (statusCode == 200) Jsoup.connect(sitePath).get().text() else ""
                 if (document != "") {
@@ -51,7 +50,7 @@ class AuthCheck {
                                 sharedPref?.edit()?.putBoolean(checkSettings, false)?.apply()
                                 Toast.makeText(
                                     context,
-                                    "Логин или пароль не верен.",
+                                    "Логин или пароль не верен",
                                     Toast.LENGTH_SHORT
                                 )
                                     .show()

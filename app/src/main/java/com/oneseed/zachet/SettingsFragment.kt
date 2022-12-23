@@ -79,6 +79,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             surnameEditText.setText(if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else "")
             loginEditText.setText(it.child("login").value.toString())
             emailInputText.setText(user?.email.toString())
+            loginEditText.isEnabled = true
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
             emailInputText.isEnabled = true
