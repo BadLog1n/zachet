@@ -52,6 +52,11 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             teacherTv.text = subjectGrades.FIO
             expandedView.visibility = View.GONE
             collapsedView.visibility = View.VISIBLE
+            subjectChange.visibility = View.GONE
+
+            if (subjectGrades.subjectIsChange) {
+                subjectChange.visibility = View.VISIBLE
+            }
 
         }
 

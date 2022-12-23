@@ -240,9 +240,21 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                             ?.apply()
                         withContext(Dispatchers.Main) {
                             var allGrades = ""
+                            var isChange = false
                             if (listOfGrades != null && listOfGrades.size != 0) {
                                 rcAdapter.clearRecords()
                                 listOfGrades.forEachIndexed { index, item ->
+                                    var changeSubject = false
+                                    allGrades += "${item["ratingScore"].toString().toInt()} "
+                                    if (actualGrades.size > index) {
+                                        if (result + 1 == ls.toInt()
+                                            && item["ratingScore"].toString() != actualGrades[index]
+                                            && actualGrades[0] != ""
+                                        ) {
+                                            changeSubject = true
+                                            isChange = true
+                                        }
+                                    }
                                     rcAdapter.addSubjectGrades(
                                         SubjectGrades(
                                             item["getSubjectName"].toString(),
@@ -251,23 +263,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                             item["rating"].toString().split(" ").toList(),
                                             item["tutorName"].toString(),
                                             item["tutorId"].toString(),
+                                            subjectIsChange = changeSubject
                                         )
                                     )
-                                    allGrades += "${item["ratingScore"].toString().toInt()} "
-                                    if (actualGrades.size > index) {
-                                        if (result + 1 == ls.toInt()
-                                            && item["ratingScore"].toString() != actualGrades[index]
-                                            && actualGrades[0] != ""
-                                        ) {
-                                            Toast.makeText(
-                                                requireContext(),
-                                                "Обновлены баллы в ${item["getSubjectName"].toString()}",
-                                                Toast.LENGTH_SHORT
-                                            ).show()
-                                        }
-                                    }
-
-
                                 }
                                 if (result + 1 == ls.toInt()) {
                                     sharedPrefGrades.edit()
@@ -277,6 +275,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                                 progressBar.visibility = View.GONE
                                 recyclerView.visibility = View.VISIBLE
+                            }
+                            if (isChange) {
+                                Toast.makeText(requireContext(), "Некоторые баллы были обновлены", Toast.LENGTH_SHORT).show()
                             }
                         }
                     }
