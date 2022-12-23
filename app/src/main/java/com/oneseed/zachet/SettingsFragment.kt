@@ -428,7 +428,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val dateFormat: DateFormat = SimpleDateFormat("MM")
                     val date = Date()
                     val month = dateFormat.format(date)
-                    val arrayOfSemester = arrayOf("1", "9", "10", "11", "12")
+                    val arrayOfSemester = arrayOf("01", "09", "10", "11", "12")
                     val semesterCurrent = month in arrayOfSemester
 
 

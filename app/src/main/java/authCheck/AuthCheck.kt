@@ -3,9 +3,6 @@ package authCheck
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
 import android.content.SharedPreferences
-import android.net.ConnectivityManager
-import android.net.NetworkCapabilities
-import android.os.Build
 import android.util.Log
 import android.view.View
 import android.widget.Toast
@@ -13,6 +10,9 @@ import androidx.navigation.Navigation.findNavController
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
 import com.oneseed.zachet.R
+import kotlinx.coroutines.*
+import org.jsoup.Connection
+import org.jsoup.Jsoup
 
 
 class AuthCheck {
@@ -20,6 +20,7 @@ class AuthCheck {
     private val savePassword = "save_password"
     private val checkSettings = "check_settings"
 
+    @OptIn(DelicateCoroutinesApi::class)
     fun check(view: View, context: Context?) {
         val sharedPref: SharedPreferences? = context?.getSharedPreferences("Settings", MODE_PRIVATE)
 
@@ -28,52 +29,42 @@ class AuthCheck {
         val email = sharedPref?.getString(saveEmail, "null").toString()
         val password = sharedPref?.getString(savePassword, "null").toString()
 
-
         val credential = EmailAuthProvider
             .getCredential(email, password)
-
-        if (isNetworkAvailable(context)) {
-// Prompt the user to re-provide their sign-in credentials
-            user?.reauthenticate(credential)?.addOnCompleteListener { task ->
-                if (task.isSuccessful) {
-                    Log.d("TAG", "User re-authenticated.")
-                } else {
-                    sharedPref?.edit()?.putBoolean(checkSettings, false)?.apply()
-                    Toast.makeText(context, "Логин или пароль не верен.", Toast.LENGTH_SHORT).show()
-                    findNavController(view).navigate(R.id.loginFragment)
-                }
-            }
-        }
-    }
-
-    @Suppress("DEPRECATION")
-    private fun isNetworkAvailable(context: Context?): Boolean {
-        if (context == null) return false
-        val connectivityManager =
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.Q) {
-            val capabilities =
-                connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
-            if (capabilities != null) {
-                when {
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
-                        return true
-                    }
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
-                        return true
-                    }
-                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET) -> {
-                        return true
+        GlobalScope.launch {
+            try {
+                val sitePath =
+                    "https://vk.com/"
+                val response: Connection.Response = Jsoup.connect(sitePath)
+                    .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                    .timeout(10000)
+                    .execute()
+                val statusCode: Int = response.statusCode()
+                Log.d("dat", "$statusCode")
+                val document =
+                    if (statusCode == 200) Jsoup.connect(sitePath).get().text() else ""
+                if (document != "") {
+                    FirebaseAuth.getInstance().currentUser?.reload()
+                    withContext(Dispatchers.Main) {
+                        user?.reauthenticate(credential)?.addOnCompleteListener { task ->
+                            if (!task.isSuccessful) {
+                                sharedPref?.edit()?.putBoolean(checkSettings, false)?.apply()
+                                Toast.makeText(
+                                    context,
+                                    "Логин или пароль не верен.",
+                                    Toast.LENGTH_SHORT
+                                )
+                                    .show()
+                                findNavController(view).navigate(R.id.loginFragment)
+                            }
+                        }
                     }
                 }
-            }
-        } else {
-            val activeNetworkInfo = connectivityManager.activeNetworkInfo
-            if (activeNetworkInfo != null && activeNetworkInfo.isConnected) {
-                return true
+            } catch (_: Exception) {
+                Log.d("dat", "error!!!!")
+
             }
         }
-        return false
     }
 
 

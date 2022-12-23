@@ -12,6 +12,7 @@ import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import authCheck.AuthCheck
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.ktx.auth
@@ -23,6 +24,7 @@ import java.util.*
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
+    private val authCheck = AuthCheck()
 
     private var rcAdapter = FeedAdapter()
     private lateinit var binding: FragmentFeedBinding
@@ -34,6 +36,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFeedBinding.inflate(layoutInflater)
         val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
+        authCheck.check(view, this@FeedFragment.context)
 
         rcAdapter.clearRecords()
         rcAdapter.recordsList = ArrayList()

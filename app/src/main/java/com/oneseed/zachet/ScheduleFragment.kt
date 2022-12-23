@@ -14,6 +14,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+import authCheck.AuthCheck
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.DatabaseReference
@@ -28,6 +29,7 @@ import kotlinx.coroutines.*
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private lateinit var database: DatabaseReference
+    private val authCheck = AuthCheck()
 
 
     private lateinit var binding: FragmentScheduleBinding
@@ -45,6 +47,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         binding = FragmentScheduleBinding.inflate(layoutInflater)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "Расписание"
+        authCheck.check(view, this@ScheduleFragment.context)
+
         getGroups(spinner)
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = view.findViewById(R.id.scheduleRc)
