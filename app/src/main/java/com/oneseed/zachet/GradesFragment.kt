@@ -234,12 +234,18 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
-                    println(strSemester)
+                    val actualGrades =
+                        sharedPrefGrades?.getString(getString(R.string.actualGrades), "")
+                            .toString().split(" ").toList().toMutableList()
+
                     val semesterAll =
                         spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
                             "${spinner.selectedItem},",
                             ""
                         )
+                    if (semesterAll != strSemester) {
+                        actualGrades[0] = ""
+                    }
                     sharedPrefGrades?.edit()
                         ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
                         ?.apply()
@@ -248,17 +254,17 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         .toString()
                     val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
                         .toString()
-                    val ls = sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0)
+                    val ls =
+                        sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString()
+                            .toInt()
 
                     val result =
                         spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
 
-                    val status = if (result + 1 >= ls!!.toInt()) "false" else "true"
+                    val status = if (result + 1 >= ls) "false" else "true"
 
                     val semester = result.toString().padStart(9, '0')
-                    val actualGrades =
-                        sharedPrefGrades.getString(getString(R.string.actualGrades), "")
-                            .toString().split(" ").toList()
+
                     GlobalScope.launch {
                         val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
                         val isDownWeek = async { checkIsDownWeek() }
@@ -274,11 +280,12 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                 listOfGrades.forEachIndexed { index, item ->
                                     var changeSubject = false
                                     allGrades += "${item["ratingScore"].toString().toInt()} "
-                                    if (actualGrades.size > index) {
-                                        if (actualGrades[0] != "" && item["ratingScore"].toString() != actualGrades[index]) {
-                                            changeSubject = true
-                                            isChange = true
-                                        }
+                                    if (actualGrades.size > index &&
+                                        actualGrades[0] != "" &&
+                                        item["ratingScore"].toString() != actualGrades[index]
+                                    ) {
+                                        changeSubject = true
+                                        isChange = true
                                     }
                                     rcAdapter.addSubjectGrades(
                                         SubjectGrades(
@@ -292,7 +299,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                         )
                                     )
                                 }
-                                sharedPrefGrades.edit()
+                                sharedPrefGrades?.edit()
                                     ?.putString(getString(R.string.actualGrades), allGrades)
                                     ?.apply()
 
