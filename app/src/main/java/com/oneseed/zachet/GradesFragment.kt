@@ -235,8 +235,13 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 recyclerView.visibility = View.INVISIBLE
                 binding.apply {
                     println(strSemester)
-                    val semesterAll = spinner.selectedItem.toString() + "," + strSemesterOriginal.replace("${spinner.selectedItem},", "")
-                    sharedPrefGrades?.edit()?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
+                    val semesterAll =
+                        spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
+                            "${spinner.selectedItem},",
+                            ""
+                        )
+                    sharedPrefGrades?.edit()
+                        ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
                         ?.apply()
 
                     val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
@@ -270,10 +275,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                     var changeSubject = false
                                     allGrades += "${item["ratingScore"].toString().toInt()} "
                                     if (actualGrades.size > index) {
-                                        if (result + 1 == ls.toInt()
-                                            && item["ratingScore"].toString() != actualGrades[index]
-                                            && actualGrades[0] != ""
-                                        ) {
+                                        if (actualGrades[0] != "" && item["ratingScore"].toString() == actualGrades[index]) {
                                             changeSubject = true
                                             isChange = true
                                         }
@@ -290,11 +292,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                         )
                                     )
                                 }
-                                if (result + 1 == ls.toInt()) {
-                                    sharedPrefGrades.edit()
-                                        ?.putString(getString(R.string.actualGrades), allGrades)
-                                        ?.apply()
-                                }
+                                sharedPrefGrades.edit()
+                                    ?.putString(getString(R.string.actualGrades), allGrades)
+                                    ?.apply()
+
 
                                 progressBar.visibility = View.GONE
                                 recyclerView.visibility = View.VISIBLE
