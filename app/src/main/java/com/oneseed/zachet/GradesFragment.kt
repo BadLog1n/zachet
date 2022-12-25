@@ -275,7 +275,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                     var changeSubject = false
                                     allGrades += "${item["ratingScore"].toString().toInt()} "
                                     if (actualGrades.size > index) {
-                                        if (actualGrades[0] != "" && item["ratingScore"].toString() == actualGrades[index]) {
+                                        if (actualGrades[0] != "" && item["ratingScore"].toString() != actualGrades[index]) {
                                             changeSubject = true
                                             isChange = true
                                         }
