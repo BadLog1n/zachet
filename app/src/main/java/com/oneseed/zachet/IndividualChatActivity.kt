@@ -90,7 +90,8 @@ class IndividualChatActivity : AppCompatActivity() {
                 if (it.child("name").value.toString() != "null") it.child("name").value.toString() else ""
             val surname =
                 if (it.child("surname").value.toString() != "null") it.child("surname").value.toString() else ""
-            val displayName: String = if (name.isNotEmpty() || surname.isNotEmpty()) "$name $surname" else it.child("login").value.toString()
+            val displayName: String =
+                if (name.isNotEmpty() || surname.isNotEmpty()) "$name $surname" else it.child("login").value.toString()
             findViewById<TextView>(R.id.receiver_tv).text = displayName
         }
 
@@ -135,57 +136,60 @@ class IndividualChatActivity : AppCompatActivity() {
                 id: Long
             ) {
 
-                val spinnerElement = spinner.selectedItem.toString()
-
-                if (spinnerElement == "Изображение") {
-                    try {
-                        if ((ContextCompat.checkSelfPermission(
-                                this@IndividualChatActivity,
-                                Manifest.permission.READ_EXTERNAL_STORAGE
-                            ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
-                                this@IndividualChatActivity,
-                                Manifest.permission.WRITE_EXTERNAL_STORAGE
-                            ) != PackageManager.PERMISSION_GRANTED))
-                        ) {
-                            ActivityCompat.requestPermissions(
-                                this@IndividualChatActivity,
-                                arrayOf(
-                                    Manifest.permission.READ_EXTERNAL_STORAGE,
-                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                ),
-                                storagePermissionCode
-                            )
-                        } else {
-                            pickFileOrPhoto(false)
-                        }
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this@IndividualChatActivity,
-                            "Вам необходимо выдать разрешение на работу с памятью в настройках, " +
-                                    "чтобы загружать изображения",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    }
-
-                } else if (spinnerElement == "Файл") {
-                    try {
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
-                            if (!isExternalStorageManager()) {
-                                Toast.makeText(
+                when (spinner.selectedItem.toString()) {
+                    "Изображение" -> {
+                        try {
+                            if ((ContextCompat.checkSelfPermission(
                                     this@IndividualChatActivity,
-                                    "Вам необходимо выдать разрешение на работу с памятью в настройках," +
-                                            "чтобы загружать файлы",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                                ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
+                                    this@IndividualChatActivity,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ) != PackageManager.PERMISSION_GRANTED))
+                            ) {
+                                ActivityCompat.requestPermissions(
+                                    this@IndividualChatActivity,
+                                    arrayOf(
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    ),
+                                    storagePermissionCode
+                                )
                             } else {
-                                pickFileOrPhoto(true)
+                                pickFileOrPhoto(false)
                             }
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@IndividualChatActivity,
+                                "Вам необходимо выдать разрешение на работу с памятью в настройках, " +
+                                        "чтобы загружать изображения",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
-                    } catch (e: Exception) {
-                        Toast.makeText(
-                            this@IndividualChatActivity, "Нет доступа к памяти", Toast.LENGTH_SHORT
-                        ).show()
 
+                    }
+                    "Файл" -> {
+                        try {
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
+                                if (!isExternalStorageManager()) {
+                                    Toast.makeText(
+                                        this@IndividualChatActivity,
+                                        "Вам необходимо выдать разрешение на работу с памятью в настройках," +
+                                                "чтобы загружать файлы",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                } else {
+                                    pickFileOrPhoto(true)
+                                }
+                            }
+                        } catch (e: Exception) {
+                            Toast.makeText(
+                                this@IndividualChatActivity,
+                                "Нет доступа к памяти",
+                                Toast.LENGTH_SHORT
+                            ).show()
+
+                        }
                     }
                 }
                 spinner.setSelection(0)

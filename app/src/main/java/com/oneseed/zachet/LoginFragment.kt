@@ -49,7 +49,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         firebaseAuth = FirebaseAuth.getInstance()
         view.findViewById<Button>(R.id.enterButton).setOnClickListener {
             email =
-                (view.findViewById<TextInputLayout>(R.id.layoutLogin))?.editText?.text.toString()
+                (view.findViewById<TextInputLayout>(R.id.layoutEmail))?.editText?.text.toString()
             pw =
                 (view.findViewById<TextInputLayout>(R.id.layoutPassword))?.editText?.text.toString()
 
@@ -69,7 +69,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                             ?.apply()
 
                         requestToDatabase.addOnSuccessListener {
-                            if (it.child("teacher").value.toString() != "null") {
+                            activity?.findViewById<DrawerLayout>(R.id.drawer)
+                                ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                            if (it.child("isTeacher").value.toString() != "null") {
                                 sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), true)
                                     ?.apply()
                                 findNavController().navigate(R.id.chatsFragment)
@@ -102,7 +104,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
 
         view.findViewById<TextView>(R.id.forgot_passw_btn).setOnClickListener {
             email =
-                (view.findViewById<TextInputLayout>(R.id.layoutLogin))?.editText?.text.toString()
+                (view.findViewById<TextInputLayout>(R.id.layoutEmail))?.editText?.text.toString()
             if (email.isNotEmpty()) {
                 firebaseAuth.sendPasswordResetEmail(email).addOnCompleteListener { task ->
                     if (task.isSuccessful) {

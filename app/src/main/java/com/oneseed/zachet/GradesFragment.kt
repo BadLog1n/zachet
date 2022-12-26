@@ -50,8 +50,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.sem_num_spinner)
-        activity?.findViewById<DrawerLayout>(R.id.drawer)
-            ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         authCheck.check(view, this@GradesFragment.context)
 
         binding = FragmentGradesBinding.inflate(layoutInflater)
