@@ -9,6 +9,7 @@
     android:layout_marginTop="80dp"
     android:layout_marginEnd="10dp"
     android:orientation="vertical"
+    android:theme="@style/Theme.UniversitySystem"
     tools:context=".FeedFragment">
 
     <LinearLayout
@@ -27,14 +28,15 @@
             android:fontFamily="@font/inter"
             android:gravity="center"
             android:text="@string/new_record"
-            android:textColor="@color/black"
-            android:textSize="16sp" />
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:theme="@style/Theme.UniversitySystem" />
 
         <ImageButton
             android:id="@+id/addRecord_imgbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:background="@color/white"
+            android:theme="@style/Theme.UniversitySystem"
             android:src="@drawable/ic_baseline_add_24"
             app:tint="@color/blue" />
     </LinearLayout>

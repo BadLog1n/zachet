@@ -15,6 +15,10 @@
         <!-- Status bar color. -->
 
         <item name="android:statusBarColor" >@color/light_grey_text</item>
+        <item name="imageButtonStyle">@color/white</item>
+        <item name="android:textColorPrimary">@color/black</item>
+        <item name="android:textColorPrimaryInverse">@color/white</item>
+        <item name="android:textColorSecondary">@color/light_grey_text</item>
         <item name="android:windowTranslucentStatus">false</item>
         <!-- Customize your theme here. -->
         <item name="windowActionBar">false</item>
