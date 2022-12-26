@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
@@ -61,6 +62,16 @@ class MainActivity : AppCompatActivity() {
         ) {
             toolbar.title = "Чаты"
         }
+
+
+        val isDarkThemeSupport =
+            sharedPref?.getBoolean(getString(R.string.darkThemeSupportShared), false) == true
+
+            if (isDarkThemeSupport)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            else
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
 
         /**
          * Навигация по нажатию в боковом меню

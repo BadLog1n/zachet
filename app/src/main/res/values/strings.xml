@@ -41,6 +41,7 @@
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
     <string name="cache_pics">Кешировать изображения</string>
+    <string name="supportDarkThemeText">Поддерживать темную тему</string>
     <string name="language">Язык</string>
     <string name="updateText">Перейдите в \"О приложении\", чтобы скачать обновление. Изменения можно посмотреть в telegram</string>
     <string name="updateTitle">Обнаружена новая версия</string>
@@ -113,9 +114,10 @@
     <string name="emailShared">email</string>
     <string name="groupSpinner">groupSpinner</string>
     <string name="isTeacher">isTeacher</string>
-    <string name="actualGrades">actualGrades</string>
+    <string name="actualGrades">actualGrades</string> собирает баллы за последний семестр
     <string name="loginShared">login</string>
-    собирает баллы за последний семестр
+    <string name="darkThemeSupportShared">themeSupport</string>
+    (конец для sharedPref)
 
 
     <string name="loadFromServerWeb">Загрузить с сервера</string>

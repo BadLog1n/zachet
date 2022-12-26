@@ -9,6 +9,7 @@ import android.view.View
 import android.widget.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
@@ -45,6 +46,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val passwordWebInput = view.findViewById<EditText>(R.id.pWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
         val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
+        val themeSwitch = view.findViewById<Switch>(R.id.supportDatkTheme)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
         val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
@@ -87,6 +89,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         val isTeacher = sharedPrefSettings?.getBoolean(getString(R.string.isTeacher), false)
+        themeSwitch.isChecked = sharedPrefSettings?.getBoolean(
+            getString(R.string.darkThemeSupportShared),
+            false
+        ) == true
+
+
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (isTeacher == true) {
                 findNavController().navigate(R.id.chatsFragment)
@@ -407,9 +415,33 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
         }
+        themeSwitch.setOnCheckedChangeListener { _, _ ->
+            val isSupportDarkTheme = sharedPrefSettings?.getBoolean(
+                getString(R.string.darkThemeSupportShared),
+                false
+            ) == true
 
+            if (themeSwitch.isChecked && !isSupportDarkTheme) {
+                sharedPrefSettings?.edit()
+                    ?.putBoolean(getString(R.string.darkThemeSupportShared), true)
+                    ?.apply()
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                onDestroy()
+            } else {
+                sharedPrefSettings?.edit()
+                    ?.putBoolean(getString(R.string.darkThemeSupportShared), false)
+                    ?.apply()
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                onDestroy()
+
+            }
+
+
+            //exitProcess(0)
+        }
 
     }
+
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun getDataOfStudent(

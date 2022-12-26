@@ -263,60 +263,65 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                     val semester = result.toString().padStart(9, '0')
 
+
                     GlobalScope.launch {
-                        val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
-                        val isDownWeek = async { checkIsDownWeek() }
+                        try {
+                            val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
+                            val isDownWeek = async { checkIsDownWeek() }
 
-                        sharedPrefSetting?.edit()
-                            ?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())
-                            ?.apply()
-                        withContext(Dispatchers.Main) {
-                            var allGrades = ""
-                            var isChange = false
-                            if (listOfGrades != null && listOfGrades.size != 0) {
-                                rcAdapter.clearRecords()
-                                listOfGrades.forEachIndexed { index, item ->
-                                    var changeSubject = false
-                                    allGrades += "${item["ratingScore"].toString().toInt()} "
-                                    if (actualGrades.size > index &&
-                                        actualGrades[0] != "" &&
-                                        item["ratingScore"].toString() != actualGrades[index]
-                                    ) {
-                                        changeSubject = true
-                                        isChange = true
-                                    }
-                                    rcAdapter.addSubjectGrades(
-                                        SubjectGrades(
-                                            item["getSubjectName"].toString(),
-                                            item["ratingScore"].toString().toInt(),
-                                            item["subjectType"].toString(),
-                                            item["rating"].toString().split(" ").toList(),
-                                            item["tutorName"].toString(),
-                                            item["tutorId"].toString(),
-                                            subjectIsChange = changeSubject
+                            sharedPrefSetting?.edit()
+                                ?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())
+                                ?.apply()
+                            withContext(Dispatchers.Main) {
+                                var allGrades = ""
+                                var isChange = false
+                                if (listOfGrades != null && listOfGrades.size != 0) {
+                                    rcAdapter.clearRecords()
+                                    listOfGrades.forEachIndexed { index, item ->
+                                        var changeSubject = false
+                                        allGrades += "${item["ratingScore"].toString().toInt()} "
+                                        if (actualGrades.size > index &&
+                                            actualGrades[0] != "" &&
+                                            item["ratingScore"].toString() != actualGrades[index]
+                                        ) {
+                                            changeSubject = true
+                                            isChange = true
+                                        }
+                                        rcAdapter.addSubjectGrades(
+                                            SubjectGrades(
+                                                item["getSubjectName"].toString(),
+                                                item["ratingScore"].toString().toInt(),
+                                                item["subjectType"].toString(),
+                                                item["rating"].toString().split(" ").toList(),
+                                                item["tutorName"].toString(),
+                                                item["tutorId"].toString(),
+                                                subjectIsChange = changeSubject
+                                            )
                                         )
-                                    )
+                                    }
+                                    sharedPrefGrades?.edit()
+                                        ?.putString(getString(R.string.actualGrades), allGrades)
+                                        ?.apply()
+
+
+                                    progressBar.visibility = View.GONE
+                                    recyclerView.visibility = View.VISIBLE
                                 }
-                                sharedPrefGrades?.edit()
-                                    ?.putString(getString(R.string.actualGrades), allGrades)
-                                    ?.apply()
-
-
-                                progressBar.visibility = View.GONE
-                                recyclerView.visibility = View.VISIBLE
+                                if (isChange) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Некоторые баллы были обновлены",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
                             }
-                            if (isChange) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Некоторые баллы были обновлены",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
+
+                        } catch (_: Exception) {
+
                         }
+
                     }
                 }
-
-
                 //val switchState: Boolean = switch.isChecked
                 //timetableGet(spinner.selectedItem.toString(), switchState)
             }

@@ -19,6 +19,7 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -223,34 +224,18 @@
                 android:layout_height="38dp"
                 android:layout_marginStart="5dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="10dp"
                 android:background="@drawable/spinner_backgr"
                 android:entries="@array/languages"
                 android:paddingStart="8dp" />
 
-            <Switch
-                android:id="@+id/cache_switch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginEnd="14dp"
-                android:layout_marginBottom="10dp"
-                android:enabled="false"
-                android:fontFamily="@font/inter"
-                android:text="@string/cache_pics"
-                android:textAlignment="viewStart"
-                android:textColor="@color/black"
-                android:textColorLink="@color/blue"
-                android:textSize="16sp"
-                android:textStyle="bold"
-                android:theme="@style/Theme.UniversitySystem"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
 
             <Button
                 android:id="@+id/saveSettingsBtn"
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:layout_marginBottom="5dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/save"
@@ -398,7 +383,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/confirm"
                 android:textAllCaps="false"
@@ -412,6 +397,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
                 android:layout_marginTop="5dp"
+                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/updateSemester"
                 android:textAllCaps="false"
@@ -420,7 +406,45 @@
                 android:visibility="gone"
                 app:cornerRadius="100dp" />
 
+            <Switch
+                android:id="@+id/supportDatkTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="20dp"
+                android:enabled="true"
+                android:fontFamily="@font/inter"
+                android:text="@string/supportDarkThemeText"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textColorLink="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:theme="@style/Theme.UniversitySystem"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+            <Switch
+                android:id="@+id/cache_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="20dp"
+                android:enabled="false"
+                android:fontFamily="@font/inter"
+                android:text="@string/cache_pics"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textColorLink="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:theme="@style/Theme.UniversitySystem"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
         </LinearLayout>
+
     </ScrollView>
 
 
