@@ -51,6 +51,7 @@
         <item name="fontFamily">@font/inter</item>
         <item name="android:textStyle">normal</item>
         <item name="android:textAlignment">center</item>
+
     </style>
 
     <style name="SwitchText" parent="TextAppearance.MaterialComponents.Headline6">

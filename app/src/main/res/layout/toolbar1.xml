@@ -4,7 +4,7 @@
     android:id="@+id/toolbar1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:theme="@style/Theme.UniversitySystem"
     android:maxHeight="80dp"
     android:minHeight="?attr/actionBarSize"
     app:buttonGravity="center_vertical"
