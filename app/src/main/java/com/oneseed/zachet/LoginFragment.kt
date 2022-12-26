@@ -87,7 +87,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     } else {
                         Toast.makeText(
                             activity,
-                            "Логин или пароль неправильный",
+                            "Данные для входа неправильные",
                             Toast.LENGTH_SHORT
                         ).show()
                     }
@@ -95,7 +95,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             } else {
                 Toast.makeText(
                     activity,
-                    "Поле для логина или пароля не должно быть пустым",
+                    "Поля для ввода не должны быть пустыми",
                     Toast.LENGTH_SHORT
                 ).show()
             }
