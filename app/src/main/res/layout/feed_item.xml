@@ -6,7 +6,7 @@
     android:layout_height="wrap_content"
     android:layout_marginBottom="15dp"
     android:background="@drawable/grades_collapsed_backgr"
-    android:theme="@style/Theme.UniversitySystem"
+
     android:orientation="vertical"
     android:paddingStart="10dp"
     android:paddingTop="10dp"
@@ -74,7 +74,7 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
-            android:background="@color/light_grey_background"
+            android:background="@color/dark_grey_background"
             app:srcCompat="@drawable/ic_baseline_chat_24"
             app:tint="@color/light_grey_text" />
     </LinearLayout>

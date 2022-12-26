@@ -24,7 +24,8 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="@string/noAuthData"
-            android:visibility="gone" />
+            android:visibility="gone"
+            android:theme="@style/Theme.UniversitySystem"/>
 
         <Spinner
             android:id="@+id/sem_num_spinner"
