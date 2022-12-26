@@ -60,7 +60,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private val chatsPackage = ChatsPackage()
     private var userName = ""
     private var userLogin = ""
-
+    private var isScrolledLast = false
 
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -111,7 +111,7 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
 
-        findViewById<RecyclerView>(R.id.messagesRcView).addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
+        rcView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
                 rcView.post {
                     try {
@@ -121,6 +121,18 @@ class IndividualChatActivity : AppCompatActivity() {
                 }
             }
         }
+
+
+
+        rcView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
+            override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
+                super.onScrollStateChanged(recyclerView, newState)
+                isScrolledLast = !recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE
+            }
+        })
+
+
+
 
         val spinner = this.findViewById<Spinner>(R.id.spinner2)
 
@@ -417,6 +429,9 @@ class IndividualChatActivity : AppCompatActivity() {
                         Firebase.analytics.logEvent("chats_upload") {
                             param("chats_upload", "")
                         }
+                    }
+                    else if (isScrolledLast){
+                        rcView.scrollToPosition(adapter.itemCount - 1)
                     }
                 }
             }
