@@ -241,6 +241,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         ""
                     )
                 if (semesterAll != strSemester) {
+                    actualGrades[0] = ""
                     sharedPrefGrades?.edit()
                         ?.putString(getString(R.string.actualGrades), "")
                         ?.apply()
