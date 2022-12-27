@@ -46,7 +46,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val passwordWebInput = view.findViewById<EditText>(R.id.pWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
         val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
-        val themeSwitch = view.findViewById<Switch>(R.id.supportDatkTheme)
+        val autoTheme = view.findViewById<Switch>(R.id.autoTheme)
+        val darkTheme = view.findViewById<Switch>(R.id.darkTheme)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
         val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
@@ -89,10 +90,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
 
         val isTeacher = sharedPrefSettings?.getBoolean(getString(R.string.isTeacher), false)
-        themeSwitch.isChecked = sharedPrefSettings?.getBoolean(
-            getString(R.string.darkThemeSupportShared),
-            false
-        ) == true
+
+        when (sharedPrefSettings?.getString(getString(R.string.darkThemeShared), "Light")){
+            "Auto" -> {
+                autoTheme.isChecked = true
+                darkTheme.isEnabled = false
+            }
+            "Night" -> {
+                darkTheme.isChecked = true
+                autoTheme.isEnabled = false
+            }
+        }
+
+
 
 
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
@@ -415,21 +425,51 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
         }
-        themeSwitch.setOnCheckedChangeListener { _, _ ->
-            val isSupportDarkTheme = sharedPrefSettings?.getBoolean(
-                getString(R.string.darkThemeSupportShared),
-                false
-            ) == true
+        autoTheme.setOnCheckedChangeListener { _, _ ->
+            darkTheme.isEnabled = false
 
-            if (themeSwitch.isChecked && !isSupportDarkTheme) {
+            val isSupportDarkTheme = sharedPrefSettings?.getString(
+                getString(R.string.darkThemeShared),
+                "Light"
+            )
+            darkTheme.isEnabled = !autoTheme.isChecked
+
+            if (autoTheme.isChecked && isSupportDarkTheme == "Light") {
+                sharedPrefSettings.edit()
+                    ?.putString(getString(R.string.darkThemeShared), "Auto")
+                    ?.apply()
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+                onDestroy()
+            } else if (isSupportDarkTheme != "Night")  {
                 sharedPrefSettings?.edit()
-                    ?.putBoolean(getString(R.string.darkThemeSupportShared), true)
+                    ?.putString(getString(R.string.darkThemeShared), "Light")
+                    ?.apply()
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                onDestroy()
+
+            }
+
+
+            //exitProcess(0)
+        }
+
+        darkTheme.setOnCheckedChangeListener { _, _ ->
+
+            val isSupportDarkTheme = sharedPrefSettings?.getString(
+                getString(R.string.darkThemeShared),
+                "Light"
+            )
+            autoTheme.isEnabled = !autoTheme.isChecked
+
+            if (darkTheme.isChecked && isSupportDarkTheme == "Light") {
+                sharedPrefSettings.edit()
+                    ?.putString(getString(R.string.darkThemeShared), "Night")
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 onDestroy()
-            } else {
+            } else if (isSupportDarkTheme != "Auto") {
                 sharedPrefSettings?.edit()
-                    ?.putBoolean(getString(R.string.darkThemeSupportShared), false)
+                    ?.putString(getString(R.string.darkThemeShared), "Light")
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 onDestroy()

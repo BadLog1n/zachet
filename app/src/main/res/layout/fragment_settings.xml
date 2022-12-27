@@ -409,7 +409,7 @@
                 app:cornerRadius="100dp" />
 
             <Switch
-                android:id="@+id/supportDatkTheme"
+                android:id="@+id/autoTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
@@ -418,6 +418,25 @@
                 android:enabled="true"
                 android:fontFamily="@font/inter"
                 android:text="@string/supportDarkThemeText"
+                android:textAlignment="viewStart"
+                android:textColor="@color/black"
+                android:textColorLink="@color/blue"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:theme="@style/Theme.UniversitySystem"
+                tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+
+            <Switch
+                android:id="@+id/darkTheme"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginEnd="14dp"
+                android:layout_marginBottom="20dp"
+                android:enabled="true"
+                android:fontFamily="@font/inter"
+                android:text="Принудительная тёмная тема"
                 android:textAlignment="viewStart"
                 android:textColor="@color/black"
                 android:textColorLink="@color/blue"

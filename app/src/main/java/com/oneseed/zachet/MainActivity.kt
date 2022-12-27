@@ -64,13 +64,23 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        val isDarkThemeSupport =
-            sharedPref?.getBoolean(getString(R.string.darkThemeSupportShared), false) == true
+        val isSupportDarkTheme = sharedPref?.getString(
+            getString(R.string.darkThemeShared),
+            "Light"
+        )
 
-            if (isDarkThemeSupport)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            else
+        when(isSupportDarkTheme){
+            "Light" -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }
+            "Auto" -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
+            }
+            "Night" -> {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+        }
+
 
 
         /**
