@@ -231,19 +231,25 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             ) {
                 progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
-                binding.apply {
-                    val actualGrades =
-                        sharedPrefGrades?.getString(getString(R.string.actualGrades), "")
-                            .toString().split(" ").toList().toMutableList()
+                val actualGrades =
+                    sharedPrefGrades?.getString(getString(R.string.actualGrades), "")
+                        .toString().split(" ").toList().toMutableList()
 
-                    val semesterAll =
-                        spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
-                            "${spinner.selectedItem},",
-                            ""
-                        )
-                    if (semesterAll != strSemester) {
-                        actualGrades[0] = ""
-                    }
+                val semesterAll =
+                    spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
+                        "${spinner.selectedItem},",
+                        ""
+                    )
+                if (semesterAll != strSemester) {
+                    sharedPrefGrades?.edit()
+                        ?.putString(getString(R.string.actualGrades), "")
+                        ?.apply()
+                }
+
+
+                binding.apply {
+
+
                     sharedPrefGrades?.edit()
                         ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
                         ?.apply()
