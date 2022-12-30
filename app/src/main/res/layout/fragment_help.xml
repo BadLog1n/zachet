@@ -40,7 +40,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/inter"
-            android:text="0"
+            android:text="@string/zero"
             android:textAlignment="textEnd"
             android:textColor="@color/black"
             android:textSize="16sp"
@@ -63,36 +63,7 @@
         app:icon="@drawable/ic_baseline_autorenew_24"
         app:iconTint="@color/black" />
 
-    <Button
-        android:id="@+id/telegramBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="@string/our_telegram"
-        android:textAlignment="textStart"
-        app:icon="@drawable/ic___icon__telegram_"
-        app:iconTint="@color/white"
-        app:iconTintMode="multiply" />
 
-    <Button
-        android:id="@+id/githubBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="@string/our_github"
-        android:textAlignment="textStart"
-        app:icon="@drawable/ic___icon__github_"
-        app:iconTint="@color/white"
-        app:iconTintMode="multiply" />
-
-    <Button
-        android:id="@+id/rustoreBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="20dp"
-        android:text="@string/our_rustore"
-        app:icon="@drawable/ic___icon__fakerustore_"
-        android:textAlignment="textStart" />
 
     <Button
         android:id="@+id/getSupportBtn"
@@ -102,6 +73,148 @@
         android:textAllCaps="false"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_marginBottom="40dp" />
+        android:layout_marginBottom="50dp" />
+
+
+
+    <Button
+        android:id="@+id/telegramBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="10dp"
+        android:text="@string/telegram"
+        android:textAlignment="textStart"
+        app:icon="@drawable/ic___icon__telegram_"
+        app:iconTint="@color/white"
+        app:iconTintMode="multiply"
+        android:layout_weight="1"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="30dp"
+        android:orientation="horizontal">
+
+
+
+
+
+        <Button
+            android:id="@+id/githubBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="20dp"
+            android:layout_marginEnd="20dp"
+            android:text="@string/github"
+            android:textAlignment="textStart"
+            app:icon="@drawable/ic___icon__github_"
+            app:iconTint="@color/white"
+            app:iconTintMode="multiply"
+            android:layout_weight="1"
+             />
+
+        <Button
+            android:id="@+id/rustoreBtn"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginStart="20dp"
+
+            android:layout_marginBottom="20dp"
+            android:text="@string/our_rustore"
+            app:icon="@drawable/ic___icon__fakerustore_"
+            android:textAlignment="textStart" />
+
+<!--        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/inter"
+            android:text="@string/nameStepan"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />-->
+
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:fontFamily="@font/inter"
+            android:text="@string/nameStepan"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+
+        <TextView
+            android:id="@+id/nemGithub"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:text="@string/github"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/nemTelegram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:text="@string/telegram"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.7"
+            android:fontFamily="@font/inter"
+            android:text="@string/nameSofia"
+            android:textColor="@color/black"
+            android:textSize="16sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/sofGithub"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:text="@string/github"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+        <TextView
+            android:id="@+id/sofTeleram"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:text="@string/telegram"
+            android:textColor="@color/black"
+            android:textSize="16sp" />
+
+    </LinearLayout>
 
 </LinearLayout>

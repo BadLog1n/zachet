@@ -61,6 +61,30 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             startActivity(openGithub)
         }
 
+        view.findViewById<TextView>(R.id.nemGithub).setOnClickListener {
+            val openGithub =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BadLog1n"))
+            startActivity(openGithub)
+        }
+
+        view.findViewById<TextView>(R.id.nemTelegram).setOnClickListener {
+            val openGithub =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/fogtoad"))
+            startActivity(openGithub)
+        }
+
+        view.findViewById<TextView>(R.id.sofGithub).setOnClickListener {
+            val openGithub =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/sssofi0101"))
+            startActivity(openGithub)
+        }
+
+        view.findViewById<TextView>(R.id.sofTeleram).setOnClickListener {
+            val openGithub =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/sssofi01"))
+            startActivity(openGithub)
+        }
+
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",
             AppCompatActivity.MODE_PRIVATE
