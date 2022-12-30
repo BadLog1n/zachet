@@ -218,6 +218,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
 
 
+        var spinnerChange = false
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -240,17 +241,14 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         "${spinner.selectedItem},",
                         ""
                     )
-                if (semesterAll != strSemester) {
+                if (semesterAll != strSemester || spinnerChange) {
                     actualGrades[0] = ""
                     sharedPrefGrades?.edit()
                         ?.putString(getString(R.string.actualGrades), "")
                         ?.apply()
                 }
-
-
+                spinnerChange = true
                 binding.apply {
-
-
                     sharedPrefGrades?.edit()
                         ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
                         ?.apply()
