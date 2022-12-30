@@ -181,27 +181,31 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                     "Доступна новая версия! Перейдите в \"О приложении\" чтобы её скачать!",
                     Toast.LENGTH_LONG
                 ).show()*/
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setMessage(R.string.updateText)
-                builder.setTitle(R.string.updateTitle)
-                builder.setPositiveButton("Ок") { _, _ ->
+                try {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(R.string.updateText)
+                    builder.setTitle(R.string.updateTitle)
+                    builder.setPositiveButton("Ок") { _, _ ->
 
-                }
-                builder.setNeutralButton("Перейти") { _, _ ->
-                    findNavController().navigate(R.id.helpFragment)
-                }
-                val alertDialog = builder.create()
-                alertDialog.show()
+                    }
+                    builder.setNeutralButton("Перейти") { _, _ ->
+                        findNavController().navigate(R.id.helpFragment)
+                    }
+                    val alertDialog = builder.create()
+                    alertDialog.show()
 
-                val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                with(autoBtn) {
-                    setTextColor(Color.BLACK)
-                }
-                val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-                with(userBtn) {
-                    setTextColor(Color.BLACK)
-                }
+                    val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
+                    with(autoBtn) {
+                        setTextColor(Color.BLACK)
+                    }
+                    val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
+                    with(userBtn) {
+                        setTextColor(Color.BLACK)
+                    }
 
+                } catch (e: Exception) {
+                    Log.d("exceptionGrades", e.toString())
+                }
             }
         }
 
