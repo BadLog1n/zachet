@@ -65,7 +65,9 @@
 
     <string name="check_versions">Проверить наличие обновлений</string>
     <string name="support">Поддержка</string>
-    <string name="our_telegram">Наш telegram</string>
+    <string name="our_telegram">Telegram</string>
+    <string name="our_github">GitHub</string>
+    <string name="our_rustore">RuStore</string>
     <string name="forgot_password">Забыли пароль?</string>
 
 
@@ -135,6 +137,8 @@
     <string name="to_register">Зарегистрироваться</string>
     <string name="change_password">Смена пароля</string>
     <string name="change_email">Поменять адрес электронной почты</string>
+    <string name="moveTelegram">Перейти в telegram</string>
+    <string name="moveGithub">Перейти в github</string>
 
 
 </resources>

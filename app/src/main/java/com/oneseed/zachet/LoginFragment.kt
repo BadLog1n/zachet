@@ -2,7 +2,9 @@ package com.oneseed.zachet
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
+import android.content.Intent
 import android.content.SharedPreferences
+import android.net.Uri
 import android.os.Bundle
 import android.view.View
 import android.view.inputmethod.InputMethodManager
@@ -136,6 +138,18 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         view.findViewById<TextView>(R.id.registerOfferTw).setOnClickListener {
             findNavController().navigate(R.id.registrationFragment)
         }
+
+        view.findViewById<TextView>(R.id.moveTelegram).setOnClickListener {
+            val openTelegram =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/zacheet"))
+            startActivity(openTelegram)        }
+
+        view.findViewById<TextView>(R.id.moveGithub).setOnClickListener {
+            val openGithub =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BadLog1n/zachet"))
+            startActivity(openGithub)
+        }
+
         /*В случае нажатия кнопки назад просит повторить действие для успешного выхода из приложения
 * В случае если в течение следующих 2-х секунд пользователь не нажал кнопку назад, в следующий раз,
 * при нажатии кнопки "назад", пользователю это будеты предложено вновь*/

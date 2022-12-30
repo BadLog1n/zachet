@@ -50,6 +50,16 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             startActivity(openTelegram)
         }
 
+        view.findViewById<TextView>(R.id.rustoreBtn).setOnClickListener {
+            val openRuStore =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet"))
+            startActivity(openRuStore)        }
+
+        view.findViewById<TextView>(R.id.githubBtn).setOnClickListener {
+            val openGithub =
+                Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/BadLog1n/zachet"))
+            startActivity(openGithub)
+        }
 
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings",

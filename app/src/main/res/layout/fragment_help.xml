@@ -75,12 +75,33 @@
         app:iconTintMode="multiply" />
 
     <Button
+        android:id="@+id/githubBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/our_github"
+        android:textAlignment="textStart"
+        app:icon="@drawable/ic___icon__github_"
+        app:iconTint="@color/white"
+        app:iconTintMode="multiply" />
+
+    <Button
+        android:id="@+id/rustoreBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
+        android:text="@string/our_rustore"
+        app:icon="@drawable/ic___icon__fakerustore_"
+        android:textAlignment="textStart" />
+
+    <Button
         android:id="@+id/getSupportBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/support"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="16sp" />
+        android:textSize="16sp"
+        android:layout_marginBottom="40dp" />
 
 </LinearLayout>
