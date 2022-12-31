@@ -91,7 +91,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         val isTeacher = sharedPrefSettings?.getBoolean(getString(R.string.isTeacher), false)
 
-        when (sharedPrefSettings?.getString(getString(R.string.darkThemeShared), "Light")){
+        when (sharedPrefSettings?.getString(getString(R.string.darkThemeShared), "Light")) {
             "Auto" -> {
                 autoTheme.isChecked = true
                 darkTheme.isEnabled = false
@@ -300,6 +300,11 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Подтвердить аккаунт?")
             builder.setPositiveButton("Да") { _, _ ->
+                Toast.makeText(
+                    requireContext(),
+                    "Ожидайте подтверждения",
+                    Toast.LENGTH_SHORT
+                ).show()
                 GlobalScope.launch {
                     try {
 
@@ -336,13 +341,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                 getDataOfStudent(
                                     sharedPrefGrades,
                                     loginWebInputString,
-                                    passwordWebInputString
+                                    passwordWebInputString,
+                                    true
                                 )
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Подтверждено!",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+
                                 if (saveOnServerWebCheckBox.isChecked) {
                                     database =
                                         FirebaseDatabase.getInstance().getReference("users/$uid")
@@ -391,14 +393,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             getDataOfStudent(
                                 sharedPrefGrades,
                                 loginWeb,
-                                passwordWeb
+                                passwordWeb,
+                            false
                             )
                             Toast.makeText(
                                 requireContext(),
-                                "Успешно обновлено!",
+                                "Ожидайте обновления",
                                 Toast.LENGTH_SHORT
                             ).show()
-
+                            sharedPrefGrades?.edit()
+                                ?.putString(getString(R.string.actualGrades), "")
+                                ?.apply()
                         }
                     }
                 } catch (e: Exception) {
@@ -440,7 +445,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 onDestroy()
-            } else if (isSupportDarkTheme != "Night")  {
+            } else if (isSupportDarkTheme != "Night") {
                 sharedPrefSettings?.edit()
                     ?.putString(getString(R.string.darkThemeShared), "Light")
                     ?.apply()
@@ -488,6 +493,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         sharedPref: SharedPreferences?,
         login: String,
         password: String,
+        isUpdate: Boolean
     ) {
         GlobalScope.launch {
 
@@ -523,6 +529,18 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
                                       .show()*/
 
+                    if (isUpdate)
+                        Toast.makeText(
+                            requireContext(),
+                            "Подтверждено!",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    else
+                        Toast.makeText(
+                            requireContext(),
+                            "Успешно обновлено!",
+                            Toast.LENGTH_SHORT
+                        ).show()
 
                 }
             }

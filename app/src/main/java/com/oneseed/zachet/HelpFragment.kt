@@ -10,6 +10,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.activity.addCallback
@@ -50,10 +51,21 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
             startActivity(openTelegram)
         }
 
+        var clickCount = 0
+        val imageMain = view.findViewById<ImageView>(R.id.imageView2)
+        imageMain.setOnClickListener {
+            if (clickCount == 5) imageMain.rotation += 5f
+            else clickCount += 1
+        }
+
         view.findViewById<TextView>(R.id.rustoreBtn).setOnClickListener {
             val openRuStore =
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet"))
-            startActivity(openRuStore)        }
+                Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                )
+            startActivity(openRuStore)
+        }
 
         view.findViewById<TextView>(R.id.githubBtn).setOnClickListener {
             val openGithub =
