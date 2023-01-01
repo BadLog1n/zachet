@@ -77,11 +77,12 @@ class ChatsPackage {
      * */
     fun updateChat(sendUser: String, getUser: String, isSend: Boolean, lastMsg: String = "") {
         database = FirebaseDatabase.getInstance().getReference("chatMembers")
-        database.child(sendUser).child(getUser).child("isRead").setValue("true")
-        database.child(sendUser).child(getUser).child("lastMsg").setValue(lastMsg)
+        database.child(sendUser).child(getUser).child("isRead").setValue(true)
+        if (lastMsg != "") database.child(sendUser).child(getUser).child("lastMsg").setValue(lastMsg)
+
         if (isSend) {
-            database.child(getUser).child(sendUser).child("isRead").setValue("false")
-            database.child(getUser).child(sendUser).child("lastMsg").setValue(lastMsg)
+            database.child(getUser).child(sendUser).child("isRead").setValue(false)
+            if (lastMsg != "") database.child(getUser).child(sendUser).child("lastMsg").setValue(lastMsg)
         }
     }
 
