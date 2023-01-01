@@ -55,12 +55,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
-            getString(R.string.gradesShared),
-            Context.MODE_PRIVATE
+            getString(R.string.gradesShared), Context.MODE_PRIVATE
         )
         val sharedPrefSettings: SharedPreferences? = activity?.getSharedPreferences(
-            getString(R.string.settingsShared),
-            Context.MODE_PRIVATE
+            getString(R.string.settingsShared), Context.MODE_PRIVATE
         )
         val loginWeb =
             sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
@@ -149,12 +147,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val builder = AlertDialog.Builder(
                 requireActivity()
             )
-            builder
-                .setTitle("Изменение пароля")
-                .setView(R.layout.dialog_change_password)
-                .setPositiveButton("OK", null)
-                .setNeutralButton("Отмена", null)
-                .create()
+            builder.setTitle("Изменение пароля").setView(R.layout.dialog_change_password)
+                .setPositiveButton("OK", null).setNeutralButton("Отмена", null).create()
             val alertDialog = builder.create()
             alertDialog.show()
 
@@ -169,21 +163,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         sharedPrefSettings?.getString(getString(R.string.savePassword), "null")
                             .toString()
                     if (password == oldPassword?.text.toString()) {
-                        sharedPrefSettings?.edit()
-                            ?.putString(
-                                getString(R.string.savePassword),
-                                newPassword?.text.toString()
-                            )
-                            ?.apply()
+                        sharedPrefSettings?.edit()?.putString(
+                                getString(R.string.savePassword), newPassword?.text.toString()
+                            )?.apply()
                         user!!.updatePassword(newPassword?.text.toString())
                         Toast.makeText(activity, "Успешно обновлено", Toast.LENGTH_SHORT).show()
 
                         alertDialog.cancel()
                     } else {
                         Toast.makeText(
-                            activity,
-                            "Предыдущий пароль не совпадает",
-                            Toast.LENGTH_SHORT
+                            activity, "Предыдущий пароль не совпадает", Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
@@ -198,8 +187,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         emailHelpBtn.setOnClickListener {
             Toast.makeText(
-                requireContext(), "Почта необходима для возможности " +
-                        "восстановления аккаунта", Toast.LENGTH_SHORT
+                requireContext(),
+                "Почта необходима для возможности " + "восстановления аккаунта",
+                Toast.LENGTH_SHORT
             ).show()
         }
 
@@ -210,8 +200,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             builder.setPositiveButton("Да") { _, _ ->
                 val login = sharedPrefSettings?.getString(getString(R.string.loginShared), "null")
                     .toString()
-                val loginText =
-                    loginEditText.text.toString().lowercase()
+                val loginText = loginEditText.text.toString().lowercase()
                 if (loginText.toIntOrNull()?.let { true } == true) {
                     Toast.makeText(
                         requireContext(),
@@ -227,15 +216,12 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     if (!item.exists()) {
                         FirebaseDatabase.getInstance().getReference("login")
                             .child(loginEditText.text.toString()).setValue(uid)
-                        FirebaseDatabase.getInstance().getReference("login")
-                            .child(login).removeValue()
+                        FirebaseDatabase.getInstance().getReference("login").child(login)
+                            .removeValue()
                         database.child("login").setValue(loginEditText.text.toString())
-                        sharedPrefSettings?.edit()
-                            ?.putString(
-                                getString(R.string.loginShared),
-                                loginEditText.text.toString()
-                            )
-                            ?.apply()
+                        sharedPrefSettings?.edit()?.putString(
+                                getString(R.string.loginShared), loginEditText.text.toString()
+                            )?.apply()
 
                     } else if (login != loginEditText.text.toString()) {
                         Toast.makeText(requireContext(), "Логин уже занят", Toast.LENGTH_SHORT)
@@ -264,18 +250,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         ?.apply()
                 } else {
                     Toast.makeText(
-                        requireContext(),
-                        "Ввденная почта некорректна",
-                        Toast.LENGTH_SHORT
+                        requireContext(), "Ввденная почта некорректна", Toast.LENGTH_SHORT
                     ).show()
 
 
                 }
 
                 Toast.makeText(
-                    this@SettingsFragment.context,
-                    "Сохранено",
-                    Toast.LENGTH_SHORT
+                    this@SettingsFragment.context, "Сохранено", Toast.LENGTH_SHORT
                 ).show()
 
 
@@ -301,9 +283,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             builder.setMessage("Подтвердить аккаунт?")
             builder.setPositiveButton("Да") { _, _ ->
                 Toast.makeText(
-                    requireContext(),
-                    "Ожидайте подтверждения",
-                    Toast.LENGTH_SHORT
+                    requireContext(), "Ожидайте подтверждения", Toast.LENGTH_SHORT
                 ).show()
                 GlobalScope.launch {
                     try {
@@ -316,28 +296,22 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                         val response: Connection.Response = Jsoup.connect(sitePath)
                             .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                            .timeout(30000)
-                            .execute()
+                            .timeout(30000).execute()
 
 
                         val statusCode: Int = response.statusCode()
                         val document =
-                            if (statusCode == 200) Jsoup.connect(sitePath).get()
-                                .text() else ""
+                            if (statusCode == 200) Jsoup.connect(sitePath).get().text() else ""
                         withContext(Dispatchers.Main) {
 
                             if (document != "") {
                                 sharedPrefGrades?.edit()?.putString(
-                                    getString(R.string.loginWebShared),
-                                    loginWebInputString
-                                )
-                                    ?.apply()
-                                sharedPrefGrades?.edit()
-                                    ?.putString(
+                                    getString(R.string.loginWebShared), loginWebInputString
+                                )?.apply()
+                                sharedPrefGrades?.edit()?.putString(
                                         getString(R.string.passwordWebShared),
                                         passwordWebInputString
-                                    )
-                                    ?.apply()
+                                    )?.apply()
                                 getDataOfStudent(
                                     sharedPrefGrades,
                                     loginWebInputString,
@@ -356,8 +330,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
                                 }
                             } else Toast.makeText(
-                                requireContext(), "Не удается авторизоваться на сайте," +
-                                        " проверьте вводимый логин и пароль", Toast.LENGTH_SHORT
+                                requireContext(),
+                                "Не удается авторизоваться на сайте," + " проверьте вводимый логин и пароль",
+                                Toast.LENGTH_SHORT
                             ).show()
 
                         }
@@ -391,25 +366,19 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     GlobalScope.launch {
                         withContext(Dispatchers.Main) {
                             getDataOfStudent(
-                                sharedPrefGrades,
-                                loginWeb,
-                                passwordWeb,
-                            false
+                                sharedPrefGrades, loginWeb, passwordWeb, false
                             )
                             Toast.makeText(
-                                requireContext(),
-                                "Ожидайте обновления",
-                                Toast.LENGTH_SHORT
+                                requireContext(), "Ожидайте обновления", Toast.LENGTH_SHORT
                             ).show()
-                            sharedPrefGrades?.edit()
-                                ?.putString(getString(R.string.actualGrades), "")
-                                ?.apply()
+
                         }
                     }
                 } catch (e: Exception) {
                     Toast.makeText(
-                        requireContext(), "Не удается обновить данные с сайта." +
-                                "Пожалуйста, попробуйте позже.", Toast.LENGTH_SHORT
+                        requireContext(),
+                        "Не удается обновить данные с сайта." + "Пожалуйста, попробуйте позже.",
+                        Toast.LENGTH_SHORT
                     ).show()
 
                 }
@@ -434,20 +403,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             darkTheme.isEnabled = false
 
             val isSupportDarkTheme = sharedPrefSettings?.getString(
-                getString(R.string.darkThemeShared),
-                "Light"
+                getString(R.string.darkThemeShared), "Light"
             )
             darkTheme.isEnabled = !autoTheme.isChecked
 
             if (autoTheme.isChecked && isSupportDarkTheme == "Light") {
-                sharedPrefSettings.edit()
-                    ?.putString(getString(R.string.darkThemeShared), "Auto")
+                sharedPrefSettings.edit()?.putString(getString(R.string.darkThemeShared), "Auto")
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM)
                 onDestroy()
             } else if (isSupportDarkTheme != "Night") {
-                sharedPrefSettings?.edit()
-                    ?.putString(getString(R.string.darkThemeShared), "Light")
+                sharedPrefSettings?.edit()?.putString(getString(R.string.darkThemeShared), "Light")
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 onDestroy()
@@ -461,20 +427,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         darkTheme.setOnCheckedChangeListener { _, _ ->
 
             val isSupportDarkTheme = sharedPrefSettings?.getString(
-                getString(R.string.darkThemeShared),
-                "Light"
+                getString(R.string.darkThemeShared), "Light"
             )
             autoTheme.isEnabled = !autoTheme.isChecked
 
             if (darkTheme.isChecked && isSupportDarkTheme == "Light") {
-                sharedPrefSettings.edit()
-                    ?.putString(getString(R.string.darkThemeShared), "Night")
+                sharedPrefSettings.edit()?.putString(getString(R.string.darkThemeShared), "Night")
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 onDestroy()
             } else if (isSupportDarkTheme != "Auto") {
-                sharedPrefSettings?.edit()
-                    ?.putString(getString(R.string.darkThemeShared), "Light")
+                sharedPrefSettings?.edit()?.putString(getString(R.string.darkThemeShared), "Light")
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 onDestroy()
@@ -490,10 +453,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
     @OptIn(DelicateCoroutinesApi::class)
     private fun getDataOfStudent(
-        sharedPref: SharedPreferences?,
-        login: String,
-        password: String,
-        isUpdate: Boolean
+        sharedPref: SharedPreferences?, login: String, password: String, isUpdate: Boolean
     ) {
         GlobalScope.launch {
 
@@ -515,8 +475,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val stringSemester = semester.joinToString(separator = ",")
 
                     sharedPref?.edit()
-                        ?.putString(getString(R.string.listOfSemester), stringSemester)
-                        ?.apply()
+                        ?.putString(getString(R.string.listOfSemester), stringSemester)?.apply()
                     sharedPref?.edit()
                         ?.putString(getString(R.string.listOfSemesterToChange), stringSemester)
                         ?.apply()
@@ -524,23 +483,17 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                         ?.putString(getString(R.string.groupOfStudent), infoOfStudent[0][1])
                         ?.apply()
                     sharedPref?.edit()
-                        ?.putString(getString(R.string.formOfStudent), infoOfStudent[0][0])
-                        ?.apply()
+                        ?.putString(getString(R.string.formOfStudent), infoOfStudent[0][0])?.apply()
+                    sharedPref?.edit()?.putString(getString(R.string.actualGrades), "")?.apply()
                     /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
                                       .show()*/
 
-                    if (isUpdate)
-                        Toast.makeText(
-                            requireContext(),
-                            "Подтверждено!",
-                            Toast.LENGTH_SHORT
-                        ).show()
-                    else
-                        Toast.makeText(
-                            requireContext(),
-                            "Успешно обновлено!",
-                            Toast.LENGTH_SHORT
-                        ).show()
+                    if (isUpdate) Toast.makeText(
+                        requireContext(), "Подтверждено!", Toast.LENGTH_SHORT
+                    ).show()
+                    else Toast.makeText(
+                        requireContext(), "Успешно обновлено!", Toast.LENGTH_SHORT
+                    ).show()
 
                 }
             }
@@ -566,8 +519,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             val response: Connection.Response = Jsoup.connect(sitePath)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(30000)
-                .execute()
+                .timeout(30000).execute()
 
             val statusCode: Int = response.statusCode()
 
@@ -593,16 +545,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val infoStudent = getFormAndGroup(login, password) ?: return null
             arrayToReturn.add(infoStudent)
             var document: String
-            val sitePath =
-                arrayOf(
-                    "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=false&type=json",
-                    "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=true&type=json"
-                )
+            val sitePath = arrayOf(
+                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=false&type=json",
+                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=semestr&group=${infoStudent[1]}&status=true&type=json"
+            )
             for (item in sitePath) {
                 val response: Connection.Response = Jsoup.connect(item)
                     .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                    .timeout(30000)
-                    .execute()
+                    .timeout(30000).execute()
                 val statusCode: Int = response.statusCode()
                 if (statusCode == 200) {
                     document = Jsoup.connect(item).get().text()
