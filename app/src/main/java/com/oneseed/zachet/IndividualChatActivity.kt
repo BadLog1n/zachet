@@ -58,6 +58,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private val storagePermissionCode = 0
     private val chatsPackage = ChatsPackage()
     private var userName = ""
+    private var loadImagesAgain = true
     private var userLogin = ""
     private lateinit var chatName: String
     private var isScrolledLast = false
@@ -83,7 +84,7 @@ class IndividualChatActivity : AppCompatActivity() {
         rcView.layoutManager = LinearLayoutManager(this)
         findViewById<TextView>(R.id.receiver_tv).text = ""
 
-
+        loadImagesAgain = sharedPref?.getBoolean(getString(R.string.loadImages), true) == true
 
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
         var requestToDatabase = database.get()
@@ -414,7 +415,8 @@ class IndividualChatActivity : AppCompatActivity() {
                                             chatName,
                                             this@IndividualChatActivity,
                                             this@IndividualChatActivity,
-                                            displaySendName
+                                            displaySendName,
+                                            loadImagesAgain
                                         )
                                     )
                                 } else {
@@ -425,11 +427,12 @@ class IndividualChatActivity : AppCompatActivity() {
                                             chatName,
                                             this@IndividualChatActivity,
                                             this@IndividualChatActivity,
-                                            displaySendName
+                                            displaySendName,
+                                            loadImagesAgain
                                         )
                                     )
                                 }
-                               // Log.d("Message", "Скачать фото")
+                                // Log.d("Message", "Скачать фото")
                             }
                         }
                     }
@@ -681,7 +684,8 @@ class ChatFromImgItem(
     private val chatName: String,
     val context: Context,
     private val activity: Activity?,
-    private val displayUser: String
+    private val displayUser: String,
+    private val loadImagesAgain: Boolean,
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
@@ -694,7 +698,7 @@ class ChatFromImgItem(
         CoroutineScope(Dispatchers.Main).launch {
             executor.execute {
                 for (i in 1..3) {
-
+                    if (!loadImagesAgain) imageView.setImageDrawable(null)
                     Handler(Looper.getMainLooper()).post {
 
                         displayImage(filename, chatName, viewHolder)
@@ -772,7 +776,8 @@ class ChatToImgItem(
     private val chatName: String,
     val context: Context,
     private val activity: Activity?,
-    private val displayUser: String
+    private val displayUser: String,
+    private val loadImagesAgain: Boolean
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
@@ -783,6 +788,7 @@ class ChatToImgItem(
         CoroutineScope(Dispatchers.Main).launch {
             executor.execute {
                 for (i in 1..3) {
+                    if (!loadImagesAgain) imageView.setImageDrawable(null)
                     Handler(Looper.getMainLooper()).post {
 
                         displayImage(filename, chatName, viewHolder)

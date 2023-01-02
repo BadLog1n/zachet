@@ -40,7 +40,7 @@
     <string name="version">Версия</string>
     <string name="name">Имя</string>
     <string name="surname">Фамилия</string>
-    <string name="cache_pics">Кешировать изображения</string>
+    <string name="cache_pics">Стараться не обновлять изображения</string>
     <string name="supportDarkThemeText">Тема как на устройстве</string>
     <string name="language">Язык</string>
     <string name="updateText">Перейдите в \"О приложении\", чтобы скачать обновление. Изменения можно посмотреть в telegram</string>
@@ -115,6 +115,7 @@
     <string name="actualGrades">actualGrades</string> собирает баллы за последний семестр
     <string name="loginShared">login</string>
     <string name="darkThemeShared">darkThemeShared</string>
+    <string name="loadImages">loadImages</string>
     // Light - светлая всегда
     // Auto - как на устройстве
     // Night - темная всегда

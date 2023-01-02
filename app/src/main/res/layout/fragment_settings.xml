@@ -439,13 +439,12 @@
 
 
             <com.google.android.material.switchmaterial.SwitchMaterial
-                android:id="@+id/cache_switch"
+                android:id="@+id/loadImages"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="14dp"
                 android:layout_marginBottom="20dp"
-                android:enabled="false"
                 android:fontFamily="@font/inter"
                 android:text="@string/cache_pics"
                 android:textAlignment="viewStart"

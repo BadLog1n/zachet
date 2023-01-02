@@ -48,6 +48,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val switch = view.findViewById<SwitchMaterial>(R.id.loadFromServerWeb)
         val autoTheme = view.findViewById<SwitchMaterial>(R.id.autoTheme)
         val darkTheme = view.findViewById<SwitchMaterial>(R.id.darkTheme)
+        val loadImages = view.findViewById<SwitchMaterial>(R.id.loadImages)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
         val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
@@ -99,6 +100,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 autoTheme.isEnabled = false
             }
         }
+        if(sharedPrefSettings?.getBoolean(getString(R.string.loadImages), true) == true){
+            loadImages.isChecked = true
+        }
 
 
 
@@ -130,8 +134,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 loginWebInput.isEnabled = true
                 passwordWebInput.isEnabled = true
                 val loginWebSwitch =
-                    sharedPrefGrades?.getString(getString(R.string.loginWebShared), "")
-                        .toString()
+                    sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
                 val passwordWebSwitch =
                     sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "")
                         .toString()
@@ -307,8 +310,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     getString(R.string.loginWebShared), loginWebInputString
                                 )?.apply()
                                 sharedPrefGrades?.edit()?.putString(
-                                    getString(R.string.passwordWebShared),
-                                    passwordWebInputString
+                                    getString(R.string.passwordWebShared), passwordWebInputString
                                 )?.apply()
                                 getDataOfStudent(
                                     sharedPrefGrades,
@@ -422,6 +424,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             //exitProcess(0)
         }
 
+
+
+
         darkTheme.setOnCheckedChangeListener { _, _ ->
 
             val isSupportDarkTheme = sharedPrefSettings?.getString(
@@ -446,6 +451,14 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             //exitProcess(0)
         }
 
+        loadImages.setOnCheckedChangeListener { _, _ ->
+            if (loadImages.isChecked) {
+                sharedPrefSettings?.edit()?.putBoolean(getString(R.string.loadImages), true)?.apply()
+
+            } else sharedPrefSettings?.edit()?.putBoolean(getString(R.string.loadImages), false)
+                ?.apply()
+
+        }
     }
 
 
@@ -473,7 +486,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val stringSemester = semester.joinToString(separator = ",")
 
                     sharedPref?.edit()
-                        ?.putString(getString(R.string.listOfSemester), stringSemester)?.apply()
+                        ?.putString(getString(R.string.listOfSemester), stringSemester)
+                        ?.apply()
                     sharedPref?.edit()
                         ?.putString(getString(R.string.listOfSemesterToChange), stringSemester)
                         ?.apply()
@@ -499,13 +513,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
 
-    /*                           returnRating(
-                                login,
-                                infoOfStudent[0][1],
-                                semester.first(),
-                                infoOfStudent[0][0],
-                                "false"
-                            )*/
+/*                           returnRating(
+                            login,
+                            infoOfStudent[0][1],
+                            semester.first(),
+                            infoOfStudent[0][0],
+                            "false"
+                        )*/
 
 
     private fun getFormAndGroup(login: String, password: String): ArrayList<String>? {
