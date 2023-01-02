@@ -114,33 +114,31 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
         switch.setOnCheckedChangeListener { _, _ ->
-            database = FirebaseDatabase.getInstance().getReference("users/$uid")
-            database.get().addOnSuccessListener {
-                val switchState: Boolean = switch.isChecked
-
-                if (switchState) {
-                    loginWebInput.setText("")
-                    passwordWebInput.setText("")
-                    loginWebInput.isEnabled = false
-                    passwordWebInput.isEnabled = false
+            if (switch.isChecked) {
+                loginWebInput.isEnabled = false
+                passwordWebInput.isEnabled = false
+                loginWebInput.setText("")
+                passwordWebInput.setText("")
+                database = FirebaseDatabase.getInstance().getReference("users/$uid")
+                database.get().addOnSuccessListener {
                     if (it.child("loginWeb").exists()) {
                         loginWebInput.setText(it.child("loginWeb").value.toString())
                         passwordWebInput.setText(it.child("passwordWeb").value.toString())
                     }
-
-                } else {
-                    loginWebInput.isEnabled = true
-                    passwordWebInput.isEnabled = true
-                    val loginWebSwitch =
-                        sharedPrefGrades?.getString(getString(R.string.loginWebShared), "")
-                            .toString()
-                    val passwordWebSwitch =
-                        sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "")
-                            .toString()
-                    loginWebInput.setText(loginWebSwitch)
-                    passwordWebInput.setText(passwordWebSwitch)
                 }
+            } else {
+                loginWebInput.isEnabled = true
+                passwordWebInput.isEnabled = true
+                val loginWebSwitch =
+                    sharedPrefGrades?.getString(getString(R.string.loginWebShared), "")
+                        .toString()
+                val passwordWebSwitch =
+                    sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "")
+                        .toString()
+                loginWebInput.setText(loginWebSwitch)
+                passwordWebInput.setText(passwordWebSwitch)
             }
+
         }
 
         view.findViewById<Button>(R.id.changePasswordBtn).setOnClickListener {
@@ -164,8 +162,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             .toString()
                     if (password == oldPassword?.text.toString()) {
                         sharedPrefSettings?.edit()?.putString(
-                                getString(R.string.savePassword), newPassword?.text.toString()
-                            )?.apply()
+                            getString(R.string.savePassword), newPassword?.text.toString()
+                        )?.apply()
                         user!!.updatePassword(newPassword?.text.toString())
                         Toast.makeText(activity, "Успешно обновлено", Toast.LENGTH_SHORT).show()
 
@@ -220,8 +218,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             .removeValue()
                         database.child("login").setValue(loginEditText.text.toString())
                         sharedPrefSettings?.edit()?.putString(
-                                getString(R.string.loginShared), loginEditText.text.toString()
-                            )?.apply()
+                            getString(R.string.loginShared), loginEditText.text.toString()
+                        )?.apply()
 
                     } else if (login != loginEditText.text.toString()) {
                         Toast.makeText(requireContext(), "Логин уже занят", Toast.LENGTH_SHORT)
@@ -309,9 +307,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                                     getString(R.string.loginWebShared), loginWebInputString
                                 )?.apply()
                                 sharedPrefGrades?.edit()?.putString(
-                                        getString(R.string.passwordWebShared),
-                                        passwordWebInputString
-                                    )?.apply()
+                                    getString(R.string.passwordWebShared),
+                                    passwordWebInputString
+                                )?.apply()
                                 getDataOfStudent(
                                     sharedPrefGrades,
                                     loginWebInputString,
