@@ -171,7 +171,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                             Toast.makeText(
                                 this@IndividualChatActivity,
-                                "Вам необходимо выдать разрешение на работу с памятью в настройках, " + "чтобы загружать изображения",
+                                "Вам необходимо выдать разрешение на работу с памятью в настройках, чтобы загружать изображения",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -183,7 +183,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                 if (!isExternalStorageManager()) {
                                     Toast.makeText(
                                         this@IndividualChatActivity,
-                                        "Вам необходимо выдать разрешение на работу с памятью в настройках," + "чтобы загружать файлы",
+                                        "Вам необходимо выдать разрешение на работу с памятью в настройках, чтобы загружать файлы",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
@@ -201,15 +201,10 @@ class IndividualChatActivity : AppCompatActivity() {
                     }
                 }
                 spinner.setSelection(0)
-
             }
-
         }
 
-        findViewById<ImageButton>(R.id.clipButton).setOnClickListener {
-
-
-        }
+        findViewById<ImageButton>(R.id.clipButton).setOnClickListener {  }
 
         spinner.setOnLongClickListener {
             pickFileOrPhoto(false)
@@ -296,16 +291,14 @@ class IndividualChatActivity : AppCompatActivity() {
                         chatsPackage.sendMessage(
                             sendName,
                             getName,
-                            chatName = chatName,
-                            type = typeOfFile,
-                            text = "$currentTimestamp/$subFile",
-                            sendName = userName,
-                            userLogin = userLogin
+                            "$currentTimestamp/$subFile",
+                            typeOfFile,
+                            chatName,
+                            userName,
+                            userLogin
                         )
                     }
-                    builder.setNeutralButton("Отмена") { _, _ ->
-
-                    }
+                    builder.setNeutralButton("Отмена") { _, _ -> }
                     val alertDialog = builder.create()
                     alertDialog.show()
 
@@ -318,12 +311,8 @@ class IndividualChatActivity : AppCompatActivity() {
                         setTextColor(Color.BLACK)
 
                     }
-
-
                 }
             }
-
-
         }
 
     var lastTimeMessage: Long = 0
@@ -340,7 +329,6 @@ class IndividualChatActivity : AppCompatActivity() {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.childrenCount == 0L) {
                     progressBar.visibility = View.GONE
-
                 }
                 val username = "username"
                 val text = "text"
@@ -768,8 +756,7 @@ class ChatToImgItem(
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
         displayImage(filename, chatName, viewHolder)
-        viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
-            "Загрузка фотографии"
+        viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
 
         CoroutineScope(Dispatchers.Main).launch {

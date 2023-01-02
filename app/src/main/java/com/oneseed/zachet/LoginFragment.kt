@@ -36,12 +36,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
             activity?.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-        //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
-        //requireActivity().actionBar?.hide()
 
         if (sharedPref?.getBoolean(getString(R.string.checkSettings), false) == true) {
             view.hideKeyboard()
-            //activity?.findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             val isTeacher = sharedPref.getBoolean(getString(R.string.isTeacher), false)
             findNavController().navigate(R.id.gradesFragment)
             if (isTeacher) {
@@ -54,22 +51,16 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                 (view.findViewById<TextInputLayout>(R.id.layoutEmail))?.editText?.text.toString()
             pw =
                 (view.findViewById<TextInputLayout>(R.id.layoutPassword))?.editText?.text.toString()
-
             if (email.isNotEmpty() && pw.isNotEmpty()) {
-
                 firebaseAuth.signInWithEmailAndPassword(email, pw).addOnCompleteListener { task ->
                     if (task.isSuccessful) {
-                        Toast.makeText(activity, "Успешный вход", Toast.LENGTH_SHORT)
-                            .show()
+                        Toast.makeText(activity, "Успешный вход", Toast.LENGTH_SHORT).show()
                         database = FirebaseDatabase.getInstance()
                             .getReference("users/${firebaseAuth.uid.toString()}")
                         val requestToDatabase = database.get()
                         view.hideKeyboard()
-
-                        //mainActionBar.show()
                         sharedPref?.edit()?.putBoolean(getString(R.string.isTeacher), false)
                             ?.apply()
-
                         requestToDatabase.addOnSuccessListener {
                             activity?.findViewById<DrawerLayout>(R.id.drawer)
                                 ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -82,23 +73,22 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                                 findNavController().navigate(R.id.gradesFragment)
 
                             }
-
-                            saveSettings(email, pw, firebaseAuth.uid.toString(), it.child("login").value.toString())
-
+                            saveSettings(
+                                email,
+                                pw,
+                                firebaseAuth.uid.toString(),
+                                it.child("login").value.toString()
+                            )
                         }
                     } else {
                         Toast.makeText(
-                            activity,
-                            "Данные для входа неправильные",
-                            Toast.LENGTH_SHORT
+                            activity, "Данные для входа неправильные", Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             } else {
                 Toast.makeText(
-                    activity,
-                    "Поля для ввода не должны быть пустыми",
-                    Toast.LENGTH_SHORT
+                    activity, "Поля для ввода не должны быть пустыми", Toast.LENGTH_SHORT
                 ).show()
             }
 
@@ -117,22 +107,15 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                         ).show()
                     } else {
                         Toast.makeText(
-                            requireContext(),
-                            "Аккаунт с этой почтой не найден",
-                            Toast.LENGTH_SHORT
+                            requireContext(), "Аккаунт с этой почтой не найден", Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             } else {
                 Toast.makeText(
-                    requireContext(),
-                    "Почта не может быть пустой",
-                    Toast.LENGTH_SHORT
+                    requireContext(), "Почта не может быть пустой", Toast.LENGTH_SHORT
                 ).show()
-
             }
-
-
         }
 
         view.findViewById<TextView>(R.id.registerOfferTw).setOnClickListener {
@@ -140,9 +123,9 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
 
         view.findViewById<TextView>(R.id.moveTelegram).setOnClickListener {
-            val openTelegram =
-                Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/zacheet"))
-            startActivity(openTelegram)        }
+            val openTelegram = Intent(Intent.ACTION_VIEW, Uri.parse("https://t.me/zacheet"))
+            startActivity(openTelegram)
+        }
 
         view.findViewById<TextView>(R.id.moveGithub).setOnClickListener {
             val openGithub =
@@ -176,7 +159,6 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         sharedPref?.edit()?.putString(getString(R.string.savePassword), pw)?.apply()
         sharedPref?.edit()?.putString(getString(R.string.uid), uid)?.apply()
         sharedPref?.edit()?.putString(getString(R.string.loginShared), saveUserId)?.apply()
-
         sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), true)?.apply()
 
     }

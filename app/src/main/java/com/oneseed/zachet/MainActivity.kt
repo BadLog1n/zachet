@@ -14,9 +14,6 @@ import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 
 class MainActivity : AppCompatActivity() {
-    //private val checkSettings = "check_settings"
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -126,13 +123,6 @@ class MainActivity : AppCompatActivity() {
                     LogoutFragment().show(
                         this.supportFragmentManager, LogoutFragment.TAG
                     )
-                    //val sharedPref: SharedPreferences? = this.getPreferences(Context.MODE_PRIVATE)
-                    //haredPref?.edit()?.putBoolean(checkSettings, false)?.apply()
-                    //findNavController(R.id.nav_host_fragment).navigate(R.id.loginFragment)
-                    //findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
-                    //supportActionBar?.hide()
-
-
                 }
                 R.id.schedule_menu -> {
                     toolbar.title = "Расписание"
