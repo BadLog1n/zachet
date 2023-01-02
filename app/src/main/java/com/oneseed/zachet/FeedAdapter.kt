@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.DialogInterface
 import android.content.Intent
 import android.graphics.Color
@@ -27,10 +26,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
 
         private val binding = FeedItemBinding.bind(item)
 
-        @SuppressLint("SetTextI18n")
         fun bind(feedItem: FeedRecord) = with(binding) {
-
-
             whoPostedTv.text =
                 if (feedItem.displayLogin != "null") "${feedItem.author} (${feedItem.displayLogin})"
                 else feedItem.author
@@ -38,7 +34,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             recordTv.text = feedItem.record_text
             record.text = feedItem.record
             authorIdChat.text = feedItem.authorIdChat
-            replyToMsgBtn.visibility = if (authorIdChat.text.toString() == "10") View.GONE else View.VISIBLE
+            replyToMsgBtn.visibility =
+                if (authorIdChat.text.toString() == "10") View.GONE else View.VISIBLE
 
             userId = feedItem.userId
             sponsoredTv.text = "Спонсировано"
@@ -51,7 +48,6 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         }
     }
 
-    @SuppressLint("SetTextI18n")
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecordHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.feed_item, parent, false)
 
@@ -117,10 +113,10 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         recordsList.removeAll(recordsList.toSet())
     }
 
-
-    @SuppressLint("NotifyDataSetChanged")
-    fun removeObject(feedItem: FeedRecord) {
+    private fun removeObject(feedItem: FeedRecord) {
+        val position = recordsList.indexOf(feedItem)
         recordsList.remove(feedItem)
-        notifyDataSetChanged()
+        notifyItemRangeChanged(position, itemCount)
+
     }
 }

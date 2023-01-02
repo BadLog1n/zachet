@@ -234,6 +234,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 position: Int,
                 id: Long
             ) {
+                spinner.isEnabled = false
+                rcAdapter.clearRecords()
+
                 progressBar.visibility = View.VISIBLE
                 recyclerView.visibility = View.INVISIBLE
                 val actualGrades =
@@ -315,7 +318,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                                     progressBar.visibility = View.GONE
                                     recyclerView.visibility = View.VISIBLE
+
                                 }
+                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
+                                spinner.isEnabled = true
+
                                 if (isChange) {
                                     Toast.makeText(
                                         requireContext(),

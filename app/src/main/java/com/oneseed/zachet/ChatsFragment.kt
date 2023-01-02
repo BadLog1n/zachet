@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
@@ -48,7 +47,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private lateinit var progressBar: ProgressBar
 
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         authCheck.check(view, this@ChatsFragment.context)
@@ -65,7 +63,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         recyclerView.layoutManager = linearLayoutManager
         rcAdapter.clearRecords()
         rcAdapter.chatsList = ArrayList()
-        rcAdapter.notifyDataSetChanged()
+        rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = linearLayoutManager
         view.findViewById<EditText>(R.id.searchTxtInput)
@@ -186,7 +184,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     private fun addPostEventListener() {
         postListener = object : ValueEventListener {
-            @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (member in dataSnapshot.children) {
                     val getUser = member.key.toString()
@@ -236,7 +233,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     list.forEach { element ->
                                         rcAdapter.addChatPreview(element)
                                     }
-                                    rcAdapter.notifyDataSetChanged()
+                                    rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
 
                                     notFirstLoad = true
                                     progressBar.visibility = View.GONE

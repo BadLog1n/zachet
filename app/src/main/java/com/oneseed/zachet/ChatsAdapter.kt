@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.graphics.Typeface
 import android.view.LayoutInflater
@@ -20,10 +19,9 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
 
         private val binding = ListOfChatsItemBinding.bind(item)
 
-        @SuppressLint("SimpleDateFormat")
         fun bind(chatPreview: ChatPreview) = with(binding) {
             val dt =
-                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(chatPreview.latestMsgTime))
+                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date(chatPreview.latestMsgTime))
                     .toString()
             receiverName.text = chatPreview.receiverName
             latestMsgTimeTv.text = dt

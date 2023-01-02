@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.View
@@ -128,14 +127,14 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
         return gradesList.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addSubjectGrades(subjectGrades: SubjectGrades) {
         gradesList.add(subjectGrades)
-        notifyDataSetChanged()
     }
 
     fun clearRecords() {
         gradesList.removeAll(gradesList.toSet())
         gradesList.clear()
+        notifyItemRangeChanged(0, itemCount)
+
     }
 }

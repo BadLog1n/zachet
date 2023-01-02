@@ -20,8 +20,6 @@ class RatingUniversity {
                 "tutorName" to "",
                 "tutorId" to "",
             )
-
-
             // ID
             val subjectType = getSubjectType(jsonArray, i)
             val getSubjectName = getSubjectName(jsonArray, i)
@@ -97,10 +95,6 @@ class RatingUniversity {
         var stringToReturn = ""
         try {
             val ratingArray = jsonArray.getJSONObject(index).getJSONObject("ReitingCode")
-            // val ratingArray = JSONArray(ratingArrayString)
-
-            //val ratingArray = ratingArrayString.getJSONObject(index).getString("ReitingCode")
-
             val arrayKt = arrayOf("1kt", "2kt", "3kt", "4kt")
             for (item in arrayKt) {
                 try {
@@ -132,14 +126,6 @@ class RatingUniversity {
         val localArray = arrayListOf("", "")
         val tutorArray = jsonArray.getJSONObject(index).getJSONArray("TutorArr")
 
-/*
-        val document: JSONArray = JSONArray("[{\"ID\":\"2520\",\"FIO\":\"Аникина Елена Игоревна\",\"Email\":\"elenaanikina@inbox.ru\",\"KafedrUrl\":[\"https:\\/\\/swsu.ru\\/structura\\/up\\/fivt\\/povt\\/index.php\"]}]")
-        //val tutorArray = tutorArrayString.getJSONObject(index).getJSONObject("TutorArr")
-        val tutorJSON = JSONArray(tutorArrayString)
-        //val tutorArray = tutorJSON.getJSONObject(index).getJSONObject("TutorArr")
-        val additional = ratingArray.getJSONObject("dopol").getJSONObject("0").getString("Ball")
-*/
-
         return if (tutorArray.length() != 0) {
             val tutorFirst = tutorArray.getJSONObject(0)
             localArray[0] = tutorFirst.getString("FIO")
@@ -151,14 +137,3 @@ class RatingUniversity {
 
 
 }
-
-/*            sg = SubjectGrades(
-                "Экономика",
-                36,
-                "зачет",
-                grArray,
-                arrayTest[1],
-                "Иванов Петр Петрович",
-                arrayTest[0],
-                "Аникина Елена Игоревна"
-            )*/

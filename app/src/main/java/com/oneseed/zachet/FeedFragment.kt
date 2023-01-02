@@ -35,7 +35,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
 
 
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFeedBinding.inflate(layoutInflater)
@@ -44,7 +43,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         progressBar = view.findViewById(R.id.feedProgressBar)
         rcAdapter.clearRecords()
         rcAdapter.recordsList = ArrayList()
-        rcAdapter.notifyDataSetChanged()
+        rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
         feedRc.adapter = rcAdapter
         addPostEventListener(view)
         feedRc.adapter = rcAdapter
@@ -136,13 +135,12 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                             )
                             lastPost = postId.toLong()
 
-                            @SuppressLint("NotifyDataSetChanged")
                             if (isFirstLoad && item.toString() == dataSnapshot.children.last()
                                     .toString()
                             ) {
                                 val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
                                 feedRc.adapter = rcAdapter
-                                feedRc.adapter?.notifyDataSetChanged()
+                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
                                 isFirstLoad = false
                                 Firebase.analytics.logEvent("feed_upload") {
                                     param("feed_upload", "")

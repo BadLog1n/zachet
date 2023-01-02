@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -15,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import authCheck.AuthCheck
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.DatabaseReference
@@ -24,7 +24,6 @@ import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
-import kotlinx.coroutines.*
 
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
@@ -34,10 +33,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
     private lateinit var binding: FragmentScheduleBinding
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.spinner)
-        val switch = requireView().findViewById<Switch>(R.id.switchh)
+        val switch = requireView().findViewById<SwitchMaterial>(R.id.switchh)
         val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swipe)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.settingsShared),
@@ -97,8 +95,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 Firebase.analytics.logEvent("schedule_update") {
                     param("schedule_update", "")
                 }
-            }
-            catch (_: Exception) {
+            } catch (_: Exception) {
                 swipeRefreshLayout.isRefreshing = false
             }
         }

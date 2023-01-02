@@ -21,14 +21,3 @@ class InfoOfStudent {
     }
 
 }
-
-
-/*            var document = ""
-            val connection =
-                Jsoup.connect("https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=@$login&password=$password&type=array")
-            //val document = connection.get().text()
-            try {
-                document = connection.get().text()
-            } catch (e: Exception) {
-                return@launch
-            }*/

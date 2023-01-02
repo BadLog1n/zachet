@@ -22,7 +22,6 @@ import android.util.Log
 import android.view.View
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.annotation.RequiresApi
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
@@ -67,7 +66,6 @@ class IndividualChatActivity : AppCompatActivity() {
 
 
     @SuppressLint("MissingInflatedId")
-    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val arguments = intent.extras
@@ -84,6 +82,7 @@ class IndividualChatActivity : AppCompatActivity() {
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this)
         findViewById<TextView>(R.id.receiver_tv).text = ""
+
 
 
         database = FirebaseDatabase.getInstance().getReference("users/$getName")
@@ -139,6 +138,11 @@ class IndividualChatActivity : AppCompatActivity() {
 
         val spinner = this.findViewById<Spinner>(R.id.spinner2)
 
+        if (Build.VERSION.SDK_INT < 26) {
+            spinner.visibility = View.GONE
+            findViewById<ImageButton>(R.id.clipButton).visibility = View.GONE
+        }
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -189,7 +193,24 @@ class IndividualChatActivity : AppCompatActivity() {
                                 } else {
                                     pickFileOrPhoto(true)
                                 }
+                            } else if ((ContextCompat.checkSelfPermission(
+                                    this@IndividualChatActivity,
+                                    Manifest.permission.READ_EXTERNAL_STORAGE
+                                ) != PackageManager.PERMISSION_GRANTED && (ContextCompat.checkSelfPermission(
+                                    this@IndividualChatActivity,
+                                    Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                ) != PackageManager.PERMISSION_GRANTED))
+                            ) {
+                                ActivityCompat.requestPermissions(
+                                    this@IndividualChatActivity, arrayOf(
+                                        Manifest.permission.READ_EXTERNAL_STORAGE,
+                                        Manifest.permission.WRITE_EXTERNAL_STORAGE
+                                    ), storagePermissionCode
+                                )
+                            } else {
+                                pickFileOrPhoto(true)
                             }
+
                         } catch (e: Exception) {
                             Toast.makeText(
                                 this@IndividualChatActivity,
@@ -204,7 +225,9 @@ class IndividualChatActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<ImageButton>(R.id.clipButton).setOnClickListener {  }
+        findViewById<ImageButton>(R.id.clipButton).setOnClickListener { }
+
+
 
         spinner.setOnLongClickListener {
             pickFileOrPhoto(false)
@@ -251,24 +274,23 @@ class IndividualChatActivity : AppCompatActivity() {
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
      * */
-    @RequiresApi(Build.VERSION_CODES.O)
     private fun pickFileOrPhoto(isNeededFile: Boolean) {
-        val intent = Intent(Intent.ACTION_PICK)
-        if (isNeededFile) {
-            intent.type = "*/*"
-            typeOfFile = "file"
-        } else {
-            intent.type = "image/*"
-            typeOfFile = "photo"
+        if (Build.VERSION.SDK_INT >= 26) {
+            val intent = Intent(Intent.ACTION_PICK)
+            if (isNeededFile) {
+                intent.type = "*/*"
+                typeOfFile = "file"
+            } else {
+                intent.type = "image/*"
+                typeOfFile = "photo"
+            }
+            resultLauncher.launch(intent)
         }
-        resultLauncher.launch(intent)
-
     }
 
     /**
      * Функция, которая загружает выбранный файл(фото) на сервер и отправляет соответствуееще сообщение на сервер.
      * */
-    @RequiresApi(Build.VERSION_CODES.O)
     private var resultLauncher =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
@@ -325,7 +347,7 @@ class IndividualChatActivity : AppCompatActivity() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         rcView.adapter = adapter
         postListener = object : ValueEventListener {
-            @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
+            @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.childrenCount == 0L) {
                     progressBar.visibility = View.GONE
@@ -407,11 +429,10 @@ class IndividualChatActivity : AppCompatActivity() {
                                         )
                                     )
                                 }
-                                Log.d("Message", "Скачать фото")
+                               // Log.d("Message", "Скачать фото")
                             }
                         }
                     }
-                    rcView.adapter?.notifyDataSetChanged()
                     if (isFirstLoad && i.toString() == dataSnapshot.children.last().toString()) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                         isFirstLoad = false
@@ -422,7 +443,7 @@ class IndividualChatActivity : AppCompatActivity() {
                     } else if (isScrolledLast) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                     }
-                    rcView.adapter?.notifyDataSetChanged()
+                    rcView.adapter?.notifyItemChanged(adapter.itemCount)
 
                 }
             }

@@ -60,7 +60,7 @@ class AuthCheck {
                     }
                 }
             } catch (_: Exception) {
-                Log.d("dat", "error!!!!")
+                Log.d("dat", "error in AuthCheck")
 
             }
         }

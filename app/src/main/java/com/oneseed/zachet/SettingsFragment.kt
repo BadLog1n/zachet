@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.*
 import android.graphics.Color
 import android.os.Bundle
@@ -13,6 +12,7 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
+import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
@@ -31,7 +31,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
     private val infoOfStudent = InfoOfStudent()
 
-    @SuppressLint("UseSwitchCompatOrMaterialCode")
+
     @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         authCheck.check(view, this@SettingsFragment.context)
@@ -45,9 +45,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val loginWebInput = view.findViewById<EditText>(R.id.lWebInput)
         val passwordWebInput = view.findViewById<EditText>(R.id.pWebInput)
         val updateBtn = view.findViewById<Button>(R.id.updateBtn)
-        val switch = view.findViewById<Switch>(R.id.loadFromServerWeb)
-        val autoTheme = view.findViewById<Switch>(R.id.autoTheme)
-        val darkTheme = view.findViewById<Switch>(R.id.darkTheme)
+        val switch = view.findViewById<SwitchMaterial>(R.id.loadFromServerWeb)
+        val autoTheme = view.findViewById<SwitchMaterial>(R.id.autoTheme)
+        val darkTheme = view.findViewById<SwitchMaterial>(R.id.darkTheme)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
 
         val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
@@ -569,11 +569,3 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
 }
-
-
-//Только английские буквы или цифры
-//Только русские буквы
-
-
-//В будущем:
-//При изменении пароля придётся заново авторизовываться.

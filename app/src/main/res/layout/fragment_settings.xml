@@ -238,7 +238,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="5dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/save"
                 android:textAllCaps="false"
@@ -259,13 +258,12 @@
                 android:textSize="16sp"
                 app:cornerRadius="100dp" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/loadFromServerWeb"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginBottom="10dp"
                 android:fontFamily="@font/inter"
                 android:text="@string/loadFromServerWeb"
                 android:textAlignment="viewStart"
@@ -273,8 +271,7 @@
                 android:textColorLink="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:theme="@style/Theme.UniversitySystem"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                android:theme="@style/Theme.UniversitySystem" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -385,7 +382,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="51dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
                 android:backgroundTint="@color/black"
                 android:text="@string/confirm"
                 android:textAllCaps="false"
@@ -408,13 +404,12 @@
                 android:visibility="gone"
                 app:cornerRadius="100dp" />
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/autoTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginBottom="20dp"
                 android:enabled="true"
                 android:fontFamily="@font/inter"
                 android:text="@string/supportDarkThemeText"
@@ -423,17 +418,15 @@
                 android:textColorLink="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:theme="@style/Theme.UniversitySystem"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                android:theme="@style/Theme.UniversitySystem" />
 
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/darkTheme"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="12dp"
                 android:layout_marginEnd="14dp"
-                android:layout_marginBottom="20dp"
                 android:enabled="true"
                 android:fontFamily="@font/inter"
                 android:text="Принудительная тёмная тема"
@@ -442,11 +435,10 @@
                 android:textColorLink="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:theme="@style/Theme.UniversitySystem"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                android:theme="@style/Theme.UniversitySystem" />
 
 
-            <Switch
+            <com.google.android.material.switchmaterial.SwitchMaterial
                 android:id="@+id/cache_switch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -461,8 +453,7 @@
                 android:textColorLink="@color/blue"
                 android:textSize="16sp"
                 android:textStyle="bold"
-                android:theme="@style/Theme.UniversitySystem"
-                tools:ignore="UseSwitchCompatOrMaterialXml" />
+                android:theme="@style/Theme.UniversitySystem" />
 
         </LinearLayout>
 
