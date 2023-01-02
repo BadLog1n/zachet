@@ -80,8 +80,7 @@
                     android:layout_weight="1"
                     android:maxWidth="240dp"
                     android:maxHeight="280dp"
-                    android:visibility="visible"
-                    app:srcCompat="@drawable/main_icon" />
+                    android:visibility="visible" />
 
             </LinearLayout>
 

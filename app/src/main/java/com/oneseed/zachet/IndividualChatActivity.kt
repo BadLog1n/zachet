@@ -338,7 +338,7 @@ class IndividualChatActivity : AppCompatActivity() {
         postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
-                if (dataSnapshot.childrenCount == 0L){
+                if (dataSnapshot.childrenCount == 0L) {
                     progressBar.visibility = View.GONE
 
                 }
@@ -434,6 +434,8 @@ class IndividualChatActivity : AppCompatActivity() {
                     } else if (isScrolledLast) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                     }
+                    rcView.adapter?.notifyDataSetChanged()
+
                 }
             }
 
@@ -447,7 +449,7 @@ class IndividualChatActivity : AppCompatActivity() {
     override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
-       //Log.w("Base", "Database closed")
+        //Log.w("Base", "Database closed")
 
         super.onStop()
     }
@@ -566,10 +568,10 @@ class ChatToFileItem(
         val photoRef = storageRef.child(chatName).child(filename)
         val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
         photoRef.downloadUrl.addOnSuccessListener { uri ->
-                val url = uri.toString()
-                Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
-                downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
-            }.addOnFailureListener { }
+            val url = uri.toString()
+            Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
+            downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
+        }.addOnFailureListener { }
     }
 
     /**
@@ -636,10 +638,10 @@ class ChatFromFileItem(
         val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
 
         photoRef.downloadUrl.addOnSuccessListener { uri ->
-                val url = uri.toString()
-                Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
-                downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
-            }.addOnFailureListener { }
+            val url = uri.toString()
+            Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
+            downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
+        }.addOnFailureListener { }
 
 
     }
@@ -672,39 +674,39 @@ class ChatFromImgItem(
     private val activity: Activity?,
     private val displayUser: String
 ) : Item<GroupieViewHolder>() {
-    private var trying = 3
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        trying = 3
-        viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageResource(0)
+        val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
+
         displayImage(filename, chatName, viewHolder)
-        if (trying >= 0) {
-            viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
-                "Загрузка фотографии"
-            val executor = Executors.newSingleThreadExecutor()
+        viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
+            "Загрузка фотографии"
+        val executor = Executors.newSingleThreadExecutor()
 
-            CoroutineScope(Dispatchers.Main).launch {
-                executor.execute {
-                    while (trying > 0) {
+        CoroutineScope(Dispatchers.Main).launch {
+            executor.execute {
+                for (i in 1..3) {
 
-                        Handler(Looper.getMainLooper()).post {
+                    Handler(Looper.getMainLooper()).post {
 
-                            displayImage(filename, chatName, viewHolder)
-                        }
-                        Thread.sleep(5000)
-                        trying -= 1
+                        displayImage(filename, chatName, viewHolder)
                     }
-                    if (trying == 0) {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                activity,
-                                "Ошибка загрузки миниатюры. Пожалуйста перезайдите в чат",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
-                                "Ошибка загрузки"
-                        }
+                    Thread.sleep(5000)
+                    if (imageView.drawable != null) {
+                        break
                     }
                 }
+                if (imageView.drawable == null) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            activity,
+                            "Ошибка загрузки миниатюры. Пожалуйста перезайдите в чат",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
+                            "Ошибка загрузки"
+                    }
+                }
+
 
             }
 
@@ -738,8 +740,6 @@ class ChatFromImgItem(
                         viewName.visibility = View.VISIBLE
                     }
 
-                    trying = -1
-
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {}
@@ -765,42 +765,41 @@ class ChatToImgItem(
     private val activity: Activity?,
     private val displayUser: String
 ) : Item<GroupieViewHolder>() {
-    private var trying = 3
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        trying = 3
-        viewHolder.itemView.findViewById<ImageView>(R.id.to_img).setImageResource(0)
+        val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
         displayImage(filename, chatName, viewHolder)
-        if (trying >= 0) {
-            viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
-                "Загрузка фотографии"
-            val executor = Executors.newSingleThreadExecutor()
+        viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
+            "Загрузка фотографии"
+        val executor = Executors.newSingleThreadExecutor()
 
-            CoroutineScope(Dispatchers.Main).launch {
-                executor.execute {
-                    while (trying > 0) {
-                        Handler(Looper.getMainLooper()).post {
+        CoroutineScope(Dispatchers.Main).launch {
+            executor.execute {
+                for (i in 1..3) {
+                    Handler(Looper.getMainLooper()).post {
 
-                            displayImage(filename, chatName, viewHolder)
-                        }
-                        trying--
-                        Thread.sleep(5000)
-
+                        displayImage(filename, chatName, viewHolder)
                     }
-                    if (trying == 0) {
-                        Handler(Looper.getMainLooper()).post {
-                            Toast.makeText(
-                                activity,
-                                "Ошибка загрузки миниатюры. Пожалуйста перезайдите в чат",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                            viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
-                                "Ошибка загрузки"
-                        }
+                    Thread.sleep(5000)
+                    if (imageView.drawable != null) {
+                        break
+                    }
+
+                }
+                if (imageView.drawable == null) {
+                    Handler(Looper.getMainLooper()).post {
+                        Toast.makeText(
+                            activity,
+                            "Ошибка загрузки миниатюры. Попробуйте перезайти в чат",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
+                            "Ошибка загрузки"
                     }
                 }
-
             }
+
         }
+
 
 
 
@@ -830,7 +829,6 @@ class ChatToImgItem(
                         viewName.text = displayUser
                         viewName.visibility = View.VISIBLE
                     }
-                    trying--
 
                 }
             } catch (e: Exception) {

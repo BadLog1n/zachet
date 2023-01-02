@@ -58,7 +58,8 @@ class ImageActivity : AppCompatActivity() {
                 }
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(this@ImageActivity, e.message, Toast.LENGTH_LONG).show()
+                    //Toast.makeText(this@ImageActivity, e.message, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@ImageActivity, "Фото не обнаружено", Toast.LENGTH_SHORT).show()
 
                 }
             }
