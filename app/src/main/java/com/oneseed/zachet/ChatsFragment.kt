@@ -232,6 +232,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     list.forEach { element ->
                                         rcAdapter.addChatPreview(element)
                                     }
+                                    rcAdapter.notifyDataSetChanged()
+
                                     notFirstLoad = true
                                 }
                             }

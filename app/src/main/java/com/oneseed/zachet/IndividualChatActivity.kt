@@ -781,7 +781,7 @@ class ChatToImgItem(
 
                             displayImage(filename, chatName, viewHolder)
                         }
-                        trying -= 1
+                        trying--
                         Thread.sleep(5000)
 
                     }
@@ -830,7 +830,7 @@ class ChatToImgItem(
                         viewName.text = displayUser
                         viewName.visibility = View.VISIBLE
                     }
-                    trying = -1
+                    trying--
 
                 }
             } catch (e: Exception) {

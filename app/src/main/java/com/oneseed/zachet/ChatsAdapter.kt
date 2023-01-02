@@ -54,10 +54,8 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         return chatsList.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addChatPreview(chatPreview: ChatPreview) {
         chatsList.add(chatPreview)
-        notifyDataSetChanged()
     }
 
     fun clearRecords() {

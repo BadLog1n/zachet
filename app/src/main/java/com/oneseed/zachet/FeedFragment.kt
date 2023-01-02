@@ -48,15 +48,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         feedRc.layoutManager = linearLayoutManager
-        /*try {
-            feedRc.scrollToPosition(
-                //feedRc.adapter!!.itemCount - 1
-            0
 
-            )}
-        catch (e: NullPointerException) {
-
-        }*/
         fun addRecordLayoutGone() {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
@@ -122,9 +114,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(postId.toLong()))
                                     .toString()
                             val text = item.child("text").value.toString()
-                            val sponsored =
-                                item.child("sponsored").value.toString()
-                                    .toBoolean()
+                            val sponsored = item.child("sponsored").value.toString().toBoolean()
                             val user = Firebase.auth.currentUser
 
                             val uid = user?.uid
@@ -142,13 +132,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                             )
                             lastPost = postId.toLong()
 
-
+                            @SuppressLint("NotifyDataSetChanged")
                             if (isFirstLoad && item.toString() == dataSnapshot.children.last()
                                     .toString()
                             ) {
                                 val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
                                 feedRc.adapter = rcAdapter
-                                feedRc.scrollToPosition(rcAdapter.itemCount - 1)
+                                feedRc.adapter?.notifyDataSetChanged()
                                 isFirstLoad = false
                                 Firebase.analytics.logEvent("feed_upload") {
                                     param("feed_upload", "")

@@ -38,17 +38,13 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             recordTv.text = feedItem.record_text
             record.text = feedItem.record
             authorIdChat.text = feedItem.authorIdChat
-            replyToMsgBtn.visibility = View.VISIBLE
+            replyToMsgBtn.visibility = if (authorIdChat.text.toString() == "10") View.GONE else View.VISIBLE
 
             userId = feedItem.userId
             sponsoredTv.text = "Спонсировано"
-            sponsoredTv.visibility = View.INVISIBLE
-            if (feedItem.isSponsored) {
-                sponsoredTv.visibility = View.VISIBLE
-            }
+            sponsoredTv.visibility = if (feedItem.isSponsored) View.VISIBLE else View.INVISIBLE
 
             if (authorIdChat.text.toString() == "10") {
-                replyToMsgBtn.visibility = View.GONE
                 whoPostedTv.text = feedItem.author
             }
 
@@ -113,10 +109,8 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         return recordsList.size
     }
 
-    @SuppressLint("NotifyDataSetChanged")
     fun addFeedRecord(feedRecord: FeedRecord) {
         recordsList.add(feedRecord)
-        notifyDataSetChanged()
     }
 
     fun clearRecords() {
