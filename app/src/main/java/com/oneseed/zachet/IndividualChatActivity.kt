@@ -60,7 +60,10 @@ class IndividualChatActivity : AppCompatActivity() {
     private val chatsPackage = ChatsPackage()
     private var userName = ""
     private var userLogin = ""
+    private lateinit var chatName: String
     private var isScrolledLast = false
+    private lateinit var postListener: ValueEventListener
+
 
     @SuppressLint("MissingInflatedId")
     @RequiresApi(Build.VERSION_CODES.O)
@@ -127,11 +130,10 @@ class IndividualChatActivity : AppCompatActivity() {
         rcView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
-                isScrolledLast = !recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE
+                isScrolledLast =
+                    !recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE
             }
         })
-
-
 
 
         val spinner = this.findViewById<Spinner>(R.id.spinner2)
@@ -142,10 +144,7 @@ class IndividualChatActivity : AppCompatActivity() {
             }
 
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
 
                 when (spinner.selectedItem.toString()) {
@@ -160,12 +159,10 @@ class IndividualChatActivity : AppCompatActivity() {
                                 ) != PackageManager.PERMISSION_GRANTED))
                             ) {
                                 ActivityCompat.requestPermissions(
-                                    this@IndividualChatActivity,
-                                    arrayOf(
+                                    this@IndividualChatActivity, arrayOf(
                                         Manifest.permission.READ_EXTERNAL_STORAGE,
                                         Manifest.permission.WRITE_EXTERNAL_STORAGE
-                                    ),
-                                    storagePermissionCode
+                                    ), storagePermissionCode
                                 )
                             } else {
                                 pickFileOrPhoto(false)
@@ -173,8 +170,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         } catch (e: Exception) {
                             Toast.makeText(
                                 this@IndividualChatActivity,
-                                "Вам необходимо выдать разрешение на работу с памятью в настройках, " +
-                                        "чтобы загружать изображения",
+                                "Вам необходимо выдать разрешение на работу с памятью в настройках, " + "чтобы загружать изображения",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
@@ -186,8 +182,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                 if (!isExternalStorageManager()) {
                                     Toast.makeText(
                                         this@IndividualChatActivity,
-                                        "Вам необходимо выдать разрешение на работу с памятью в настройках," +
-                                                "чтобы загружать файлы",
+                                        "Вам необходимо выдать разрешение на работу с памятью в настройках," + "чтобы загружать файлы",
                                         Toast.LENGTH_SHORT
                                     ).show()
                                 } else {
@@ -289,8 +284,7 @@ class IndividualChatActivity : AppCompatActivity() {
                     val subFile = filePath.substring(filePath.lastIndexOf("/") + 1)
                     val chatName =
                         if (getName.contains("group")) getName else chatsPackage.getChatName(
-                            sendName,
-                            getName
+                            sendName, getName
                         )
                     val currentTimestamp = System.currentTimeMillis().toString()
 
@@ -334,13 +328,13 @@ class IndividualChatActivity : AppCompatActivity() {
     var lastTimeMessage: Long = 0
     var isFirstLoad = true
     private fun addPostEventListener(sendUser: String, getName: String) {
-        val chatName =
+        chatName =
             if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this@IndividualChatActivity)
         val adapter = GroupAdapter<GroupieViewHolder>()
         rcView.adapter = adapter
-        val postListener = object : ValueEventListener {
+        postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 val username = "username"
@@ -387,7 +381,8 @@ class IndividualChatActivity : AppCompatActivity() {
                                             tx,
                                             dt,
                                             chatName,
-                                            this@IndividualChatActivity, displaySendName
+                                            this@IndividualChatActivity,
+                                            displaySendName
                                         )
                                     )
                                 }
@@ -429,8 +424,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         Firebase.analytics.logEvent("chats_upload") {
                             param("chats_upload", "")
                         }
-                    }
-                    else if (isScrolledLast){
+                    } else if (isScrolledLast) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                     }
                 }
@@ -440,8 +434,19 @@ class IndividualChatActivity : AppCompatActivity() {
                 Log.w("T", "loadPost:onCancelled", databaseError.toException())
             }
         }
+
+    }
+    
+    override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
+        super.onStop()
+    }
+
+    override fun onResume() {
+        database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
+        database.addValueEventListener(postListener)
+        super.onResume()
     }
 
 
@@ -551,8 +556,7 @@ class ChatToFileItem(
         val storageRef = Firebase.storage.reference
         val photoRef = storageRef.child(chatName).child(filename)
         val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
-        photoRef.downloadUrl
-            .addOnSuccessListener { uri ->
+        photoRef.downloadUrl.addOnSuccessListener { uri ->
                 val url = uri.toString()
                 Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
                 downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
@@ -563,10 +567,7 @@ class ChatToFileItem(
      * Расширение функции загрузки фото
      * */
     private fun downloadFile(
-        context: Context,
-        fileName: String,
-        destinationDirectory: String?,
-        url: String?
+        context: Context, fileName: String, destinationDirectory: String?, url: String?
     ) {
 
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
@@ -575,8 +576,7 @@ class ChatToFileItem(
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(
 
-            destinationDirectory,
-            fileName
+            destinationDirectory, fileName
         )
         downloadManager.enqueue(request)
 
@@ -626,8 +626,7 @@ class ChatFromFileItem(
         val photoRef = storageRef.child(chatName).child(filename)
         val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
 
-        photoRef.downloadUrl
-            .addOnSuccessListener { uri ->
+        photoRef.downloadUrl.addOnSuccessListener { uri ->
                 val url = uri.toString()
                 Toast.makeText(context, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
                 downloadFile(context, subFileName, DIRECTORY_DOWNLOADS, url)
@@ -640,18 +639,14 @@ class ChatFromFileItem(
      * Расширение функции загрузки фото
      * */
     private fun downloadFile(
-        context: Context,
-        fileName: String,
-        destinationDirectory: String?,
-        url: String?
+        context: Context, fileName: String, destinationDirectory: String?, url: String?
     ) {
         val downloadManager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(
-            destinationDirectory,
-            fileName
+            destinationDirectory, fileName
         )
         downloadManager.enqueue(request)
     }
@@ -724,8 +719,7 @@ class ChatFromImgItem(
                 val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 withContext(Dispatchers.Main) {
-                    viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
-                        .setImageBitmap(bmp)
+                    viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageBitmap(bmp)
                     viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
 
                     if (displayUser != "") {
@@ -739,8 +733,7 @@ class ChatFromImgItem(
 
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                }
+                withContext(Dispatchers.Main) {}
             }
 
         }
@@ -762,8 +755,7 @@ class ChatToImgItem(
     val context: Context,
     private val activity: Activity?,
     private val displayUser: String
-) :
-    Item<GroupieViewHolder>() {
+) : Item<GroupieViewHolder>() {
     private var trying = 3
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         trying = 3
@@ -819,8 +811,7 @@ class ChatToImgItem(
                 val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
                 val bmp = BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
                 withContext(Dispatchers.Main) {
-                    viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
-                        .setImageBitmap(bmp)
+                    viewHolder.itemView.findViewById<ImageView>(R.id.to_img).setImageBitmap(bmp)
                     //imageView?.setImageBitmap(bmp)
                     viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
 
@@ -834,8 +825,7 @@ class ChatToImgItem(
 
                 }
             } catch (e: Exception) {
-                withContext(Dispatchers.Main) {
-                }
+                withContext(Dispatchers.Main) {}
             }
         }
 

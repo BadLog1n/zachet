@@ -31,6 +31,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var database: DatabaseReference
     private var lastPost: Long = 0
     private lateinit var progressBar: ProgressBar
+    private lateinit var postListener: ValueEventListener
+
 
 
     @SuppressLint("NotifyDataSetChanged")
@@ -93,7 +95,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     var isFirstLoad = true
     private fun addPostEventListener(view: View) {
-        val postListener = object : ValueEventListener {
+        postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (item in dataSnapshot.children) {
@@ -158,12 +160,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
 
             override fun onCancelled(databaseError: DatabaseError) {
-                Log.w("T", "loadPost:onCancelled", databaseError.toException())
+                Log.w("T", "loadPost:onCancelled") //databaseError.toException())
             }
 
         }
-        database = FirebaseDatabase.getInstance().getReference("feed")
-        database.addValueEventListener(postListener)
     }
 
     private fun View.hideKeyboard() {
@@ -187,6 +187,18 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val currentTimestamp = System.currentTimeMillis().toString()
         database.child(currentTimestamp).updateChildren(message)
 
+    }
+
+    override fun onStop() {
+        database = FirebaseDatabase.getInstance().getReference("feed")
+        database.removeEventListener(postListener)
+        super.onStop()
+    }
+
+    override fun onResume() {
+        database = FirebaseDatabase.getInstance().getReference("feed")
+        database.addValueEventListener(postListener)
+        super.onResume()
     }
 
 }
