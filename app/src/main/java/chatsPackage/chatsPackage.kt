@@ -54,7 +54,7 @@ class ChatsPackage {
         val message = mapOf(
             "text" to text,
             "type" to type,
-            "username" to sendUser,
+            "userUid" to sendUser,
             "sendName" to sendName,
             "userLogin" to userLogin
         )
