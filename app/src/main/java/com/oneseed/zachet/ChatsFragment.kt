@@ -17,6 +17,7 @@ import android.view.inputmethod.EditorInfo
 import android.view.inputmethod.InputMethodManager
 import android.widget.EditText
 import android.widget.ImageButton
+import android.widget.ProgressBar
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
@@ -44,6 +45,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private lateinit var postListener: ValueEventListener
     var list = ArrayList<ChatPreview>()
     private var rcAdapter = ChatsAdapter()
+    private lateinit var progressBar: ProgressBar
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -57,6 +60,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             LinearLayoutManager(this@ChatsFragment.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         userName = sharedPref?.getString(getString(R.string.uid), "").toString()
+        progressBar = view.findViewById(R.id.chatProgressBar)
+        progressBar.visibility = View.VISIBLE
         val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
         recyclerView.layoutManager = linearLayoutManager
         rcAdapter.clearRecords()
@@ -235,6 +240,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     rcAdapter.notifyDataSetChanged()
 
                                     notFirstLoad = true
+                                    progressBar.visibility = View.GONE
+
                                 }
                             }
                         }

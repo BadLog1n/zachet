@@ -30,6 +30,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var binding: FragmentFeedBinding
     private lateinit var database: DatabaseReference
     private var lastPost: Long = 0
+    private lateinit var progressBar: ProgressBar
+
 
     @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -37,7 +39,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         binding = FragmentFeedBinding.inflate(layoutInflater)
         val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
         authCheck.check(view, this@FeedFragment.context)
-
+        progressBar = view.findViewById(R.id.feedProgressBar)
+        progressBar.visibility = View.VISIBLE
         rcAdapter.clearRecords()
         rcAdapter.recordsList = ArrayList()
         rcAdapter.notifyDataSetChanged()
@@ -143,6 +146,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 Firebase.analytics.logEvent("feed_upload") {
                                     param("feed_upload", "")
                                 }
+                                progressBar.visibility = View.GONE
                             }
 
 

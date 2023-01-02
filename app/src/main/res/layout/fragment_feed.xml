@@ -41,6 +41,14 @@
             app:tint="@color/blue" />
     </LinearLayout>
 
+    <ProgressBar
+        android:id="@+id/feedProgressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:visibility="gone" />
+
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
