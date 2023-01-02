@@ -60,19 +60,8 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         notifyDataSetChanged()
     }
 
-    @SuppressLint("NotifyDataSetChanged")
-    fun chatChange(item: ChatPreview, chat: ChatPreview) {
-        val index = chatsList.indexOf(item)
-        chatsList[index] = chat
-        notifyDataSetChanged()
-
-    }
-
     fun clearRecords() {
         chatsList.removeAll(chatsList.toSet())
     }
 
-    fun removeObject(chatPreview: ChatPreview) {
-        chatsList.remove(chatPreview)
-    }
 }
