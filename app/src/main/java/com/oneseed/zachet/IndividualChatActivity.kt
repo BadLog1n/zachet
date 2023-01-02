@@ -338,10 +338,15 @@ class IndividualChatActivity : AppCompatActivity() {
         postListener = object : ValueEventListener {
             @SuppressLint("SimpleDateFormat", "NotifyDataSetChanged")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (dataSnapshot.childrenCount == 0L){
+                    progressBar.visibility = View.GONE
+
+                }
                 val username = "username"
                 val text = "text"
                 val type = "type"
                 for (i in dataSnapshot.children) {
+
                     if (lastTimeMessage < i.key!!.toLong()) {
                         lastTimeMessage = i.key!!.toLong()
                         //Log.d("timestamp", i.key!!.toLong().toString())
@@ -442,6 +447,8 @@ class IndividualChatActivity : AppCompatActivity() {
     override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
+       //Log.w("Base", "Database closed")
+
         super.onStop()
     }
 
