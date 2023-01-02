@@ -63,6 +63,7 @@ class IndividualChatActivity : AppCompatActivity() {
     private lateinit var chatName: String
     private var isScrolledLast = false
     private lateinit var postListener: ValueEventListener
+    private lateinit var progressBar: ProgressBar
 
 
     @SuppressLint("MissingInflatedId")
@@ -79,7 +80,7 @@ class IndividualChatActivity : AppCompatActivity() {
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.chat_action_bar)
         supportActionBar?.show()
-
+        progressBar = findViewById(R.id.messagesProgressBar)
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this)
         findViewById<TextView>(R.id.receiver_tv).text = ""
@@ -424,6 +425,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         Firebase.analytics.logEvent("chats_upload") {
                             param("chats_upload", "")
                         }
+                        progressBar.visibility = View.GONE
                     } else if (isScrolledLast) {
                         rcView.scrollToPosition(adapter.itemCount - 1)
                     }
@@ -436,7 +438,7 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
     }
-    
+
     override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)

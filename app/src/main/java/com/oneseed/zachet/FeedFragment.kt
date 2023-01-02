@@ -42,7 +42,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
         authCheck.check(view, this@FeedFragment.context)
         progressBar = view.findViewById(R.id.feedProgressBar)
-        progressBar.visibility = View.VISIBLE
         rcAdapter.clearRecords()
         rcAdapter.recordsList = ArrayList()
         rcAdapter.notifyDataSetChanged()

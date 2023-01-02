@@ -61,7 +61,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         linearLayoutManager.stackFromEnd = true
         userName = sharedPref?.getString(getString(R.string.uid), "").toString()
         progressBar = view.findViewById(R.id.chatProgressBar)
-        progressBar.visibility = View.VISIBLE
         val recyclerView: RecyclerView = view.findViewById(R.id.chatsRcView)
         recyclerView.layoutManager = linearLayoutManager
         rcAdapter.clearRecords()
