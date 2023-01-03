@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -34,7 +33,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var postListener: ValueEventListener
 
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentFeedBinding.inflate(layoutInflater)
@@ -53,14 +51,20 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         feedRc.layoutManager = linearLayoutManager
 
         fun addRecordLayoutGone() {
+            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
+            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+        }
+
+        fun addRecordLayoutShow() {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
         }
+
         view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
-            addRecordLayoutGone()
+            addRecordLayoutShow()
         }
         view.findViewById<ImageButton>(R.id.addRecord_imgbtn).setOnClickListener {
-            addRecordLayoutGone()
+            addRecordLayoutShow()
         }
         view.findViewById<ImageButton>(R.id.closeNewMsgImgBtn).setOnClickListener {
             view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
@@ -113,8 +117,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                             val displayLogin = itName.child("login").value.toString()
 
                             val dateTime =
-                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date(postId.toLong()))
-                                    .toString()
+                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(
+                                    Date(postId.toLong())
+                                ).toString()
                             val text = item.child("text").value.toString()
                             val sponsored = item.child("sponsored").value.toString().toBoolean()
                             val user = Firebase.auth.currentUser
@@ -133,21 +138,26 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 )
                             )
                             lastPost = postId.toLong()
-
-                            if (isFirstLoad && item.toString() == dataSnapshot.children.last()
-                                    .toString()
-                            ) {
-                                val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
-                                feedRc.adapter = rcAdapter
-                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
-                                isFirstLoad = false
+                            val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
+                            if (item.toString() == dataSnapshot.children.last().toString()) {
+                                if (isFirstLoad) {
+                                    rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
+                                    isFirstLoad = false
+                                } else {
+                                    rcAdapter.notifyItemChanged(rcAdapter.itemCount)
+                                    if ((feedRc.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() + 2 == rcAdapter.itemCount && rcAdapter.itemCount > 0) {
+                                        feedRc.smoothScrollToPosition(rcAdapter.itemCount)
+                                    }
+                                }
                                 Firebase.analytics.logEvent("feed_upload") {
                                     param("feed_upload", "")
                                 }
                                 progressBar.visibility = View.GONE
                             }
+/*                            if ((feedRc.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > 0){
 
 
+                            }*/
                         }
                     }
 
@@ -182,6 +192,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         )
         val currentTimestamp = System.currentTimeMillis().toString()
         database.child(currentTimestamp).updateChildren(message)
+        rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
 
     }
 

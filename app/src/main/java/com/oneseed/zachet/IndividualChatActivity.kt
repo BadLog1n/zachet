@@ -409,7 +409,6 @@ class IndividualChatActivity : AppCompatActivity() {
                                             dt,
                                             chatName,
                                             this@IndividualChatActivity,
-                                            this@IndividualChatActivity,
                                             displaySendName,
                                             loadImagesAgain
                                         )
@@ -420,7 +419,6 @@ class IndividualChatActivity : AppCompatActivity() {
                                             tx,
                                             dt,
                                             chatName,
-                                            this@IndividualChatActivity,
                                             this@IndividualChatActivity,
                                             displaySendName,
                                             loadImagesAgain
@@ -678,7 +676,6 @@ class ChatFromImgItem(
     private val time: String,
     private val chatName: String,
     val context: Context,
-    private val activity: Activity?,
     private val displayUser: String,
     private val loadImagesAgain: Boolean,
 ) : Item<GroupieViewHolder>() {
@@ -771,7 +768,6 @@ class ChatToImgItem(
     private val time: String,
     private val chatName: String,
     val context: Context,
-    private val activity: Activity?,
     private val displayUser: String,
     private val loadImagesAgain: Boolean
 ) : Item<GroupieViewHolder>() {
