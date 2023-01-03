@@ -1,6 +1,5 @@
 package com.oneseed.zachet
 
-import android.annotation.SuppressLint
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences

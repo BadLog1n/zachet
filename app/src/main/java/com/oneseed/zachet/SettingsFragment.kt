@@ -39,7 +39,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "Настройки"
-        val loginEditText = view.findViewById<EditText>(R.id.loginText)
+        val loginEditText = view.findViewById<EditText>(R.id.textLgn)
         val nameEditText = view.findViewById<EditText>(R.id.nameText)
         val surnameEditText = view.findViewById<EditText>(R.id.surnameText)
         val loginWebInput = view.findViewById<EditText>(R.id.lWebInput)

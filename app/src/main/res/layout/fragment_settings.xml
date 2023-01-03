@@ -40,9 +40,9 @@
                     android:theme="@style/Theme.UniversitySystem" />
 
             </LinearLayout>
-
+            <!--Переименован из-за проблем с сохранением данных-->
             <EditText
-                android:id="@+id/loginText"
+                android:id="@+id/textLgn"
                 android:layout_width="match_parent"
                 android:layout_height="50dp"
                 android:layout_marginStart="5dp"
