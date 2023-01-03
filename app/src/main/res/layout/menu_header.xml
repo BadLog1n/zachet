@@ -39,8 +39,6 @@
             android:layout_height="match_parent"
             android:layout_gravity="center"
             android:adjustViewBounds="false"
-            android:cropToPadding="false"
-            app:srcCompat="@drawable/main_icon"
-            tools:srcCompat="@drawable/main_icon" />
+            android:cropToPadding="false"/>
     </androidx.cardview.widget.CardView>
 </androidx.constraintlayout.widget.ConstraintLayout>
