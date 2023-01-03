@@ -7,6 +7,8 @@ import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -18,10 +20,14 @@ import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import authCheck.AuthCheck
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.databinding.FragmentGradesBinding
 import kotlinx.coroutines.*
 import org.json.JSONArray
@@ -56,6 +62,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRcView)
         val progressBar: ProgressBar = view.findViewById(R.id.gradesProgressBar)
         val textviewNoAuthData: TextView = view.findViewById(R.id.textviewNeedAuth)
+        val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swipe)
+        swipeRefreshLayout.isEnabled = false
+        spinner.isEnabled = false
 
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
@@ -219,8 +228,126 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
-
         var spinnerChange = false
+        fun gradesChange() {
+            swipeRefreshLayout.isEnabled = false
+            spinner.isEnabled = false
+            rcAdapter.clearRecords()
+
+            progressBar.visibility = View.VISIBLE
+            recyclerView.visibility = View.INVISIBLE
+            val actualGrades =
+                sharedPrefGrades?.getString(getString(R.string.actualGrades), "")
+                    .toString().split(" ").toList().toMutableList()
+
+            val semesterAll =
+                spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
+                    "${spinner.selectedItem},",
+                    ""
+                )
+            if (semesterAll != strSemester || spinnerChange) {
+                actualGrades[0] = ""
+                sharedPrefGrades?.edit()
+                    ?.putString(getString(R.string.actualGrades), "")
+                    ?.apply()
+            }
+            spinnerChange = true
+            binding.apply {
+                sharedPrefGrades?.edit()
+                    ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
+                    ?.apply()
+
+                val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
+                    .toString()
+                val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
+                    .toString()
+                val ls =
+                    sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString()
+                        .toInt()
+
+                val result =
+                    spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
+
+                val status = if (result + 1 >= ls) "false" else "true"
+
+                val semester = result.toString().padStart(9, '0')
+
+
+                GlobalScope.launch {
+                    try {
+                        val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
+                        val isDownWeek = async { checkIsDownWeek() }
+
+                        sharedPrefSetting?.edit()
+                            ?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())
+                            ?.apply()
+                        withContext(Dispatchers.Main) {
+                            var allGrades = ""
+                            var isChange = false
+                            if (listOfGrades != null && listOfGrades.size != 0) {
+                                rcAdapter.clearRecords()
+                                listOfGrades.forEachIndexed { index, item ->
+                                    var changeSubject = false
+                                    allGrades += "${item["ratingScore"].toString().toInt()} "
+                                    if (actualGrades.size > index &&
+                                        actualGrades[0] != "" &&
+                                        item["ratingScore"].toString() != actualGrades[index]
+                                    ) {
+                                        changeSubject = true
+                                        isChange = true
+                                    }
+                                    rcAdapter.addSubjectGrades(
+                                        SubjectGrades(
+                                            item["getSubjectName"].toString(),
+                                            item["ratingScore"].toString().toInt(),
+                                            item["subjectType"].toString(),
+                                            item["rating"].toString().split(" ").toList(),
+                                            item["tutorName"].toString(),
+                                            item["tutorId"].toString(),
+                                            subjectIsChange = changeSubject
+                                        )
+                                    )
+                                }
+                                sharedPrefGrades?.edit()
+                                    ?.putString(getString(R.string.actualGrades), allGrades)
+                                    ?.apply()
+
+
+                                progressBar.visibility = View.GONE
+                                recyclerView.visibility = View.VISIBLE
+
+                            }
+                            swipeRefreshLayout.isEnabled = true
+                            rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
+                            if (rcAdapter.itemCount > 0) spinner.isEnabled = true
+
+                            if (isChange) {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Некоторые баллы были обновлены",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                        }
+
+                    } catch (_: Exception) {
+
+                    }
+
+                }
+            }
+            //val switchState: Boolean = switch.isChecked
+            //timetableGet(spinner.selectedItem.toString(), switchState)
+
+        }
+
+
+
+
+
+
+
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -233,111 +360,24 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 id: Long
             ) {
                 spinner.isEnabled = false
-                rcAdapter.clearRecords()
+                gradesChange()
+            }
+        }
 
-                progressBar.visibility = View.VISIBLE
-                recyclerView.visibility = View.INVISIBLE
-                val actualGrades =
-                    sharedPrefGrades?.getString(getString(R.string.actualGrades), "")
-                        .toString().split(" ").toList().toMutableList()
-
-                val semesterAll =
-                    spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
-                        "${spinner.selectedItem},",
-                        ""
-                    )
-                if (semesterAll != strSemester || spinnerChange) {
-                    actualGrades[0] = ""
-                    sharedPrefGrades?.edit()
-                        ?.putString(getString(R.string.actualGrades), "")
-                        ?.apply()
-                }
-                spinnerChange = true
-                binding.apply {
-                    sharedPrefGrades?.edit()
-                        ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
-                        ?.apply()
-
-                    val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
-                        .toString()
-                    val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
-                        .toString()
-                    val ls =
-                        sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString()
-                            .toInt()
-
-                    val result =
-                        spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
-
-                    val status = if (result + 1 >= ls) "false" else "true"
-
-                    val semester = result.toString().padStart(9, '0')
-
-
-                    GlobalScope.launch {
-                        try {
-                            val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
-                            val isDownWeek = async { checkIsDownWeek() }
-
-                            sharedPrefSetting?.edit()
-                                ?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())
-                                ?.apply()
-                            withContext(Dispatchers.Main) {
-                                var allGrades = ""
-                                var isChange = false
-                                if (listOfGrades != null && listOfGrades.size != 0) {
-                                    rcAdapter.clearRecords()
-                                    listOfGrades.forEachIndexed { index, item ->
-                                        var changeSubject = false
-                                        allGrades += "${item["ratingScore"].toString().toInt()} "
-                                        if (actualGrades.size > index &&
-                                            actualGrades[0] != "" &&
-                                            item["ratingScore"].toString() != actualGrades[index]
-                                        ) {
-                                            changeSubject = true
-                                            isChange = true
-                                        }
-                                        rcAdapter.addSubjectGrades(
-                                            SubjectGrades(
-                                                item["getSubjectName"].toString(),
-                                                item["ratingScore"].toString().toInt(),
-                                                item["subjectType"].toString(),
-                                                item["rating"].toString().split(" ").toList(),
-                                                item["tutorName"].toString(),
-                                                item["tutorId"].toString(),
-                                                subjectIsChange = changeSubject
-                                            )
-                                        )
-                                    }
-                                    sharedPrefGrades?.edit()
-                                        ?.putString(getString(R.string.actualGrades), allGrades)
-                                        ?.apply()
-
-
-                                    progressBar.visibility = View.GONE
-                                    recyclerView.visibility = View.VISIBLE
-
-                                }
-                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
-                                spinner.isEnabled = true
-
-                                if (isChange) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Некоторые баллы были обновлены",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            }
-
-                        } catch (_: Exception) {
-
-                        }
-
+        swipeRefreshLayout.setOnRefreshListener {
+            val spinnerElement = spinner.selectedItem.toString()
+            if (rcAdapter.itemCount > 0 && spinnerElement != "") {
+                try {
+                    gradesChange()
+                    Handler(Looper.getMainLooper()).postDelayed({
+                        swipeRefreshLayout.isRefreshing = false
+                    }, 500)
+                    Firebase.analytics.logEvent("schedule_update") {
+                        param("schedule_update", "")
                     }
+                } catch (_: Exception) {
+                    swipeRefreshLayout.isRefreshing = false
                 }
-                //val switchState: Boolean = switch.isChecked
-                //timetableGet(spinner.selectedItem.toString(), switchState)
             }
         }
 
@@ -380,7 +420,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                     PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
-                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(
+                    requireContext().packageName,
+                    0
+                )
             }
             version = pInfo!!.versionName
         } catch (e: PackageManager.NameNotFoundException) {

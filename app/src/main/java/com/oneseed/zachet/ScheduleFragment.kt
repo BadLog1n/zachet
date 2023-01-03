@@ -79,16 +79,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-
             try {
                 val spinnerElement = spinner.selectedItem.toString()
                 val switchState: Boolean = switch.isChecked
 
-                if (spinnerElement != "") {
-                    progressBar.visibility = View.VISIBLE
-                    timetableGet(spinnerElement, switchState)
-                    progressBar.visibility = View.GONE
-                }
+                progressBar.visibility = View.VISIBLE
+                timetableGet(spinnerElement, switchState)
+                progressBar.visibility = View.GONE
+
                 Handler(Looper.getMainLooper()).postDelayed({
                     swipeRefreshLayout.isRefreshing = false
                 }, 1000)
@@ -99,6 +97,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 swipeRefreshLayout.isRefreshing = false
             }
         }
+
 
 
 
@@ -113,8 +112,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 position: Int,
                 id: Long
             ) {
-
-
+                swipeRefreshLayout.isEnabled = true
                 val spinnerElement = spinner.selectedItem.toString()
                 sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
                     ?.apply()

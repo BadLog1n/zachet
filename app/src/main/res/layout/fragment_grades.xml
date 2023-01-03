@@ -24,14 +24,15 @@
             android:layout_weight="1"
             android:gravity="center_horizontal"
             android:text="@string/noAuthData"
-            android:visibility="gone"
-            android:theme="@style/Theme.UniversitySystem"/>
+            android:theme="@style/Theme.UniversitySystem"
+            android:visibility="gone" />
 
         <Spinner
             android:id="@+id/sem_num_spinner"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
+            android:enabled = "false"
             android:entries="@array/sem_nums"
             android:spinnerMode="dropdown"
             android:visibility="gone" />
@@ -45,11 +46,20 @@
         android:layout_height="wrap_content"
         android:visibility="gone" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/gradesRcView"
+
+    <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+        android:id="@+id/swipe"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:listitem="@layout/subject_grades_item" >
+        android:enabled = "false">
 
-    </androidx.recyclerview.widget.RecyclerView>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/gradesRcView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            tools:listitem="@layout/subject_grades_item">
+
+        </androidx.recyclerview.widget.RecyclerView>
+    </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
 </LinearLayout>

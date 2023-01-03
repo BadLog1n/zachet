@@ -74,7 +74,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:enabled = "false">
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/scheduleRc"
         android:layout_width="match_parent"
