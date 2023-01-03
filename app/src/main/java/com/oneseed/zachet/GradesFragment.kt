@@ -47,7 +47,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private var clickBack = false
 
     @OptIn(DelicateCoroutinesApi::class)
-    @SuppressLint("NotifyDataSetChanged")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.sem_num_spinner)
         authCheck.check(view, this@GradesFragment.context)
@@ -77,7 +76,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         rcAdapter.clearRecords()
         rcAdapter.gradesList = ArrayList()
-        rcAdapter.notifyDataSetChanged()
+        rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
         recyclerView.adapter = rcAdapter
         progressBar.visibility = View.VISIBLE
 
