@@ -147,8 +147,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                     clickBack = false
                 }
             } else {
-                Thread.sleep(150)
-                exitProcess(0)
+                activity?.finish()
             }
         }
 

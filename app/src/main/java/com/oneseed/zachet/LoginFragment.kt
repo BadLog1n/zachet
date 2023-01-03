@@ -146,8 +146,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
                     clickBack = false
                 }
             } else {
-                Thread.sleep(150)
-                exitProcess(0)
+                activity?.finish()
             }
         }
     }

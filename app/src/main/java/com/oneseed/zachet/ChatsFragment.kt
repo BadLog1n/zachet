@@ -88,8 +88,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                         clickBack = false
                     }
                 } else {
-                    Thread.sleep(150)
-                    exitProcess(0)
+                    activity?.finish()
                 }
             } else {
                 findNavController().navigate(R.id.gradesFragment)
