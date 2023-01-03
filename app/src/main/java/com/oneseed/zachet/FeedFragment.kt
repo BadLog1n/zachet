@@ -94,7 +94,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     var isFirstLoad = true
     private fun addPostEventListener(view: View) {
         postListener = object : ValueEventListener {
-            @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (item in dataSnapshot.children) {
                     val postId = item.key.toString()
@@ -114,7 +113,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                             val displayLogin = itName.child("login").value.toString()
 
                             val dateTime =
-                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(postId.toLong()))
+                                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date(postId.toLong()))
                                     .toString()
                             val text = item.child("text").value.toString()
                             val sponsored = item.child("sponsored").value.toString().toBoolean()

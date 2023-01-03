@@ -344,12 +344,11 @@ class IndividualChatActivity : AppCompatActivity() {
         val adapter = GroupAdapter<GroupieViewHolder>()
         rcView.adapter = adapter
         postListener = object : ValueEventListener {
-            @SuppressLint("SimpleDateFormat")
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 if (dataSnapshot.childrenCount == 0L) {
                     progressBar.visibility = View.GONE
                 }
-                val username = "username"
+                val userUid = "userUid"
                 val text = "text"
                 val type = "type"
                 for (i in dataSnapshot.children) {
@@ -358,9 +357,9 @@ class IndividualChatActivity : AppCompatActivity() {
                         lastTimeMessage = i.key!!.toLong()
                         //Log.d("timestamp", i.key!!.toLong().toString())
 
-                        val dt =
-                            SimpleDateFormat("dd/MM/yyyy HH:mm:ss").format(Date(i.key!!.toLong()))
-                                .toString()
+                        val dt = SimpleDateFormat(
+                            "dd/MM/yyyy HH:mm:ss", Locale.getDefault()
+                        ).format(Date(i.key!!.toLong())).toString()
                         val usernameId = i.child("userLogin").value.toString()
                         val sendNameUser = i.child("sendName").value.toString()
                         val displaySendName =
@@ -370,7 +369,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             "text" -> {
                                 val tx = i.child(text).value.toString()
 
-                                if (i.child(username).value.toString() == sendUser) {
+                                if (i.child(userUid).value.toString() == sendUser) {
                                     adapter.add(ChatToItem(tx, dt, displaySendName))
                                 } else {
                                     adapter.add(ChatFromItem(tx, dt, displaySendName))
@@ -378,7 +377,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             }
                             "file" -> {
                                 val tx = i.child(text).value.toString()
-                                if (i.child(username).value.toString() == sendUser) {
+                                if (i.child(userUid).value.toString() == sendUser) {
                                     adapter.add(
                                         ChatToFileItem(
                                             tx,
@@ -403,7 +402,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             }
                             "photo" -> {
                                 val tx = i.child(text).value.toString()
-                                if (i.child(username).value.toString() == sendUser) {
+                                if (i.child(userUid).value.toString() == sendUser) {
                                     adapter.add(
                                         ChatToImgItem(
                                             tx,
@@ -440,7 +439,7 @@ class IndividualChatActivity : AppCompatActivity() {
                         }
                         progressBar.visibility = View.GONE
                     } else if (isScrolledLast) {
-                        rcView.scrollToPosition(adapter.itemCount - 1)
+                        rcView.smoothScrollToPosition(adapter.itemCount - 1)
                     }
                     rcView.adapter?.notifyItemChanged(adapter.itemCount)
 
@@ -692,27 +691,24 @@ class ChatFromImgItem(
         val executor = Executors.newSingleThreadExecutor()
 
         CoroutineScope(Dispatchers.Main).launch {
+
             executor.execute {
                 for (i in 1..3) {
-                    if (!loadImagesAgain) imageView.setImageDrawable(null)
-                    Handler(Looper.getMainLooper()).post {
-
-                        displayImage(filename, chatName, viewHolder)
-                    }
-                    Thread.sleep(5000)
                     if (imageView.drawable != null) {
                         break
                     }
+                    if (!loadImagesAgain) imageView.setImageDrawable(null)
+                    Handler(Looper.getMainLooper()).post {
+                        displayImage(filename, chatName, viewHolder)
+                    }
+                    Thread.sleep(5000)
                 }
                 if (imageView.drawable == null) {
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            activity,
-                            "Ошибка загрузки миниатюры. Пожалуйста перезайдите в чат",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
                             "Ошибка загрузки"
+                        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility = View.GONE
+
                     }
                 }
 
@@ -734,6 +730,9 @@ class ChatFromImgItem(
         CoroutineScope(Dispatchers.IO).launch {
 
             try {
+                viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility = View.VISIBLE
+                viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
+                    View.VISIBLE
                 val imageRef = Firebase.storage.reference
                 val maxDownloadSize = 5L * 1024 * 1024 * 1024
                 val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
@@ -741,7 +740,8 @@ class ChatFromImgItem(
                 withContext(Dispatchers.Main) {
                     viewHolder.itemView.findViewById<ImageView>(R.id.from_img).setImageBitmap(bmp)
                     viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
-
+                    viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
+                        View.GONE
                     if (displayUser != "") {
                         val viewName =
                             viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
@@ -777,6 +777,7 @@ class ChatToImgItem(
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
+
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
@@ -784,26 +785,25 @@ class ChatToImgItem(
         CoroutineScope(Dispatchers.Main).launch {
             executor.execute {
                 for (i in 1..3) {
+                    if (imageView.drawable != null) {
+                        break
+                    }
                     if (!loadImagesAgain) imageView.setImageDrawable(null)
+
                     Handler(Looper.getMainLooper()).post {
 
                         displayImage(filename, chatName, viewHolder)
                     }
                     Thread.sleep(5000)
-                    if (imageView.drawable != null) {
-                        break
-                    }
+
 
                 }
                 if (imageView.drawable == null) {
                     Handler(Looper.getMainLooper()).post {
-                        Toast.makeText(
-                            activity,
-                            "Ошибка загрузки миниатюры. Попробуйте перезайти в чат",
-                            Toast.LENGTH_SHORT
-                        ).show()
                         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
                             "Ошибка загрузки"
+                        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility = View.GONE
+
                     }
                 }
             }
@@ -824,6 +824,9 @@ class ChatToImgItem(
     private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
         CoroutineScope(Dispatchers.Main).launch {
             try {
+                viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility = View.VISIBLE
+                viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
+                    View.VISIBLE
                 val imageRef = Firebase.storage.reference
                 val maxDownloadSize = 5L * 1024 * 1024 * 1024
                 val bytes = imageRef.child("$chatName/$filename").getBytes(maxDownloadSize).await()
@@ -832,7 +835,8 @@ class ChatToImgItem(
                     viewHolder.itemView.findViewById<ImageView>(R.id.to_img).setImageBitmap(bmp)
                     //imageView?.setImageBitmap(bmp)
                     viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
-
+                    viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
+                        View.GONE
                     if (displayUser != "") {
                         val viewName =
                             viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
