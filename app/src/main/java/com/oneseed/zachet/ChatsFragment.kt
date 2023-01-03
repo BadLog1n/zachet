@@ -122,7 +122,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun getAppVersion(context: Context?): String {
         var version = ""
         try {
@@ -131,7 +130,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     requireContext().packageName, PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
             version = pInfo!!.versionName
         } catch (e: PackageManager.NameNotFoundException) {

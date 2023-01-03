@@ -145,7 +145,6 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         }
     }
 
-    @Suppress("DEPRECATION")
     private fun getAppVersion(context: Context?): String {
         var version = ""
         try {
@@ -155,7 +154,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
                     PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
             version = pInfo?.versionName ?: "0"
         } catch (e: PackageManager.NameNotFoundException) {

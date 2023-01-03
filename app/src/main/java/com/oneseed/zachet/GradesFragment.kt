@@ -373,7 +373,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     }
 
 
-    @Suppress("DEPRECATION")
     private fun getAppVersion(context: Context?): String {
         var version = ""
         try {
@@ -383,7 +382,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                     PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
-                context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
             }
             version = pInfo!!.versionName
         } catch (e: PackageManager.NameNotFoundException) {
