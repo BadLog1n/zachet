@@ -226,10 +226,6 @@ class IndividualChatActivity : AppCompatActivity() {
             }
         }
 
-        findViewById<ImageButton>(R.id.clipButton).setOnClickListener { }
-
-
-
         spinner.setOnLongClickListener {
             pickFileOrPhoto(false)
             return@setOnLongClickListener true
