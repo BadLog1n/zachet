@@ -1,6 +1,7 @@
 package com.oneseed.zachet
 
 import android.content.Intent
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -47,6 +48,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
                 whoPostedTv.text = feedItem.author
             }
 
+
         }
     }
 
@@ -67,17 +69,37 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             val record = view.findViewById<TextView>(R.id.record).text.toString()
             val myRef = database.getReference("warnings").child(record)
             myRef.setValue(userId)
-            Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT)
-                .show()
+            Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT).show()
         }
 
+
+
         view.findViewById<ImageButton>(R.id.deleteSign).setOnClickListener {
-            val record = view.findViewById<TextView>(R.id.record).text.toString()
-            val myRef = database.getReference("feed").child(record)
-            myRef.removeValue()
-            val item: FeedRecord = recordsList.single { (record == it.record) }
-            removeObject(item)
+
+            val builder = androidx.appcompat.app.AlertDialog.Builder(parent.context)
+            builder.setTitle("Вы уверены, что хотите удалить запись?")
+            builder.setMessage("Это действие нельзя будет отменить")
+            builder.setIcon(R.drawable.ic_baseline_priority_high_24)
+            builder.setPositiveButton("Удалить сообщение") { _, _ ->
+
+                val record = view.findViewById<TextView>(R.id.record).text.toString()
+                val myRef = database.getReference("feed").child(record)
+                myRef.removeValue()
+                val item: FeedRecord = recordsList.single { (record == it.record) }
+                removeObject(item)
+            }
+            builder.setNegativeButton("Отмена") { _, _ -> }
+            val alertDialog: androidx.appcompat.app.AlertDialog = builder.create()
+            //alertDialog.setCancelable(false)
+            alertDialog.show()
+            alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_POSITIVE)
+                .setTextColor(Color.BLACK)
+            alertDialog.getButton(androidx.appcompat.app.AlertDialog.BUTTON_NEGATIVE)
+                .setTextColor(Color.BLACK)
         }
+
+
+
 
         return RecordHolder(view)
     }
