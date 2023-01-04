@@ -34,10 +34,17 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             recordTv.text = feedItem.record_text
             record.text = feedItem.record
             authorIdChat.text = feedItem.authorIdChat
-            replyToMsgBtn.visibility =
-                if (authorIdChat.text.toString() == "10") View.GONE else View.VISIBLE
-
             userId = feedItem.userId
+            val isAdmin = feedItem.authorIdChat == "10"
+            deleteSign.visibility = if (feedItem.authorIdChat != userId) View.GONE else View.VISIBLE
+            if (isAdmin || feedItem.authorIdChat == userId) {
+                replyToMsgBtn.visibility = View.GONE
+                warningSign.visibility = View.GONE
+            } else {
+                replyToMsgBtn.visibility = View.VISIBLE
+                warningSign.visibility = View.VISIBLE
+            }
+
             sponsoredTv.text = "Спонсировано"
             sponsoredTv.visibility = if (feedItem.isSponsored) View.VISIBLE else View.INVISIBLE
 
@@ -61,37 +68,20 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
 
         }
 
-        view.findViewById<LinearLayout>(R.id.recordItemLayout).setOnClickListener {
-            val authorIdChat = view.findViewById<TextView>(R.id.authorIdChat).text.toString()
+        view.findViewById<ImageButton>(R.id.warningSign).setOnClickListener {
             val record = view.findViewById<TextView>(R.id.record).text.toString()
-            if (authorIdChat != "10") {
+            val myRef = database.getReference("warnings").child(record)
+            myRef.setValue(userId)
+            Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT)
+                .show()
+        }
 
-                val builder = AlertDialog.Builder(parent.context)
-                if (userId == authorIdChat) {
-                    builder.setNeutralButton("Удалить") { _, _ ->
-                        val myRef = database.getReference("feed").child(record)
-                        myRef.removeValue()
-                        val item: FeedRecord =
-                            recordsList.single { (record == it.record) }
-                        removeObject(item)
-                    }
-                } else {
-                    builder.setNeutralButton("Пожаловаться") { _, _ ->
-                        val myRef = database.getReference("warnings").child(record)
-                        myRef.setValue(userId)
-                        Toast.makeText(parent.context, "Жалоба отправлена", Toast.LENGTH_SHORT)
-                            .show()
-                    }
-                }
-
-                val alertDialog = builder.create()
-                alertDialog.show()
-                val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-                with(autoBtn) {
-                    setTextColor(Color.BLACK)
-
-                }
-            }
+        view.findViewById<ImageButton>(R.id.deleteSign).setOnClickListener {
+            val record = view.findViewById<TextView>(R.id.record).text.toString()
+            val myRef = database.getReference("feed").child(record)
+            myRef.removeValue()
+            val item: FeedRecord = recordsList.single { (record == it.record) }
+            removeObject(item)
         }
 
         return RecordHolder(view)
