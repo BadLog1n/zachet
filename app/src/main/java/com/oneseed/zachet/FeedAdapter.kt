@@ -80,7 +80,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             builder.setTitle("Вы уверены, что хотите удалить запись?")
             builder.setMessage("Это действие нельзя будет отменить")
             builder.setIcon(R.drawable.ic_baseline_priority_high_24)
-            builder.setPositiveButton("Удалить сообщение") { _, _ ->
+            builder.setPositiveButton("Удалить запись") { _, _ ->
 
                 val record = view.findViewById<TextView>(R.id.record).text.toString()
                 val myRef = database.getReference("feed").child(record)
