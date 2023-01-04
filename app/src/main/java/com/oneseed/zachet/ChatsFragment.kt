@@ -148,7 +148,6 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                             Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
                         )
                         startActivity(openDownloadFile)
-                        activity?.finish()
                     }
                     val alertDialog = builder.create()
                     alertDialog.show()

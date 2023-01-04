@@ -220,7 +220,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
                     )
                     startActivity(openDownloadFile)
-                    activity?.finish()
                 }
                 val alertDialog = builder.create()
                 alertDialog.show()
