@@ -40,10 +40,9 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
                 replyToMsgBtn.visibility = View.VISIBLE
                 warningSign.visibility = View.VISIBLE
             }
-
             sponsoredTv.text = "Спонсировано"
             sponsoredTv.visibility = if (feedItem.isSponsored) View.VISIBLE else View.INVISIBLE
-
+            if (isAdmin) sponsoredTv.visibility = View.GONE
             if (authorIdChat.text.toString() == "10") {
                 whoPostedTv.text = feedItem.author
             }
