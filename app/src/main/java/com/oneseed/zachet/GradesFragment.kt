@@ -150,7 +150,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val builder = AlertDialog.Builder(
                 requireActivity()
             )
-            builder.setTitle("Обновление $versionName").setView(R.layout.dialog_update)
+            builder.setTitle("Обновление $versionName").setView(R.layout.dialog_new_version)
                 .setPositiveButton("OK", null).create()
             val alertDialog = builder.create()
             alertDialog.show()
