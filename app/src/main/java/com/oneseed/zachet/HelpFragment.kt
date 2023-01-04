@@ -31,7 +31,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
 
         activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
             "О приложении"
-        
+
         view.findViewById<Button>(R.id.getSupportBtn).setOnClickListener {
             database = FirebaseDatabase.getInstance().getReference("login")
             database.child("support").get().addOnSuccessListener { itLogin ->
@@ -49,10 +49,20 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         }
 
         var clickCount = 0
+        var countCircle = 1
         val imageMain = view.findViewById<ImageView>(R.id.imageView2)
         imageMain.setOnClickListener {
-            if (clickCount == 5) imageMain.rotation += 5f
-            else clickCount += 1
+            if (clickCount == 5) {
+                imageMain.rotation += 5f
+                if (imageMain.rotation % 360 == 0f)
+                {
+                    Toast.makeText(
+                        requireContext(), "Это ${countCircle++} полный оборот!", Toast.LENGTH_SHORT
+                    ).show()
+                }
+            }
+            else clickCount++
+
         }
 
         view.findViewById<TextView>(R.id.rustoreBtn).setOnClickListener {
