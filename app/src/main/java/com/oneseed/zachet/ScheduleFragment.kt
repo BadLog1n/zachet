@@ -63,8 +63,15 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val loadScheduleFirstLoad =
             sharedPref?.getString("scheduleShared$upDownTextFirstLoad", "").toString()
 
-        if (loadScheduleFirstLoad.isNotEmpty()) {
-            timetableGetCache(loadScheduleFirstLoad)
+
+        if (loadScheduleFirstLoad.isNotEmpty()){
+            if (isDownWeekFirstLoad == true){
+                switch.isChecked = true
+                timetableGetCache(loadScheduleFirstLoad)
+            }
+            else {
+                timetableGetCache(loadScheduleFirstLoad)
+            }
         }
 
 

@@ -127,8 +127,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             spinner.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
-
-
 /*        try {
             //initGradesRc()
         } catch (e: Exception) {
@@ -274,61 +272,67 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                 GlobalScope.launch {
                     try {
+                        checkIsDownWeek()
                         val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
-                        val isDownWeek = async { checkIsDownWeek() }
-
-                        sharedPrefSetting?.edit()
-                            ?.putBoolean(getString(R.string.isDownWeek), isDownWeek.await())
-                            ?.apply()
+                        println(listOfGrades)
                         withContext(Dispatchers.Main) {
-                            var allGrades = ""
-                            var isChange = false
-                            if (listOfGrades != null && listOfGrades.size != 0) {
-                                rcAdapter.clearRecords()
-                                listOfGrades.forEachIndexed { index, item ->
-                                    var changeSubject = false
-                                    allGrades += "${item["ratingScore"].toString().toInt()} "
-                                    if (actualGrades.size > index &&
-                                        actualGrades[0] != "" &&
-                                        item["ratingScore"].toString() != actualGrades[index]
-                                    ) {
-                                        changeSubject = true
-                                        isChange = true
-                                    }
-                                    rcAdapter.addSubjectGrades(
-                                        SubjectGrades(
-                                            item["getSubjectName"].toString(),
-                                            item["ratingScore"].toString().toInt(),
-                                            item["subjectType"].toString(),
-                                            item["rating"].toString().split(" ").toList(),
-                                            item["tutorName"].toString(),
-                                            item["tutorId"].toString(),
-                                            subjectIsChange = changeSubject
+                            if (listOfGrades != null) {
+                                var allGrades = ""
+                                var isChange = false
+                                if (listOfGrades.size != 0) {
+                                    rcAdapter.clearRecords()
+                                    listOfGrades.forEachIndexed { index, item ->
+                                        var changeSubject = false
+                                        allGrades += "${item["ratingScore"].toString().toInt()} "
+                                        if (actualGrades.size > index &&
+                                            actualGrades[0] != "" &&
+                                            item["ratingScore"].toString() != actualGrades[index]
+                                        ) {
+                                            changeSubject = true
+                                            isChange = true
+                                        }
+                                        rcAdapter.addSubjectGrades(
+                                            SubjectGrades(
+                                                item["getSubjectName"].toString(),
+                                                item["ratingScore"].toString().toInt(),
+                                                item["subjectType"].toString(),
+                                                item["rating"].toString().split(" ").toList(),
+                                                item["tutorName"].toString(),
+                                                item["tutorId"].toString(),
+                                                subjectIsChange = changeSubject
+                                            )
                                         )
-                                    )
+                                    }
+                                    sharedPrefGrades?.edit()
+                                        ?.putString(getString(R.string.actualGrades), allGrades)
+                                        ?.apply()
+
+
+                                    progressBar.visibility = View.GONE
+                                    recyclerView.visibility = View.VISIBLE
+
                                 }
-                                sharedPrefGrades?.edit()
-                                    ?.putString(getString(R.string.actualGrades), allGrades)
-                                    ?.apply()
+                                swipeRefreshLayout.isEnabled = true
+                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
+                                if (rcAdapter.itemCount > 0) spinner.isEnabled = true
 
+                                if (isChange) {
+                                    Toast.makeText(
+                                        requireContext(),
+                                        "Некоторые баллы были обновлены",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
 
+                            } else {
                                 progressBar.visibility = View.GONE
-                                recyclerView.visibility = View.VISIBLE
-
+                                spinner.visibility = View.GONE
+                                textviewNoAuthData.text =
+                                    "Не удаётся подключиться к сайту. Проверьте подключение к интернету."
+                                textviewNoAuthData.visibility = View.VISIBLE
                             }
-                            swipeRefreshLayout.isEnabled = true
-                            rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
-                            if (rcAdapter.itemCount > 0) spinner.isEnabled = true
 
-                            if (isChange) {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Некоторые баллы были обновлены",
-                                    Toast.LENGTH_SHORT
-                                ).show()
-                            }
                         }
-
                     } catch (_: Exception) {
 
                     }
@@ -383,8 +387,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
     }
 
-    private fun checkIsDownWeek(): Boolean {
-
+    private fun checkIsDownWeek() {
+        val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
+            getString(R.string.settingsShared),
+            Context.MODE_PRIVATE
+        )
         try {
             val sitePath =
                 "https://swsu.ru/rzs/"
@@ -401,12 +408,14 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val masthead: Element? = document?.select("div.current-week")?.select("b")?.first()
 
             Log.d("tag", masthead.toString())
-            return "нижняя" in masthead.toString()
+            if (masthead != null) {
+                sharedPrefSetting?.edit()
+                    ?.putBoolean(getString(R.string.isDownWeek), "нижняя" !in masthead.toString())
+                    ?.apply()
+            }
         } catch (_: Exception) {
 
         }
-        return false
-
     }
 
 
@@ -447,7 +456,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
             val response: Connection.Response = Jsoup.connect(sitePath)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(30000)
+                .timeout(10000)
                 .execute()
 
             val statusCode: Int = response.statusCode()
@@ -461,10 +470,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         } catch (e: Exception) {
             Log.d("getFormAndGroup", e.toString())
-
-
+            return null
         }
-        return null
     }
 }
 
