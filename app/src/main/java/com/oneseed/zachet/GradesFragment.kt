@@ -2,9 +2,11 @@ package com.oneseed.zachet
 
 import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
@@ -17,7 +19,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
-import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
@@ -38,7 +39,6 @@ import org.jsoup.nodes.Element
 import ratingUniversity.RatingUniversity
 import java.util.*
 import java.util.concurrent.Executors
-import kotlin.system.exitProcess
 
 
 class GradesFragment : Fragment(R.layout.fragment_grades) {
@@ -73,12 +73,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
-            getString(R.string.settingsShared),
-            Context.MODE_PRIVATE
+            getString(R.string.settingsShared), Context.MODE_PRIVATE
         )
         val sharedPrefGrades: SharedPreferences? = context?.getSharedPreferences(
-            getString(R.string.gradesShared),
-            Context.MODE_PRIVATE
+            getString(R.string.gradesShared), Context.MODE_PRIVATE
         )
 
 
@@ -96,11 +94,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         if (firebaseAuth.uid == null) {
             sharedPrefSetting?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
             Toast.makeText(
-                context,
-                "Логин или пароль не верен.",
-                Toast.LENGTH_SHORT
-            )
-                .show()
+                context, "Логин или пароль не верен.", Toast.LENGTH_SHORT
+            ).show()
             Navigation.findNavController(view).navigate(R.id.loginFragment)
         }
         val passwordWeb =
@@ -114,12 +109,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val semester = strSemester.split(",").toTypedArray()
             spinner.visibility = View.VISIBLE
             textviewNoAuthData.visibility = View.GONE
-            val arrayAdapter: ArrayAdapter<String> =
-                ArrayAdapter(
-                    requireContext(),
-                    android.R.layout.simple_spinner_dropdown_item,
-                    semester
-                )
+            val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                requireContext(), android.R.layout.simple_spinner_dropdown_item, semester
+            )
             arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
             spinner.adapter = arrayAdapter
         } else {
@@ -153,17 +145,13 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             sharedPrefSetting?.getString(getString(R.string.versionShared), "").toString()
 
 
-        database = FirebaseDatabase.getInstance().getReference("version")
         val versionName = getAppVersion(requireContext())
         if (versionCurrent < versionName && versionCurrent != "") {
             val builder = AlertDialog.Builder(
                 requireActivity()
             )
-            builder
-                .setTitle("Обновление $versionName")
-                .setView(R.layout.dialog_update)
-                .setPositiveButton("OK", null)
-                .create()
+            builder.setTitle("Обновление $versionName").setView(R.layout.dialog_update)
+                .setPositiveButton("OK", null).create()
             val alertDialog = builder.create()
             alertDialog.show()
 
@@ -178,52 +166,73 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         sharedPrefSetting?.edit()?.putString(getString(R.string.versionShared), versionName)
             ?.apply()
+
+
+        database = FirebaseDatabase.getInstance().getReference("versionInfo")
         database.get().addOnSuccessListener {
-            if (versionName < it.value.toString()) {
-                /*Toast.makeText(
-                    this.context,
-                    "Доступна новая версия! Перейдите в \"О приложении\" чтобы её скачать!",
-                    Toast.LENGTH_LONG
-                ).show()*/
-                try {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setMessage(R.string.updateText)
-                    builder.setTitle(R.string.updateTitle)
-                    builder.setPositiveButton("Ок") { _, _ ->
-
-                    }
-                    builder.setNeutralButton("Перейти") { _, _ ->
-                        findNavController().navigate(R.id.helpFragment)
-                    }
-                    val alertDialog = builder.create()
-                    alertDialog.show()
-
-                    val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                    with(autoBtn) {
-                        setTextColor(Color.BLACK)
-                    }
-                    val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-                    with(userBtn) {
-                        setTextColor(Color.BLACK)
-                    }
-
-                } catch (e: Exception) {
-                    Log.d("exceptionGrades", e.toString())
+            val actualVersion = it.child("actualVersion").value.toString()
+            if (versionName < it.child("minVersion").value.toString()) {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setMessage(R.string.updateTextForced)
+                builder.setTitle(R.string.updateTitleForced)
+                builder.setNegativeButton("Выход") { _, _ ->
+                    activity?.finish()
                 }
+                builder.setPositiveButton("Обновить") { _, _ ->
+                    val openDownloadFile = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
+                    )
+                    startActivity(openDownloadFile)
+                    activity?.finish()
+                }
+                builder.setNeutralButton("RuStore") { _, _ ->
+                    val openDownloadFile = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                    )
+                    startActivity(openDownloadFile)
+                    activity?.finish()
+                }
+                val alertDialog = builder.create()
+                alertDialog.setCancelable(false)
+                alertDialog.show()
+                alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+            } else if (versionName < actualVersion) {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setMessage(R.string.updateText)
+                builder.setTitle(R.string.updateTitle)
+                builder.setNegativeButton("Ок") { _, _ ->
+                }
+                builder.setPositiveButton("Обновить") { _, _ ->
+                    val openDownloadFile = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
+                    )
+                    startActivity(openDownloadFile)
+                }
+                builder.setNeutralButton("RuStore") { _, _ ->
+                    val openDownloadFile = Intent(
+                        Intent.ACTION_VIEW,
+                        Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                    )
+                    startActivity(openDownloadFile)
+                    activity?.finish()
+                }
+                val alertDialog = builder.create()
+                alertDialog.show()
+                alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+
+                alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+
             }
+
         }
 
-        database = FirebaseDatabase.getInstance().getReference("minVersion")
-        database.get().addOnSuccessListener {
-            if (versionName < it.value.toString()) {
-                Toast.makeText(
-                    this.context,
-                    "Чтобы пользоваться приложением, необходимо установить последнюю версию",
-                    Toast.LENGTH_LONG
-                ).show()
-                exitProcess(0)
-            }
-        }
 
         var spinnerChange = false
         fun gradesChange() {
@@ -234,36 +243,29 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             progressBar.visibility = View.VISIBLE
             recyclerView.visibility = View.INVISIBLE
             val actualGrades =
-                sharedPrefGrades?.getString(getString(R.string.actualGrades), "")
-                    .toString().split(" ").toList().toMutableList()
+                sharedPrefGrades?.getString(getString(R.string.actualGrades), "").toString()
+                    .split(" ").toList().toMutableList()
 
-            val semesterAll =
-                spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
-                    "${spinner.selectedItem},",
-                    ""
-                )
+            val semesterAll = spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
+                "${spinner.selectedItem},", ""
+            )
             if (semesterAll != strSemester || spinnerChange) {
                 actualGrades[0] = ""
-                sharedPrefGrades?.edit()
-                    ?.putString(getString(R.string.actualGrades), "")
-                    ?.apply()
+                sharedPrefGrades?.edit()?.putString(getString(R.string.actualGrades), "")?.apply()
             }
             spinnerChange = true
             binding.apply {
                 sharedPrefGrades?.edit()
-                    ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)
-                    ?.apply()
+                    ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)?.apply()
 
-                val gr = sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "")
-                    .toString()
-                val fo = sharedPrefGrades?.getString(getString(R.string.formOfStudent), "")
-                    .toString()
+                val gr =
+                    sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "").toString()
+                val fo =
+                    sharedPrefGrades?.getString(getString(R.string.formOfStudent), "").toString()
                 val ls =
-                    sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString()
-                        .toInt()
+                    sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString().toInt()
 
-                val result =
-                    spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
+                val result = spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
 
                 val status = if (result + 1 >= ls) "false" else "true"
 
@@ -284,10 +286,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                     listOfGrades.forEachIndexed { index, item ->
                                         var changeSubject = false
                                         allGrades += "${item["ratingScore"].toString().toInt()} "
-                                        if (actualGrades.size > index &&
-                                            actualGrades[0] != "" &&
-                                            item["ratingScore"].toString() != actualGrades[index]
-                                        ) {
+                                        if (actualGrades.size > index && actualGrades[0] != "" && item["ratingScore"].toString() != actualGrades[index]) {
                                             changeSubject = true
                                             isChange = true
                                         }
@@ -357,10 +356,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
 
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 spinner.isEnabled = false
                 gradesChange()
@@ -389,17 +385,14 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
     private fun checkIsDownWeek() {
         val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
-            getString(R.string.settingsShared),
-            Context.MODE_PRIVATE
+            getString(R.string.settingsShared), Context.MODE_PRIVATE
         )
         try {
-            val sitePath =
-                "https://swsu.ru/rzs/"
+            val sitePath = "https://swsu.ru/rzs/"
 
             val response: Connection.Response = Jsoup.connect(sitePath)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(5000)
-                .execute()
+                .timeout(5000).execute()
 
             val statusCode: Int = response.statusCode()
 
@@ -424,13 +417,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         try {
             val pInfo = if (Build.VERSION.SDK_INT >= 33) {
                 context?.packageManager?.getPackageInfo(
-                    requireContext().packageName,
-                    PackageManager.PackageInfoFlags.of(0)
+                    requireContext().packageName, PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
                 @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(
-                    requireContext().packageName,
-                    0
+                    requireContext().packageName, 0
                 )
             }
             version = pInfo!!.versionName
@@ -443,11 +434,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
 
     private fun returnRating(
-        login: String,
-        group: String,
-        semester: String,
-        form: String,
-        status: String
+        login: String, group: String, semester: String, form: String, status: String
     ): ArrayList<MutableMap<String, String>>? {
         try {
             val document: String
@@ -456,8 +443,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
             val response: Connection.Response = Jsoup.connect(sitePath)
                 .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(10000)
-                .execute()
+                .timeout(10000).execute()
 
             val statusCode: Int = response.statusCode()
 
