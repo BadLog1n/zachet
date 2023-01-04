@@ -1,11 +1,11 @@
 package com.oneseed.zachet
 
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -32,7 +32,6 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import java.util.concurrent.Executors
-import kotlin.system.exitProcess
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private val authCheck = AuthCheck()
@@ -95,28 +94,71 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             }
         }
         val versionName = getAppVersion(requireContext())
-        database = FirebaseDatabase.getInstance().getReference("version")
-        database.get().addOnSuccessListener {
-            if (versionName < it.value.toString() && isTeacher == true) {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setMessage(R.string.updateText)
-                builder.setTitle(R.string.updateTitle)
-                builder.setPositiveButton("Ок") { _, _ ->
-                }
-                builder.setNeutralButton("Перейти") { _, _ ->
-                    findNavController().navigate(R.id.helpFragment)
-                }
-                val alertDialog = builder.create()
-                alertDialog.show()
 
-                val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                with(autoBtn) {
-                    setTextColor(Color.BLACK)
+
+        if (isTeacher == true) {
+            database = FirebaseDatabase.getInstance().getReference("versionInfo")
+            database.get().addOnSuccessListener {
+                val actualVersion = it.child("actualVersion").value.toString()
+                if (versionName < it.child("minVersion").value.toString()) {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(R.string.updateTextForced)
+                    builder.setTitle(R.string.updateTitleForced)
+                    builder.setNegativeButton("Выход") { _, _ ->
+                        activity?.finish()
+                    }
+                    builder.setPositiveButton("Обновить") { _, _ ->
+                        val openDownloadFile = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
+                        )
+                        startActivity(openDownloadFile)
+                        activity?.finish()
+                    }
+                    builder.setNeutralButton("RuStore") { _, _ ->
+                        val openDownloadFile = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                        )
+                        startActivity(openDownloadFile)
+                        activity?.finish()
+                    }
+                    val alertDialog = builder.create()
+                    alertDialog.setCancelable(false)
+                    alertDialog.show()
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+                } else if (versionName < actualVersion) {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setMessage(R.string.updateText)
+                    builder.setTitle(R.string.updateTitle)
+                    builder.setNegativeButton("Ок") { _, _ ->
+                    }
+                    builder.setPositiveButton("Обновить") { _, _ ->
+                        val openDownloadFile = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
+                        )
+                        startActivity(openDownloadFile)
+                    }
+                    builder.setNeutralButton("RuStore") { _, _ ->
+                        val openDownloadFile = Intent(
+                            Intent.ACTION_VIEW,
+                            Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                        )
+                        startActivity(openDownloadFile)
+                        activity?.finish()
+                    }
+                    val alertDialog = builder.create()
+                    alertDialog.show()
+                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+
+                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+
                 }
-                val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-                with(userBtn) {
-                    setTextColor(Color.BLACK)
-                }
+
             }
         }
     }
@@ -129,7 +171,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     requireContext().packageName, PackageManager.PackageInfoFlags.of(0)
                 )
             } else {
-                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(requireContext().packageName, 0)
+                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(
+                    requireContext().packageName, 0
+                )
             }
             version = pInfo!!.versionName
         } catch (e: PackageManager.NameNotFoundException) {
