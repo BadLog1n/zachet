@@ -410,7 +410,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             Log.d("tag", masthead.toString())
             if (masthead != null) {
                 sharedPrefSetting?.edit()
-                    ?.putBoolean(getString(R.string.isDownWeek), "нижняя" !in masthead.toString())
+                    ?.putBoolean(getString(R.string.isDownWeek), "нижняя" in masthead.toString())
                     ?.apply()
             }
         } catch (_: Exception) {
