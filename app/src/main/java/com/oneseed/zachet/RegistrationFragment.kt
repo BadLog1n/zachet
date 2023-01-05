@@ -28,79 +28,61 @@ class RegistrationFragment : Fragment() {
         val regCodeText = view.findViewById<EditText>(R.id.regCodeText)
         auth = Firebase.auth
         view.findViewById<Button>(R.id.regButton).setOnClickListener {
-
-            if (!android.util.Patterns.EMAIL_ADDRESS.matcher(regEmailText.text.toString())
-                    .matches()
-            ) {
-                Toast.makeText(
-                    requireContext(),
-                    "Ввденная почта некорректна",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-/*                user!!.updateEmail(emailInputText.text.toString())
-                sharedPrefSettings?.edit()
-                    ?.putString(getString(R.string.emailShared), emailInputText.text.toString())
-                    ?.apply()*/
-            }
-            if (regPasswordText.text.toString().length < 6) {
-                Toast.makeText(
-                    requireContext(),
-                    "Пароль должен быть минимум из 6 знаков",
-                    Toast.LENGTH_SHORT
-                ).show()
-                return@setOnClickListener
-            }
-
-
-            var isTeacher: Boolean
-            val databaseRefNew = FirebaseDatabase.getInstance().getReference("code")
-                .child(regCodeText.text.toString()).get()
-            databaseRefNew.addOnSuccessListener { element ->
-                if (!element.exists()) {
+            while (true) {
+                if (!android.util.Patterns.EMAIL_ADDRESS.matcher(regEmailText.text.toString())
+                        .matches()
+                ) {
+                    Toast.makeText(
+                        requireContext(), "Ввденная почта некорректна", Toast.LENGTH_SHORT
+                    ).show()
+                    break
+                }
+                if (regPasswordText.text.toString().length < 6) {
                     Toast.makeText(
                         requireContext(),
-                        "Код не подходит",
+                        "Пароль должен быть минимум из 6 знаков",
                         Toast.LENGTH_SHORT
                     ).show()
-                    return@addOnSuccessListener
-                } else {
-                    isTeacher = element.value.toString().toBoolean()
+                    break
                 }
-                auth.createUserWithEmailAndPassword(
-                    regEmailText.text.toString(),
-                    regPasswordText.text.toString()
-                )
-                    .addOnCompleteListener(requireActivity()) { task ->
+                var isTeacher: Boolean
+                val databaseRefNew = FirebaseDatabase.getInstance().getReference("code")
+                    .child(regCodeText.text.toString()).get()
+                databaseRefNew.addOnSuccessListener { element ->
+                    if (!element.exists()) {
+                        Toast.makeText(
+                            requireContext(), "Код не подходит", Toast.LENGTH_SHORT
+                        ).show()
+                        return@addOnSuccessListener
+                    } else {
+                        isTeacher = element.value.toString().toBoolean()
+                    }
+                    auth.createUserWithEmailAndPassword(
+                        regEmailText.text.toString(), regPasswordText.text.toString()
+                    ).addOnCompleteListener(requireActivity()) { task ->
                         if (task.isSuccessful) {
                             val uid = Firebase.auth.currentUser?.uid
 
                             val userLogin = uid.toString().lowercase().take(6) + ('a'..'z').random()
-                            
-                            FirebaseDatabase.getInstance().getReference("login")
-                                .child(userLogin).setValue(uid)
+
+                            FirebaseDatabase.getInstance().getReference("login").child(userLogin)
+                                .setValue(uid)
                             FirebaseDatabase.getInstance()
-                                .getReference("users/${uid.toString()}/login")
-                                .setValue(userLogin)
+                                .getReference("users/${uid.toString()}/login").setValue(userLogin)
                             FirebaseDatabase.getInstance().getReference("code")
                                 .child(regCodeText.text.toString()).removeValue()
-                            // Sign in success, update UI with the signed-in user's information
-                            Toast.makeText(
-                                requireContext(),
-                                "Успешная регистрация",
-                                Toast.LENGTH_SHORT
-                            ).show()
                             if (isTeacher) {
                                 FirebaseDatabase.getInstance()
                                     .getReference("users/${uid.toString()}/isTeacher")
                                     .setValue(true)
                             }
-                            Toast.makeText(requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT).show()
+                            Toast.makeText(
+                                requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT
+                            ).show()
                             findNavController().navigate(R.id.loginFragment)
 
 
                         } else {
-                            // If sign in fails, display a message to the user.
                             Toast.makeText(
                                 requireContext(),
                                 "Пожалуйста, проверьте вводимые данные",
@@ -108,7 +90,8 @@ class RegistrationFragment : Fragment() {
                             ).show()
                         }
                     }
-
+                }
+                break
 
             }
 
@@ -118,8 +101,7 @@ class RegistrationFragment : Fragment() {
 
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_registration, container, false)
