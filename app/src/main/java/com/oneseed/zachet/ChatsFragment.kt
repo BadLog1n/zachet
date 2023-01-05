@@ -104,7 +104,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setMessage(R.string.updateTextForced)
                     builder.setTitle(R.string.updateTitleForced)
-                    builder.setNegativeButton("Выход") { _, _ ->
+                    builder.setNeutralButton("Выход") { _, _ ->
                         activity?.finish()
                     }
                     builder.setPositiveButton("Обновить") { _, _ ->
@@ -115,7 +115,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                         startActivity(openDownloadFile)
                         activity?.finish()
                     }
-                    builder.setNeutralButton("RuStore") { _, _ ->
+                    builder.setNegativeButton("RuStore") { _, _ ->
                         val openDownloadFile = Intent(
                             Intent.ACTION_VIEW,
                             Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")

@@ -205,7 +205,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setMessage(R.string.updateText)
                 builder.setTitle(R.string.updateTitle)
-                builder.setNegativeButton("Ок") { _, _ ->
+                builder.setNeutralButton("Ок") { _, _ ->
                 }
                 builder.setPositiveButton("Обновить") { _, _ ->
                     val openDownloadFile = Intent(
@@ -214,7 +214,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                     )
                     startActivity(openDownloadFile)
                 }
-                builder.setNeutralButton("RuStore") { _, _ ->
+                builder.setNegativeButton("RuStore") { _, _ ->
                     val openDownloadFile = Intent(
                         Intent.ACTION_VIEW,
                         Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
