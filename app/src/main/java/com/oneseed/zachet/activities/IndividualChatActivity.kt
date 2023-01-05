@@ -25,6 +25,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBar
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -79,6 +80,14 @@ class IndividualChatActivity : AppCompatActivity() {
         setContentView(R.layout.activity_individual_chat)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
         supportActionBar?.setCustomView(R.layout.chat_action_bar)
+        findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        findViewById<ConstraintLayout>(R.id.layout).setOnClickListener() {
+            onBackPressedDispatcher.onBackPressed()
+
+        }
         supportActionBar?.show()
         progressBar = findViewById(R.id.messagesProgressBar)
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
@@ -111,9 +120,7 @@ class IndividualChatActivity : AppCompatActivity() {
             userLogin = it.child("login").value.toString()
         }
 
-        findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+
 
 
         rcView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
@@ -705,7 +712,8 @@ class ChatFromImgItem(
                     Handler(Looper.getMainLooper()).post {
                         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
                             "Ошибка загрузки"
-                        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility = View.GONE
+                        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility =
+                            View.GONE
 
                     }
                 }
@@ -728,7 +736,8 @@ class ChatFromImgItem(
         CoroutineScope(Dispatchers.IO).launch {
 
             try {
-                viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility = View.VISIBLE
+                viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility =
+                    View.VISIBLE
                 viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
                     View.VISIBLE
                 val imageRef = Firebase.storage.reference
@@ -799,7 +808,8 @@ class ChatToImgItem(
                     Handler(Looper.getMainLooper()).post {
                         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
                             "Ошибка загрузки"
-                        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility = View.GONE
+                        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility =
+                            View.GONE
 
                     }
                 }
@@ -821,7 +831,8 @@ class ChatToImgItem(
     private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
         CoroutineScope(Dispatchers.Main).launch {
             try {
-                viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility = View.VISIBLE
+                viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility =
+                    View.VISIBLE
                 viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
                     View.VISIBLE
                 val imageRef = Firebase.storage.reference
