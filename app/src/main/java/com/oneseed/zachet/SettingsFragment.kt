@@ -158,23 +158,31 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             with(autoBtn) {
                 setTextColor(Color.BLACK)
                 setOnClickListener {
-                    val oldPassword = alertDialog.findViewById<EditText>(R.id.oldPasswordEt)
-                    val newPassword = alertDialog.findViewById<EditText>(R.id.newPasswordEt)
+                    val oldPassword =
+                        alertDialog.findViewById<EditText>(R.id.oldPasswordEt)?.text.toString()
+                    val newPassword =
+                        alertDialog.findViewById<EditText>(R.id.newPasswordEt)?.text.toString()
                     val password =
                         sharedPrefSettings?.getString(getString(R.string.savePassword), "null")
                             .toString()
-                    if (password == oldPassword?.text.toString()) {
-                        sharedPrefSettings?.edit()?.putString(
-                            getString(R.string.savePassword), newPassword?.text.toString()
-                        )?.apply()
-                        user!!.updatePassword(newPassword?.text.toString())
-                        Toast.makeText(activity, "Успешно обновлено", Toast.LENGTH_SHORT).show()
-
-                        alertDialog.cancel()
-                    } else {
+                    if (newPassword.isEmpty()) {
                         Toast.makeText(
-                            activity, "Предыдущий пароль не совпадает", Toast.LENGTH_SHORT
+                            activity, "Новый пароль не может быть пустым", Toast.LENGTH_SHORT
                         ).show()
+                    } else {
+                        if (password == oldPassword) {
+                            sharedPrefSettings?.edit()?.putString(
+                                getString(R.string.savePassword), newPassword
+                            )?.apply()
+                            user!!.updatePassword(newPassword)
+                            Toast.makeText(activity, "Успешно обновлено", Toast.LENGTH_SHORT).show()
+
+                            alertDialog.cancel()
+                        } else {
+                            Toast.makeText(
+                                activity, "Предыдущий пароль не совпадает", Toast.LENGTH_SHORT
+                            ).show()
+                        }
                     }
                 }
             }
