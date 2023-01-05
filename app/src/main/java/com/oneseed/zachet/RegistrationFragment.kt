@@ -95,6 +95,7 @@ class RegistrationFragment : Fragment() {
                                     .getReference("users/${uid.toString()}/isTeacher")
                                     .setValue(true)
                             }
+                            Toast.makeText(requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT).show()
                             findNavController().navigate(R.id.loginFragment)
 
 
