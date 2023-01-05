@@ -47,7 +47,7 @@
 
     <com.google.android.material.navigation.NavigationView
         android:id="@+id/navViewGrades"
-        android:layout_width="wrap_content"
+        android:layout_width="200dp"
         android:layout_height="match_parent"
         android:layout_gravity="end"
         android:background="@color/blue"
