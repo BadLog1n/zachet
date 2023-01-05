@@ -57,6 +57,7 @@
             android:id="@+id/gradesRcView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:scrollbars="none"
             tools:listitem="@layout/subject_grades_item">
 
         </androidx.recyclerview.widget.RecyclerView>
