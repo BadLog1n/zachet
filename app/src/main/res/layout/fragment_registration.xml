@@ -83,6 +83,7 @@
                 android:layout_height="wrap_content"
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
+                android:maxLength="50"
                 android:hint="@string/password"
                 android:inputType="textPassword"
                 android:minHeight="50dp"
