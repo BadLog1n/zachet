@@ -74,6 +74,13 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
             view.hideKeyboard()
         }
+
+        view.findViewById<LinearLayout>(R.id.layout).setOnClickListener {
+            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
+            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+            view.hideKeyboard()
+        }
+
         view.findViewById<Button>(R.id.publishNewMessButton).setOnClickListener {
 
             val text = view.findViewById<EditText>(R.id.newMessEdittext).text.toString()
