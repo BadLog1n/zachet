@@ -1,8 +1,12 @@
 package com.oneseed.zachet.activities
 
 import android.content.SharedPreferences
+import android.os.Build
 import android.os.Bundle
+import android.widget.Button
+import android.widget.ImageButton
 import android.widget.Toast
+import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -23,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
         setSupportActionBar(toolbar)
 
+
         val toggle = ActionBarDrawerToggle(
             this,
             findViewById(R.id.drawer),
@@ -30,9 +35,7 @@ class MainActivity : AppCompatActivity() {
             R.string.drawer_open,
             R.string.drawer_closed
         )
-        toggle.onDrawerOpened(findViewById<DrawerLayout>(R.id.drawer)).apply {
-            supportActionBar?.hide()
-        }
+
 
         findViewById<DrawerLayout>(R.id.drawer).addDrawerListener(toggle)
         toggle.syncState()
@@ -44,6 +47,23 @@ class MainActivity : AppCompatActivity() {
         val sharedPref: SharedPreferences? =
             this.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
 
+        toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1).setOnClickListener(){
+            if (findViewById<DrawerLayout>(R.id.drawer).isDrawerOpen(GravityCompat.END)) {
+                findViewById<DrawerLayout>(R.id.drawer).closeDrawers()
+            } else {
+                findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.END)
+            }
+        }
+
+        toolbar.setNavigationOnClickListener {
+            if (findViewById<DrawerLayout>(R.id.drawer).isDrawerOpen(GravityCompat.END)) {
+                findViewById<DrawerLayout>(R.id.drawer).closeDrawers()
+            } else {
+                findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.END)
+            }
+
+
+        }
 
         /*findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
@@ -68,7 +88,7 @@ class MainActivity : AppCompatActivity() {
             "Light"
         )
 
-        when(isSupportDarkTheme){
+        when (isSupportDarkTheme) {
             "Light" -> {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }
@@ -79,7 +99,6 @@ class MainActivity : AppCompatActivity() {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
         }
-
 
 
         /**
@@ -145,7 +164,7 @@ class MainActivity : AppCompatActivity() {
                     }
                 }
             }
-            findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.START)
+            findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.END)
             true
         }
     }
