@@ -269,18 +269,17 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     list.add(chat)
                                 }
                             }
-                                if (member.toString() == dataSnapshot.children.last().toString()) {
+                            if (member.toString() == dataSnapshot.children.last().toString()) {
 
-                                    list =
-                                        ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
-                                    rcAdapter.clearRecords()
-                                    list.forEach { element ->
-                                        rcAdapter.addChatPreview(element)
-                                    }
-                                    rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
+                                list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
+                                rcAdapter.clearRecords()
+                                list.forEach { element ->
+                                    rcAdapter.addChatPreview(element)
+                                }
+                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
 
-                                    notFirstLoad = true
-                                    progressBar.visibility = View.GONE
+                                notFirstLoad = true
+                                progressBar.visibility = View.GONE
 
 
                             }
