@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 
 
@@ -12,6 +12,7 @@ import android.widget.Button
 import android.widget.FrameLayout
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import com.oneseed.zachet.R
 
 
 class LogoutFragment : BottomSheetDialogFragment() {

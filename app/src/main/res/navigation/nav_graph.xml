@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/loginFragment"
-        android:name="com.oneseed.zachet.LoginFragment"
+        android:name="com.oneseed.zachet.fragments.LoginFragment"
         android:label="fragment_login"
         tools:layout="@layout/fragment_login" >
         <action
@@ -17,42 +17,42 @@
     </fragment>
     <fragment
         android:id="@+id/gradesFragment"
-        android:name="com.oneseed.zachet.GradesFragment"
+        android:name="com.oneseed.zachet.fragments.GradesFragment"
         android:label="fragment_grades"
         tools:layout="@layout/fragment_grades" />
     <fragment
         android:id="@+id/helpFragment"
-        android:name="com.oneseed.zachet.HelpFragment"
+        android:name="com.oneseed.zachet.fragments.HelpFragment"
         android:label="fragment_help"
         tools:layout="@layout/fragment_help" />
     <fragment
         android:id="@+id/settingsFragment"
-        android:name="com.oneseed.zachet.SettingsFragment"
+        android:name="com.oneseed.zachet.fragments.SettingsFragment"
         android:label="fragment_settings"
         tools:layout="@layout/fragment_settings" />
     <fragment
         android:id="@+id/logoutFragment"
-        android:name="com.oneseed.zachet.LogoutFragment"
+        android:name="com.oneseed.zachet.fragments.LogoutFragment"
         android:label="fragment_logout"
         tools:layout="@layout/fragment_logout" />
     <fragment
         android:id="@+id/chatsFragment"
-        android:name="com.oneseed.zachet.ChatsFragment"
+        android:name="com.oneseed.zachet.fragments.ChatsFragment"
         android:label="fragment_chats"
         tools:layout="@layout/fragment_chats" />
     <fragment
         android:id="@+id/scheduleFragment"
-        android:name="com.oneseed.zachet.ScheduleFragment"
+        android:name="com.oneseed.zachet.fragments.ScheduleFragment"
         android:label="fragment_schedule"
         tools:layout="@layout/fragment_schedule" />
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.oneseed.zachet.FeedFragment"
+        android:name="com.oneseed.zachet.fragments.FeedFragment"
         android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" />
     <fragment
         android:id="@+id/registrationFragment"
-        android:name="com.oneseed.zachet.RegistrationFragment"
+        android:name="com.oneseed.zachet.fragments.RegistrationFragment"
         android:label="fragment_registration"
         tools:layout="@layout/fragment_registration" />
 </navigation>

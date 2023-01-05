@@ -10,7 +10,7 @@
     android:layout_marginBottom="20dp"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".HelpFragment">
+    tools:context=".fragments.HelpFragment">
 
     <ImageView
         android:id="@+id/imageView2"

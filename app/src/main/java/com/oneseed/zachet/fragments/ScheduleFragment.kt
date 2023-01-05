@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
@@ -20,6 +20,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.R
 import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder

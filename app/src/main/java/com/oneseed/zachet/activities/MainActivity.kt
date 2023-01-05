@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -12,6 +12,8 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_LOCKED_CLOSED
 import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
+import com.oneseed.zachet.R
+import com.oneseed.zachet.fragments.LogoutFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

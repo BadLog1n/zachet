@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.content.Intent
@@ -30,6 +30,10 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.activities.IndividualChatActivity
+import com.oneseed.zachet.R
+import com.oneseed.zachet.adapters.ChatsAdapter
+import com.oneseed.zachet.dataClasses.ChatPreview
 import java.util.concurrent.Executors
 
 class ChatsFragment : Fragment(R.layout.fragment_chats) {

@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.content.Context.MODE_PRIVATE
@@ -19,8 +19,8 @@ import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
+import com.oneseed.zachet.R
 import java.util.concurrent.Executors
-import kotlin.system.exitProcess
 
 
 class LoginFragment : Fragment(R.layout.fragment_login) {

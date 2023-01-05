@@ -9,7 +9,7 @@
     android:layout_marginBottom="20dp"
     android:gravity="center"
     android:orientation="vertical"
-    tools:context=".ScheduleFragment">
+    tools:context=".fragments.ScheduleFragment">
 
 
 

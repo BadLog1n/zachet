@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.content.DialogInterface
@@ -29,6 +29,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.R
+import com.oneseed.zachet.adapters.GradesAdapter
+import com.oneseed.zachet.dataClasses.SubjectGrades
 import com.oneseed.zachet.databinding.FragmentGradesBinding
 import kotlinx.coroutines.*
 import org.json.JSONArray

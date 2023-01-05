@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.activities
 
 import android.Manifest
 import android.annotation.SuppressLint
@@ -35,6 +35,7 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.oneseed.zachet.R
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item

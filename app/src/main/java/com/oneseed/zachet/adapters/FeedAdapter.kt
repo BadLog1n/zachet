@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.adapters
 
 import android.content.Intent
 import android.graphics.Color
@@ -10,6 +10,9 @@ import android.widget.TextView
 import android.widget.Toast
 import androidx.recyclerview.widget.RecyclerView
 import com.google.firebase.database.FirebaseDatabase
+import com.oneseed.zachet.dataClasses.FeedRecord
+import com.oneseed.zachet.activities.IndividualChatActivity
+import com.oneseed.zachet.R
 import com.oneseed.zachet.databinding.FeedItemBinding
 
 

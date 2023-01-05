@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.dataClasses
 
 data class SubjectGrades(
     val subject: String,

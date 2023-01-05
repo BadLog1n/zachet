@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 import android.content.*
 import android.graphics.Color
@@ -17,6 +17,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.R
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection

@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.os.Bundle
@@ -17,6 +17,9 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.R
+import com.oneseed.zachet.adapters.FeedAdapter
+import com.oneseed.zachet.dataClasses.FeedRecord
 import com.oneseed.zachet.databinding.FragmentFeedBinding
 import java.text.SimpleDateFormat
 import java.util.*

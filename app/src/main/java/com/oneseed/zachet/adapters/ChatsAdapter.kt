@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.adapters
 
 import android.content.Intent
 import android.graphics.Typeface
@@ -8,6 +8,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.oneseed.zachet.dataClasses.ChatPreview
+import com.oneseed.zachet.activities.IndividualChatActivity
+import com.oneseed.zachet.R
 import com.oneseed.zachet.databinding.ListOfChatsItemBinding
 import java.text.SimpleDateFormat
 import java.util.*

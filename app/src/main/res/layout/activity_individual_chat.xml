@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:backgroundTint="@color/light_grey_background"
     android:fitsSystemWindows="true"
-    tools:context=".IndividualChatActivity">
+    tools:context=".activities.IndividualChatActivity">
 
 
     <EditText

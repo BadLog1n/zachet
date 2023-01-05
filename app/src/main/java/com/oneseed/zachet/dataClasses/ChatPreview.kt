@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.dataClasses
 
 //Необходимо добавить параметр с названием чата, чтобы удалять не через конкретный объект, а через поиск с именем чата
 

@@ -1,4 +1,4 @@
-package com.oneseed.zachet
+package com.oneseed.zachet.activities
 
 import android.app.DownloadManager
 import android.content.Context
@@ -15,6 +15,7 @@ import com.davemorrissey.labs.subscaleview.ImageSource
 import com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView
 import com.google.firebase.ktx.Firebase
 import com.google.firebase.storage.ktx.storage
+import com.oneseed.zachet.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
