@@ -100,7 +100,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 autoTheme.isEnabled = false
             }
         }
-        if(sharedPrefSettings?.getBoolean(getString(R.string.loadImages), true) == true){
+        if (sharedPrefSettings?.getBoolean(getString(R.string.loadImages), true) == true) {
             loadImages.isChecked = true
         }
 
@@ -199,83 +199,86 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Сохранить изменения?")
             builder.setPositiveButton("Да") { _, _ ->
-                val login = sharedPrefSettings?.getString(getString(R.string.loginShared), "null")
-                    .toString()
-                val loginText = loginEditText.text.toString().lowercase()
-                if (loginText.toIntOrNull()?.let { true } == true) {
-                    Toast.makeText(
-                        requireContext(),
-                        "Логин не должен состоять только из цифр",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    return@setPositiveButton
-                }
-
-                val databaseRef = FirebaseDatabase.getInstance().getReference("login")
-                    .child(loginEditText.text.toString()).get()
-                databaseRef.addOnSuccessListener { item ->
-                    if (!item.exists()) {
-                        FirebaseDatabase.getInstance().getReference("login")
-                            .child(loginEditText.text.toString()).setValue(uid)
-                        FirebaseDatabase.getInstance().getReference("login").child(login)
-                            .removeValue()
-                        database.child("login").setValue(loginEditText.text.toString())
+                while (true) {
+                    val login =
+                        sharedPrefSettings?.getString(getString(R.string.loginShared), "null")
+                            .toString()
+                    val loginText = loginEditText.text.toString().lowercase()
+                    if (loginText.toIntOrNull()?.let { true } == true) {
+                        Toast.makeText(
+                            requireContext(),
+                            "Логин не должен состоять только из цифр",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        break
+                    }
+                    if (loginText.isEmpty()) {
+                        Toast.makeText(
+                            requireContext(), "Логин не может быть пустым", Toast.LENGTH_SHORT
+                        ).show()
+                        break
+                    }
+                    val surname = surnameEditText.text.toString()
+                    val name = nameEditText.text.toString()
+                    if (surname.isNotEmpty()) {
+                        database.child("surname").setValue(surname)
+                    }
+                    if (name.isNotEmpty()) {
+                        database.child("name").setValue(name)
+                    }
+                    if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
+                            .matches()
+                    ) {
+                        user!!.updateEmail(emailInputText.text.toString())
                         sharedPrefSettings?.edit()?.putString(
-                            getString(R.string.loginShared), loginEditText.text.toString()
+                            getString(R.string.emailShared), emailInputText.text.toString()
                         )?.apply()
+                    } else {
+                        Toast.makeText(
+                            requireContext(), "Ввденная почта некорректна", Toast.LENGTH_SHORT
+                        ).show()
+                        break
+                    }
 
-                    } else if (login != loginEditText.text.toString()) {
-                        Toast.makeText(requireContext(), "Логин уже занят", Toast.LENGTH_SHORT)
-                            .show()
+                    val databaseRef =
+                        FirebaseDatabase.getInstance().getReference("login").child(loginText).get()
+                    databaseRef.addOnSuccessListener { item ->
+                        if (!item.exists()) {
+                            FirebaseDatabase.getInstance().getReference("login").child(loginText)
+                                .setValue(uid)
+                            FirebaseDatabase.getInstance().getReference("login").child(login)
+                                .removeValue()
+                            database.child("login").setValue(loginText)
+                            sharedPrefSettings?.edit()?.putString(
+                                getString(R.string.loginShared), loginText
+                            )?.apply()
+
+                        } else if (login != loginText) {
+                            Toast.makeText(requireContext(), "Логин уже занят", Toast.LENGTH_SHORT)
+                                .show()
+                        } else {
+                            Toast.makeText(
+                                requireContext(), "Успешно сохранено", Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    }
+                    if (login != loginText) {
+                        Toast.makeText(
+                            requireContext(), "Успешно сохранено", Toast.LENGTH_SHORT
+                        ).show()
                     }
 
 
+
+                    break
                 }
-
-                val surname = surnameEditText.text.toString()
-                val name = nameEditText.text.toString()
-                if (surname.isNotEmpty() && surname.isNotBlank()) {
-                    database.child("surname").setValue(surname)
-
-                }
-                if (name.isNotEmpty() && name.isNotBlank()) {
-                    database.child("name").setValue(name)
-
-                }
-                if (android.util.Patterns.EMAIL_ADDRESS.matcher(emailInputText.text.toString())
-                        .matches()
-                ) {
-                    user!!.updateEmail(emailInputText.text.toString())
-                    sharedPrefSettings?.edit()
-                        ?.putString(getString(R.string.emailShared), emailInputText.text.toString())
-                        ?.apply()
-                } else {
-                    Toast.makeText(
-                        requireContext(), "Ввденная почта некорректна", Toast.LENGTH_SHORT
-                    ).show()
-
-
-                }
-
-                Toast.makeText(
-                    this@SettingsFragment.context, "Сохранено", Toast.LENGTH_SHORT
-                ).show()
-
-
             }
             builder.setNeutralButton("Нет") { _, _ ->
             }
             val alertDialog = builder.create()
             alertDialog.show()
-
-            val autoBtn = alertDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-            with(autoBtn) {
-                setTextColor(Color.BLACK)
-            }
-            val userBtn = alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL)
-            with(userBtn) {
-                setTextColor(Color.BLACK)
-            }
+            alertDialog.getButton(DialogInterface.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+            alertDialog.getButton(DialogInterface.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
 
 
         }
@@ -453,7 +456,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         loadImages.setOnCheckedChangeListener { _, _ ->
             if (loadImages.isChecked) {
-                sharedPrefSettings?.edit()?.putBoolean(getString(R.string.loadImages), true)?.apply()
+                sharedPrefSettings?.edit()?.putBoolean(getString(R.string.loadImages), true)
+                    ?.apply()
 
             } else sharedPrefSettings?.edit()?.putBoolean(getString(R.string.loadImages), false)
                 ?.apply()
@@ -486,8 +490,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     val stringSemester = semester.joinToString(separator = ",")
 
                     sharedPref?.edit()
-                        ?.putString(getString(R.string.listOfSemester), stringSemester)
-                        ?.apply()
+                        ?.putString(getString(R.string.listOfSemester), stringSemester)?.apply()
                     sharedPref?.edit()
                         ?.putString(getString(R.string.listOfSemesterToChange), stringSemester)
                         ?.apply()
