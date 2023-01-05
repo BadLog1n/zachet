@@ -54,7 +54,7 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         var countCircle = 1
         val imageMain = view.findViewById<ImageView>(R.id.imageView2)
         imageMain.setOnClickListener {
-            if (clickCount == 5) {
+            if (clickCount == 3) {
                 imageMain.rotation += 5f
                 if (imageMain.rotation % 360 == 0f)
                 {
