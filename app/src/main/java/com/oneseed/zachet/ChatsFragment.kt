@@ -8,7 +8,6 @@ import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -248,24 +247,28 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                             FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
                         val requestToDatabase = database.limitToLast(1).get()
                         requestToDatabase.addOnSuccessListener { itNew ->
-                            for (i in itNew.children) {
-                                val dtLong = i.key!!.toString().toLong()
-                                val displayText: String = when (i.child("type").value.toString()) {
-                                    "text" -> i.child("text").value.toString()
-                                    "file" -> "Файл"
-                                    "photo" -> "Фотография"
-                                    else -> "Сообщение"
-                                }
 
-                                val chat = ChatPreview(
-                                    displayName, dtLong, displayText, isRead, getUser
-                                )
-                                Log.d("notFirstLoad", notFirstLoad.toString())
+                            if (itNew.exists()) {
+                                for (i in itNew.children) {
+                                    val dtLong = i.key!!.toString().toLong()
+                                    val displayText: String =
+                                        when (i.child("type").value.toString()) {
+                                            "text" -> i.child("text").value.toString()
+                                            "file" -> "Файл"
+                                            "photo" -> "Фотография"
+                                            else -> "Сообщение"
+                                        }
 
-                                if (notFirstLoad && itNew.children.count() == 1 && list.singleOrNull { (it.getUser == getUser) } != null) {
-                                    list.remove(list.single { (it.getUser == getUser) })
+                                    val chat = ChatPreview(
+                                        displayName, dtLong, displayText, isRead, getUser
+                                    )
+
+                                    if (notFirstLoad && itNew.children.count() == 1 && list.singleOrNull { (it.getUser == getUser) } != null) {
+                                        list.remove(list.single { (it.getUser == getUser) })
+                                    }
+                                    list.add(chat)
                                 }
-                                list.add(chat)
+                            }
                                 if (member.toString() == dataSnapshot.children.last().toString()) {
 
                                     list =
@@ -279,7 +282,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     notFirstLoad = true
                                     progressBar.visibility = View.GONE
 
-                                }
+
                             }
                         }
                     }
