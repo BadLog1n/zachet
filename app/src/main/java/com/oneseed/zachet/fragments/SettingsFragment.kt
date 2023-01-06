@@ -10,6 +10,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.android.material.switchmaterial.SwitchMaterial
@@ -475,50 +476,49 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
     }
 
 
-    @OptIn(DelicateCoroutinesApi::class)
     private fun getDataOfStudent(
         sharedPref: SharedPreferences?, login: String, password: String, isUpdate: Boolean
     ) {
-        GlobalScope.launch {
+        lifecycleScope.launch {
+            withContext(Dispatchers.IO) {
+                val infoOfStudent = getSemester(login, password)
+                withContext(Dispatchers.Main) {
+                    if (infoOfStudent != null) {
+                        val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
+                        semester.sort()
+                        semester.reverse()
+                        sharedPref?.edit()
+                            ?.putInt(getString(R.string.lastSemester), semester.first().toInt())
+                            ?.apply()
+                        semester.forEachIndexed { index, element ->
+                            val correctSemester = element.toInt() - 1
+                            semester[index] = "Семестр $correctSemester"
+                        }
+                        val stringSemester = semester.joinToString(separator = ",")
 
-            val infoOfStudent = getSemester(login, password)
-            withContext(Dispatchers.Main) {
-                if (infoOfStudent != null) {
-
-
-                    val semester = (infoOfStudent[1] + infoOfStudent[2]).toMutableList()
-                    semester.sort()
-                    semester.reverse()
-                    sharedPref?.edit()
-                        ?.putInt(getString(R.string.lastSemester), semester.first().toInt())
-                        ?.apply()
-                    semester.forEachIndexed { index, element ->
-                        val correctSemester = element.toInt() - 1
-                        semester[index] = "Семестр $correctSemester"
-                    }
-                    val stringSemester = semester.joinToString(separator = ",")
-
-                    sharedPref?.edit()
-                        ?.putString(getString(R.string.listOfSemester), stringSemester)?.apply()
-                    sharedPref?.edit()
-                        ?.putString(getString(R.string.listOfSemesterToChange), stringSemester)
-                        ?.apply()
-                    sharedPref?.edit()
-                        ?.putString(getString(R.string.groupOfStudent), infoOfStudent[0][1])
-                        ?.apply()
-                    sharedPref?.edit()
-                        ?.putString(getString(R.string.formOfStudent), infoOfStudent[0][0])?.apply()
-                    sharedPref?.edit()?.putString(getString(R.string.actualGrades), "")?.apply()
-                    /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
+                        sharedPref?.edit()
+                            ?.putString(getString(R.string.listOfSemester), stringSemester)?.apply()
+                        sharedPref?.edit()
+                            ?.putString(getString(R.string.listOfSemesterToChange), stringSemester)
+                            ?.apply()
+                        sharedPref?.edit()
+                            ?.putString(getString(R.string.groupOfStudent), infoOfStudent[0][1])
+                            ?.apply()
+                        sharedPref?.edit()
+                            ?.putString(getString(R.string.formOfStudent), infoOfStudent[0][0])
+                            ?.apply()
+                        sharedPref?.edit()?.putString(getString(R.string.actualGrades), "")?.apply()
+                        /*              Toast.makeText(requireContext(), item, Toast.LENGTH_SHORT)
                                       .show()*/
 
-                    if (isUpdate) Toast.makeText(
-                        requireContext(), "Подтверждено!", Toast.LENGTH_SHORT
-                    ).show()
-                    else Toast.makeText(
-                        requireContext(), "Успешно обновлено!", Toast.LENGTH_SHORT
-                    ).show()
+                        if (isUpdate) Toast.makeText(
+                            requireContext(), "Подтверждено!", Toast.LENGTH_SHORT
+                        ).show()
+                        else Toast.makeText(
+                            requireContext(), "Успешно обновлено!", Toast.LENGTH_SHORT
+                        ).show()
 
+                    }
                 }
             }
         }

@@ -7,10 +7,7 @@ import android.content.SharedPreferences
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.net.Uri
-import android.os.Build
-import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
+import android.os.*
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -18,6 +15,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -49,12 +47,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private lateinit var database: DatabaseReference
     private val ratingUniversity = RatingUniversity()
     private lateinit var firebaseAuth: FirebaseAuth
-
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
     private var clickBack = false
 
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val spinner = requireView().findViewById<Spinner>(R.id.sem_num_spinner)
         authCheck.check(view, this@GradesFragment.context)
@@ -274,65 +270,69 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 val semester = result.toString().padStart(9, '0')
 
 
-                GlobalScope.launch {
+                lifecycleScope.launch {
                     try {
-                        checkIsDownWeek()
-                        val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
-                        println(listOfGrades)
-                        withContext(Dispatchers.Main) {
-                            if (listOfGrades != null) {
-                                var allGrades = ""
-                                var isChange = false
-                                if (listOfGrades.size != 0) {
-                                    rcAdapter.clearRecords()
-                                    listOfGrades.forEachIndexed { index, item ->
-                                        var changeSubject = false
-                                        allGrades += "${item["ratingScore"].toString().toInt()} "
-                                        if (actualGrades.size > index && actualGrades[0] != "" && item["ratingScore"].toString() != actualGrades[index]) {
-                                            changeSubject = true
-                                            isChange = true
-                                        }
-                                        rcAdapter.addSubjectGrades(
-                                            SubjectGrades(
-                                                item["getSubjectName"].toString(),
-                                                item["ratingScore"].toString().toInt(),
-                                                item["subjectType"].toString(),
-                                                item["rating"].toString().split(" ").toList(),
-                                                item["tutorName"].toString(),
-                                                item["tutorId"].toString(),
-                                                subjectIsChange = changeSubject
+                        withContext(Dispatchers.IO) {
+                            checkIsDownWeek()
+                            val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
+                            println(listOfGrades)
+                            withContext(Dispatchers.Main) {
+                                if (listOfGrades != null) {
+                                    var allGrades = ""
+                                    var isChange = false
+                                    if (listOfGrades.size != 0) {
+                                        rcAdapter.clearRecords()
+                                        listOfGrades.forEachIndexed { index, item ->
+                                            var changeSubject = false
+                                            allGrades += "${
+                                                item["ratingScore"].toString().toInt()
+                                            } "
+                                            if (actualGrades.size > index && actualGrades[0] != "" && item["ratingScore"].toString() != actualGrades[index]) {
+                                                changeSubject = true
+                                                isChange = true
+                                            }
+
+                                            rcAdapter.addSubjectGrades(
+                                                SubjectGrades(
+                                                    item["getSubjectName"].toString(),
+                                                    item["ratingScore"].toString().toInt(),
+                                                    item["subjectType"].toString(),
+                                                    item["rating"].toString().split(" ").toList(),
+                                                    item["tutorName"].toString(),
+                                                    item["tutorId"].toString(),
+                                                    subjectIsChange = changeSubject
+                                                )
                                             )
-                                        )
+                                        }
+                                        sharedPrefGrades?.edit()
+                                            ?.putString(getString(R.string.actualGrades), allGrades)
+                                            ?.apply()
+                                        progressBar.visibility = View.GONE
+                                        recyclerView.visibility = View.VISIBLE
+                                        Toast.makeText(
+                                            requireContext(), "abcd", Toast.LENGTH_SHORT
+                                        ).show()
                                     }
-                                    sharedPrefGrades?.edit()
-                                        ?.putString(getString(R.string.actualGrades), allGrades)
-                                        ?.apply()
+                                    swipeRefreshLayout.isEnabled = true
+                                    rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
+                                    if (rcAdapter.itemCount > 0) spinner.isEnabled = true
 
+                                    if (isChange) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Некоторые баллы были обновлены",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
 
+                                } else {
                                     progressBar.visibility = View.GONE
-                                    recyclerView.visibility = View.VISIBLE
-
+                                    spinner.visibility = View.GONE
+                                    textviewNoAuthData.text =
+                                        "Не удаётся подключиться к сайту. Проверьте подключение к интернету."
+                                    textviewNoAuthData.visibility = View.VISIBLE
                                 }
-                                swipeRefreshLayout.isEnabled = true
-                                rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
-                                if (rcAdapter.itemCount > 0) spinner.isEnabled = true
-
-                                if (isChange) {
-                                    Toast.makeText(
-                                        requireContext(),
-                                        "Некоторые баллы были обновлены",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-
-                            } else {
-                                progressBar.visibility = View.GONE
-                                spinner.visibility = View.GONE
-                                textviewNoAuthData.text =
-                                    "Не удаётся подключиться к сайту. Проверьте подключение к интернету."
-                                textviewNoAuthData.visibility = View.VISIBLE
                             }
-
                         }
                     } catch (_: Exception) {
 
