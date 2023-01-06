@@ -2,9 +2,11 @@ package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
+import android.view.Gravity
 import android.view.View
 import android.widget.*
 import androidx.activity.addCallback
@@ -25,11 +27,13 @@ import com.oneseed.zachet.databinding.FragmentScheduleBinding
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.GroupieViewHolder
 import com.xwray.groupie.Item
+import java.util.*
 
 
 class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private lateinit var database: DatabaseReference
     private val authCheck = AuthCheck()
+    private lateinit var dayOfWeek: String
 
 
     private lateinit var binding: FragmentScheduleBinding
@@ -63,14 +67,27 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         val loadScheduleFirstLoad =
             sharedPref?.getString("scheduleShared$upDownTextFirstLoad", "").toString()
+        val calendar = Calendar.getInstance()
 
 
-        if (loadScheduleFirstLoad.isNotEmpty()){
-            if (isDownWeekFirstLoad == true){
+        dayOfWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
+            Calendar.SUNDAY -> "Воскресенье"
+            Calendar.MONDAY -> "Понедельник"
+            Calendar.TUESDAY -> "Вторник"
+            Calendar.WEDNESDAY -> "Среда"
+            Calendar.THURSDAY -> "Четверг"
+            Calendar.FRIDAY -> "Пятница"
+            Calendar.SATURDAY -> "Суббота"
+            else -> ""
+        }
+
+
+
+        if (loadScheduleFirstLoad.isNotEmpty()) {
+            if (isDownWeekFirstLoad == true) {
                 switch.isChecked = true
                 timetableGetCache(loadScheduleFirstLoad)
-            }
-            else {
+            } else {
                 timetableGetCache(loadScheduleFirstLoad)
             }
         }
@@ -263,7 +280,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                     ?.apply()
 
                 subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
-                adapter.add(WeekDayItem(rusDay[index]))
+                adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
                 for (item in subjects) {
                     adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
                 }
@@ -318,14 +335,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                     subjects.add(subject)
                 }
                 subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
-                adapter.add(WeekDayItem(rusDay[index]))
+                adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
                 for (item in subjects) {
                     adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
                 }
                 subjects.clear()
                 index += 1
             } else {
-                adapter.add(WeekDayItem(rusDay[index]))
+                adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
                 index += 1
             }
         }
@@ -340,9 +357,13 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
-class WeekDayItem(val text: String) : Item<GroupieViewHolder>() {
+class WeekDayItem(val text: String, val today: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
-        viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv).text = text
+        val weekday = viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv)
+        weekday.text = text
+        if (today == text){
+            weekday.gravity = Gravity.CENTER
+        }
     }
 
     override fun getLayout(): Int {
