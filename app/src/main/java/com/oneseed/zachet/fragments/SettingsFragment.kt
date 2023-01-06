@@ -9,6 +9,7 @@ import android.widget.*
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.app.ActivityCompat.recreate
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
@@ -55,6 +56,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
         val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
         val emailHelpBtn = view.findViewById<ImageButton>(R.id.emailHelpBtn)
+        val menuMove = view.findViewById<SwitchMaterial>(R.id.menuMove)
 
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
@@ -89,6 +91,27 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             emailInputText.isEnabled = true
 
         }
+
+        val menuIsRight = sharedPrefSettings?.getBoolean(getString(R.string.menuIsRight), false) == true
+        if (menuIsRight) menuMove.isChecked = true
+
+        menuMove.setOnCheckedChangeListener { _, _ ->
+
+            if (menuMove.isChecked && !menuIsRight) {
+                sharedPrefSettings?.edit()?.putBoolean(
+                    getString(R.string.menuIsRight), true
+                )?.apply()
+                recreate(requireActivity())
+            } else if (menuIsRight) {
+                sharedPrefSettings?.edit()?.putBoolean(
+                    getString(R.string.menuIsRight), false
+                )?.apply()
+                recreate(requireActivity())
+
+            }
+        }
+
+
 
         val isTeacher = sharedPrefSettings?.getBoolean(getString(R.string.isTeacher), false)
 

@@ -138,6 +138,8 @@
     <string name="nameSofia">Сохина Софья</string>
     <string name="zero">0</string>
     <string name="onlyDarkTheme">Принудительная тёмная тема</string>
+    <string name="menuIsRight">menuIsRight</string>
+    <string name="menuMove">Меню справа</string>
 
 
 </resources>

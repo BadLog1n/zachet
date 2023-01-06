@@ -1,12 +1,8 @@
 package com.oneseed.zachet.activities
 
 import android.content.SharedPreferences
-import android.os.Build
 import android.os.Bundle
-import android.widget.Button
-import android.widget.ImageButton
 import android.widget.Toast
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -26,66 +22,83 @@ class MainActivity : AppCompatActivity() {
 
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
         setSupportActionBar(toolbar)
+        val drawer = findViewById<DrawerLayout>(R.id.drawer)
+        val navigationView = findViewById<NavigationView>(R.id.navViewGrades)
 
 
         val toggle = ActionBarDrawerToggle(
-            this,
-            findViewById(R.id.drawer),
-            toolbar,
-            R.string.drawer_open,
-            R.string.drawer_closed
+            this, drawer, toolbar, R.string.drawer_open, R.string.drawer_closed
         )
 
 
-        findViewById<DrawerLayout>(R.id.drawer).addDrawerListener(toggle)
+        drawer.addDrawerListener(toggle)
         toggle.syncState()
 
         //mainActionBar = supportActionBar!!
-        findViewById<DrawerLayout>(R.id.drawer).setDrawerLockMode(LOCK_MODE_UNLOCKED)
+        drawer.setDrawerLockMode(LOCK_MODE_UNLOCKED)
 
         supportActionBar?.hide()
         val sharedPref: SharedPreferences? =
             this.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
+        val menuIsRight = sharedPref?.getBoolean(getString(R.string.menuIsRight), false) == true
 
-        toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1).setOnClickListener(){
-            if (findViewById<DrawerLayout>(R.id.drawer).isDrawerOpen(GravityCompat.END)) {
-                findViewById<DrawerLayout>(R.id.drawer).closeDrawers()
-            } else {
-                findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.END)
-            }
+        if (menuIsRight) {
+            val params = navigationView.layoutParams as DrawerLayout.LayoutParams
+            params.gravity = GravityCompat.END
+            navigationView.layoutParams = params
+        } else {
+            val params = navigationView.layoutParams as DrawerLayout.LayoutParams
+            params.gravity = GravityCompat.START
+            navigationView.layoutParams = params
         }
 
+        fun whereToMove() {
+            if (menuIsRight) {
+                if (drawer.isDrawerOpen(GravityCompat.END)) {
+                    drawer.closeDrawers()
+                } else {
+                    drawer.openDrawer(GravityCompat.END)
+                }
+            } else {
+                if (drawer.isDrawerOpen(GravityCompat.START)) {
+                    drawer.closeDrawers()
+                } else {
+                    drawer.openDrawer(GravityCompat.START)
+                }
+            }
+
+        }
+
+        toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1).setOnClickListener {
+            whereToMove()
+        }
         toolbar.setNavigationOnClickListener {
-            if (findViewById<DrawerLayout>(R.id.drawer).isDrawerOpen(GravityCompat.END)) {
-                findViewById<DrawerLayout>(R.id.drawer).closeDrawers()
-            } else {
-                findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.END)
-            }
-
-
+            whereToMove()
         }
+
 
         /*findViewById<ImageButton>(R.id.menuButton).setOnClickListener {
             findViewById<DrawerLayout>(R.id.drawer).openDrawer(GravityCompat.START)
         }*/
 
-        if (findNavController(R.id.nav_host_fragment).currentDestination ==
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.loginFragment)
+        if (findNavController(R.id.nav_host_fragment).currentDestination == findNavController(R.id.nav_host_fragment).findDestination(
+                R.id.loginFragment
+            )
         ) {
             supportActionBar?.show()
-            findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+            drawer?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
         }
 
-        if (findNavController(R.id.nav_host_fragment).currentDestination ==
-            findNavController(R.id.nav_host_fragment).findDestination(R.id.chatsFragment)
+        if (findNavController(R.id.nav_host_fragment).currentDestination == findNavController(R.id.nav_host_fragment).findDestination(
+                R.id.chatsFragment
+            )
         ) {
             toolbar.title = "Чаты"
         }
 
 
         val isSupportDarkTheme = sharedPref?.getString(
-            getString(R.string.darkThemeShared),
-            "Light"
+            getString(R.string.darkThemeShared), "Light"
         )
 
         when (isSupportDarkTheme) {
@@ -116,9 +129,7 @@ class MainActivity : AppCompatActivity() {
                         findNavController(R.id.nav_host_fragment).navigate(R.id.gradesFragment)
                     } else {
                         Toast.makeText(
-                            this,
-                            "Этот раздел закрыт для преподавателей",
-                            Toast.LENGTH_SHORT
+                            this, "Этот раздел закрыт для преподавателей", Toast.LENGTH_SHORT
                         ).show()
                     }
 
@@ -157,14 +168,17 @@ class MainActivity : AppCompatActivity() {
                         findNavController(R.id.nav_host_fragment).navigate(R.id.feedFragment)
                     } else {
                         Toast.makeText(
-                            this,
-                            "Этот раздел закрыт для преподавателей",
-                            Toast.LENGTH_SHORT
+                            this, "Этот раздел закрыт для преподавателей", Toast.LENGTH_SHORT
                         ).show()
                     }
                 }
             }
-            findViewById<DrawerLayout>(R.id.drawer).closeDrawer(GravityCompat.END)
+            if (menuIsRight) {
+                drawer.closeDrawer(GravityCompat.END)
+            } else {
+                drawer.closeDrawer(GravityCompat.START)
+
+            }
             true
         }
     }

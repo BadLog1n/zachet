@@ -309,9 +309,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                                             ?.apply()
                                         progressBar.visibility = View.GONE
                                         recyclerView.visibility = View.VISIBLE
-                                        Toast.makeText(
-                                            requireContext(), "abcd", Toast.LENGTH_SHORT
-                                        ).show()
                                     }
                                     swipeRefreshLayout.isEnabled = true
                                     rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
