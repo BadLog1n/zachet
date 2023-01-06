@@ -179,7 +179,7 @@ class IndividualChatActivity : AppCompatActivity() {
                             Toast.makeText(
                                 this@IndividualChatActivity,
                                 "Вам необходимо выдать разрешение на работу с памятью в настройках, чтобы загружать изображения",
-                                Toast.LENGTH_SHORT
+                                Toast.LENGTH_LONG
                             ).show()
                         }
                     }
@@ -190,7 +190,7 @@ class IndividualChatActivity : AppCompatActivity() {
                                     Toast.makeText(
                                         this@IndividualChatActivity,
                                         "Вам необходимо выдать разрешение на работу с памятью в настройках, чтобы загружать файлы",
-                                        Toast.LENGTH_SHORT
+                                        Toast.LENGTH_LONG
                                     ).show()
                                 } else {
                                     pickFileOrPhoto(true)
