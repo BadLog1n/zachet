@@ -1,7 +1,6 @@
 package com.oneseed.zachet.activities
 
 import android.Manifest
-import android.annotation.SuppressLint
 import android.app.Activity
 import android.app.DownloadManager
 import android.content.Context
@@ -20,6 +19,7 @@ import android.os.Handler
 import android.os.Looper
 import android.util.Log
 import android.view.View
+import android.view.ViewGroup
 import android.widget.*
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.ActionBar
@@ -68,7 +68,6 @@ class IndividualChatActivity : AppCompatActivity() {
     private lateinit var progressBar: ProgressBar
 
 
-    @SuppressLint("MissingInflatedId")
     override fun onCreate(savedInstanceState: Bundle?) {
 
         val arguments = intent.extras
@@ -78,21 +77,32 @@ class IndividualChatActivity : AppCompatActivity() {
         sendName = sharedPref?.getString(getString(R.string.uid), "").toString()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_individual_chat)
+
+        val rootView = window.decorView as ViewGroup
+
+        val customView = layoutInflater.inflate(R.layout.chat_action_bar, rootView, false)
         supportActionBar?.displayOptions = ActionBar.DISPLAY_SHOW_CUSTOM
-        supportActionBar?.setCustomView(R.layout.chat_action_bar)
-        findViewById<ImageButton>(R.id.backFromChatBtn).setOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
-        }
+        supportActionBar?.customView = customView
+        val backFromChatBtn = customView.findViewById<ImageButton>(R.id.backFromChatBtn)
+        val layout = customView.findViewById<ConstraintLayout>(R.id.layout)
+        val receiverTv = customView.findViewById<TextView>(R.id.receiver_tv)
 
-        findViewById<ConstraintLayout>(R.id.layout).setOnClickListener() {
-            onBackPressedDispatcher.onBackPressed()
-
-        }
         supportActionBar?.show()
+
+
+        backFromChatBtn.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+        }
+
+        layout.setOnClickListener {
+            onBackPressedDispatcher.onBackPressed()
+
+        }
+
         progressBar = findViewById(R.id.messagesProgressBar)
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this)
-        findViewById<TextView>(R.id.receiver_tv).text = ""
+        receiverTv.text = ""
 
         loadImagesAgain = sharedPref?.getBoolean(getString(R.string.loadImages), true) == true
 
