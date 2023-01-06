@@ -2,6 +2,8 @@ package com.oneseed.zachet.activities
 
 import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.View
+import android.widget.ImageButton
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -31,9 +33,9 @@ class MainActivity : AppCompatActivity() {
         )
 
 
-        drawer.addDrawerListener(toggle)
-        toggle.syncState()
 
+
+        val menuBtn = toolbar.findViewById<ImageButton>(R.id.menuBtn)
         //mainActionBar = supportActionBar!!
         drawer.setDrawerLockMode(LOCK_MODE_UNLOCKED)
 
@@ -46,10 +48,13 @@ class MainActivity : AppCompatActivity() {
             val params = navigationView.layoutParams as DrawerLayout.LayoutParams
             params.gravity = GravityCompat.END
             navigationView.layoutParams = params
+            menuBtn.visibility = View.VISIBLE
         } else {
             val params = navigationView.layoutParams as DrawerLayout.LayoutParams
             params.gravity = GravityCompat.START
             navigationView.layoutParams = params
+            drawer.addDrawerListener(toggle)
+            toggle.syncState()
         }
 
         fun whereToMove() {
@@ -70,6 +75,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1).setOnClickListener {
+            whereToMove()
+        }
+        menuBtn.setOnClickListener {
             whereToMove()
         }
         toolbar.setNavigationOnClickListener {

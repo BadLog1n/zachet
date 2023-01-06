@@ -11,5 +11,19 @@
     app:title=""
     app:titleTextAppearance="@style/ToolbarTitleText">
 
+    <ImageButton
+        android:id="@+id/menuBtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="end"
+        android:backgroundTint="@color/white"
+        android:paddingTop="10dp"
+        android:paddingStart="10dp"
+        android:paddingEnd="20dp"
+        android:visibility="gone"
+        android:background="@null"
+        android:src="@drawable/ic_baseline_menu_24"
+        app:tint="@color/black" />
+
 
 </androidx.appcompat.widget.Toolbar>
