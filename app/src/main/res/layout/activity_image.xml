@@ -23,40 +23,41 @@
 
     </com.davemorrissey.labs.subscaleview.SubsamplingScaleImageView>
 
-    <ImageButton
-        android:id="@+id/backFromImgBtn"
-        style="@android:style/Widget.ImageButton"
-        android:layout_width="25dp"
-        android:layout_height="25dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="33dp"
-        android:layout_marginBottom="20dp"
-        android:background="@drawable/arrow_back"
-        android:backgroundTint="@color/grey_mes_edittext"
-        android:visibility="visible"
-        app:layout_constraintBottom_toTopOf="@id/bigImg"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.046"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ImageButton
-        android:id="@+id/saveImgBtn"
-        style="@android:style/Widget.ImageButton"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_marginTop="30dp"
-        android:layout_marginEnd="20dp"
-        android:adjustViewBounds="false"
-        android:background="@drawable/ic__save"
-        android:backgroundTint="@color/grey_mes_edittext"
-        android:scaleType="fitCenter"
-        android:visibility="visible"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toTopOf="@+id/bigImg"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
 
+        <ImageButton
+            android:id="@+id/backFromImgBtn"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="false"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginBottom="20dp"
+            android:background="@drawable/ic_baseline_close_24"
+            android:backgroundTint="@color/grey_mes_edittext"
+            android:visibility="visible" />
+
+        <ImageButton
+            android:id="@+id/saveImgBtn"
+            style="@android:style/Widget.ImageButton"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:layout_alignParentEnd="true"
+            android:adjustViewBounds="false"
+            android:background="@drawable/ic__save"
+            android:backgroundTint="@color/grey_mes_edittext"
+            android:visibility="visible" />
+
+    </RelativeLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
