@@ -86,19 +86,13 @@ class IndividualChatActivity : AppCompatActivity() {
         val backFromChatBtn = customView.findViewById<ImageButton>(R.id.backFromChatBtn)
         val layout = customView.findViewById<ConstraintLayout>(R.id.layout)
         val receiverTv = customView.findViewById<TextView>(R.id.receiver_tv)
-
         supportActionBar?.show()
-
-
         backFromChatBtn.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
         }
-
         layout.setOnClickListener {
             onBackPressedDispatcher.onBackPressed()
-
         }
-
         progressBar = findViewById(R.id.messagesProgressBar)
         val rcView = findViewById<RecyclerView>(R.id.messagesRcView)
         rcView.layoutManager = LinearLayoutManager(this)
@@ -130,9 +124,6 @@ class IndividualChatActivity : AppCompatActivity() {
             userLogin = it.child("login").value.toString()
         }
 
-
-
-
         rcView.addOnLayoutChangeListener { _, _, _, _, bottom, _, _, _, oldBottom ->
             if (bottom < oldBottom) {
                 rcView.post {
@@ -144,8 +135,6 @@ class IndividualChatActivity : AppCompatActivity() {
             }
         }
 
-
-
         rcView.addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrollStateChanged(recyclerView: RecyclerView, newState: Int) {
                 super.onScrollStateChanged(recyclerView, newState)
@@ -153,7 +142,6 @@ class IndividualChatActivity : AppCompatActivity() {
                     !recyclerView.canScrollVertically(1) && newState == RecyclerView.SCROLL_STATE_IDLE
             }
         })
-
 
         val spinner = this.findViewById<Spinner>(R.id.spinner2)
 
@@ -163,14 +151,10 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
-
                 when (spinner.selectedItem.toString()) {
                     "Изображение" -> {
                         try {
@@ -198,7 +182,6 @@ class IndividualChatActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
                     }
                     "Файл" -> {
                         try {
@@ -285,7 +268,6 @@ class IndividualChatActivity : AppCompatActivity() {
             sendMessage(text.substring(200))
         }
     }
-
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
      * */

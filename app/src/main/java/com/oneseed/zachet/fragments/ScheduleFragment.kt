@@ -2,7 +2,6 @@ package com.oneseed.zachet.fragments
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
@@ -34,8 +33,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private lateinit var database: DatabaseReference
     private val authCheck = AuthCheck()
     private lateinit var dayOfWeek: String
-
-
     private lateinit var binding: FragmentScheduleBinding
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,8 +40,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val switch = requireView().findViewById<SwitchMaterial>(R.id.switchh)
         val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swipe)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-            getString(R.string.settingsShared),
-            Context.MODE_PRIVATE
+            getString(R.string.settingsShared), Context.MODE_PRIVATE
         )
         super.onViewCreated(view, savedInstanceState)
         binding = FragmentScheduleBinding.inflate(layoutInflater)
@@ -69,7 +65,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             sharedPref?.getString("scheduleShared$upDownTextFirstLoad", "").toString()
         val calendar = Calendar.getInstance()
 
-
         dayOfWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
             Calendar.SUNDAY -> "Воскресенье"
             Calendar.MONDAY -> "Понедельник"
@@ -81,8 +76,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             else -> ""
         }
 
-
-
         if (loadScheduleFirstLoad.isNotEmpty()) {
             if (isDownWeekFirstLoad == true) {
                 switch.isChecked = true
@@ -91,7 +84,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 timetableGetCache(loadScheduleFirstLoad)
             }
         }
-
 
         val isTeacher = sharedPref?.getBoolean(getString(R.string.isTeacher), false)
 
@@ -107,7 +99,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             try {
                 val spinnerElement = spinner.selectedItem.toString()
                 val switchState: Boolean = switch.isChecked
-
                 progressBar.visibility = View.VISIBLE
                 timetableGet(spinnerElement, switchState)
                 progressBar.visibility = View.GONE
@@ -123,19 +114,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             }
         }
 
-
-
-
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-
+            override fun onNothingSelected(parent: AdapterView<*>?) { }
             override fun onItemSelected(
-                parent: AdapterView<*>?,
-                view: View?,
-                position: Int,
-                id: Long
+                parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 swipeRefreshLayout.isEnabled = true
                 val spinnerElement = spinner.selectedItem.toString()
@@ -147,10 +129,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
                 val upDownText = if (isDownWeek == true) "down" else "up"
 
-                val loadSchedule =
-                    sharedPref?.getString("scheduleShared$upDownText", "").toString()
-                val group =
-                    sharedPref?.getString("groupShared$upDownText", "").toString()
+                val loadSchedule = sharedPref?.getString("scheduleShared$upDownText", "").toString()
+                val group = sharedPref?.getString("groupShared$upDownText", "").toString()
 
 
                 if (isDownWeek == true) {
@@ -163,29 +143,21 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                     progressBar.visibility = View.VISIBLE
                     timetableGet(spinnerElement, switchState)
                     progressBar.visibility = View.GONE
-
                 }
             }
-
-
         }
-
-
-        // div with class=masthead
 
 
         switch.setOnCheckedChangeListener { _, _ ->
             val switchState: Boolean = switch.isChecked
             val upDownText = if (switchState) "down" else "up"
-            val loadSchedule =
-                sharedPref?.getString("scheduleShared$upDownText", "").toString()
+            val loadSchedule = sharedPref?.getString("scheduleShared$upDownText", "").toString()
 
             if (spinner.selectedItem != null) {
                 progressBar.visibility = View.VISIBLE
 
 
-                val group =
-                    sharedPref?.getString("groupShared$upDownText", "").toString()
+                val group = sharedPref?.getString("groupShared$upDownText", "").toString()
                 if (loadSchedule.isNotEmpty() && group == spinner.selectedItem.toString()) {
                     timetableGetCache(loadSchedule)
                     progressBar.visibility = View.GONE
@@ -203,8 +175,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 timetableGetCache(loadSchedule)
             }
         }
-
-
     }
 
 
@@ -217,8 +187,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 groups.add(item.key.toString())
             }
             val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-                getString(R.string.settingsShared),
-                Context.MODE_PRIVATE
+                getString(R.string.settingsShared), Context.MODE_PRIVATE
             )
             val groupLoad = sharedPref?.getString(getString(R.string.groupSpinner), "").toString()
 
@@ -227,12 +196,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 groups.add(0, groupLoad)
             }
             try {
-                val arrayAdapter: ArrayAdapter<String> =
-                    ArrayAdapter(
-                        this.requireContext(),
-                        android.R.layout.simple_spinner_item,
-                        groups
-                    )
+                val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
+                    this.requireContext(), android.R.layout.simple_spinner_item, groups
+                )
                 arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 spinner.adapter = arrayAdapter
             } catch (_: IllegalStateException) {
@@ -247,8 +213,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     private var subjects = arrayListOf<ScheduleRecordItem>()
     private fun timetableGet(group: String, upDown: Boolean) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
-            getString(R.string.settingsShared),
-            Context.MODE_PRIVATE
+            getString(R.string.settingsShared), Context.MODE_PRIVATE
         )
         var stringOfSchedule = ""
         val adapter = GroupAdapter<GroupieViewHolder>()
@@ -263,12 +228,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             day.forEachIndexed { index, element ->
                 stringOfSchedule += "$element;"
                 for (timeCabSub in gets.child(element).children) {
-                    val subject =
-                        ScheduleRecordItem(
-                            timeCabSub.key.toString(),
-                            timeCabSub.child("cabName").value.toString(),
-                            timeCabSub.child("subject").value.toString()
-                        )
+                    val subject = ScheduleRecordItem(
+                        timeCabSub.key.toString(),
+                        timeCabSub.child("cabName").value.toString(),
+                        timeCabSub.child("subject").value.toString()
+                    )
                     stringOfSchedule += timeCabSub.key.toString() + ";"
                     stringOfSchedule += timeCabSub.child("cabName").value.toString() + ";"
                     stringOfSchedule += timeCabSub.child("subject").value.toString() + ";"
@@ -276,8 +240,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 }
                 sharedPref?.edit()?.putString("scheduleShared$upDownText", stringOfSchedule)
                     ?.apply()
-                sharedPref?.edit()?.putString("groupShared$upDownText", group)
-                    ?.apply()
+                sharedPref?.edit()?.putString("groupShared$upDownText", group)?.apply()
 
                 subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
                 adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
@@ -289,8 +252,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             scheduleRc.adapter = adapter
             scheduleRc.layoutManager = LinearLayoutManager(this.context)
         }
-
-
     }
 
     private fun timetableGetCache(scheduleText: String) {
@@ -312,7 +273,6 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 scheduleArray.add(scheduleTextLocal)
             }
         }
-
         var index = 0
         for (timeCabSub in scheduleArray) {
             if (timeCabSub.isNotEmpty() && timeCabSub != " ") {
@@ -325,12 +285,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 //  println(scheduleTextArray[7])
                 var indexLocal = 0
                 while (indexLocal < scheduleTextArray.size) {
-                    val subject =
-                        ScheduleRecordItem(
-                            scheduleTextArray[indexLocal],
-                            scheduleTextArray[indexLocal + 1],
-                            scheduleTextArray[indexLocal + 2]
-                        )
+                    val subject = ScheduleRecordItem(
+                        scheduleTextArray[indexLocal],
+                        scheduleTextArray[indexLocal + 1],
+                        scheduleTextArray[indexLocal + 2]
+                    )
                     indexLocal += 3
                     subjects.add(subject)
                 }
@@ -349,11 +308,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 
         scheduleRc.adapter = adapter
         scheduleRc.layoutManager = LinearLayoutManager(this.context)
-
-
     }
-
-
 }
 
 
@@ -361,11 +316,10 @@ class WeekDayItem(val text: String, val today: String) : Item<GroupieViewHolder>
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val weekday = viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv)
         weekday.text = text
-        if (today == text){
+        if (today == text) {
             weekday.gravity = Gravity.CENTER
         }
     }
-
     override fun getLayout(): Int {
         return R.layout.weekday_item
     }

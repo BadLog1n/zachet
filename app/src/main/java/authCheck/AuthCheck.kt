@@ -18,12 +18,9 @@ class AuthCheck {
 
     fun check(view: View, context: Context?) {
         val sharedPref: SharedPreferences? = context?.getSharedPreferences("Settings", MODE_PRIVATE)
-
-
         val user = FirebaseAuth.getInstance().currentUser
         val email = sharedPref?.getString(saveEmail, "null").toString()
         val password = sharedPref?.getString(savePassword, "null").toString()
-
         val credential = EmailAuthProvider.getCredential(email, password)
         FirebaseAuth.getInstance().currentUser?.reload()
         user?.reauthenticate(credential)?.addOnCompleteListener { task ->

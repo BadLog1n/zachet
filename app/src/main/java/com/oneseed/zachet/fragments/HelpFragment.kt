@@ -20,8 +20,8 @@ import androidx.navigation.fragment.findNavController
 import authCheck.AuthCheck
 import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
-import com.oneseed.zachet.activities.IndividualChatActivity
 import com.oneseed.zachet.R
+import com.oneseed.zachet.activities.IndividualChatActivity
 
 class HelpFragment : Fragment(R.layout.fragment_help) {
     private val authCheck = AuthCheck()

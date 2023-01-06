@@ -11,8 +11,7 @@ import android.provider.MediaStore
 class UriPathHelper {
 
     private fun getDataColumn(
-        context: Context, uri: Uri?, selection: String?,
-        selectionArgs: Array<String>?
+        context: Context, uri: Uri?, selection: String?, selectionArgs: Array<String>?
     ): String? {
         var cursor: Cursor? = null
         val column = "_data"
@@ -22,8 +21,7 @@ class UriPathHelper {
         try {
             cursor = uri?.let {
                 context.contentResolver.query(
-                    it, projection, selection, selectionArgs,
-                    null
+                    it, projection, selection, selectionArgs, null
                 )
             }
             if (cursor != null && cursor.moveToFirst()) {
@@ -39,13 +37,10 @@ class UriPathHelper {
     fun getPathFromUri(context: Context, uri: Uri): String? {
 
         // DocumentProvider
-        if (
-            DocumentsContract.isDocumentUri(context, uri)
-        ) {
+        if (DocumentsContract.isDocumentUri(context, uri)) {
             // ExternalStorageProvider
             if (isExternalStorageDocument(uri)) {
-                val docId =
-                    DocumentsContract.getDocumentId(uri)
+                val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":").toTypedArray()
                 val type = split[0]
                 if ("primary".equals(type, ignoreCase = true)) {
@@ -54,15 +49,13 @@ class UriPathHelper {
 
                 // TODO handle non-primary volumes
             } else if (isDownloadsDocument(uri)) {
-                val id =
-                    DocumentsContract.getDocumentId(uri)
+                val id = DocumentsContract.getDocumentId(uri)
                 val contentUri = ContentUris.withAppendedId(
                     Uri.parse("content://downloads/public_downloads"), java.lang.Long.valueOf(id)
                 )
                 return getDataColumn(context, contentUri, null, null)
             } else if (isMediaDocument(uri)) {
-                val docId =
-                    DocumentsContract.getDocumentId(uri)
+                val docId = DocumentsContract.getDocumentId(uri)
                 val split = docId.split(":").toTypedArray()
                 val type = split[0]
                 var contentUri: Uri? = null
@@ -87,10 +80,7 @@ class UriPathHelper {
 
             // Return the remote address
             return if (isGooglePhotosUri(uri)) uri.lastPathSegment else getDataColumn(
-                context,
-                uri,
-                null,
-                null
+                context, uri, null, null
             )
         } else if ("file".equals(uri.scheme, ignoreCase = true)) {
             return uri.path

@@ -33,9 +33,6 @@ private lateinit var database: DatabaseReference
 class SettingsFragment : Fragment(R.layout.fragment_settings) {
     private val authCheck = AuthCheck()
     private val infoOfStudent = InfoOfStudent()
-
-
-    @OptIn(DelicateCoroutinesApi::class)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         authCheck.check(view, this@SettingsFragment.context)
 
@@ -53,11 +50,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         val darkTheme = view.findViewById<SwitchMaterial>(R.id.darkTheme)
         val loadImages = view.findViewById<SwitchMaterial>(R.id.loadImages)
         val saveOnServerWebCheckBox = view.findViewById<CheckBox>(R.id.saveOnServerWebCheckBox)
-
         val emailInputText = view.findViewById<EditText>(R.id.emailInputText)
         val emailHelpBtn = view.findViewById<ImageButton>(R.id.emailHelpBtn)
         val menuMove = view.findViewById<SwitchMaterial>(R.id.menuMove)
-
 
         val sharedPrefGrades: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.gradesShared), Context.MODE_PRIVATE
@@ -75,7 +70,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             updateBtn.visibility = View.VISIBLE
         }
         val user = Firebase.auth.currentUser
-
         val uid = user?.uid
 
         database = FirebaseDatabase.getInstance().getReference("users/$uid")
@@ -89,7 +83,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             nameEditText.isEnabled = true
             surnameEditText.isEnabled = true
             emailInputText.isEnabled = true
-
         }
 
         val menuIsRight = sharedPrefSettings?.getBoolean(getString(R.string.menuIsRight), false) == true
@@ -111,8 +104,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         }
 
-
-
         val isTeacher = sharedPrefSettings?.getBoolean(getString(R.string.isTeacher), false)
 
         when (sharedPrefSettings?.getString(getString(R.string.darkThemeShared), "Light")) {
@@ -129,9 +120,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             loadImages.isChecked = true
         }
 
-
-
-
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (isTeacher == true) {
                 findNavController().navigate(R.id.chatsFragment)
@@ -139,8 +127,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 findNavController().navigate(R.id.gradesFragment)
             }
         }
-
-
 
         switch.setOnCheckedChangeListener { _, _ ->
             if (switch.isChecked) {
@@ -216,8 +202,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
 
         }
-
-
 
         emailHelpBtn.setOnClickListener {
             Toast.makeText(
@@ -300,9 +284,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                             requireContext(), "Успешно сохранено", Toast.LENGTH_SHORT
                         ).show()
                     }
-
-
-
                     break
                 }
             }
@@ -324,18 +305,13 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 ).show()
                 GlobalScope.launch {
                     try {
-
                         val loginWebInputString = loginWebInput.text.toString()
                         val passwordWebInputString = passwordWebInput.text.toString()
                         val sitePath =
                             "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$loginWebInputString&password=$passwordWebInputString&type=array"
-
-
                         val response: Connection.Response = Jsoup.connect(sitePath)
                             .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
                             .timeout(30000).execute()
-
-
                         val statusCode: Int = response.statusCode()
                         val document =
                             if (statusCode == 200) Jsoup.connect(sitePath).get().text() else ""
@@ -460,9 +436,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             //exitProcess(0)
         }
 
-
-
-
         darkTheme.setOnCheckedChangeListener { _, _ ->
 
             val isSupportDarkTheme = sharedPrefSettings?.getString(
@@ -480,11 +453,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                     ?.apply()
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
                 onDestroy()
-
             }
-
-
-            //exitProcess(0)
         }
 
         loadImages.setOnCheckedChangeListener { _, _ ->
@@ -494,10 +463,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
             } else sharedPrefSettings?.edit()?.putBoolean(getString(R.string.loadImages), false)
                 ?.apply()
-
         }
     }
-
 
     private fun getDataOfStudent(
         sharedPref: SharedPreferences?, login: String, password: String, isUpdate: Boolean
@@ -547,16 +514,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
     }
 
-
-/*                           returnRating(
-                            login,
-                            infoOfStudent[0][1],
-                            semester.first(),
-                            infoOfStudent[0][0],
-                            "false"
-                        )*/
-
-
     private fun getFormAndGroup(login: String, password: String): ArrayList<String>? {
         try {
             val arrayToReturn = arrayListOf("", "")
@@ -584,7 +541,6 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             return null
         }
     }
-
 
     private fun getSemester(login: String, password: String): ArrayList<ArrayList<String>>? {
         try {
@@ -615,6 +571,5 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         }
         return null
     }
-
 
 }

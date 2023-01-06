@@ -77,12 +77,10 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
             expView.visibility = View.VISIBLE
             collView.visibility = View.GONE
         }
-        //TODO("Изменить ImageButton в ImageView")
         view.findViewById<ImageButton>(R.id.expandBtn).setOnClickListener {
             expView.visibility = View.VISIBLE
             collView.visibility = View.GONE
         }
-        //TODO("Изменить ImageButton в ImageView")
         view.findViewById<ImageButton>(R.id.collapseBtn).setOnClickListener {
             expView.visibility = View.GONE
             collView.visibility = View.VISIBLE

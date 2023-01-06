@@ -9,9 +9,7 @@ class RatingUniversity {
 
     fun gradesCollector(jsonArray: JSONArray): ArrayList<MutableMap<String, String>> {
         val globalArrayToReturn = arrayListOf<MutableMap<String, String>>()
-
         for (i in 0 until jsonArray.length()) {
-            //val localArray = arrayListOf<String>()
             val localArray = mutableMapOf(
                 "getSubjectName" to "",
                 "ratingScore" to "",
@@ -20,7 +18,6 @@ class RatingUniversity {
                 "tutorName" to "",
                 "tutorId" to "",
             )
-            // ID
             val subjectType = getSubjectType(jsonArray, i)
             val getSubjectName = getSubjectName(jsonArray, i)
             val tutorArr = getTutorNameAndID(jsonArray, i)
@@ -37,7 +34,6 @@ class RatingUniversity {
                 }
             }
             val additional = getDopolPbZed(jsonArray, i)
-
             for (item in additional) {
                 ratingScore += item.toInt()
                 rating += "$item "
@@ -55,7 +51,6 @@ class RatingUniversity {
         return globalArrayToReturn
 
     }
-
 
     private fun getDopolPbZed(jsonArray: JSONArray, index: Int): Array<String> {
         val arrayToReturn: Array<String> = arrayOf("0", "0", "0")

@@ -27,13 +27,9 @@ class MainActivity : AppCompatActivity() {
         val drawer = findViewById<DrawerLayout>(R.id.drawer)
         val navigationView = findViewById<NavigationView>(R.id.navViewGrades)
 
-
         val toggle = ActionBarDrawerToggle(
             this, drawer, toolbar, R.string.drawer_open, R.string.drawer_closed
         )
-
-
-
 
         val menuBtn = toolbar.findViewById<ImageButton>(R.id.menuBtn)
         //mainActionBar = supportActionBar!!
@@ -71,9 +67,7 @@ class MainActivity : AppCompatActivity() {
                     drawer.openDrawer(GravityCompat.START)
                 }
             }
-
         }
-
         toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1).setOnClickListener {
             whereToMove()
         }

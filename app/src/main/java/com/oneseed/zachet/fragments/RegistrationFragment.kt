@@ -81,8 +81,6 @@ class RegistrationFragment : Fragment() {
                                 requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT
                             ).show()
                             findNavController().navigate(R.id.loginFragment)
-
-
                         } else {
                             Toast.makeText(
                                 requireContext(),
@@ -93,13 +91,9 @@ class RegistrationFragment : Fragment() {
                     }
                 }
                 break
-
             }
-
-
         }
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?

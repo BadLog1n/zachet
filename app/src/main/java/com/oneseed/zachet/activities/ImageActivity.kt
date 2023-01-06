@@ -60,7 +60,8 @@ class ImageActivity : AppCompatActivity() {
             } catch (e: Exception) {
                 withContext(Dispatchers.Main) {
                     //Toast.makeText(this@ImageActivity, e.message, Toast.LENGTH_LONG).show()
-                    Toast.makeText(this@ImageActivity, "Фото не обнаружено", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(this@ImageActivity, "Фото не обнаружено", Toast.LENGTH_SHORT)
+                        .show()
 
                 }
             }
@@ -71,36 +72,28 @@ class ImageActivity : AppCompatActivity() {
      * [chatName] - имя чата между пользователями.
      * */
     private fun download(filename: String, chatName: String) {
-
         val storageRef = Firebase.storage.reference
         val photoRef = storageRef.child(chatName).child(filename)
         val subFileName = filename.substring(filename.lastIndexOf("/") + 1)
-
-        photoRef.downloadUrl
-            .addOnSuccessListener { uri ->
+        photoRef.downloadUrl.addOnSuccessListener { uri ->
                 val url = uri.toString()
                 Toast.makeText(this, "Загрузка файла началась", Toast.LENGTH_SHORT).show()
                 downloadFile(subFileName, DIRECTORY_DOWNLOADS, url)
             }.addOnFailureListener { }
-
-
     }
 
     /**
      * Расширение функции загрузки фото
      * */
     private fun downloadFile(
-        fileName: String,
-        destinationDirectory: String?,
-        url: String?
+        fileName: String, destinationDirectory: String?, url: String?
     ) {
         val downloadManager = this.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager
         val uri = Uri.parse(url)
         val request = DownloadManager.Request(uri)
         request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
         request.setDestinationInExternalPublicDir(
-            destinationDirectory,
-            fileName
+            destinationDirectory, fileName
         )
         downloadManager.enqueue(request)
     }

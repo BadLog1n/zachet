@@ -1,7 +1,6 @@
 package com.oneseed.zachet.fragments
 
 
-
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -18,16 +17,14 @@ import com.oneseed.zachet.R
 class LogoutFragment : BottomSheetDialogFragment() {
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?
     ): View? = inflater.inflate(R.layout.fragment_logout, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         view.findViewById<Button>(R.id.bs_logoutButton).setOnClickListener {
-            val sharedPref: SharedPreferences? = activity?.getSharedPreferences(getString(R.string.settingsShared),
-                Context.MODE_PRIVATE
+            val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
+                getString(R.string.settingsShared), Context.MODE_PRIVATE
             )
             sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
             findNavController().navigate(R.id.loginFragment)

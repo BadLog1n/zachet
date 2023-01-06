@@ -15,8 +15,7 @@ class ChatsPackage {
      * */
     fun putFile(file: String, chatName: String, currentTimestamp: String) {
         val refStorageRoot = FirebaseStorage.getInstance().reference
-        val putPath =
-            refStorageRoot.child(chatName)
+        val putPath = refStorageRoot.child(chatName)
         val uriFile = Uri.fromFile(File(file))
         val subFile = file.substring(file.lastIndexOf("/") + 1)
 
@@ -78,11 +77,13 @@ class ChatsPackage {
     fun updateChat(sendUser: String, getUser: String, isSend: Boolean, lastMsg: String = "") {
         database = FirebaseDatabase.getInstance().getReference("chatMembers")
         database.child(sendUser).child(getUser).child("isRead").setValue(true)
-        if (lastMsg != "") database.child(sendUser).child(getUser).child("lastMsg").setValue(lastMsg)
+        if (lastMsg != "") database.child(sendUser).child(getUser).child("lastMsg")
+            .setValue(lastMsg)
 
         if (isSend) {
             database.child(getUser).child(sendUser).child("isRead").setValue(false)
-            if (lastMsg != "") database.child(getUser).child(sendUser).child("lastMsg").setValue(lastMsg)
+            if (lastMsg != "") database.child(getUser).child(sendUser).child("lastMsg")
+                .setValue(lastMsg)
         }
     }
 

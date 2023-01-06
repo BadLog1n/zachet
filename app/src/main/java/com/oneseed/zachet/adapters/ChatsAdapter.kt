@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.oneseed.zachet.dataClasses.ChatPreview
-import com.oneseed.zachet.activities.IndividualChatActivity
 import com.oneseed.zachet.R
+import com.oneseed.zachet.activities.IndividualChatActivity
+import com.oneseed.zachet.dataClasses.ChatPreview
 import com.oneseed.zachet.databinding.ListOfChatsItemBinding
 import java.text.SimpleDateFormat
 import java.util.*
@@ -23,9 +23,9 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         private val binding = ListOfChatsItemBinding.bind(item)
 
         fun bind(chatPreview: ChatPreview) = with(binding) {
-            val dt =
-                SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault()).format(Date(chatPreview.latestMsgTime))
-                    .toString()
+            val dt = SimpleDateFormat(
+                "dd/MM/yyyy HH:mm:ss", Locale.getDefault()
+            ).format(Date(chatPreview.latestMsgTime)).toString()
             receiverName.text = chatPreview.receiverName
             latestMsgTimeTv.text = dt
             latestMsgTv.text = chatPreview.latestMsg

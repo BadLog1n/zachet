@@ -78,7 +78,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             getString(R.string.gradesShared), Context.MODE_PRIVATE
         )
 
-
         rcAdapter.clearRecords()
         rcAdapter.gradesList = ArrayList()
         rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
@@ -118,10 +117,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             spinner.visibility = View.GONE
             progressBar.visibility = View.GONE
         }
-/*        try {
-            //initGradesRc()
-        } catch (e: Exception) {
-        }*/
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
@@ -159,9 +154,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 setTextColor(Color.BLACK)
             }
         }
-
-
-
 
         sharedPrefSetting?.edit()?.putString(getString(R.string.versionShared), versionName)
             ?.apply()
@@ -230,7 +222,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
 
         }
-
 
         var spinnerChange = false
         fun gradesChange() {
@@ -337,17 +328,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                 }
             }
-            //val switchState: Boolean = switch.isChecked
-            //timetableGet(spinner.selectedItem.toString(), switchState)
-
         }
-
-
-
-
-
-
-
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -409,7 +390,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         }
     }
-
 
     private fun getAppVersion(context: Context?): String {
         var version = ""
