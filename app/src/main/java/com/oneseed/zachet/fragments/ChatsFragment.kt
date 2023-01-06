@@ -189,6 +189,12 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             param("userSearch", "")
         }
         val user = view?.findViewById<EditText>(R.id.searchTxtInput)?.text.toString()
+        if(user.isEmpty() || user.isBlank()){
+            Toast.makeText(
+                activity, "Пожалуйста, введите логин", Toast.LENGTH_SHORT
+            ).show()
+            return
+        }
         database = FirebaseDatabase.getInstance().getReference("login")
         database.child(user).get().addOnSuccessListener { itLogin ->
             val getUser = if (itLogin.exists() && user != "") {
