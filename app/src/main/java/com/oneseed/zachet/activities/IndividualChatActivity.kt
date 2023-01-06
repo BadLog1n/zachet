@@ -686,7 +686,12 @@ class ChatFromImgItem(
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
             "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
-
+        if (displayUser != "") {
+            val viewName =
+                viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
+            viewName.text = displayUser
+            viewName.visibility = View.VISIBLE
+        }
         CoroutineScope(Dispatchers.Main).launch {
 
             executor.execute {
@@ -741,12 +746,7 @@ class ChatFromImgItem(
                     viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text = time
                     viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
                         View.GONE
-                    if (displayUser != "") {
-                        val viewName =
-                            viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
-                        viewName.text = displayUser
-                        viewName.visibility = View.VISIBLE
-                    }
+
 
                 }
             } catch (e: Exception) {
@@ -779,7 +779,12 @@ class ChatToImgItem(
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
-
+        if (displayUser != "") {
+            val viewName =
+                viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
+            viewName.text = displayUser
+            viewName.visibility = View.VISIBLE
+        }
         CoroutineScope(Dispatchers.Main).launch {
             executor.execute {
                 for (i in 1..3) {
@@ -796,6 +801,7 @@ class ChatToImgItem(
 
 
                 }
+
                 if (imageView.drawable == null) {
                     Handler(Looper.getMainLooper()).post {
                         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
@@ -837,12 +843,7 @@ class ChatToImgItem(
                     viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
                     viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
                         View.GONE
-                    if (displayUser != "") {
-                        val viewName =
-                            viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
-                        viewName.text = displayUser
-                        viewName.visibility = View.VISIBLE
-                    }
+
 
                 }
             } catch (e: Exception) {
