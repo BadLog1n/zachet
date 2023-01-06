@@ -681,14 +681,14 @@ class ChatFromImgItem(
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
-
+        val viewName =
+            viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
             "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
         if (displayUser != "") {
-            val viewName =
-                viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
+
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
         }
@@ -711,7 +711,10 @@ class ChatFromImgItem(
                             "Ошибка загрузки"
                         viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility =
                             View.GONE
-
+                        viewName.visibility =
+                            View.GONE
+                        viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
+                            View.GONE
                     }
                 }
 
@@ -775,13 +778,13 @@ class ChatToImgItem(
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
-
+        val viewName =
+            viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
         if (displayUser != "") {
-            val viewName =
-                viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
+
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
         }
@@ -807,6 +810,10 @@ class ChatToImgItem(
                         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
                             "Ошибка загрузки"
                         viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility =
+                            View.GONE
+                        viewName.visibility =
+                            View.GONE
+                        viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
                             View.GONE
 
                     }
@@ -843,6 +850,7 @@ class ChatToImgItem(
                     viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
                     viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
                         View.GONE
+
 
 
                 }
