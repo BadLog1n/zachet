@@ -132,8 +132,6 @@
     <string name="to_register">Зарегистрироваться</string>
     <string name="change_password">Смена пароля</string>
     <string name="change_email">Поменять адрес электронной почты</string>
-    <string name="moveTelegram">Перейти в telegram</string>
-    <string name="moveGithub">Перейти в github</string>
     <string name="github">GitHub</string>
     <string name="telegram">Telegram</string>
     <string name="nameStepan">Немченко Степан</string>
