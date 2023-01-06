@@ -1,6 +1,8 @@
 package com.oneseed.zachet.fragments
 
-import android.content.*
+import android.content.Context
+import android.content.DialogInterface
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -20,12 +22,13 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
-import kotlinx.coroutines.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import org.json.JSONArray
 import org.jsoup.Connection
 import org.jsoup.Jsoup
 import ratingUniversity.InfoOfStudent
-import java.util.*
 
 
 private lateinit var database: DatabaseReference
@@ -85,7 +88,8 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             emailInputText.isEnabled = true
         }
 
-        val menuIsRight = sharedPrefSettings?.getBoolean(getString(R.string.menuIsRight), false) == true
+        val menuIsRight =
+            sharedPrefSettings?.getBoolean(getString(R.string.menuIsRight), false) == true
         if (menuIsRight) menuMove.isChecked = true
 
         menuMove.setOnCheckedChangeListener { _, _ ->
@@ -303,50 +307,55 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 Toast.makeText(
                     requireContext(), "Ожидайте подтверждения", Toast.LENGTH_SHORT
                 ).show()
-                GlobalScope.launch {
+                lifecycleScope.launch {
                     try {
-                        val loginWebInputString = loginWebInput.text.toString()
-                        val passwordWebInputString = passwordWebInput.text.toString()
-                        val sitePath =
-                            "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$loginWebInputString&password=$passwordWebInputString&type=array"
-                        val response: Connection.Response = Jsoup.connect(sitePath)
-                            .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                            .timeout(30000).execute()
-                        val statusCode: Int = response.statusCode()
-                        val document =
-                            if (statusCode == 200) Jsoup.connect(sitePath).get().text() else ""
-                        withContext(Dispatchers.Main) {
+                        withContext(Dispatchers.IO) {
 
-                            if (document != "") {
-                                sharedPrefGrades?.edit()?.putString(
-                                    getString(R.string.loginWebShared), loginWebInputString
-                                )?.apply()
-                                sharedPrefGrades?.edit()?.putString(
-                                    getString(R.string.passwordWebShared), passwordWebInputString
-                                )?.apply()
-                                getDataOfStudent(
-                                    sharedPrefGrades,
-                                    loginWebInputString,
-                                    passwordWebInputString,
-                                    true
-                                )
+                            val loginWebInputString = loginWebInput.text.toString()
+                            val passwordWebInputString = passwordWebInput.text.toString()
+                            val sitePath =
+                                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$loginWebInputString&password=$passwordWebInputString&type=array"
+                            val response: Connection.Response = Jsoup.connect(sitePath)
+                                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                                .timeout(30000).execute()
+                            val statusCode: Int = response.statusCode()
+                            val document =
+                                if (statusCode == 200) Jsoup.connect(sitePath).get().text() else ""
+                            withContext(Dispatchers.Main) {
 
-                                if (saveOnServerWebCheckBox.isChecked) {
-                                    database =
-                                        FirebaseDatabase.getInstance().getReference("users/$uid")
-                                    val loginPassWeb = mapOf(
-                                        "loginWeb" to loginWebInputString,
-                                        "passwordWeb" to passwordWebInputString,
+                                if (document != "") {
+                                    sharedPrefGrades?.edit()?.putString(
+                                        getString(R.string.loginWebShared), loginWebInputString
+                                    )?.apply()
+                                    sharedPrefGrades?.edit()?.putString(
+                                        getString(R.string.passwordWebShared),
+                                        passwordWebInputString
+                                    )?.apply()
+                                    getDataOfStudent(
+                                        sharedPrefGrades,
+                                        loginWebInputString,
+                                        passwordWebInputString,
+                                        true
                                     )
-                                    database.updateChildren(loginPassWeb)
 
-                                }
-                            } else Toast.makeText(
-                                requireContext(),
-                                "Не удается авторизоваться на сайте," + " проверьте вводимый логин и пароль",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                                    if (saveOnServerWebCheckBox.isChecked) {
+                                        database =
+                                            FirebaseDatabase.getInstance()
+                                                .getReference("users/$uid")
+                                        val loginPassWeb = mapOf(
+                                            "loginWeb" to loginWebInputString,
+                                            "passwordWeb" to passwordWebInputString,
+                                        )
+                                        database.updateChildren(loginPassWeb)
 
+                                    }
+                                } else Toast.makeText(
+                                    requireContext(),
+                                    "Не удается авторизоваться на сайте," + " проверьте вводимый логин и пароль",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+
+                            }
                         }
 
                     } catch (e: Exception) {
@@ -375,17 +384,16 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             builder.setMessage("Обновить данные о семестрах?")
             builder.setPositiveButton("Да") { _, _ ->
                 try {
-                    GlobalScope.launch {
-                        withContext(Dispatchers.Main) {
-                            getDataOfStudent(
-                                sharedPrefGrades, loginWeb, passwordWeb, false
-                            )
-                            Toast.makeText(
-                                requireContext(), "Ожидайте обновления", Toast.LENGTH_SHORT
-                            ).show()
+                    lifecycleScope.launch {
+                        getDataOfStudent(
+                            sharedPrefGrades, loginWeb, passwordWeb, false
+                        )
+                        Toast.makeText(
+                            requireContext(), "Ожидайте обновления", Toast.LENGTH_SHORT
+                        ).show()
 
-                        }
                     }
+
                 } catch (e: Exception) {
                     Toast.makeText(
                         requireContext(),
