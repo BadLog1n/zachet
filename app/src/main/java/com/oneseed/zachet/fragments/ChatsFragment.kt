@@ -235,6 +235,10 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private fun addPostEventListener() {
         postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    progressBar.visibility = View.GONE
+                    return
+                }
                 for (member in dataSnapshot.children) {
                     val getUser = member.key.toString()
                     val isRead = member.child("isRead").value.toString().toBoolean()
@@ -279,6 +283,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                                     list.add(chat)
                                 }
                             }
+
+
+
                             if (member.toString() == dataSnapshot.children.last().toString()) {
 
                                 list = ArrayList(list.sortedWith(compareBy { it.latestMsgTime }))
@@ -295,6 +302,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
                             }
                         }
                     }
+
+
                 }
             }
 
