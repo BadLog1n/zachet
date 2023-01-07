@@ -51,19 +51,12 @@ class HelpFragment : Fragment(R.layout.fragment_help) {
         }
 
         var clickCount = 0
-        var countCircle = 1
         val imageMain = view.findViewById<ImageView>(R.id.imageView2)
         imageMain.setOnClickListener {
             if (clickCount == 3) {
                 imageMain.rotation += 5f
-                if (imageMain.rotation % 360 == 0f)
-                {
-                    Toast.makeText(
-                        requireContext(), "Это ${countCircle++} полный оборот!", Toast.LENGTH_SHORT
-                    ).show()
-                }
-            }
-            else clickCount++
+                if (imageMain.rotation % 360 == 0f) Toast.makeText(requireContext(), "Полный оборот!", Toast.LENGTH_SHORT).show()
+            } else clickCount++
 
         }
 
