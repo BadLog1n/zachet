@@ -7,6 +7,7 @@
     android:layout_marginStart="10dp"
     android:layout_marginTop="80dp"
     android:layout_marginEnd="10dp"
+    android:importantForAutofill="noExcludeDescendants"
     android:orientation="vertical"
     tools:context=".fragments.SettingsFragment"
     >
@@ -19,6 +20,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:importantForAutofill="noExcludeDescendants"
             android:orientation="vertical">
 
 
