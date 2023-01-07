@@ -312,11 +312,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
-class WeekDayItem(val text: String, val today: String) : Item<GroupieViewHolder>() {
+class WeekDayItem(val scheduleDay: String, val today: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val weekday = viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv)
-        weekday.text = text
-        if (today == text) {
+        weekday.text = scheduleDay
+        weekday.gravity = Gravity.START
+        if (today == scheduleDay) {
             weekday.gravity = Gravity.CENTER
         }
     }
