@@ -57,6 +57,7 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         feedRc.layoutManager = linearLayoutManager
         addRecordLayout = view.findViewById(R.id.addRecordLayout)
         addRecordBtnLayout = view.findViewById(R.id.addRecordBtnLayout)
+        addRecordBtnLayout.visibility = View.GONE
 
         fun addRecordLayoutGone() {
             addRecordLayout.visibility = View.GONE
