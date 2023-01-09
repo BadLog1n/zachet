@@ -33,6 +33,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private lateinit var database: DatabaseReference
     private var lastPost: Long = 0
     private lateinit var progressBar: ProgressBar
+    private lateinit var addRecordLayout: LinearLayout
+    private lateinit var addRecordBtnLayout: LinearLayout
+
     private lateinit var postListener: ValueEventListener
 
 
@@ -52,15 +55,17 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             LinearLayoutManager(this.context, LinearLayoutManager.VERTICAL, true)
         linearLayoutManager.stackFromEnd = true
         feedRc.layoutManager = linearLayoutManager
+        addRecordLayout = view.findViewById(R.id.addRecordLayout)
+        addRecordBtnLayout = view.findViewById(R.id.addRecordBtnLayout)
 
         fun addRecordLayoutGone() {
-            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
-            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+            addRecordLayout.visibility = View.GONE
+            addRecordBtnLayout.visibility = View.VISIBLE
         }
 
         fun addRecordLayoutShow() {
-            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.VISIBLE
-            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.GONE
+            addRecordLayout.visibility = View.VISIBLE
+            addRecordBtnLayout.visibility = View.GONE
         }
 
         view.findViewById<TextView>(R.id.addRecord_tv).setOnClickListener {
@@ -70,14 +75,14 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
             addRecordLayoutShow()
         }
         view.findViewById<ImageButton>(R.id.closeNewMsgImgBtn).setOnClickListener {
-            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
-            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+            addRecordLayout.visibility = View.GONE
+            addRecordBtnLayout.visibility = View.VISIBLE
             view.hideKeyboard()
         }
 
         view.findViewById<LinearLayout>(R.id.layout).setOnClickListener {
-            view.findViewById<LinearLayout>(R.id.addRecordLayout).visibility = View.GONE
-            view.findViewById<LinearLayout>(R.id.addRecordBtnLayout).visibility = View.VISIBLE
+            addRecordLayout.visibility = View.GONE
+            addRecordBtnLayout.visibility = View.VISIBLE
             view.hideKeyboard()
         }
 
@@ -109,6 +114,12 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private fun addPostEventListener(view: View) {
         postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
+                if (!dataSnapshot.exists()) {
+                    progressBar.visibility = View.GONE
+                    addRecordLayout.visibility = View.VISIBLE
+                    addRecordBtnLayout.visibility = View.GONE
+                    return
+                }
                 for (item in dataSnapshot.children) {
                     val postId = item.key.toString()
                     if (lastPost < postId.toLong()) {
@@ -162,6 +173,8 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                                 Firebase.analytics.logEvent("feed_upload") {
                                     param("feed_upload", "")
                                 }
+                                addRecordLayout.visibility = View.GONE
+                                addRecordBtnLayout.visibility = View.VISIBLE
                                 progressBar.visibility = View.GONE
                             }
 /*                            if ((feedRc.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > 0){
