@@ -151,7 +151,7 @@ class IndividualChatActivity : AppCompatActivity() {
         }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
@@ -268,6 +268,7 @@ class IndividualChatActivity : AppCompatActivity() {
             sendMessage(text.substring(200))
         }
     }
+
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
      * */
@@ -683,6 +684,7 @@ class ChatFromImgItem(
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
         val viewName =
             viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
+        if (!loadImagesAgain) imageView.setImageDrawable(null)
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
             "Загрузка фотографии"
@@ -692,34 +694,30 @@ class ChatFromImgItem(
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
         }
-        CoroutineScope(Dispatchers.Main).launch {
 
-            executor.execute {
-                for (i in 1..3) {
-                    if (imageView.drawable != null) {
-                        break
-                    }
-                    if (!loadImagesAgain) imageView.setImageDrawable(null)
-                    Handler(Looper.getMainLooper()).post {
-                        displayImage(filename, chatName, viewHolder)
-                    }
-                    Thread.sleep(5000)
+        executor.execute {
+            for (i in 1..3) {
+                if (imageView.drawable != null) {
+                    break
                 }
-                if (imageView.drawable == null) {
-                    Handler(Looper.getMainLooper()).post {
-                        viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
-                            "Ошибка загрузки"
-                        viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility =
-                            View.GONE
-                        viewName.visibility =
-                            View.GONE
-                        viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
-                            View.GONE
-                    }
+                Handler(Looper.getMainLooper()).post {
+                    displayImage(filename, chatName, viewHolder)
                 }
-
-
+                Thread.sleep(5000)
             }
+            if (imageView.drawable == null) {
+                Handler(Looper.getMainLooper()).post {
+                    viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
+                        "Ошибка загрузки"
+                    viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility =
+                        View.GONE
+                    viewName.visibility =
+                        View.GONE
+                    viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
+                        View.GONE
+                }
+            }
+
 
         }
 
@@ -780,6 +778,7 @@ class ChatToImgItem(
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
         val viewName =
             viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
+        if (!loadImagesAgain) imageView.setImageDrawable(null)
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = "Загрузка фотографии"
         val executor = Executors.newSingleThreadExecutor()
@@ -788,37 +787,31 @@ class ChatToImgItem(
             viewName.text = displayUser
             viewName.visibility = View.VISIBLE
         }
-        CoroutineScope(Dispatchers.Main).launch {
-            executor.execute {
-                for (i in 1..3) {
-                    if (imageView.drawable != null) {
-                        break
-                    }
-                    if (!loadImagesAgain) imageView.setImageDrawable(null)
-
-                    Handler(Looper.getMainLooper()).post {
-
-                        displayImage(filename, chatName, viewHolder)
-                    }
-                    Thread.sleep(5000)
-
-
+        executor.execute {
+            for (i in 1..3) {
+                if (imageView.drawable != null) {
+                    break
                 }
+                Handler(Looper.getMainLooper()).post {
+                    displayImage(filename, chatName, viewHolder)
+                }
+                Thread.sleep(5000)
+            }
 
-                if (imageView.drawable == null) {
-                    Handler(Looper.getMainLooper()).post {
-                        viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
-                            "Ошибка загрузки"
-                        viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility =
-                            View.GONE
-                        viewName.visibility =
-                            View.GONE
-                        viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
-                            View.GONE
+            if (imageView.drawable == null) {
+                Handler(Looper.getMainLooper()).post {
+                    viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text =
+                        "Ошибка загрузки"
+                    viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility =
+                        View.GONE
+                    viewName.visibility =
+                        View.GONE
+                    viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
+                        View.GONE
 
-                    }
                 }
             }
+
 
         }
 
@@ -850,7 +843,6 @@ class ChatToImgItem(
                     viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = time
                     viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
                         View.GONE
-
 
 
                 }
