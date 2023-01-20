@@ -20,7 +20,6 @@ import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.adapters.FeedAdapter
 import com.oneseed.zachet.dataClasses.FeedRecord
-import com.oneseed.zachet.databinding.FragmentFeedBinding
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -29,7 +28,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
     private val authCheck = AuthCheck()
 
     private var rcAdapter = FeedAdapter()
-    private lateinit var binding: FragmentFeedBinding
     private lateinit var database: DatabaseReference
     private var lastPost: Long = 0
     private lateinit var progressBar: ProgressBar
@@ -41,7 +39,6 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding = FragmentFeedBinding.inflate(layoutInflater)
         val feedRc: RecyclerView = view.findViewById(R.id.feedRc)
         authCheck.check(view, this@FeedFragment.context)
         progressBar = view.findViewById(R.id.feedProgressBar)

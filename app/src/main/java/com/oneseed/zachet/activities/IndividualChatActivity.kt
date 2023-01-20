@@ -673,11 +673,11 @@ class ChatFromFileItem(
  * Класс с конструктором для отображения картинки в входящем сообщении.
  */
 class ChatFromImgItem(
-    private val filename: String,
-    private val time: String,
-    private val chatName: String,
+    private val filename: String, //Название файла
+    private val time: String, //Дата и время сообщения
+    private val chatName: String, //ID чата
     val context: Context,
-    private val displayUser: String,
+    private val displayUser: String, //Имя отправителя
     private val loadImagesAgain: Boolean,
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -730,6 +730,11 @@ class ChatFromImgItem(
 
     }
 
+    /**
+     * Отображение изображения в чате.
+     * @param filename Название файла
+     * @param chatName ID чата
+     */
     private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
         CoroutineScope(Dispatchers.IO).launch {
 
