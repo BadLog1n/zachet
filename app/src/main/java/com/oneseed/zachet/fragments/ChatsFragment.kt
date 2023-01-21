@@ -40,8 +40,11 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private val authCheck = AuthCheck()
     private val chatsPackage = ChatsPackage()
     private lateinit var database: DatabaseReference
+    /**Проверка на нажатие кнопки назад*/
     private var clickBack = false
+    /**Проверка на первую загрузку данных с базы данных.*/
     private var notFirstLoad = false
+    /**Уникальный идентификатор пользователя*/
     private lateinit var userName: String
     private lateinit var postListener: ValueEventListener
     var list = ArrayList<ChatPreview>()
@@ -99,6 +102,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         val versionName = getAppVersion(requireContext())
 
 
+        // Проверка доступных обновлений
         if (isTeacher == true) {
             database = FirebaseDatabase.getInstance().getReference("versionInfo")
             database.get().addOnSuccessListener {
@@ -165,6 +169,8 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         }
     }
 
+    /**Определяет версию приложения.
+     * @return Версия приложения*/
     private fun getAppVersion(context: Context?): String {
         var version = ""
         try {
@@ -184,6 +190,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         return version
     }
 
+    /**Ищет пользователя в базе данных и вы-полняет определенные действия в зависимости от результата.*/
     private fun userSearch() {
         Firebase.analytics.logEvent("user_search") {
             param("userSearch", "")
@@ -232,6 +239,7 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
         }
     }
 
+    /**Слушатель изменений в базе данных с дальнейшим отображением их*/
     private fun addPostEventListener() {
         postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -319,11 +327,14 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     }
 
 
+    // Убирает слушатель изменений в базе данных
     override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("chatMembers/$userName")
         database.removeEventListener(postListener)
         super.onStop()
     }
+
+    // Устанавливает слушатель изменений в базе данных
 
     override fun onResume() {
         database = FirebaseDatabase.getInstance().getReference("chatMembers/$userName")

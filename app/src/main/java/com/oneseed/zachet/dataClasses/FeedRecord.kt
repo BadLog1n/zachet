@@ -1,8 +1,5 @@
 package com.oneseed.zachet.dataClasses
 
-
-
-
 /**
  * data-классом элемента записи.
  *@param author имя и фамилия отправителя

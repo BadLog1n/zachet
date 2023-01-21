@@ -55,16 +55,24 @@ import java.util.concurrent.Executors
 class IndividualChatActivity : AppCompatActivity() {
 
     private var typeOfFile = ""
-    private var sendName = "" //uid пользователя
-    private var getName = "" //uid получатель
+    /**uid пользователя*/
+    private var sendName = ""
+    /**uid получателя*/
+    private var getName = ""
     private lateinit var database: DatabaseReference
-    private val storagePermissionCode = 0 //Код запроса доступа к памяти
+    /**Код запроса доступа к памяти*/
+    private val storagePermissionCode = 0
     private val chatsPackage = ChatsPackage()
-    private var userName = "" //Имя и фамилия получателя
-    private var loadImagesAgain = true //Индикатор необходимости перезагружать изображения
-    private var userLogin = "" //Логин получателя
-    private lateinit var chatName: String //UID чата
-    private var isScrolledLast = false //Индикатор нахожде-ния в самом конце чата
+    /**Имя и фамилия получателя*/
+    private var userName = ""
+    /**Индикатор необходимости перезагружать изображения*/
+    private var loadImagesAgain = true
+    /**Логин получателя*/
+    private var userLogin = ""
+    /**UID чата*/
+    private lateinit var chatName: String
+    /**Индикатор нахождения в самом конце чата*/
+    private var isScrolledLast = false
     private lateinit var postListener: ValueEventListener
     private lateinit var progressBar: ProgressBar
 
@@ -472,7 +480,7 @@ class IndividualChatActivity : AppCompatActivity() {
         super.onStop()
     }
 
-    // Добавляет слушатель изменений в базе данных
+    // Устанавливает слушатель изменений в базе данных
     override fun onResume() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)

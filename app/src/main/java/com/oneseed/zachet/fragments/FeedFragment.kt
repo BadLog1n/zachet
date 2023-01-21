@@ -26,14 +26,14 @@ import java.util.*
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
     private val authCheck = AuthCheck()
-
     private var rcAdapter = FeedAdapter()
     private lateinit var database: DatabaseReference
+
+    /**Значение последней отображенной записи*/
     private var lastPost: Long = 0
     private lateinit var progressBar: ProgressBar
     private lateinit var addRecordLayout: LinearLayout
     private lateinit var addRecordBtnLayout: LinearLayout
-
     private lateinit var postListener: ValueEventListener
 
 
@@ -107,8 +107,10 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     }
 
-
+    /**Проверка на первую загрузку данных с базы данных.*/
     var isFirstLoad = true
+
+    /**Слушатель изменений в базе данных с дальнейшим отображением их*/
     private fun addPostEventListener(view: View) {
         postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
@@ -193,12 +195,16 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
         }
     }
 
+    /**Скрывает клавиатуру.*/
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)
     }
 
 
+    /**Сохраняет новую запись в базе данных.
+     *@param text текст записи.
+     * */
     private fun sendPost(
         text: String,
     ) {
@@ -217,12 +223,15 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
 
     }
 
+    // Убирает слушатель изменений в базе данных
+
     override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("feed")
         database.removeEventListener(postListener)
         super.onStop()
     }
 
+    // Устанавливает слушатель изменений в базе данных
     override fun onResume() {
         database = FirebaseDatabase.getInstance().getReference("feed")
         database.addValueEventListener(postListener)
