@@ -83,7 +83,10 @@ class ImageActivity : AppCompatActivity() {
     }
 
     /**
-     * Расширение функции загрузки фото
+     * Расширение функции загрузки фото, отвечает за загрузку файла
+     * @param fileName имя файла без расширения
+     * @param destinationDirectory путь загрузки
+     * @param url ссылка на файл
      * */
     private fun downloadFile(
         fileName: String, destinationDirectory: String?, url: String?
