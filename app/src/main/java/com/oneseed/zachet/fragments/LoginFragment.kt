@@ -25,8 +25,11 @@ import java.util.concurrent.Executors
 
 class LoginFragment : Fragment(R.layout.fragment_login) {
 
+    /**Электронная почта*/
     private var email = ""
+    /**Пароль пользователя.*/
     private var pw = ""
+    /**Проверка на нажатие кнопки назад.*/
     private var clickBack = false
     private lateinit var database: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
@@ -37,6 +40,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
 
+        //Если пользователь уже авторизован в приложении то его сразу перенаправляют в gradesFragment
         if (sharedPref?.getBoolean(getString(R.string.checkSettings), false) == true) {
             view.hideKeyboard()
             val isTeacher = sharedPref.getBoolean(getString(R.string.isTeacher), false)
@@ -151,6 +155,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
         }
     }
 
+    /**Сохраняет пользовательские данные в памяти.
+     * @param email электронная почта
+     * @param pw пароль пользователя
+     * @param saveUserId логин пользователя
+     * @param uid уникальный идентификатор пользователя
+     * */
     private fun saveSettings(email: String, pw: String, uid: String, saveUserId: String) {
         val sharedPref: SharedPreferences? =
             activity?.getSharedPreferences("Settings", MODE_PRIVATE)
@@ -163,6 +173,7 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     }
 
 
+    /**Скрывает клавиатуру.*/
     private fun View.hideKeyboard() {
         val imm = context.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(windowToken, 0)

@@ -19,7 +19,6 @@ import com.oneseed.zachet.R
 
 class RegistrationFragment : Fragment() {
     private lateinit var auth: FirebaseAuth
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         activity?.findViewById<DrawerLayout>(R.id.drawer)
