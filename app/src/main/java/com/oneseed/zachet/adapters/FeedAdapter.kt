@@ -27,6 +27,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         private val binding = FeedItemBinding.bind(item)
 
         fun bind(feedItem: FeedRecord) = with(binding) {
+            val uidAdmin = "10"
             whoPostedTv.text =
                 if (feedItem.displayLogin != "null") "${feedItem.author} (${feedItem.displayLogin})"
                 else feedItem.author
@@ -47,7 +48,7 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
             sponsoredTv.text = "Спонсировано"
             sponsoredTv.visibility = if (feedItem.isSponsored) View.VISIBLE else View.INVISIBLE
             if (isAdmin) sponsoredTv.visibility = View.GONE
-            if (authorIdChat.text.toString() == "10") {
+            if (authorIdChat.text.toString() == uidAdmin) {
                 whoPostedTv.text = feedItem.author
             }
 
@@ -61,7 +62,6 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         val database = FirebaseDatabase.getInstance()
         view.findViewById<ImageButton>(R.id.replyToMsgBtn).setOnClickListener {
             val authorIdChat = view.findViewById<TextView>(R.id.authorIdChat).text.toString()
-
             val intent = Intent(parent.context, IndividualChatActivity::class.java)
             intent.putExtra("getUser", authorIdChat)
             parent.context.startActivity(intent)
@@ -115,14 +115,17 @@ class FeedAdapter : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
         return recordsList.size
     }
 
+    /** Добавляет новую запись ([feedRecord])*/
     fun addFeedRecord(feedRecord: FeedRecord) {
         recordsList.add(feedRecord)
     }
 
+    /**Очищает весь список из элементов записей*/
     fun clearRecords() {
         recordsList.removeAll(recordsList.toSet())
     }
 
+    /**Удаляет конкретную запись ([feedItem])*/
     private fun removeObject(feedItem: FeedRecord) {
         val position = recordsList.indexOf(feedItem)
         recordsList.remove(feedItem)
