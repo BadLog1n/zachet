@@ -51,19 +51,20 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
+
 class IndividualChatActivity : AppCompatActivity() {
 
     private var typeOfFile = ""
-    private var sendName = ""
-    private var getName = ""
+    private var sendName = "" //uid пользователя
+    private var getName = "" //uid получатель
     private lateinit var database: DatabaseReference
-    private val storagePermissionCode = 0
+    private val storagePermissionCode = 0 //Код запроса доступа к памяти
     private val chatsPackage = ChatsPackage()
-    private var userName = ""
-    private var loadImagesAgain = true
-    private var userLogin = ""
-    private lateinit var chatName: String
-    private var isScrolledLast = false
+    private var userName = "" //Имя и фамилия получателя
+    private var loadImagesAgain = true //Индикатор необходимости перезагружать изображения
+    private var userLogin = "" //Логин получателя
+    private lateinit var chatName: String //UID чата
+    private var isScrolledLast = false //Индикатор нахожде-ния в самом конце чата
     private lateinit var postListener: ValueEventListener
     private lateinit var progressBar: ProgressBar
 
@@ -248,6 +249,9 @@ class IndividualChatActivity : AppCompatActivity() {
 
     }
 
+    /**Отправляет сообщение в базу данных. Об-резает сообщение, превышающее макси-мальное количество символов и отправляет частями.
+     * @param text текст сообщения
+     * */
     private fun sendMessage(text: String) {
         val lengthTooBig = text.length > 200
         val textSub = if (lengthTooBig) {
@@ -271,6 +275,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
     /**
      * Функция, которая определяет формат загружаемого файла по параметру [isNeededFile].
+     * @param isNeededFile True - файл, False - изображение
      * */
     private fun pickFileOrPhoto(isNeededFile: Boolean) {
         if (Build.VERSION.SDK_INT >= 26) {
@@ -337,6 +342,12 @@ class IndividualChatActivity : AppCompatActivity() {
 
     var lastTimeMessage: Long = 0
     var isFirstLoad = true
+
+
+    /**Слушатель изменений в базе данных с дальнейшим отображением их.
+     * @param sendUser UID пользователя
+     * @param getName UID получателя
+     * */
     private fun addPostEventListener(sendUser: String, getName: String) {
         chatName =
             if (getName.contains("group")) getName else chatsPackage.getChatName(sendName, getName)
@@ -452,6 +463,7 @@ class IndividualChatActivity : AppCompatActivity() {
 
     }
 
+    // Убирает слушатель изменений в базе данных
     override fun onStop() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
@@ -460,6 +472,7 @@ class IndividualChatActivity : AppCompatActivity() {
         super.onStop()
     }
 
+    // Добавляет слушатель изменений в базе данных
     override fun onResume() {
         database = FirebaseDatabase.getInstance().getReference("chatMessages/$chatName")
         database.addValueEventListener(postListener)
@@ -487,7 +500,10 @@ class IndividualChatActivity : AppCompatActivity() {
 }
 
 /**
- * Класс с конструктором для отображения данных входящего сообщения.
+ * Класс с конструктором для отображения данных исходящего сообщения.
+ * @param text текст сообщения
+ * @param time дата и время отправления сообщения
+ * @param displayUser имя отправителя
  */
 class ChatFromItem(val text: String, private val time: String, private val displayUser: String) :
     Item<GroupieViewHolder>() {
@@ -509,6 +525,9 @@ class ChatFromItem(val text: String, private val time: String, private val displ
 
 /**
  * Класс с конструктором для отображения данных исходящего сообщения.
+ * @param text текст сообщения
+ * @param time дата и время отправления сообщения
+ * @param displayUser имя отправителя
  */
 class ChatToItem(val text: String, private val time: String, private val displayUser: String) :
     Item<GroupieViewHolder>() {
@@ -530,6 +549,10 @@ class ChatToItem(val text: String, private val time: String, private val display
 
 /**
  * Класс с конструктором для отображения файла в исходящем сообщении.
+ * @param text название файла
+ * @param time дата и время отправления сообщения
+ * @param chatName ID чата
+ * @param displayUser имя отправителя
  */
 class ChatToFileItem(
     val text: String,
@@ -581,7 +604,10 @@ class ChatToFileItem(
     }
 
     /**
-     * Расширение функции загрузки фото
+     * Расширение функции загрузки фото, отвечает за загрузку файла
+     * @param fileName имя файла без расширения
+     * @param destinationDirectory путь загрузки
+     * @param url ссылка на файл
      * */
     private fun downloadFile(
         context: Context, fileName: String, destinationDirectory: String?, url: String?
@@ -603,6 +629,10 @@ class ChatToFileItem(
 
 /**
  * Класс с конструктором для отображения файла во входящем сообщении.
+ * @param text название файла
+ * @param time дата и время отправления сообщения
+ * @param chatName ID чата
+ * @param displayUser имя отправителя
  */
 class ChatFromFileItem(
     val text: String,
@@ -653,7 +683,10 @@ class ChatFromFileItem(
     }
 
     /**
-     * Расширение функции загрузки фото
+     * Расширение функции загрузки фото, отвечает за загрузку файла
+     * @param fileName имя файла без расширения
+     * @param destinationDirectory путь загрузки
+     * @param url ссылка на файл
      * */
     private fun downloadFile(
         context: Context, fileName: String, destinationDirectory: String?, url: String?
@@ -671,19 +704,23 @@ class ChatFromFileItem(
 
 /**
  * Класс с конструктором для отображения картинки в входящем сообщении.
+ * @param filename название файла
+ * @param time дата и время отправления сообщения
+ * @param chatName  ID чата
+ * @param displayUser имя отправителя
+ * @param loadImagesAgain нужно ли очищать ImageView при каждом новом обращении
  */
 class ChatFromImgItem(
-    private val filename: String, //Название файла
-    private val time: String, //Дата и время сообщения
-    private val chatName: String, //ID чата
+    private val filename: String,
+    private val time: String,
+    private val chatName: String,
     val context: Context,
-    private val displayUser: String, //Имя отправителя
+    private val displayUser: String,
     private val loadImagesAgain: Boolean,
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.from_img)
-        val viewName =
-            viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
+        val viewName = viewHolder.itemView.findViewById<TextView>(R.id.from_img_name)
         if (!loadImagesAgain) imageView.setImageDrawable(null)
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.from_img_time_tv).text =
@@ -711,8 +748,7 @@ class ChatFromImgItem(
                         "Ошибка загрузки"
                     viewHolder.itemView.findViewById<LinearLayout>(R.id.from_img_layout).visibility =
                         View.GONE
-                    viewName.visibility =
-                        View.GONE
+                    viewName.visibility = View.GONE
                     viewHolder.itemView.findViewById<ProgressBar>(R.id.from_img_progress).visibility =
                         View.GONE
                 }
@@ -770,6 +806,11 @@ class ChatFromImgItem(
 
 /**
  * Класс с конструктором для отображения картинки в исходящем сообщении.
+ * @param filename название файла
+ * @param time дата и время отправления сообщения
+ * @param chatName  ID чата
+ * @param displayUser имя отправителя
+ * @param loadImagesAgain нужно ли очищать ImageView при каждом новом обращении
  */
 class ChatToImgItem(
     private val filename: String,
@@ -781,8 +822,7 @@ class ChatToImgItem(
 ) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val imageView = viewHolder.itemView.findViewById<ImageView>(R.id.to_img)
-        val viewName =
-            viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
+        val viewName = viewHolder.itemView.findViewById<TextView>(R.id.to_img_name_tv)
         if (!loadImagesAgain) imageView.setImageDrawable(null)
         displayImage(filename, chatName, viewHolder)
         viewHolder.itemView.findViewById<TextView>(R.id.to_img_time_tv).text = "Загрузка фотографии"
@@ -809,8 +849,7 @@ class ChatToImgItem(
                         "Ошибка загрузки"
                     viewHolder.itemView.findViewById<LinearLayout>(R.id.to_img_layout).visibility =
                         View.GONE
-                    viewName.visibility =
-                        View.GONE
+                    viewName.visibility = View.GONE
                     viewHolder.itemView.findViewById<ProgressBar>(R.id.to_img_progress).visibility =
                         View.GONE
 
@@ -831,6 +870,11 @@ class ChatToImgItem(
         }
     }
 
+    /**
+     * Отображение изображения в чате.
+     * @param filename Название файла
+     * @param chatName ID чата
+     */
     private fun displayImage(filename: String, chatName: String, viewHolder: GroupieViewHolder) =
         CoroutineScope(Dispatchers.Main).launch {
             try {
