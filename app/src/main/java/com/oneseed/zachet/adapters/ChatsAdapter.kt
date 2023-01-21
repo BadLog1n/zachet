@@ -41,8 +41,8 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
             LayoutInflater.from(parent.context).inflate(R.layout.list_of_chats_item, parent, false)
         view.findViewById<LinearLayout>(R.id.linearLayout).setOnClickListener {
             val intent = Intent(parent.context, IndividualChatActivity::class.java)
-            intent.putExtra("getUser", view.findViewById<TextView>(R.id.getUser).text)
-            parent.context.startActivity(intent)
+            intent.putExtra("getUser", view.findViewById<TextView>(R.id.getUser).text) // передает UID получателя
+            parent.context.startActivity(intent) //переходит в чат
         }
         return ChatsHolder(view)
     }
@@ -55,10 +55,12 @@ class ChatsAdapter : RecyclerView.Adapter<ChatsAdapter.ChatsHolder>() {
         return chatsList.size
     }
 
+    /** Добавляет [chatPreview] (элемент чата) в общий список*/
     fun addChatPreview(chatPreview: ChatPreview) {
         chatsList.add(chatPreview)
     }
 
+    /** Очищает весь список чатов. */
     fun clearRecords() {
         chatsList.removeAll(chatsList.toSet())
     }
