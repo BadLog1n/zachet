@@ -68,14 +68,17 @@ class MainActivity : AppCompatActivity() {
                 }
             }
         }
-        toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1).setOnClickListener {
-            whereToMove()
-        }
-        menuBtn.setOnClickListener {
-            whereToMove()
-        }
-        toolbar.setNavigationOnClickListener {
-            whereToMove()
+        if (sharedPref?.getBoolean(getString(R.string.checkSettings), false) == true) {
+            toolbar.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
+                .setOnClickListener {
+                    whereToMove()
+                }
+            menuBtn.setOnClickListener {
+                whereToMove()
+            }
+            toolbar.setNavigationOnClickListener {
+                whereToMove()
+            }
         }
 
 
