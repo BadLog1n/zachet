@@ -5,8 +5,7 @@
 | Version | Supported          |
 | ------- | ------------------ |
 | 1.7  | :white_check_mark: |
-| 1.6.7   |:white_check_mark:             |
-| < 1.6.6   | :x:                |
+| < 1.6.7   |:x:           |
 
 
 ## Reporting a bug in Зачёт!
