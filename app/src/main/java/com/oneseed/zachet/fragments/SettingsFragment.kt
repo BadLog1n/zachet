@@ -210,7 +210,7 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
         emailHelpBtn.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "Почта необходима для возможности " + "восстановления аккаунта",
+                "Почта необходима для возможности восстановления аккаунта",
                 Toast.LENGTH_SHORT
             ).show()
         }

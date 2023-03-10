@@ -1,5 +1,7 @@
 package com.oneseed.zachet.fragments
 
+import android.content.Context
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -104,6 +106,20 @@ class RegistrationFragment : Fragment() {
                                                     "Успешная регистрация",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
+
+                                                val sharedPrefGrades: SharedPreferences? =
+                                                    activity?.getSharedPreferences(
+                                                        getString(R.string.gradesShared),
+                                                        Context.MODE_PRIVATE
+                                                    )
+                                                sharedPrefGrades?.edit()?.putString(
+                                                    getString(R.string.loginWebShared),
+                                                    inputLoginInfoText.text.toString()
+                                                )?.apply()
+                                                sharedPrefGrades?.edit()?.putString(
+                                                    getString(R.string.passwordWebShared),
+                                                    inputPasswordInfoText.text.toString()
+                                                )?.apply()
                                                 findNavController().navigate(R.id.loginFragment)
                                             } else {
                                                 Toast.makeText(
