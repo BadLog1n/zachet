@@ -1,5 +1,7 @@
 package com.oneseed.zachet.fragments
 
+import android.content.ClipData
+import android.content.ClipboardManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.os.Bundle
@@ -146,9 +148,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         view.findViewById<TextView>(R.id.localSchedule).setOnClickListener {
             if (sharedPref?.getBoolean(getString(R.string.localSchedule), true) != true) {
                 sharedPref?.edit()?.putBoolean(getString(R.string.localSchedule), true)?.apply()
-                val textSample = ""
-                val scheduleSharedup = textSample.substringAfter("UP;").substringBefore("DOWN;")
-                val scheduleShareddown = textSample.substringAfter("DOWN;")
+                val clipboard: ClipboardManager =
+                    requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+                val scheduleText = clipboard.primaryClip?.getItemAt(0)?.text.toString()
+                val scheduleSharedup = scheduleText.substringBefore("DOWN;")
+                val scheduleShareddown = scheduleText.substringAfter("DOWN;")
 
                 sharedPref?.edit()?.putString("scheduleSharedup", scheduleSharedup)?.apply()
                 sharedPref?.edit()?.putString("scheduleShareddown", scheduleShareddown)?.apply()
@@ -173,7 +177,13 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         view.findViewById<TextView>(R.id.downloadSample).setOnClickListener {
-
+            val sample = getString(R.string.scheduleSample)
+            val clipboard: ClipboardManager =
+                requireContext().getSystemService(Context.CLIPBOARD_SERVICE) as ClipboardManager
+            val clip = ClipData.newPlainText("scheduleSample", sample)
+            clipboard.setPrimaryClip(clip)
+            Toast.makeText(requireContext(), "Пример расписания скопирован", Toast.LENGTH_SHORT)
+                .show()
         }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
