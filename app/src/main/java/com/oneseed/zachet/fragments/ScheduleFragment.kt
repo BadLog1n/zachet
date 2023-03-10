@@ -39,6 +39,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val spinner = requireView().findViewById<Spinner>(R.id.spinner)
         val switch = requireView().findViewById<SwitchMaterial>(R.id.switchh)
         val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swipe)
+        val switchLayout = requireView().findViewById<LinearLayout>(R.id.switchLayout)
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.settingsShared), Context.MODE_PRIVATE
         )
@@ -61,15 +62,25 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val isDownWeekFirstLoad = sharedPref?.getBoolean(getString(R.string.isDownWeek), false)
         val localSchedule = sharedPref?.getBoolean(getString(R.string.localSchedule), false)
 
-        if (localSchedule == true) {
-            spinner.visibility = View.GONE
-            view.findViewById<TextView>(R.id.localSchedule).text = "Удалить расписание"
-        }
 
         val upDownTextFirstLoad = if (isDownWeekFirstLoad == true) "down" else "up"
 
         val loadScheduleFirstLoad =
             sharedPref?.getString("scheduleShared$upDownTextFirstLoad", "").toString()
+
+        if (localSchedule == true) {
+            spinner.visibility = View.INVISIBLE
+            view.findViewById<TextView>(R.id.localSchedule).text = "Удалить расписание"
+
+            if (loadScheduleFirstLoad.isEmpty()) {
+                Toast.makeText(requireContext(), "Ошибка загрузки расписания", Toast.LENGTH_SHORT)
+                    .show()
+                switchLayout.visibility = View.INVISIBLE
+
+
+            }
+
+        }
         val calendar = Calendar.getInstance()
 
         dayOfWeek = when (calendar.get(Calendar.DAY_OF_WEEK)) {
@@ -84,12 +95,16 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         if (loadScheduleFirstLoad.isNotEmpty()) {
-            if (isDownWeekFirstLoad == true) {
-                switch.isChecked = true
+            try {
+                switch.isChecked = isDownWeekFirstLoad == true
                 timetableGetCache(loadScheduleFirstLoad)
-            } else {
-                timetableGetCache(loadScheduleFirstLoad)
+            } catch (e: Exception) {
+                switchLayout.visibility = View.INVISIBLE
+                Toast.makeText(requireContext(), "Ошибка загрузки расписания", Toast.LENGTH_SHORT)
+                    .show()
+
             }
+
         }
 
         val isTeacher = sharedPref?.getBoolean(getString(R.string.isTeacher), false)
@@ -103,8 +118,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         swipeRefreshLayout.setOnRefreshListener {
-            if (spinner.visibility == View.GONE) {
-                Toast.makeText(requireContext(), "Нельзя обновить локальное расписание", Toast.LENGTH_SHORT).show()
+            if (spinner.visibility == View.INVISIBLE) {
+                Toast.makeText(
+                    requireContext(), "Нельзя обновить локальное расписание", Toast.LENGTH_SHORT
+                ).show()
+                swipeRefreshLayout.isRefreshing = false
                 return@setOnRefreshListener
             }
             try {
@@ -126,39 +144,40 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         view.findViewById<TextView>(R.id.localSchedule).setOnClickListener {
-            if (sharedPref?.getBoolean(getString(R.string.localSchedule), true) != true){
-                sharedPref?.edit()?.putBoolean(getString(R.string.localSchedule), true)
-                    ?.apply()
+            if (sharedPref?.getBoolean(getString(R.string.localSchedule), true) != true) {
+                sharedPref?.edit()?.putBoolean(getString(R.string.localSchedule), true)?.apply()
                 val textSample = ""
                 val scheduleSharedup = textSample.substringAfter("UP;").substringBefore("DOWN;")
                 val scheduleShareddown = textSample.substringAfter("DOWN;")
 
-/*                sharedPref.edit()?.putString("scheduleSharedup", scheduleSharedup)
-                    ?.apply()
-                sharedPref.edit()?.putString("scheduleShareddown", scheduleShareddown)
-                    ?.apply()
-                sharedPref.edit()?.putString("scheduleSharedup", "local")?.apply()
-                sharedPref.edit()?.putString("scheduleShareddown", "local")?.apply()*/
-                spinner.visibility = View.GONE
+                sharedPref?.edit()?.putString("scheduleSharedup", scheduleSharedup)?.apply()
+                sharedPref?.edit()?.putString("scheduleShareddown", scheduleShareddown)?.apply()
+                spinner.visibility = View.INVISIBLE
+                switchLayout.visibility = View.INVISIBLE
                 view.findViewById<TextView>(R.id.localSchedule).text = "Удалить расписание"
-            }
-            else{
+                Toast.makeText(
+                    requireContext(), "Необходимо перезайти в расписание", Toast.LENGTH_SHORT
+                ).show()
+            } else {
                 sharedPref.edit()?.putBoolean(getString(R.string.localSchedule), false)?.apply()
+                sharedPref.edit()?.putString("scheduleSharedup", "")?.apply()
+                sharedPref.edit()?.putString("scheduleShareddown", "")?.apply()
                 view.findViewById<TextView>(R.id.localSchedule).text = "Вставить расписание"
-                Toast.makeText(requireContext(), "Необходимо перезайти в расписание", Toast.LENGTH_SHORT).show()
+                Toast.makeText(
+                    requireContext(), "Необходимо перезайти в расписание", Toast.LENGTH_SHORT
+                ).show()
 
             }
 
 
-
-            }
+        }
 
         view.findViewById<TextView>(R.id.downloadSample).setOnClickListener {
 
         }
 
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onNothingSelected(parent: AdapterView<*>?) { }
+            override fun onNothingSelected(parent: AdapterView<*>?) {}
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
@@ -358,7 +377,8 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
-class WeekDayItem(private val scheduleDay: String, private val today: String) : Item<GroupieViewHolder>() {
+class WeekDayItem(private val scheduleDay: String, private val today: String) :
+    Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val weekday = viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv)
         weekday.text = scheduleDay
@@ -367,6 +387,7 @@ class WeekDayItem(private val scheduleDay: String, private val today: String) : 
             weekday.gravity = Gravity.CENTER
         }
     }
+
     override fun getLayout(): Int {
         return R.layout.weekday_item
     }
