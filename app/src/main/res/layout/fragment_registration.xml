@@ -127,6 +127,78 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputLoginInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:minHeight="50dp"
+            android:textAlignment="center"
+            android:textColorHint="@color/grey_hint"
+            android:theme="@style/EditTextStyle"
+            app:boxStrokeColor="#00FFFFFF"
+            app:boxStrokeWidth="0dp"
+            app:hintTextColor="@color/black"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            android:visibility="gone"
+            app:layout_constraintTop_toBottomOf="@+id/layoutRegCode">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputLoginInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_edittext"
+                android:ems="10"
+                android:hint="@string/loginWeb"
+                android:inputType="number"
+                android:maxLength="6"
+                android:minHeight="50dp"
+                android:textAlignment="center"
+                android:textColorHint="@color/black"
+                android:textSize="18sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputPasswordInfo"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginTop="16dp"
+            android:layout_marginEnd="12dp"
+            android:minHeight="50dp"
+            android:textAlignment="center"
+            android:textColorHint="@color/grey_hint"
+            android:theme="@style/EditTextStyle"
+            app:boxStrokeColor="#00FFFFFF"
+            app:boxStrokeWidth="0dp"
+            app:hintTextColor="@color/black"
+            android:visibility="gone"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/inputLoginInfo">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputPasswordInfoText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:background="@drawable/rounded_edittext"
+                android:ems="10"
+                android:hint="@string/passwordWeb"
+                android:inputType="number"
+                android:maxLength="6"
+                android:minHeight="50dp"
+                android:textAlignment="center"
+                android:textColorHint="@color/black"
+                android:textSize="18sp" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
         <Button
             android:id="@+id/regButton"
             android:layout_width="0dp"
@@ -144,9 +216,30 @@
             app:cornerRadius="100dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/layoutRegCode" />
+            app:layout_constraintTop_toBottomOf="@+id/inputPasswordInfo" />
 
+
+        <com.google.android.material.switchmaterial.SwitchMaterial
+            android:id="@+id/loadFromServerWeb"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="12dp"
+            android:layout_marginEnd="14dp"
+            android:fontFamily="@font/inter"
+            android:text="Нет кода    "
+            android:textAlignment="viewEnd"
+            android:textColor="@color/black"
+            android:textColorLink="@color/blue"
+            android:textSize="16sp"
+            android:textStyle="bold"
+            android:theme="@style/Theme.UniversitySystem"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/regButton"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
 
 
 </layout>
