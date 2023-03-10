@@ -53,47 +53,92 @@ class RegistrationFragment : Fragment() {
                     ).show()
                     break
                 }
-                var isTeacher: Boolean
-                val databaseRefNew = FirebaseDatabase.getInstance().getReference("code")
-                    .child(regCodeText.text.toString()).get()
-                databaseRefNew.addOnSuccessListener { element ->
-                    if (!element.exists()) {
-                        Toast.makeText(
-                            requireContext(), "Код не подходит", Toast.LENGTH_SHORT
-                        ).show()
-                        return@addOnSuccessListener
-                    } else {
-                        isTeacher = element.value.toString().toBoolean()
-                    }
-                    auth.createUserWithEmailAndPassword(
-                        regEmailText.text.toString(), regPasswordText.text.toString()
-                    ).addOnCompleteListener(requireActivity()) { task ->
-                        if (task.isSuccessful) {
-                            val uid = Firebase.auth.currentUser?.uid
 
-                            val userLogin = uid.toString().lowercase().take(6) + ('a'..'z').random()
+                if (switch.isChecked) {
+                    val databaseRefNew = FirebaseDatabase.getInstance().getReference("noCode").get()
+                    databaseRefNew.addOnSuccessListener { element ->
+                        if (!element.exists()) {
+                            Toast.makeText(
+                                requireContext(), "Регистрация временно недоступна", Toast.LENGTH_SHORT
+                            ).show()
+                            return@addOnSuccessListener
+                        }
+                       /* auth.createUserWithEmailAndPassword(
+                            regEmailText.text.toString(), regPasswordText.text.toString()
+                        ).addOnCompleteListener(requireActivity()) { task ->
+                            if (task.isSuccessful) {
+                                val uid = Firebase.auth.currentUser?.uid
 
-                            FirebaseDatabase.getInstance().getReference("login").child(userLogin)
-                                .setValue(uid)
-                            FirebaseDatabase.getInstance()
-                                .getReference("users/${uid.toString()}/login").setValue(userLogin)
-                            FirebaseDatabase.getInstance().getReference("code")
-                                .child(regCodeText.text.toString()).removeValue()
-                            if (isTeacher) {
+                                val userLogin =
+                                    uid.toString().lowercase().take(6) + ('a'..'z').random()
+
+                                FirebaseDatabase.getInstance().getReference("login")
+                                    .child(userLogin)
+                                    .setValue(uid)
                                 FirebaseDatabase.getInstance()
-                                    .getReference("users/${uid.toString()}/isTeacher")
-                                    .setValue(true)
+                                    .getReference("users/${uid.toString()}/login")
+                                    .setValue(userLogin)
+                                FirebaseDatabase.getInstance().getReference("code")
+                                    .child(regCodeText.text.toString()).removeValue()
+                                Toast.makeText(
+                                    requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT
+                                ).show()
+                                findNavController().navigate(R.id.loginFragment)
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Пожалуйста, проверьте вводимые данные",
+                                    Toast.LENGTH_SHORT
+                                ).show()
                             }
+                        }*/
+                    }
+                } else {
+                    var isTeacher: Boolean
+                    val databaseRefNew = FirebaseDatabase.getInstance().getReference("code")
+                        .child(regCodeText.text.toString()).get()
+                    databaseRefNew.addOnSuccessListener { element ->
+                        if (!element.exists()) {
                             Toast.makeText(
-                                requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT
+                                requireContext(), "Код не подходит", Toast.LENGTH_SHORT
                             ).show()
-                            findNavController().navigate(R.id.loginFragment)
+                            return@addOnSuccessListener
                         } else {
-                            Toast.makeText(
-                                requireContext(),
-                                "Пожалуйста, проверьте вводимые данные",
-                                Toast.LENGTH_SHORT
-                            ).show()
+                            isTeacher = element.value.toString().toBoolean()
+                        }
+                        auth.createUserWithEmailAndPassword(
+                            regEmailText.text.toString(), regPasswordText.text.toString()
+                        ).addOnCompleteListener(requireActivity()) { task ->
+                            if (task.isSuccessful) {
+                                val uid = Firebase.auth.currentUser?.uid
+
+                                val userLogin =
+                                    uid.toString().lowercase().take(6) + ('a'..'z').random()
+
+                                FirebaseDatabase.getInstance().getReference("login")
+                                    .child(userLogin)
+                                    .setValue(uid)
+                                FirebaseDatabase.getInstance()
+                                    .getReference("users/${uid.toString()}/login")
+                                    .setValue(userLogin)
+                                FirebaseDatabase.getInstance().getReference("code")
+                                    .child(regCodeText.text.toString()).removeValue()
+                                if (isTeacher) {
+                                    FirebaseDatabase.getInstance()
+                                        .getReference("users/${uid.toString()}/isTeacher")
+                                        .setValue(true)
+                                }
+                                Toast.makeText(
+                                    requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT
+                                ).show()
+                                findNavController().navigate(R.id.loginFragment)
+                            } else {
+                                Toast.makeText(
+                                    requireContext(),
+                                    "Пожалуйста, проверьте вводимые данные",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         }
                     }
                 }
