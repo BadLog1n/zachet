@@ -10,6 +10,8 @@ import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.google.android.material.switchmaterial.SwitchMaterial
+import com.google.android.material.textfield.TextInputLayout
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
@@ -24,8 +26,14 @@ class RegistrationFragment : Fragment() {
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
         val regEmailText = view.findViewById<EditText>(R.id.regEmailText)
+        val switch = requireView().findViewById<SwitchMaterial>(R.id.switchCode)
         val regPasswordText = view.findViewById<EditText>(R.id.regPasswordText)
         val regCodeText = view.findViewById<EditText>(R.id.regCodeText)
+        val layoutRegCode = view.findViewById<TextInputLayout>(R.id.layoutRegCode)
+        val inputPasswordInfo = view.findViewById<TextInputLayout>(R.id.inputPasswordInfo)
+        val inputPasswordInfoText = view.findViewById<EditText>(R.id.inputPasswordInfoText)
+        val inputLoginInfo = view.findViewById<TextInputLayout>(R.id.inputLoginInfo)
+        val inputLoginInfoText = view.findViewById<EditText>(R.id.inputLoginInfoText)
         auth = Firebase.auth
         view.findViewById<Button>(R.id.regButton).setOnClickListener {
             while (true) {
@@ -92,6 +100,23 @@ class RegistrationFragment : Fragment() {
                 break
             }
         }
+
+
+
+
+        switch.setOnCheckedChangeListener { _, _ ->
+            if (switch.isChecked) {
+                layoutRegCode.visibility = View.GONE
+                inputPasswordInfo.visibility = View.VISIBLE
+                inputLoginInfo.visibility = View.VISIBLE
+            } else {
+                layoutRegCode.visibility = View.VISIBLE
+                inputPasswordInfo.visibility = View.GONE
+                inputLoginInfo.visibility = View.GONE
+            }
+        }
+
+
     }
 
     override fun onCreateView(
