@@ -103,7 +103,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/inter"
-            android:text="Вставить расписание"
+            android:text="@string/inputSchedule"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textSize="12sp" />
@@ -116,7 +116,7 @@
             android:fontFamily="@font/inter"
             android:layout_gravity="center"
 
-            android:text="Копировать шаблон"
+            android:text="@string/copySampleSchedule"
             android:textAlignment="center"
             android:textSize="12sp" />
     </LinearLayout>

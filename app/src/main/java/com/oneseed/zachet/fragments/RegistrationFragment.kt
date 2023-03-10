@@ -69,7 +69,7 @@ class RegistrationFragment : Fragment() {
                     ).show()
                     val databaseRefNew = FirebaseDatabase.getInstance().getReference("noCode").get()
                     databaseRefNew.addOnSuccessListener { element ->
-                        if (!element.exists()) {
+                        if (element.value.toString().isEmpty()) {
                             Toast.makeText(
                                 requireContext(),
                                 "Регистрация временно недоступна",
@@ -77,7 +77,16 @@ class RegistrationFragment : Fragment() {
                             ).show()
                             return@addOnSuccessListener
                         }
+                        if (inputLoginInfoText.text.toString() in element.value.toString().split(";")){
+                            Toast.makeText(
+                                requireContext(),
+                                "Данный логин от info уже зарегистрирован",
+                                Toast.LENGTH_SHORT
+                            ).show()
+                            return@addOnSuccessListener
+                        }
                         lifecycleScope.launch {
+
                             withContext(Dispatchers.IO) {
                                 if (authInfo(
                                         inputLoginInfoText.text.toString(),
@@ -106,6 +115,7 @@ class RegistrationFragment : Fragment() {
                                                     "Успешная регистрация",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
+                                                FirebaseDatabase.getInstance().getReference("noCode").setValue(element.value.toString() + inputLoginInfoText.text.toString() + ";")
 
                                                 val sharedPrefGrades: SharedPreferences? =
                                                     activity?.getSharedPreferences(
@@ -134,7 +144,7 @@ class RegistrationFragment : Fragment() {
                                     withContext(Dispatchers.Main) {
                                         Toast.makeText(
                                             requireContext(),
-                                            "Не удается подключиться к сайту. Проверьте вводимые данные",
+                                            "Не удается подключиться к сайту info.swsu. Проверьте вводимые данные",
                                             Toast.LENGTH_SHORT
                                         ).show()
 
