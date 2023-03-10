@@ -96,25 +96,25 @@
         tools:layout_editor_absoluteX="0dp">
 
         <TextView
-            android:id="@+id/moveTelegram"
+            android:id="@+id/localSchedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/inter"
-            android:text="Загрузить расписание"
+            android:text="Вставить расписание"
             android:layout_gravity="center"
             android:textAlignment="center"
             android:textSize="12sp" />
 
         <TextView
-            android:id="@+id/moveGithub"
+            android:id="@+id/downloadSample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:fontFamily="@font/inter"
             android:layout_gravity="center"
 
-            android:text="Скачать шаблон"
+            android:text="Копировать шаблон"
             android:textAlignment="center"
             android:textSize="12sp" />
     </LinearLayout>

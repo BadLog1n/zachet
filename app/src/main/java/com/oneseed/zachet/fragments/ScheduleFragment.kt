@@ -48,6 +48,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             "Расписание"
         authCheck.check(view, this@ScheduleFragment.context)
 
+
         getGroups(spinner)
         val adapter = GroupAdapter<GroupieViewHolder>()
         val scheduleRc: RecyclerView = view.findViewById(R.id.scheduleRc)
@@ -58,6 +59,12 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         val progressBar: ProgressBar = view.findViewById(R.id.scheduleProgressBar)
         //timetableGet("П")
         val isDownWeekFirstLoad = sharedPref?.getBoolean(getString(R.string.isDownWeek), false)
+        val localSchedule = sharedPref?.getBoolean(getString(R.string.localSchedule), false)
+
+        if (localSchedule == true) {
+            spinner.visibility = View.GONE
+            view.findViewById<TextView>(R.id.localSchedule).text = "Удалить расписание"
+        }
 
         val upDownTextFirstLoad = if (isDownWeekFirstLoad == true) "down" else "up"
 
@@ -96,6 +103,10 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
 
         swipeRefreshLayout.setOnRefreshListener {
+            if (spinner.visibility == View.GONE) {
+                Toast.makeText(requireContext(), "Нельзя обновить локальное расписание", Toast.LENGTH_SHORT).show()
+                return@setOnRefreshListener
+            }
             try {
                 val spinnerElement = spinner.selectedItem.toString()
                 val switchState: Boolean = switch.isChecked
@@ -114,11 +125,44 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             }
         }
 
+        view.findViewById<TextView>(R.id.localSchedule).setOnClickListener {
+            if (sharedPref?.getBoolean(getString(R.string.localSchedule), true) != true){
+                sharedPref?.edit()?.putBoolean(getString(R.string.localSchedule), true)
+                    ?.apply()
+                val textSample = ""
+                val scheduleSharedup = textSample.substringAfter("UP;").substringBefore("DOWN;")
+                val scheduleShareddown = textSample.substringAfter("DOWN;")
+
+/*                sharedPref.edit()?.putString("scheduleSharedup", scheduleSharedup)
+                    ?.apply()
+                sharedPref.edit()?.putString("scheduleShareddown", scheduleShareddown)
+                    ?.apply()
+                sharedPref.edit()?.putString("scheduleSharedup", "local")?.apply()
+                sharedPref.edit()?.putString("scheduleShareddown", "local")?.apply()*/
+                spinner.visibility = View.GONE
+                view.findViewById<TextView>(R.id.localSchedule).text = "Удалить расписание"
+            }
+            else{
+                sharedPref.edit()?.putBoolean(getString(R.string.localSchedule), false)?.apply()
+                view.findViewById<TextView>(R.id.localSchedule).text = "Вставить расписание"
+                Toast.makeText(requireContext(), "Необходимо перезайти в расписание", Toast.LENGTH_SHORT).show()
+
+            }
+
+
+
+            }
+
+        view.findViewById<TextView>(R.id.downloadSample).setOnClickListener {
+
+        }
+
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) { }
             override fun onItemSelected(
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
+                if (spinner.visibility == View.GONE) return
                 swipeRefreshLayout.isEnabled = true
                 val spinnerElement = spinner.selectedItem.toString()
                 sharedPref?.edit()?.putString(getString(R.string.groupSpinner), spinnerElement)
@@ -173,12 +217,14 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
             if (loadSchedule.isNotEmpty()) {
                 progressBar.visibility = View.GONE
                 timetableGetCache(loadSchedule)
+
             }
         }
     }
 
 
     private fun getGroups(spinner: Spinner) {
+        if (spinner.visibility == View.GONE) return
         val groups: ArrayList<String> = arrayListOf()
         database = FirebaseDatabase.getInstance().getReference("timetable")
         val requestToDatabase = database.get()
@@ -312,7 +358,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
-class WeekDayItem(val scheduleDay: String, val today: String) : Item<GroupieViewHolder>() {
+class WeekDayItem(private val scheduleDay: String, private val today: String) : Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
         val weekday = viewHolder.itemView.findViewById<TextView>(R.id.weekday_tv)
         weekday.text = scheduleDay

@@ -165,6 +165,7 @@
     <string name="onlyDarkTheme">Принудительная тёмная тема</string>
     <string name="menuIsRight">menuIsRight</string>
     <string name="menuMove">Меню справа</string>
+    <string name="localSchedule">false</string>
 
 
 </resources>
