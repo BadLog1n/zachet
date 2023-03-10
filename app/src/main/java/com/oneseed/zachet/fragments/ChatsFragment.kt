@@ -1,5 +1,6 @@
 package com.oneseed.zachet.fragments
 
+import android.app.Activity
 import android.content.Context
 import android.content.Intent
 import android.content.SharedPreferences
@@ -118,62 +119,68 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
             database = FirebaseDatabase.getInstance().getReference("versionInfo")
             database.get().addOnSuccessListener {
                 val actualVersion = it.child("actualVersion").value.toString()
-                if (versionName < it.child("minVersion").value.toString()) {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setMessage(R.string.updateTextForced)
-                    builder.setTitle(R.string.updateTitleForced)
-                    builder.setNeutralButton("Выход") { _, _ ->
-                        activity?.finish()
-                    }
-                    builder.setPositiveButton("Обновить") { _, _ ->
-                        val openDownloadFile = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
-                        )
-                        startActivity(openDownloadFile)
-                        activity?.finish()
-                    }
-                    builder.setNegativeButton("RuStore") { _, _ ->
-                        val openDownloadFile = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
-                        )
-                        startActivity(openDownloadFile)
-                        activity?.finish()
-                    }
-                    val alertDialog = builder.create()
-                    alertDialog.setCancelable(false)
-                    alertDialog.show()
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
-                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
-                } else if (versionName < actualVersion) {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setMessage(R.string.updateText)
-                    builder.setTitle(R.string.updateTitle)
-                    builder.setNeutralButton("Ок") { _, _ ->
-                    }
-                    builder.setPositiveButton("Обновить") { _, _ ->
-                        val openDownloadFile = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
-                        )
-                        startActivity(openDownloadFile)
-                    }
-                    builder.setNegativeButton("RuStore") { _, _ ->
-                        val openDownloadFile = Intent(
-                            Intent.ACTION_VIEW,
-                            Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
-                        )
-                        startActivity(openDownloadFile)
-                    }
-                    val alertDialog = builder.create()
-                    alertDialog.show()
-                    alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+                val activity: Activity? = activity
+                if (activity != null) {
 
-                    alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
-                    alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
 
+                    if (versionName < it.child("minVersion").value.toString()) {
+                        val builder = AlertDialog.Builder(activity)
+                        builder.setMessage(R.string.updateTextForced)
+                        builder.setTitle(R.string.updateTitleForced)
+                        builder.setNeutralButton("Выход") { _, _ ->
+                            activity.finish()
+                        }
+                        builder.setPositiveButton("Обновить") { _, _ ->
+                            val openDownloadFile = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
+                            )
+                            startActivity(openDownloadFile)
+                            activity.finish()
+                        }
+                        builder.setNegativeButton("RuStore") { _, _ ->
+                            val openDownloadFile = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                            )
+                            startActivity(openDownloadFile)
+                            activity.finish()
+                        }
+                        val alertDialog = builder.create()
+                        alertDialog.setCancelable(false)
+                        alertDialog.show()
+                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+                    } else if (versionName < actualVersion) {
+                        val builder = AlertDialog.Builder(activity)
+                        builder.setMessage(R.string.updateText)
+                        builder.setTitle(R.string.updateTitle)
+                        builder.setNeutralButton("Ок") { _, _ ->
+                        }
+                        builder.setPositiveButton("Обновить") { _, _ ->
+                            val openDownloadFile = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://github.com/BadLog1n/zachet/releases/download/$actualVersion/$actualVersion.apk")
+                            )
+                            startActivity(openDownloadFile)
+                        }
+                        builder.setNegativeButton("RuStore") { _, _ ->
+                            val openDownloadFile = Intent(
+                                Intent.ACTION_VIEW,
+                                Uri.parse("https://apps.rustore.ru/app/com.oneseed.zachet")
+                            )
+                            startActivity(openDownloadFile)
+                        }
+                        val alertDialog = builder.create()
+                        alertDialog.show()
+                        alertDialog.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(Color.BLACK)
+
+                        alertDialog.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.BLACK)
+                        alertDialog.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK)
+
+                    }
                 }
 
             }

@@ -14,8 +14,8 @@ android {
         applicationId "com.oneseed.zachet"
         minSdk 21
         targetSdk 33
-        versionCode 22
-        versionName "1.8"
+        versionCode 23
+        versionName "1.8.1"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
