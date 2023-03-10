@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginStart="20dp"
     android:layout_marginTop="80dp"
     android:layout_marginEnd="20dp"
-    android:layout_marginBottom="20dp"
+    android:layout_marginBottom="5dp"
     android:gravity="center"
     android:orientation="vertical"
     tools:context=".fragments.ScheduleFragment">
-
 
 
     <LinearLayout
@@ -67,6 +67,7 @@
         android:id="@+id/scheduleProgressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
+
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
         android:visibility="gone" />
@@ -74,6 +75,7 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
+        android:layout_weight="0.1"
         android:layout_height="match_parent"
         android:enabled="false">
 
@@ -83,5 +85,39 @@
             android:layout_height="match_parent"
             android:scrollbars="none" />
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout2"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal"
+        android:layout_weight="0.7"
+
+        tools:layout_editor_absoluteX="0dp">
+
+        <TextView
+            android:id="@+id/moveTelegram"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:text="Загрузить расписание"
+            android:layout_gravity="center"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/moveGithub"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:fontFamily="@font/inter"
+            android:layout_gravity="center"
+
+            android:text="Скачать шаблон"
+            android:textAlignment="center"
+            android:textSize="12sp" />
+    </LinearLayout>
+
 
 </LinearLayout>
