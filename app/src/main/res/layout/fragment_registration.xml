@@ -229,7 +229,6 @@
             android:textColor="@color/black"
             android:textColorLink="@color/black"
             android:textSize="16sp"
-            android:textStyle="bold"
             android:theme="@style/Theme.UniversitySystem"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
