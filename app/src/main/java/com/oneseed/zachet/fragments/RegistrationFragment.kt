@@ -1,6 +1,7 @@
 package com.oneseed.zachet.fragments
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,6 +10,7 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.switchmaterial.SwitchMaterial
 import com.google.android.material.textfield.TextInputLayout
@@ -17,6 +19,11 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import org.jsoup.Connection
+import org.jsoup.Jsoup
 
 
 class RegistrationFragment : Fragment() {
@@ -55,44 +62,79 @@ class RegistrationFragment : Fragment() {
                 }
 
                 if (switch.isChecked) {
+                    Toast.makeText(
+                        requireContext(),
+                        "Ожидайте",
+                        Toast.LENGTH_SHORT
+                    ).show()
                     val databaseRefNew = FirebaseDatabase.getInstance().getReference("noCode").get()
                     databaseRefNew.addOnSuccessListener { element ->
                         if (!element.exists()) {
                             Toast.makeText(
-                                requireContext(), "Регистрация временно недоступна", Toast.LENGTH_SHORT
+                                requireContext(),
+                                "Регистрация временно недоступна",
+                                Toast.LENGTH_SHORT
                             ).show()
                             return@addOnSuccessListener
                         }
-                       /* auth.createUserWithEmailAndPassword(
-                            regEmailText.text.toString(), regPasswordText.text.toString()
-                        ).addOnCompleteListener(requireActivity()) { task ->
-                            if (task.isSuccessful) {
-                                val uid = Firebase.auth.currentUser?.uid
+                        lifecycleScope.launch {
+                            withContext(Dispatchers.IO) {
+                                if (authInfo(
+                                        inputLoginInfoText.text.toString(),
+                                        inputPasswordInfoText.text.toString()
+                                    )
+                                ) {
 
-                                val userLogin =
-                                    uid.toString().lowercase().take(6) + ('a'..'z').random()
+                                    withContext(Dispatchers.Main) {
+                                        auth.createUserWithEmailAndPassword(
+                                            regEmailText.text.toString(),
+                                            regPasswordText.text.toString()
+                                        ).addOnCompleteListener(requireActivity()) { task ->
+                                            if (task.isSuccessful) {
+                                                val uid = Firebase.auth.currentUser?.uid
 
-                                FirebaseDatabase.getInstance().getReference("login")
-                                    .child(userLogin)
-                                    .setValue(uid)
-                                FirebaseDatabase.getInstance()
-                                    .getReference("users/${uid.toString()}/login")
-                                    .setValue(userLogin)
-                                FirebaseDatabase.getInstance().getReference("code")
-                                    .child(regCodeText.text.toString()).removeValue()
-                                Toast.makeText(
-                                    requireContext(), "Успешная регистрация", Toast.LENGTH_SHORT
-                                ).show()
-                                findNavController().navigate(R.id.loginFragment)
-                            } else {
-                                Toast.makeText(
-                                    requireContext(),
-                                    "Пожалуйста, проверьте вводимые данные",
-                                    Toast.LENGTH_SHORT
-                                ).show()
+                                                val userLogin =
+                                                    uid.toString().lowercase()
+                                                        .take(6) + ('a'..'z').random()
+
+                                                FirebaseDatabase.getInstance().getReference("login")
+                                                    .child(userLogin)
+                                                    .setValue(uid)
+                                                FirebaseDatabase.getInstance()
+                                                    .getReference("users/${uid.toString()}/login")
+                                                    .setValue(userLogin)
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "Успешная регистрация",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                                findNavController().navigate(R.id.loginFragment)
+                                            } else {
+                                                Toast.makeText(
+                                                    requireContext(),
+                                                    "Пожалуйста, проверьте вводимые данные",
+                                                    Toast.LENGTH_SHORT
+                                                ).show()
+                                            }
+                                        }
+                                    }
+                                }
+                             else {
+                                    withContext(Dispatchers.Main) {
+                                        Toast.makeText(
+                                            requireContext(),
+                                            "Не удается подключиться к сайту. Проверьте вводимые данные",
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+
+                                    }
+
+                                }
+
                             }
-                        }*/
+                        }
                     }
+
                 } else {
                     var isTeacher: Boolean
                     val databaseRefNew = FirebaseDatabase.getInstance().getReference("code")
@@ -162,6 +204,29 @@ class RegistrationFragment : Fragment() {
         }
 
 
+    }
+
+
+    private fun authInfo(login: String, password: String): Boolean {
+        try {
+            val document: String
+            val sitePath =
+                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=auth&login=$login&password=$password&type=array"
+
+            val response: Connection.Response = Jsoup.connect(sitePath)
+                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
+                .timeout(30000).execute()
+
+            val statusCode: Int = response.statusCode()
+
+            if (statusCode == 200) {
+                document = Jsoup.connect(sitePath).get().text()
+            } else return false
+            return document.isNotEmpty()
+        } catch (e: Exception) {
+            Log.d("getFormAndGroup", e.toString())
+            return false
+        }
     }
 
     override fun onCreateView(

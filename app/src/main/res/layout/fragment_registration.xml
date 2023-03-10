@@ -154,10 +154,9 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:hint="@string/loginWeb"
-                android:inputType="number"
-                android:maxLength="6"
+                android:inputType="text"
+                android:maxLength="20"
                 android:minHeight="50dp"
-                android:textAlignment="center"
                 android:textColorHint="@color/black"
                 android:textSize="18sp" />
 
@@ -190,10 +189,9 @@
                 android:background="@drawable/rounded_edittext"
                 android:ems="10"
                 android:hint="@string/passwordWeb"
-                android:inputType="number"
-                android:maxLength="6"
+                android:inputType="text"
+                android:maxLength="20"
                 android:minHeight="50dp"
-                android:textAlignment="center"
                 android:textColorHint="@color/black"
                 android:textSize="18sp" />
 
