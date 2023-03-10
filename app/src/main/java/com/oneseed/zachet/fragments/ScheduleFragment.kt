@@ -172,6 +172,7 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 ).show()
 
             }
+            it.isEnabled = false
 
 
         }
