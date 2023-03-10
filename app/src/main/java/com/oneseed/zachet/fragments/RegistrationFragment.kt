@@ -63,9 +63,7 @@ class RegistrationFragment : Fragment() {
 
                 if (switch.isChecked) {
                     Toast.makeText(
-                        requireContext(),
-                        "Ожидайте",
-                        Toast.LENGTH_SHORT
+                        requireContext(), "Ожидайте", Toast.LENGTH_SHORT
                     ).show()
                     val databaseRefNew = FirebaseDatabase.getInstance().getReference("noCode").get()
                     databaseRefNew.addOnSuccessListener { element ->
@@ -93,13 +91,11 @@ class RegistrationFragment : Fragment() {
                                             if (task.isSuccessful) {
                                                 val uid = Firebase.auth.currentUser?.uid
 
-                                                val userLogin =
-                                                    uid.toString().lowercase()
-                                                        .take(6) + ('a'..'z').random()
+                                                val userLogin = uid.toString().lowercase()
+                                                    .take(6) + ('a'..'z').random()
 
                                                 FirebaseDatabase.getInstance().getReference("login")
-                                                    .child(userLogin)
-                                                    .setValue(uid)
+                                                    .child(userLogin).setValue(uid)
                                                 FirebaseDatabase.getInstance()
                                                     .getReference("users/${uid.toString()}/login")
                                                     .setValue(userLogin)
@@ -118,8 +114,7 @@ class RegistrationFragment : Fragment() {
                                             }
                                         }
                                     }
-                                }
-                             else {
+                                } else {
                                     withContext(Dispatchers.Main) {
                                         Toast.makeText(
                                             requireContext(),
@@ -158,8 +153,7 @@ class RegistrationFragment : Fragment() {
                                     uid.toString().lowercase().take(6) + ('a'..'z').random()
 
                                 FirebaseDatabase.getInstance().getReference("login")
-                                    .child(userLogin)
-                                    .setValue(uid)
+                                    .child(userLogin).setValue(uid)
                                 FirebaseDatabase.getInstance()
                                     .getReference("users/${uid.toString()}/login")
                                     .setValue(userLogin)
