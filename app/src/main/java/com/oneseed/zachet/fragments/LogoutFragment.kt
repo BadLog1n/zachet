@@ -26,6 +26,8 @@ class LogoutFragment : BottomSheetDialogFragment() {
                 getString(R.string.settingsShared), Context.MODE_PRIVATE
             )
             sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
+            activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.isEnabled = false
+
             findNavController().navigate(R.id.loginFragment)
             dismiss()
         }

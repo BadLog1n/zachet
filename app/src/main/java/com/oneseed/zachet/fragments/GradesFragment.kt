@@ -52,9 +52,12 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private var clickBack = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
+        toolbar1?.isEnabled = true
         val spinner = requireView().findViewById<Spinner>(R.id.sem_num_spinner)
         authCheck.check(view, this@GradesFragment.context)
-
+        activity?.findViewById<DrawerLayout>(R.id.drawer)
+            ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         binding = FragmentGradesBinding.inflate(layoutInflater)
         super.onViewCreated(view, savedInstanceState)
 
@@ -67,8 +70,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.title =
-            "Мои баллы"
+        toolbar1?.title = "Мои баллы"
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
         val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(

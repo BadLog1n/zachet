@@ -34,11 +34,12 @@ class LoginFragment : Fragment(R.layout.fragment_login) {
     private lateinit var database: DatabaseReference
     private lateinit var firebaseAuth: FirebaseAuth
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         val sharedPref: SharedPreferences? =
             activity?.getSharedPreferences(getString(R.string.settingsShared), MODE_PRIVATE)
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.isEnabled = false
+        super.onViewCreated(view, savedInstanceState)
 
         //Если пользователь уже авторизован в приложении то его сразу перенаправляют в gradesFragment
         if (sharedPref?.getBoolean(getString(R.string.checkSettings), false) == true) {

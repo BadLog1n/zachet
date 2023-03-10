@@ -20,6 +20,7 @@ import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -53,8 +54,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
         authCheck.check(view, this@ChatsFragment.context)
+        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.isEnabled = true
+        activity?.findViewById<DrawerLayout>(R.id.drawer)
+            ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+
+        super.onViewCreated(view, savedInstanceState)
+
         rcAdapter.clearRecords()
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             "Settings", AppCompatActivity.MODE_PRIVATE
