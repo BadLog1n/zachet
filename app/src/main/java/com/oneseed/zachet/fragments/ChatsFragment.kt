@@ -41,10 +41,13 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
     private val authCheck = AuthCheck()
     private val chatsPackage = ChatsPackage()
     private lateinit var database: DatabaseReference
+
     /**Проверка на нажатие кнопки назад*/
     private var clickBack = false
+
     /**Проверка на первую загрузку данных с базы данных.*/
     private var notFirstLoad = false
+
     /**Уникальный идентификатор пользователя*/
     private lateinit var userName: String
     private lateinit var postListener: ValueEventListener
@@ -55,7 +58,9 @@ class ChatsFragment : Fragment(R.layout.fragment_chats) {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         authCheck.check(view, this@ChatsFragment.context)
-        activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.isEnabled = true
+        val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
+        toolbar1?.isEnabled = true
+        toolbar1?.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = true
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
 

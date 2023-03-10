@@ -54,6 +54,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
         toolbar1?.isEnabled = true
+        toolbar1?.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = true
         val spinner = requireView().findViewById<Spinner>(R.id.sem_num_spinner)
         authCheck.check(view, this@GradesFragment.context)
         activity?.findViewById<DrawerLayout>(R.id.drawer)

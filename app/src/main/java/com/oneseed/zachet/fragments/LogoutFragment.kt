@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.FrameLayout
+import android.widget.ImageButton
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import com.oneseed.zachet.R
@@ -26,7 +27,10 @@ class LogoutFragment : BottomSheetDialogFragment() {
                 getString(R.string.settingsShared), Context.MODE_PRIVATE
             )
             sharedPref?.edit()?.putBoolean(getString(R.string.checkSettings), false)?.apply()
-            activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)?.isEnabled = false
+            val toolbar = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
+            toolbar?.isEnabled = false
+            toolbar?.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = false
+
 
             findNavController().navigate(R.id.loginFragment)
             dismiss()
