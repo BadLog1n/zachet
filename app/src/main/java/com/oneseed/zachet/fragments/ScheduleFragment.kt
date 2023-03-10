@@ -330,59 +330,64 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
     private fun timetableGetCache(scheduleText: String) {
-        var scheduleTextLocal = scheduleText
-        scheduleTextLocal = scheduleTextLocal.substringAfter("monday;")
+        try {
+            var scheduleTextLocal = scheduleText
+            scheduleTextLocal = scheduleTextLocal.substringAfter("monday;")
 
-        val scheduleArray = arrayListOf<String>()
-        val adapter = GroupAdapter<GroupieViewHolder>()
-        val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
-        val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
-        val dayForSplit =
-            arrayOf("tuesday;", "wednesday;", "thursday;", "friday;", "saturday;", ";")
-        for (item in dayForSplit) {
-            if (item != ";") {
-                scheduleArray.add(scheduleTextLocal.substringBefore(item))
-                scheduleTextLocal = scheduleTextLocal.substringAfter(item)
-            } else {
-                scheduleTextLocal = scheduleTextLocal.substringBeforeLast(item) + " "
-                scheduleArray.add(scheduleTextLocal)
+            val scheduleArray = arrayListOf<String>()
+            val adapter = GroupAdapter<GroupieViewHolder>()
+            val scheduleRc: RecyclerView = requireView().findViewById(R.id.scheduleRc)
+            val rusDay = arrayOf("Понедельник", "Вторник", "Среда", "Четверг", "Пятница", "Суббота")
+            val dayForSplit =
+                arrayOf("tuesday;", "wednesday;", "thursday;", "friday;", "saturday;", ";")
+            for (item in dayForSplit) {
+                if (item != ";") {
+                    scheduleArray.add(scheduleTextLocal.substringBefore(item))
+                    scheduleTextLocal = scheduleTextLocal.substringAfter(item)
+                } else {
+                    scheduleTextLocal = scheduleTextLocal.substringBeforeLast(item) + " "
+                    scheduleArray.add(scheduleTextLocal)
+                }
             }
-        }
-        var index = 0
-        for (timeCabSub in scheduleArray) {
-            if (timeCabSub.isNotEmpty() && timeCabSub != " ") {
-                val scheduleTextArray =
-                    timeCabSub.substring(0, timeCabSub.length - 1).split(";").toTypedArray()
-                println(scheduleTextArray.size)
-                for (item in scheduleTextArray) {
-                    println(item)
+            var index = 0
+            for (timeCabSub in scheduleArray) {
+                if (timeCabSub.isNotEmpty() && timeCabSub != " ") {
+                    val scheduleTextArray =
+                        timeCabSub.substring(0, timeCabSub.length - 1).split(";").toTypedArray()
+                    println(scheduleTextArray.size)
+                    for (item in scheduleTextArray) {
+                        println(item)
+                    }
+                    //  println(scheduleTextArray[7])
+                    var indexLocal = 0
+                    while (indexLocal < scheduleTextArray.size) {
+                        val subject = ScheduleRecordItem(
+                            scheduleTextArray[indexLocal],
+                            scheduleTextArray[indexLocal + 1],
+                            scheduleTextArray[indexLocal + 2]
+                        )
+                        indexLocal += 3
+                        subjects.add(subject)
+                    }
+                    subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
+                    adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
+                    for (item in subjects) {
+                        adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
+                    }
+                    subjects.clear()
+                    index += 1
+                } else {
+                    adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
+                    index += 1
                 }
-                //  println(scheduleTextArray[7])
-                var indexLocal = 0
-                while (indexLocal < scheduleTextArray.size) {
-                    val subject = ScheduleRecordItem(
-                        scheduleTextArray[indexLocal],
-                        scheduleTextArray[indexLocal + 1],
-                        scheduleTextArray[indexLocal + 2]
-                    )
-                    indexLocal += 3
-                    subjects.add(subject)
-                }
-                subjects = ArrayList(subjects.sortedWith(compareBy { it.time }))
-                adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
-                for (item in subjects) {
-                    adapter.add(ScheduleRecordItem(item.time, item.cabName, item.subject))
-                }
-                subjects.clear()
-                index += 1
-            } else {
-                adapter.add(WeekDayItem(rusDay[index], dayOfWeek))
-                index += 1
             }
-        }
 
-        scheduleRc.adapter = adapter
-        scheduleRc.layoutManager = LinearLayoutManager(this.context)
+            scheduleRc.adapter = adapter
+            scheduleRc.layoutManager = LinearLayoutManager(this.context)
+        } catch (_: Exception) {
+            Toast.makeText(requireContext(), "Ошибка загрузки расписания", Toast.LENGTH_SHORT)
+                .show()
+        }
     }
 }
 
