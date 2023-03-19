@@ -82,6 +82,8 @@
 <h3> Макет приложения (на 01.08.2022):  
 <div style="display: flex;">
   <img src="https://user-images.githubusercontent.com/54963637/207435512-bdc2755e-b7ab-4989-8a43-d2485dfcd3c2.png" style="flex: 1;">
+</div>
+<div style="display: flex;">
   <img src="https://user-images.githubusercontent.com/54963637/207435519-446ad3a3-a800-446d-aceb-87d92117911a.png" style="flex: 1;">
 </div>
 
