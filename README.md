@@ -2,9 +2,9 @@
 
 <p>Зачёт - это мобильное приложение для студента. 
 <br>Приложение уведомляет о измененных баллах, запоминает расписание в памяти телефона (и отображает без интернета). Предусмотрена и социальная сфера (чаты со студентами и преподавателями, лента), но из-за базовой конфигурации сервера некоторые функции могут время от времени некорректно работать.
-<br>На данный момент, взаимодействие с информацией, предоставляемой университетом, предусмотрено только в рамках ЮЗГУ. 
+<br>На данный момент, взаимодействие с информацией, предоставляемой университетом, предусмотрено только в рамках ЮЗГУ. Мы не сохраняем данные от аккаунта университета без Вашего разрешения.
 
-<div style="display: flex;">
+<div style="display:  ;">
   <img src="https://user-images.githubusercontent.com/54963637/226174255-b032a7c7-1695-475b-9079-065a8b36323f.jpg" style="flex: 1;" width="250">
   <img src="https://user-images.githubusercontent.com/54963637/226174257-568ae321-5019-4a6e-9ae7-3ab73f608188.jpg" style="flex: 1;" width="250">
   <img src="https://user-images.githubusercontent.com/54963637/226174254-503de60e-19e8-46d9-8c10-61bb3c791eaf.jpg" style="flex: 1;" width="250">
@@ -78,11 +78,11 @@
 <h3> Ознакомиться с работой приложения(на 05.12.2022) можно <a href="https://user-images.githubusercontent.com/54963637/209171696-0e84e28c-206c-4d67-afd0-a821d99e1177.mp4">по ссылке</a>
 
 <h3> Макет приложения (на 01.08.2022):  
-<div style="display: flex;">
-  <img src="https://user-images.githubusercontent.com/54963637/207435512-bdc2755e-b7ab-4989-8a43-d2485dfcd3c2.png" style="flex: 1;">
+<div style="display: ;">
+  <img src="https://user-images.githubusercontent.com/54963637/207435512-bdc2755e-b7ab-4989-8a43-d2485dfcd3c2.png" style="flex: 1;" width="1000">
 </div>
-<div style="display: flex;">
-  <img src="https://user-images.githubusercontent.com/54963637/207435519-446ad3a3-a800-446d-aceb-87d92117911a.png" style="flex: 1;">
+<div style="display: ;">
+  <img src="https://user-images.githubusercontent.com/54963637/207435519-446ad3a3-a800-446d-aceb-87d92117911a.png" style="flex: 1;" width="1000">
 </div>
 
 <h3> Файлы с презентацией и статистикой: </h3> 
