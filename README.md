@@ -1,13 +1,15 @@
 <h1> Зачёт! </h1>
 
+<center><big><a href="[https://apps.rustore.ru/app/com.oneseed.zachet](https://badlog1n.github.io/zachet/#%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0)">Перейти к установке</a></big></center>
+
 <p>Зачёт - это мобильное приложение для студента. 
 <br>Приложение уведомляет о измененных баллах, запоминает расписание в памяти телефона (и отображает без интернета). Предусмотрена и социальная сфера (чаты со студентами и преподавателями, лента), но из-за базовой конфигурации сервера некоторые функции могут время от времени некорректно работать.
 <br>На данный момент, взаимодействие с информацией, предоставляемой университетом, предусмотрено только в рамках ЮЗГУ. Мы не сохраняем данные от аккаунта университета без Вашего разрешения.
 
 <div style="display:  ;">
-  <img src="https://user-images.githubusercontent.com/54963637/226174255-b032a7c7-1695-475b-9079-065a8b36323f.jpg" style="flex: 1;" width="250">
-  <img src="https://user-images.githubusercontent.com/54963637/226174257-568ae321-5019-4a6e-9ae7-3ab73f608188.jpg" style="flex: 1;" width="250">
-  <img src="https://user-images.githubusercontent.com/54963637/226174254-503de60e-19e8-46d9-8c10-61bb3c791eaf.jpg" style="flex: 1;" width="250">
+  <img src="https://user-images.githubusercontent.com/54963637/226174255-b032a7c7-1695-475b-9079-065a8b36323f.jpg" width="200">
+  <img src="https://user-images.githubusercontent.com/54963637/226174257-568ae321-5019-4a6e-9ae7-3ab73f608188.jpg" width="200">
+  <img src="https://user-images.githubusercontent.com/54963637/226174254-503de60e-19e8-46d9-8c10-61bb3c791eaf.jpg" width="200">
 </div>
 
 <h3>Основной функционал приложения:</h3>
