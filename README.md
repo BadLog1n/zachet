@@ -57,7 +57,7 @@
 <br> > <a href="https://t.me/fogtoad">Telegram</a>
 <br> > <a href="https://vk.com/fogtoad">VK</a>
 
-<br> <b>Софья сохина: </b> 
+<br> <b>Сохина Софья: </b> 
 <br> > <a href="https://t.me/sssofi01">Telegram</a>
 <br> > <a href="https://vk.com/sokhinasofia ">VK</a>
 
