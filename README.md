@@ -38,8 +38,8 @@
 
 <h3>УСТАНОВКА</h3>
 
-Рекомендовано: <a href="https://apps.rustore.ru/app/com.oneseed.zachet">Установка через RuStore</a>.
-<br>Скачать мобильное приложение также можно в разделе Releases или <a href="https://github.com/BadLog1n/zachet/releases/download/1.8.1/1.8.1.apk">по прямой ссылке на последнюю версию.</a>
+Рекомендовано: <big><a href="https://apps.rustore.ru/app/com.oneseed.zachet">Установка через RuStore</a>.</big>
+<br>Скачать мобильное приложение также можно в разделе Releases или <big><a href="https://github.com/BadLog1n/zachet/releases/download/1.8.1/1.8.1.apk">по прямой ссылке на последнюю версию.</a></big>
 <br>Чтобы установить приложение - скачайте apk-файл и запустите установщик. Работа приложения не требует дополнительных установок или настроек. Приложение работает только на устройствах Android.
 
 <h3>КОНТАКТЫ</h3>
@@ -87,9 +87,8 @@
   <img src="https://user-images.githubusercontent.com/54963637/207435519-446ad3a3-a800-446d-aceb-87d92117911a.png" style="flex: 1;">
 </div>
 
-<h3> Файлы с презентацией и статистикой:  
-<br><a href="https://docs.google.com/spreadsheets/d/1wNkxLYoAJfU8afBjkjnfntf9YKQlvJGvftK60hskPY8/edit?usp=share_link">Статистика</a>
+<h3> Файлы с презентацией и статистикой: </h3> 
+<a href="https://docs.google.com/spreadsheets/d/1wNkxLYoAJfU8afBjkjnfntf9YKQlvJGvftK60hskPY8/edit?usp=share_link">Статистика</a>
 <br><a href="https://drive.google.com/file/d/1oIY_IeX7VBVBnWPUXVwafNMO-rrkv3dZ/view?usp=sharing">Презентация проекта</a>
  
-<h2> Важно: 
-Приложение находится на стадии тестирования. 
+<h2> Важно: Приложение находится на стадии тестирования.</h2>
