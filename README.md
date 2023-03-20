@@ -1,5 +1,8 @@
 <h1> Зачёт! </h1>
-
+<center><div style="display:  ;">
+  <img src="https://user-images.githubusercontent.com/54963637/226384706-8c64c2cf-f303-4272-aba1-bae25e771623.png" width="100">
+</div></center>
+<br>
 <center><big><a href="https://badlog1n.github.io/zachet/#%D1%83%D1%81%D1%82%D0%B0%D0%BD%D0%BE%D0%B2%D0%BA%D0%B0">Перейти к установке</a></big></center>
 <br>
 <br>
