@@ -91,8 +91,9 @@
   <img src="https://user-images.githubusercontent.com/54963637/207435519-446ad3a3-a800-446d-aceb-87d92117911a.png" style="flex: 1;" width="1000">
 </div>
 
-<h3> Файлы с презентацией и статистикой: </h3> 
+<h3> Дополнительные ссылки: </h3> 
 <a href="https://docs.google.com/spreadsheets/d/1wNkxLYoAJfU8afBjkjnfntf9YKQlvJGvftK60hskPY8/edit?usp=share_link">Статистика</a>
 <br><a href="https://drive.google.com/file/d/1oIY_IeX7VBVBnWPUXVwafNMO-rrkv3dZ/view?usp=sharing">Презентация проекта</a>
+<br><a href="https://pt.2035.university/project/socialno-informacionnyj-portal-dla-studentov-rossijskih-vuzov-v-formate-mobilnogo-prilozenia-zacet?_ga=2.190583275.1735722827.1679424397-337496946.1675586656">Университет-2032</a>
  
 <h2> Важно: Приложение находится на стадии тестирования.</h2>
