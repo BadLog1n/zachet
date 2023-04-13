@@ -3,19 +3,18 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:layout_marginStart="20dp"
-    android:layout_marginTop="80dp"
+    android:layout_marginTop="70dp"
     android:layout_marginEnd="20dp"
-    android:layout_marginBottom="20dp"
-    android:gravity="center"
+    android:gravity="center|top"
     android:orientation="vertical"
     tools:context=".fragments.HelpFragment">
 
     <ImageView
         android:id="@+id/imageView2"
         android:layout_width="176dp"
-        android:layout_height="200dp"
+        android:layout_height="160dp"
         android:src="@drawable/ic_main_icon" />
 
     <LinearLayout
@@ -53,7 +52,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
-        android:layout_weight="1"
         android:fontFamily="@font/inter"
         android:text="@string/check_versions"
         android:textAllCaps="false"
@@ -64,16 +62,15 @@
         app:iconTint="@color/black" />
 
 
-
     <Button
         android:id="@+id/getSupportBtn"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginBottom="20dp"
         android:text="@string/support"
         android:textAllCaps="false"
         android:textColor="@color/black"
-        android:textSize="16sp"
-        android:layout_marginBottom="50dp" />
+        android:textSize="16sp" />
 
 
     <Button
@@ -81,17 +78,17 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="10dp"
-        android:layout_weight="1"
         android:text="@string/telegram"
         android:textAlignment="center"
         android:textColor="#2196F3"
         app:icon="@drawable/ic___icon__telegram_"
         app:iconTint="@color/white"
         app:iconTintMode="multiply" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:orientation="horizontal">
 
 
@@ -120,7 +117,7 @@
             app:iconTint="@color/white"
             app:iconTintMode="multiply" />
 
-<!--        <TextView
+        <!--        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/inter"
@@ -128,7 +125,6 @@
             android:textColor="@color/black"
             android:textSize="16sp"
             android:textStyle="bold" />-->
-
 
 
     </LinearLayout>
