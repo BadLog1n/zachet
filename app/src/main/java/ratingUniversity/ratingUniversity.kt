@@ -52,6 +52,13 @@ class RatingUniversity {
 
     }
 
+    /** Функция для получения баллов баллов не за успеваемость (премиальных, дополнительных или
+     *  за экзамен/зачет)
+     * Zed - баллы за экзамен или зачет
+     * Dopol - дополнительные баллы
+     * Pb - премиальные баллы
+     * index - порядковый номер предмета
+     */
     private fun getDopolPbZed(jsonArray: JSONArray, index: Int): Array<String> {
         val arrayToReturn: Array<String> = arrayOf("0", "0", "0")
         try {
@@ -86,6 +93,10 @@ class RatingUniversity {
         return arrayToReturn
     }
 
+    /**
+     * pos - баллы за посещение
+     * usp - баллы за успеваемость
+     */
     private fun getRating(jsonArray: JSONArray, index: Int): String {
         var stringToReturn = ""
         try {
