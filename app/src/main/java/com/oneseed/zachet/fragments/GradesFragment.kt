@@ -265,6 +265,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
                 val result = spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
 
+                // проверка обновились ли семестры. если result( факт. последн.сем. в спиннере)>=полученному
+                // по запросу ls, то не обновились, иначе обновились
                 val status = if (result + 1 >= ls) "false" else "true"
 
                 val semester = result.toString().padStart(9, '0')
@@ -421,6 +423,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     }
 
 
+    /**
+     * Функция для запроса к сайту с параметром reiting
+     * Запрос происходит с помощью Jsoup
+     */
     private fun returnRating(
         login: String, group: String, semester: String, form: String, status: String
     ): ArrayList<MutableMap<String, String>>? {
@@ -439,7 +445,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 document = Jsoup.connect(sitePath).get().text()
             } else return null
 
+            // преобразуем полученный по запросу ответ из простого текста в формат JSON
             val jsonArray = JSONArray(document)
+            // вызываем метод класса ratingUniversity для разбора JSONа по тегам
             return ratingUniversity.gradesCollector(jsonArray)
 
         } catch (e: Exception) {
