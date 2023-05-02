@@ -88,8 +88,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         recyclerView.adapter = rcAdapter
         progressBar.visibility = View.VISIBLE
 
-        val loginWeb =
-            sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
+
+        // проверка аутентификации пользователя
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -100,6 +100,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             ).show()
             Navigation.findNavController(view).navigate(R.id.loginFragment)
         }
+
+        // проверка аутентификации по брс
+        val loginWeb =
+            sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
         val passwordWeb =
             sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
         val strSemesterOriginal =
@@ -125,6 +129,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
 
 
+        // при нажатии кнопки "назад" на экране баллов(который является домашним), приложение выходит
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (!clickBack) {
                 Toast.makeText(activity, "Нажмите ещё раз, чтобы выйти", Toast.LENGTH_SHORT).show()
@@ -139,6 +144,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
+
+        /**
+         * Действия, которые происходят при запуске только обновленного приложения. Появляется окно,
+         * в котором подробно расписаны изменения в новой версии
+         */
         val versionCurrent =
             sharedPrefSetting?.getString(getString(R.string.versionShared), "").toString()
 
@@ -162,13 +172,19 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         sharedPrefSetting?.edit()?.putString(getString(R.string.versionShared), versionName)
             ?.apply()
 
-
+        /**
+         *  Проверка версии приложения при отрисовке экрана.
+         *  Если версия на телефоне меньше, чем минимальная допустимая версия приложения,
+         *  появляется диалог для обновления, который нельзя скрыть, при отказе обновления
+         *  приложение принудительно закрывается.
+         *  Если версия на телефоне больше минимально допустимой, но меньше самой новой (актуальной),
+         *  появляется диалог с информацией о новой версии и предложением обновления. Его можно скрыть.
+         */
         database = FirebaseDatabase.getInstance().getReference("versionInfo")
         database.get().addOnSuccessListener {
             val actualVersion = it.child("actualVersion").value.toString()
             val activity: Activity? = activity
             if (activity != null) {
-
 
                 if (versionName < it.child("minVersion").value.toString()) {
                     val builder = AlertDialog.Builder(activity)
@@ -232,6 +248,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         }
 
+        /**
+         * Функция, которая обновляет список баллов на экране в соответствии с полученными данными
+         */
         var spinnerChange = false
         fun gradesChange() {
             swipeRefreshLayout.isEnabled = false
@@ -244,10 +263,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 sharedPrefGrades?.getString(getString(R.string.actualGrades), "").toString()
                     .split(" ").toList().toMutableList()
 
+            // с какого на какой семестр поменяли. если не поменялся то "на какой" будет пустым
             val semesterAll = spinner.selectedItem.toString() + "," + strSemesterOriginal.replace(
                 "${spinner.selectedItem},", ""
             )
-            if (semesterAll != strSemester || spinnerChange) {
+            if ((semesterAll != strSemester) || spinnerChange) {
                 actualGrades[0] = ""
                 sharedPrefGrades?.edit()?.putString(getString(R.string.actualGrades), "")?.apply()
             }
@@ -263,13 +283,13 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 val ls =
                     sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString().toInt()
 
-                val result = spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1
+                val result = spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1 // номер выбранного семестра
 
                 // проверка обновились ли семестры. если result( факт. последн.сем. в спиннере)>=полученному
                 // по запросу ls, то не обновились, иначе обновились
                 val status = if (result + 1 >= ls) "false" else "true"
 
-                val semester = result.toString().padStart(9, '0')
+                val semester = result.toString().padStart(9, '0') //дополнение нулями впереди
 
 
                 lifecycleScope.launch {
@@ -277,7 +297,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                         withContext(Dispatchers.IO) {
                             checkIsDownWeek()
                             val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
-                            println(listOfGrades)
+                            //println(listOfGrades)
                             withContext(Dispatchers.Main) {
                                 if (listOfGrades != null) {
                                     var allGrades = ""
@@ -341,6 +361,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
+        /** то, что проиходит во время выбора элемента в спиннере (списке семестров): обновление
+         *  баллов и пока они обновляются спиннер будет не доступен
+         */
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onNothingSelected(parent: AdapterView<*>?) {
 
@@ -354,6 +377,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             }
         }
 
+        // при свайпе и обновлении происходит следующее:
         swipeRefreshLayout.setOnRefreshListener {
             val spinnerElement = spinner.selectedItem.toString()
             if (rcAdapter.itemCount > 0 && spinnerElement != "") {
@@ -374,6 +398,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
     }
 
+    /**
+     * Функция, проверяющая по парсингу сайта юзгу, нижняя ли сейчас неделя. Если нижняя, то
+     * переменной isDownWeek в SharedPreferences будет присвоено значение true, в противном случае
+     * false
+     */
     private fun checkIsDownWeek() {
         val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
             getString(R.string.settingsShared), Context.MODE_PRIVATE
@@ -402,6 +431,9 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
     }
 
+    /**
+     * Функция, которая получает информацию о том, какая версия приложения установлена на телефоне
+     */
     private fun getAppVersion(context: Context?): String {
         var version = ""
         try {
@@ -426,6 +458,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     /**
      * Функция для запроса к сайту с параметром reiting
      * Запрос происходит с помощью Jsoup
+     * Возвращает разобранный в массив строковых словарей JSON с данными о рейтинге по предметам
      */
     private fun returnRating(
         login: String, group: String, semester: String, form: String, status: String

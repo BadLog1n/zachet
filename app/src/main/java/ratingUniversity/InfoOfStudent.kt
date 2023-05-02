@@ -2,6 +2,10 @@ package ratingUniversity
 
 import org.json.JSONArray
 
+/**
+ * Класс, с функциямии,возвращающими данные о студенте, такие как: код формы обучения, код группы
+ * студента и семестры
+ */
 class InfoOfStudent {
 
     fun getFormOfStudy(authText: String): String {
