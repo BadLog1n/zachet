@@ -252,6 +252,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
 
+    /**
+     * Функция для извлечения списка групп из бд и присвоения списка групп выпадающему списку
+     */
     private fun getGroups(spinner: Spinner) {
         if (spinner.visibility == View.GONE) return
         val groups: ArrayList<String> = arrayListOf()
@@ -285,7 +288,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
     }
 
+
     private var subjects = arrayListOf<ScheduleRecordItem>()
+    /**
+     * Функция для получения расписания по группе и неделе из бд и его кеширования
+     */
     private fun timetableGet(group: String, upDown: Boolean) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.settingsShared), Context.MODE_PRIVATE
@@ -329,6 +336,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
     }
 
+    /**
+     * Функция для получения и отрисовки кешированного расписания из строки
+     */
     private fun timetableGetCache(scheduleText: String) {
         var scheduleTextLocal = scheduleText
         scheduleTextLocal = scheduleTextLocal.substringAfter("monday;")
@@ -387,6 +397,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
+/**
+ * Класс - вид объекта в списке-расписании. Заполняет элемент списка - название дня недели
+ */
 class WeekDayItem(private val scheduleDay: String, private val today: String) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -404,6 +417,10 @@ class WeekDayItem(private val scheduleDay: String, private val today: String) :
 
 }
 
+/**
+ * Класс - вид объекта в списке-расписании. Заполняет элемент списка - запись в расписании дня
+ * (предмет, во сколько и где).
+ */
 class ScheduleRecordItem(val time: String, val subject: String, val cabName: String) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
