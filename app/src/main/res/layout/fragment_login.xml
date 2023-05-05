@@ -140,35 +140,36 @@
             app:layout_constraintTop_toBottomOf="@+id/enterButton" />
 
         <LinearLayout
-            android:id="@+id/linearLayout2"
+            android:id="@+id/loginLinearLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
             android:layout_marginBottom="12dp"
+            android:orientation="horizontal"
             app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/registerOfferTw"
-            app:layout_constraintVertical_bias="0.944"
-            tools:layout_editor_absoluteX="0dp">
+            app:layout_constraintVertical_bias="0.944">
 
             <TextView
                 android:id="@+id/moveTelegram"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/inter"
                 android:text="@string/telegram"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="16sp" />
 
             <TextView
                 android:id="@+id/moveGithub"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:fontFamily="@font/inter"
                 android:text="@string/github"
-                android:textSize="16sp"
-                android:layout_weight="1"
-                android:textAlignment="center" />
+                android:textAlignment="center"
+                android:textSize="16sp" />
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

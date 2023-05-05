@@ -211,7 +211,21 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 }
                 val switchState: Boolean = switch.isChecked
                 if (loadSchedule.isNotEmpty() && group == spinnerElement) {
-                    timetableGetCache(loadSchedule)
+                    try {
+                        timetableGetCache(loadSchedule)
+                    }
+                    catch (e:Exception) {
+                        if (sharedPref != null) {
+                            sharedPref.edit()?.putBoolean(getString(R.string.localSchedule), false)?.apply()
+                            sharedPref.edit()?.putString("scheduleSharedup", "")?.apply()
+                            sharedPref.edit()?.putString("scheduleShareddown", "")?.apply()
+                        }
+
+                        view?.findViewById<TextView>(R.id.localSchedule)?.text ?: "Вставить расписание"
+                        Toast.makeText(
+                            requireContext(), "Неверный формат. Необходимо перезайти в расписание", Toast.LENGTH_LONG
+                        ).show()
+                    }
                 } else {
                     progressBar.visibility = View.VISIBLE
                     timetableGet(spinnerElement, switchState)
