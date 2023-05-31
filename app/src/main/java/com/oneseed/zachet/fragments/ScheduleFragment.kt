@@ -212,7 +212,21 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
                 }
                 val switchState: Boolean = switch.isChecked
                 if (loadSchedule.isNotEmpty() && group == spinnerElement) {
-                    timetableGetCache(loadSchedule)
+                    try {
+                        timetableGetCache(loadSchedule)
+                    }
+                    catch (e:Exception) {
+                        if (sharedPref != null) {
+                            sharedPref.edit()?.putBoolean(getString(R.string.localSchedule), false)?.apply()
+                            sharedPref.edit()?.putString("scheduleSharedup", "")?.apply()
+                            sharedPref.edit()?.putString("scheduleShareddown", "")?.apply()
+                        }
+
+                        view?.findViewById<TextView>(R.id.localSchedule)?.text ?: "Вставить расписание"
+                        Toast.makeText(
+                            requireContext(), "Неверный формат. Необходимо перезайти в расписание", Toast.LENGTH_LONG
+                        ).show()
+                    }
                 } else {
                     progressBar.visibility = View.VISIBLE
                     timetableGet(spinnerElement, switchState)
@@ -253,6 +267,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
     }
 
 
+    /**
+     * Функция для извлечения списка групп из бд и присвоения списка групп выпадающему списку
+     */
     private fun getGroups(spinner: Spinner) {
         if (spinner.visibility == View.GONE) return
         val groups: ArrayList<String> = arrayListOf()
@@ -286,7 +303,11 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
     }
 
+
     private var subjects = arrayListOf<ScheduleRecordItem>()
+    /**
+     * Функция для получения расписания по группе и неделе из бд и его кеширования
+     */
     private fun timetableGet(group: String, upDown: Boolean) {
         val sharedPref: SharedPreferences? = activity?.getSharedPreferences(
             getString(R.string.settingsShared), Context.MODE_PRIVATE
@@ -330,6 +351,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
         }
     }
 
+    /**
+     * Функция для получения и отрисовки кешированного расписания из строки
+     */
     private fun timetableGetCache(scheduleText: String) {
         try {
             var scheduleTextLocal = scheduleText
@@ -393,6 +417,9 @@ class ScheduleFragment : Fragment(R.layout.fragment_schedule) {
 }
 
 
+/**
+ * Класс - вид объекта в списке-расписании. Заполняет элемент списка - название дня недели
+ */
 class WeekDayItem(private val scheduleDay: String, private val today: String) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {
@@ -410,6 +437,10 @@ class WeekDayItem(private val scheduleDay: String, private val today: String) :
 
 }
 
+/**
+ * Класс - вид объекта в списке-расписании. Заполняет элемент списка - запись в расписании дня
+ * (предмет, во сколько и где).
+ */
 class ScheduleRecordItem(val time: String, val subject: String, val cabName: String) :
     Item<GroupieViewHolder>() {
     override fun bind(viewHolder: GroupieViewHolder, position: Int) {

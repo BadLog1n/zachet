@@ -2,6 +2,11 @@ package ratingUniversity
 
 import org.json.JSONArray
 
+/**
+ * Вспомогательный класс, с функциямии,возвращающими данные о студенте, такие как: код формы обучения, код группы
+ * студента и семестры.
+ * Используется в Настройках.
+ */
 class InfoOfStudent {
 
     fun getFormOfStudy(authText: String): String {

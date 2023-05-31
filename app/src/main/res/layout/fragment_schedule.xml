@@ -89,7 +89,7 @@
     </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/localScheduleLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="horizontal"

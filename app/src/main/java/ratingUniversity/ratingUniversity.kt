@@ -4,9 +4,15 @@ import android.util.Log
 import org.json.JSONArray
 import org.json.JSONException
 
-
+/**
+ * Класс для разбора JSONа рейтинга
+ */
 class RatingUniversity {
 
+    /**
+     * Функция для разбора JSON документа, которая записывает данные о предметах и баллах в массив
+     * строковых словарей. Каждый элемент массива - словарь с параметрами одного предмета.
+     */
     fun gradesCollector(jsonArray: JSONArray): ArrayList<MutableMap<String, String>> {
         val globalArrayToReturn = arrayListOf<MutableMap<String, String>>()
         for (i in 0 until jsonArray.length()) {
@@ -52,6 +58,14 @@ class RatingUniversity {
 
     }
 
+    /** Функция для получения баллов не за контрольные точки (премиальных, дополнительных или
+     *  за экзамен/зачет) из JSONа по индексу объекта предмета из параметра "ReitingCode" и
+     *  вложенных параметров.
+     * zed - баллы за экзамен или зачет
+     * dopol - дополнительные баллы
+     * pb - премиальные баллы
+     * index - порядковый номер предмета
+     */
     private fun getDopolPbZed(jsonArray: JSONArray, index: Int): Array<String> {
         val arrayToReturn: Array<String> = arrayOf("0", "0", "0")
         try {
@@ -86,6 +100,12 @@ class RatingUniversity {
         return arrayToReturn
     }
 
+    /**
+     * Функция для получения баллов за контрольные точки из JSONа по индексу объекта предмета
+     * из параметра "ReitingCode" вложенных параметров:
+     * pos - баллы за посещение
+     * usp - баллы за успеваемость
+     */
     private fun getRating(jsonArray: JSONArray, index: Int): String {
         var stringToReturn = ""
         try {
@@ -107,16 +127,29 @@ class RatingUniversity {
     }
 
 
+    /**
+     * Функция для получения типа предмета(зачет или экзамен) из документа JSON по индексу объекта
+     * и имени параметра "LoadName" в нем
+     */
     private fun getSubjectType(jsonArray: JSONArray, index: Int): String {
         return jsonArray.getJSONObject(index).getString("LoadName")
     }
 
-
+    /**
+     * Функция для получения названия предмета из документа JSON по индексу объекта
+     * и имени параметра "SubjName" в нем
+     */
     private fun getSubjectName(jsonArray: JSONArray, index: Int): String {
         return jsonArray.getJSONObject(index).getString("SubjName")
     }
 
 
+    /**
+     * Функция для получения ФИО и id преподавателя из документа JSON по индексу объекта (предмета),
+     * в котором есть массив преподавателей "TutorArr". Из массива преподавателей получаем первого
+     * по индексу и извлекаем информацию по именам параметров "FIO" и "ID".
+     * Возвращает строковый массив с двумя элементами - ФИО и id преподавателя
+     */
     private fun getTutorNameAndID(jsonArray: JSONArray, index: Int): ArrayList<String> {
         val localArray = arrayListOf("", "")
         val tutorArray = jsonArray.getJSONObject(index).getJSONArray("TutorArr")

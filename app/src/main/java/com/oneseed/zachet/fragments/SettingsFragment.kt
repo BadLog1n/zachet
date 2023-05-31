@@ -132,6 +132,9 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
             }
         }
 
+        /**
+         * Действия при смене положения switch элемента - "загрузить с сервера"
+         */
         switch.setOnCheckedChangeListener { _, _ ->
             if (switch.isChecked) {
                 loginWebInput.isEnabled = false
@@ -300,6 +303,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
 
 
         }
+
+        /**
+         * Действия по кнопке "Подтвердить" данные аккаунта в брс
+         */
         view.findViewById<Button>(R.id.submitBtn).setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Подтвердить аккаунт?")
@@ -379,6 +386,10 @@ class SettingsFragment : Fragment(R.layout.fragment_settings) {
                 setTextColor(Color.BLACK)
             }
         }
+
+        /**
+         * Действия по кнопке "Обновить список семестров"
+         */
         updateBtn.setOnClickListener {
             val builder = AlertDialog.Builder(requireContext())
             builder.setMessage("Обновить данные о семестрах?")
