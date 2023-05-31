@@ -386,8 +386,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                     Handler(Looper.getMainLooper()).postDelayed({
                         swipeRefreshLayout.isRefreshing = false
                     }, 500)
-                    Firebase.analytics.logEvent("schedule_update") {
-                        param("schedule_update", "")
+                    Firebase.analytics.logEvent("grades_update") {
+                        param("grades_update", "")
                     }
                 } catch (_: Exception) {
                     swipeRefreshLayout.isRefreshing = false
