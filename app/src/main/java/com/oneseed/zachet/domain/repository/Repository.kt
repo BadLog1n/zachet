@@ -1,10 +1,11 @@
 package com.oneseed.zachet.domain.repository
-import com.oneseed.zachet.domain.GetRatingCallback
+
+import com.oneseed.zachet.domain.models.StudentRating
 
 interface Repository {
 
     interface GetRating {
-        fun getRating(getRatingCallback: GetRatingCallback)
+        fun getRating(getRatingCallback: (studentRating: StudentRating) -> Unit)
     }
 
 }

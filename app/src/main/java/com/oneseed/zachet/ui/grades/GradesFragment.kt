@@ -1,6 +1,5 @@
 package com.oneseed.zachet.ui.grades
 
-import GetRatingImpl
 import GradesFragmentViewModel
 import android.app.Activity
 import android.content.Context
@@ -33,10 +32,11 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.adapters.GradesAdapter
+import com.oneseed.zachet.data.GetRatingImpl
 import com.oneseed.zachet.dataClasses.SubjectGrades
 import com.oneseed.zachet.databinding.FragmentGradesBinding
-import com.oneseed.zachet.domain.GetRatingCallback
 import com.oneseed.zachet.domain.GetRatingUseCase
+import com.oneseed.zachet.domain.models.StudentRating
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
@@ -61,16 +61,13 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-//todo
+
+        //todo вынести во viewModel
         val getRatingImpl = GetRatingImpl()
         val getRating = GetRatingUseCase(getRatingImpl)
-        val getRatingCallback: GetRatingCallback = {
-
-        }
-        getRating.execute(-> run {
+        getRating.execute(callback = { it: StudentRating ->
+            //todo
         })
-         //todo
-
 
 
 
