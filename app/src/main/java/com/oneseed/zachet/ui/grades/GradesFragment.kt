@@ -1,5 +1,7 @@
 package com.oneseed.zachet.ui.grades
 
+import GetRatingImpl
+import GradesFragmentViewModel
 import android.app.Activity
 import android.content.Context
 import android.content.DialogInterface
@@ -16,6 +18,7 @@ import androidx.activity.addCallback
 import androidx.appcompat.app.AlertDialog
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -32,6 +35,8 @@ import com.oneseed.zachet.R
 import com.oneseed.zachet.adapters.GradesAdapter
 import com.oneseed.zachet.dataClasses.SubjectGrades
 import com.oneseed.zachet.databinding.FragmentGradesBinding
+import com.oneseed.zachet.domain.GetRatingCallback
+import com.oneseed.zachet.domain.GetRatingUseCase
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
@@ -51,8 +56,24 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     private lateinit var binding: FragmentGradesBinding
     private var rcAdapter = GradesAdapter()
     private var clickBack = false
+    private val viewModel: GradesFragmentViewModel by lazy {
+        ViewModelProvider(this)[GradesFragmentViewModel::class.java]
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+//todo
+        val getRatingImpl = GetRatingImpl()
+        val getRating = GetRatingUseCase(getRatingImpl)
+        val getRatingCallback: GetRatingCallback = {
+
+        }
+        getRating.execute(-> run {
+        })
+         //todo
+
+
+
+
         val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
         toolbar1?.isEnabled = true
         toolbar1?.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = true
@@ -283,7 +304,8 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 val ls =
                     sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString().toInt()
 
-                val result = spinner.selectedItem.toString().filter { it.isDigit() }.toInt() + 1 // номер выбранного семестра
+                val result = spinner.selectedItem.toString().filter { it.isDigit() }
+                    .toInt() + 1 // номер выбранного семестра
 
                 // проверка обновились ли семестры. если result( факт. последн.сем. в спиннере)>=полученному
                 // по запросу ls, то не обновились, иначе обновились
@@ -489,7 +511,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
     }
 }
-
 
 
 
