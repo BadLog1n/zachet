@@ -1,4 +1,4 @@
-package com.oneseed.zachet.fragments
+package com.oneseed.zachet.ui.chats
 
 import android.app.Activity
 import android.content.Context

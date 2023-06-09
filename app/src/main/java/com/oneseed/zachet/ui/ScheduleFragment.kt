@@ -1,4 +1,4 @@
-package com.oneseed.zachet.fragments
+package com.oneseed.zachet.ui
 
 import android.content.ClipData
 import android.content.ClipboardManager

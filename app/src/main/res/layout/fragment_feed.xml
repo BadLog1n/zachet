@@ -10,7 +10,7 @@
     android:layout_marginEnd="10dp"
     android:orientation="vertical"
     android:theme="@style/Theme.UniversitySystem"
-    tools:context=".fragments.FeedFragment">
+    tools:context=".ui.FeedFragment">
 
     <LinearLayout
         android:id="@+id/addRecordBtnLayout"

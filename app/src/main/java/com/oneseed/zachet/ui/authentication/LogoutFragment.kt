@@ -1,4 +1,4 @@
-package com.oneseed.zachet.fragments
+package com.oneseed.zachet.ui.authentication
 
 
 import android.content.Context

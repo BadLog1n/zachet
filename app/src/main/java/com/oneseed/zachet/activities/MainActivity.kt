@@ -15,7 +15,7 @@ import androidx.drawerlayout.widget.DrawerLayout.LOCK_MODE_UNLOCKED
 import androidx.navigation.findNavController
 import com.google.android.material.navigation.NavigationView
 import com.oneseed.zachet.R
-import com.oneseed.zachet.fragments.LogoutFragment
+import com.oneseed.zachet.ui.authentication.LogoutFragment
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {

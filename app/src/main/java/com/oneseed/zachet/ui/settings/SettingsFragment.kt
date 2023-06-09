@@ -1,4 +1,4 @@
-package com.oneseed.zachet.fragments
+package com.oneseed.zachet.ui.settings
 
 import android.content.Context
 import android.content.DialogInterface
