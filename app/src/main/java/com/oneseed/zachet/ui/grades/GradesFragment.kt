@@ -29,10 +29,9 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.adapters.GradesAdapter
-import com.oneseed.zachet.dataClasses.SubjectGrades
+import com.oneseed.zachet.domain.models.SubjectGrades
 import com.oneseed.zachet.databinding.FragmentGradesBinding
 import com.oneseed.zachet.domain.models.StudentState
-import com.oneseed.zachet.ui.newGradesFragment.GradesFragmentViewModel
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
@@ -113,7 +112,7 @@ class GradesFragment : Fragment() {
         viewModel.listToObserve.observe(viewLifecycleOwner) {
             when (it) {
                 is StudentState.Success -> {
-//todo                    rcAdapter.gradesList = it.ratingData
+                   rcAdapter.gradesList = ArrayList(it.ratingData)
 
                 }
 

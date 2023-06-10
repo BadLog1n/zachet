@@ -1,4 +1,4 @@
-package com.oneseed.zachet.ui.newGradesFragment
+package com.oneseed.zachet.ui.grades
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
