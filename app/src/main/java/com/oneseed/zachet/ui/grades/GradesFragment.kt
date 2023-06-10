@@ -1,6 +1,5 @@
 package com.oneseed.zachet.ui.grades
 
-import com.oneseed.zachet.ui.newGradesFragment.GradesFragmentViewModel
 import android.content.Context
 import android.content.DialogInterface
 import android.content.SharedPreferences
@@ -30,11 +29,10 @@ import com.google.firebase.database.DatabaseReference
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.adapters.GradesAdapter
-import com.oneseed.zachet.data.GetRatingImpl
 import com.oneseed.zachet.dataClasses.SubjectGrades
 import com.oneseed.zachet.databinding.FragmentGradesBinding
-import com.oneseed.zachet.domain.GetRatingUseCase
-import com.oneseed.zachet.domain.models.StudentRating
+import com.oneseed.zachet.domain.models.StudentState
+import com.oneseed.zachet.ui.newGradesFragment.GradesFragmentViewModel
 import kotlinx.coroutines.*
 import org.json.JSONArray
 import org.jsoup.Connection
@@ -46,8 +44,9 @@ import java.util.*
 import java.util.concurrent.Executors
 
 
-class GradesFragment : Fragment(R.layout.fragment_grades) {
+class GradesFragment : Fragment() {
 
+    private lateinit var strSemester: String
     private var _binding: FragmentGradesBinding? = null
     private val binding get() = _binding!!
     private var spinnerChange = false
@@ -80,15 +79,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
-        //todo вынести во viewModel
-        val getRatingImpl = GetRatingImpl()
-        val getRating = GetRatingUseCase(getRatingImpl)
-        getRating.invoke(callback = { it: StudentRating ->
-            //todo
-        })
-
-
         val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
         toolbar1?.isEnabled = true
         toolbar1?.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = true
@@ -101,12 +91,12 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         val recyclerView: RecyclerView = view.findViewById(R.id.gradesRecyclerView)
         val progressBar: ProgressBar = view.findViewById(R.id.gradesProgressBar)
         val textviewNoAuthData: TextView = view.findViewById(R.id.textviewNeedAuth)
-        val swipeRefreshLayout = requireView().findViewById<SwipeRefreshLayout>(R.id.swipe)
-        swipeRefreshLayout.isEnabled = false
+        val swipeRefreshLayout =
+            requireView().findViewById<SwipeRefreshLayout>(R.id.swipeRefreshLayout)
+
+        swipeRefreshLayout.isEnabled = false //NULL
         spinner.isEnabled = false
-
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
-
         toolbar1?.title = "Мои баллы"
         activity?.findViewById<DrawerLayout>(R.id.drawer)
             ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
@@ -119,6 +109,20 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
         recyclerView.adapter = rcAdapter
         progressBar.visibility = View.VISIBLE
+
+        viewModel.listToObserve.observe(viewLifecycleOwner) {
+            when (it) {
+                is StudentState.Success -> {
+//todo                    rcAdapter.gradesList = it.ratingData
+
+                }
+
+                is StudentState.Error -> TODO()
+                StudentState.Loading -> TODO()
+            }
+        }
+
+
 
         firebaseAuth = FirebaseAuth.getInstance()
 
@@ -135,8 +139,11 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
         val passwordWeb =
             sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
-
-
+        val strSemesterOriginal =
+            sharedPrefGrades?.getString(getString(R.string.listOfSemester), "").toString()
+        val strSemester =
+            sharedPrefGrades?.getString(getString(R.string.listOfSemesterToChange), "")
+                .toString()
         if (loginWeb != "" && passwordWeb != "" && strSemester != "") {
             val semester = strSemester.split(",").toTypedArray()
             spinner.visibility = View.VISIBLE
@@ -153,8 +160,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
         }
         recyclerView.adapter = rcAdapter
         recyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
-
-
         // при нажатии кнопки "назад" на экране баллов(который является домашним), приложение выходит
         requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
             if (!clickBack) {
@@ -291,7 +296,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 parent: AdapterView<*>?, view: View?, position: Int, id: Long
             ) {
                 spinner.isEnabled = false
-                gradesChange()
+                gradesChange(loginWeb)
             }
         }
 
@@ -300,7 +305,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
             val spinnerElement = spinner.selectedItem.toString()
             if (rcAdapter.itemCount > 0 && spinnerElement != "") {
                 try {
-                    gradesChange()
+                    gradesChange(loginWeb)
                     Handler(Looper.getMainLooper()).postDelayed({
                         swipeRefreshLayout.isRefreshing = false
                     }, 500)
@@ -315,21 +320,21 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     }
 
 
-    private fun gradesChange() {
+    private fun gradesChange(loginWeb: String) {
         with(binding) {
-
             swipeRefreshLayout.isEnabled = false
             semNumSpinner.isEnabled = false
             rcAdapter.clearRecords()
-
             gradesProgressBar.visibility = View.VISIBLE
             gradesRecyclerView.visibility = View.INVISIBLE
+
+
             val actualGrades =
                 sharedPrefGrades?.getString(getString(R.string.actualGrades), "").toString()
                     .split(" ").toList().toMutableList()
             val strSemesterOriginal =
                 sharedPrefGrades?.getString(getString(R.string.listOfSemester), "").toString()
-            val strSemester =
+            strSemester =
                 sharedPrefGrades?.getString(getString(R.string.listOfSemesterToChange), "")
                     .toString()
             // с какого на какой семестр поменяли. если не поменялся то "на какой" будет пустым
@@ -341,9 +346,10 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 actualGrades[0] = ""
                 sharedPrefGrades?.edit()?.putString(getString(R.string.actualGrades), "")?.apply()
             }
-            spinnerChange = true
             sharedPrefGrades?.edit()
                 ?.putString(getString(R.string.listOfSemesterToChange), semesterAll)?.apply()
+
+            spinnerChange = true
 
             val gr =
                 sharedPrefGrades?.getString(getString(R.string.groupOfStudent), "").toString()
@@ -351,25 +357,27 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
                 sharedPrefGrades?.getString(getString(R.string.formOfStudent), "").toString()
             val ls =
                 sharedPrefGrades?.getInt(getString(R.string.lastSemester), 0).toString().toInt()
-
             val result = semNumSpinner.selectedItem.toString().filter { it.isDigit() }
                 .toInt() + 1 // номер выбранного семестра
 
             // проверка обновились ли семестры. если result( факт. последн.сем. в спиннере)>=полученному
             // по запросу ls, то не обновились, иначе обновились
             val status = if (result + 1 >= ls) "false" else "true"
-
             val semester = result.toString().padStart(9, '0') //дополнение нулями впереди
-
 
             lifecycleScope.launch {
                 try {
-                    withContext(Dispatchers.IO) {
+                    withContext(Dispatchers.IO) { 
                         checkIsDownWeek()
-                        val listOfGrades = returnRating(loginWeb, gr, semester, fo, status)
-                        //println(listOfGrades)
-                        withContext(Dispatchers.Main) {
-                            if (listOfGrades != null) {
+                        val listOfGrades = returnRating(
+                            loginWeb,
+                            gr,
+                            semester,
+                            fo,
+                            status
+                        ) 
+                        withContext(Dispatchers.Main) { 
+                            if (listOfGrades != null) { 
                                 var allGrades = ""
                                 var isChange = false
                                 if (listOfGrades.size != 0) {
@@ -433,7 +441,6 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
     }
 
 
-
     /**
      * Функция, проверяющая по парсингу сайта юзгу, нижняя ли сейчас неделя. Если нижняя, то
      * переменной isDownWeek в SharedPreferences будет присвоено значение true, в противном случае
@@ -466,6 +473,7 @@ class GradesFragment : Fragment(R.layout.fragment_grades) {
 
         }
     }
+
     /**
      * Функция, которая получает информацию о том, какая версия приложения установлена на телефоне
      */

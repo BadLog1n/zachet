@@ -1,6 +1,6 @@
 package com.oneseed.zachet.domain.models
 
-data class StudentRating(
+data class SubjectGrades(
     val getSubjectName: String,
     val ratingScore: Int,
     val subjectType: String,
