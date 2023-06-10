@@ -7,7 +7,7 @@ class GetRatingUseCase(
     private val repository: Repository.GetRating,
 ) {
 
-    fun execute(callback: (studentRating: StudentRating) -> Unit) {
+    fun invoke(callback: (studentRating: StudentRating) -> Unit) {
         repository.getRating(callback)
     }
 
