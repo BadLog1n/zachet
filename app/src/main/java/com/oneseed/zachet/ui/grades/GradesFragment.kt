@@ -438,13 +438,30 @@ class GradesFragment : Fragment() {
             }
         }
     }
-
-
     /**
-     * Функция, проверяющая по парсингу сайта юзгу, нижняя ли сейчас неделя. Если нижняя, то
-     * переменной isDownWeek в SharedPreferences будет присвоено значение true, в противном случае
-     * false
+     * Функция, которая получает информацию о том, какая версия приложения установлена на телефоне
      */
+    private fun getAppVersion(context: Context?): String {//это
+        var version = ""
+        try {
+            val pInfo = if (Build.VERSION.SDK_INT >= 33) {
+                context?.packageManager?.getPackageInfo(
+                    requireContext().packageName, PackageManager.PackageInfoFlags.of(0)
+                )
+            } else {
+                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(
+                    requireContext().packageName, 0
+                )
+            }
+            version = pInfo!!.versionName
+        } catch (e: PackageManager.NameNotFoundException) {
+            e.printStackTrace()
+        }
+
+        return version
+    }
+
+
     private fun checkIsDownWeek() {
         val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
             getString(R.string.settingsShared), Context.MODE_PRIVATE
@@ -474,62 +491,11 @@ class GradesFragment : Fragment() {
     }
 
     /**
-     * Функция, которая получает информацию о том, какая версия приложения установлена на телефоне
+     * Функция, проверяющая по парсингу сайта юзгу, нижняя ли сейчас неделя. Если нижняя, то
+     * переменной isDownWeek в SharedPreferences будет присвоено значение true, в противном случае
+     * false
      */
-    private fun getAppVersion(context: Context?): String {//это
-        var version = ""
-        try {
-            val pInfo = if (Build.VERSION.SDK_INT >= 33) {
-                context?.packageManager?.getPackageInfo(
-                    requireContext().packageName, PackageManager.PackageInfoFlags.of(0)
-                )
-            } else {
-                @Suppress("DEPRECATION") context?.packageManager?.getPackageInfo(
-                    requireContext().packageName, 0
-                )
-            }
-            version = pInfo!!.versionName
-        } catch (e: PackageManager.NameNotFoundException) {
-            e.printStackTrace()
-        }
-
-        return version
-    }
-
-
-    /**
-     * Функция для запроса к сайту с параметром reiting
-     * Запрос происходит с помощью Jsoup
-     * Возвращает разобранный в массив строковых словарей JSON с данными о рейтинге по предметам
-     */ //+
-    private fun returnRating(
-        login: String, group: String, semester: String, form: String, status: String
-    ): ArrayList<MutableMap<String, String>>? {
-        try {
-            val document: String
-            val sitePath =
-                "https://info.swsu.ru/scripts/student_diplom/auth.php?act=reiting&uid=$login&group=$group&semestr=$semester&status=$status&fo=$form&type=json"
-
-            val response: Connection.Response = Jsoup.connect(sitePath)
-                .userAgent("Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/535.21 (KHTML, like Gecko) Chrome/19.0.1042.0 Safari/535.21")
-                .timeout(10000).execute()
-
-            val statusCode: Int = response.statusCode()
-
-            if (statusCode == 200) {
-                document = Jsoup.connect(sitePath).get().text()
-            } else return null
-
-            // преобразуем полученный по запросу ответ из простого текста в формат JSON
-            val jsonArray = JSONArray(document)
-            // вызываем метод класса ratingUniversity для разбора JSONа по тегам
-            return ratingUniversity.gradesCollector(jsonArray)
-
-        } catch (e: Exception) {
-            Log.d("getFormAndGroup", e.toString())
-            return null
-        }
-    }
+    
 
     override fun onDestroy() {
         super.onDestroy()

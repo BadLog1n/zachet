@@ -3,10 +3,13 @@ package com.oneseed.zachet.ui.grades
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.oneseed.zachet.data.GetRatingImpl
 import com.oneseed.zachet.domain.GetRatingUseCase
-import com.oneseed.zachet.domain.models.SubjectGrades
 import com.oneseed.zachet.domain.models.StudentState
+import com.oneseed.zachet.domain.models.SubjectGrades
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 class GradesFragmentViewModel : ViewModel() {
 
@@ -16,10 +19,10 @@ class GradesFragmentViewModel : ViewModel() {
     fun getGrades() {
         val getRatingImpl = GetRatingImpl()
         val getRating = GetRatingUseCase(getRatingImpl)
-        getRating.invoke(callback = { it: List<SubjectGrades> ->
-            //  viewModelScope.launch(Dispatchers.IO) { 
-            _listToObserve.postValue(StudentState.Success(it))
-            // }
-        })
+        viewModelScope.launch(Dispatchers.IO) {
+            getRating.invoke(callback = { it: ArrayList<SubjectGrades> ->
+                _listToObserve.postValue(StudentState.Success(it))
+            })
+        }
     }
 }

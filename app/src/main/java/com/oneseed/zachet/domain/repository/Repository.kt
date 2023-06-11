@@ -5,7 +5,14 @@ import com.oneseed.zachet.domain.models.SubjectGrades
 interface Repository {
 
     interface GetRating {
-        fun getRating(getRatingCallback: (subjectGrades: List<SubjectGrades>) -> Unit)
+        suspend fun getRating(
+            login: String,
+            group: String,
+            semester: String,
+            form: String,
+            status: String,
+            getRatingCallback: (subjectGrades: ArrayList<SubjectGrades>) -> Unit
+        )
     }
 
 }

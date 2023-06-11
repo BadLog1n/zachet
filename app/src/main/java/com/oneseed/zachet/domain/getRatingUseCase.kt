@@ -7,8 +7,22 @@ class GetRatingUseCase(
     private val repository: Repository.GetRating,
 ) {
 
-    fun invoke(callback: (subjectGrades: List<SubjectGrades>) -> Unit) {
-        repository.getRating(callback)
+    suspend fun invoke(
+        login: String,
+        group: String,
+        semester: String,
+        form: String,
+        status: String,
+        callback: (subjectGrades: ArrayList<SubjectGrades>) -> Unit,
+    ) {
+        repository.getRating(
+            login,
+            group,
+            semester,
+            form,
+            status,
+            callback,
+        )
     }
 
 }

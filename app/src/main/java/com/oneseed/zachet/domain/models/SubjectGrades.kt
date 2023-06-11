@@ -4,9 +4,9 @@ data class SubjectGrades(
     val subject: String,
     val allGradesCount: Int,
     val typeOfSubject: String,
-    val grades: List<String>,
+    val grades: String,
     val userChatId: String,
     val FIO: String,
-    val segments: MutableList<String> = mutableListOf("1 к.т.", "2 к.т.", "3 к.т.", "4 к.т."),
+    val segments: List<String> = listOf("1 к.т.", "2 к.т.", "3 к.т.", "4 к.т."),
     val subjectIsChange: Boolean = false
 )
