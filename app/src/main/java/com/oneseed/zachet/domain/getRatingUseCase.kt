@@ -8,19 +8,16 @@ class GetRatingUseCase(
 ) {
 
     suspend fun invoke(
-        login: String,
-        group: String,
-        semester: String,
-        form: String,
-        status: String,
+        semNumSpinner: Int,
         callback: (subjectGrades: ArrayList<SubjectGrades>) -> Unit,
     ) {
         repository.getRating(
-            login,
-            group,
-            semester,
-            form,
-            status,
+//            login,
+//            group,
+//            semester,
+//            form,
+//            status,
+            semNumSpinner,
             callback,
         )
     }

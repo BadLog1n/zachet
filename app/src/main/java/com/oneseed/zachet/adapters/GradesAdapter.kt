@@ -17,13 +17,13 @@ import com.oneseed.zachet.domain.models.SubjectGrades
 import com.oneseed.zachet.databinding.SubjectGradesItemBinding
 
 class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
-    var gradesList = ArrayList<SubjectGrades>()
+    var gradesList = ArrayList<SubjectGrades>() //!!!!
     private lateinit var database: DatabaseReference
 
     class GradesHolder(item: View) : RecyclerView.ViewHolder(item) {
 
         private val binding = SubjectGradesItemBinding.bind(item)
-        fun bind(subjectGrades: SubjectGrades) = with(binding) {
+        fun bind(subjectGrades: SubjedctGrades) = with(binding) {
             tv1Subject.text = subjectGrades.subject
             grAll.text = subjectGrades.allGradesCount.toString()
             grAll3.text = subjectGrades.allGradesCount.toString()

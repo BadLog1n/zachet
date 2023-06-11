@@ -6,11 +6,12 @@ interface Repository {
 
     interface GetRating {
         suspend fun getRating(
-            login: String,
-            group: String,
-            semester: String,
-            form: String,
-            status: String,
+//            login: String,
+//            group: String,
+//            semester: String,
+//            form: String,
+//            status: String,
+            semNumSpinner: Int,
             getRatingCallback: (subjectGrades: ArrayList<SubjectGrades>) -> Unit
         )
     }
