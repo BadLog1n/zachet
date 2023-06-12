@@ -7,13 +7,13 @@ plugins {
 }
 
 android {
-    compileSdk 33
+    compileSdk 34
 
 
     defaultConfig {
         applicationId "com.oneseed.zachet"
         minSdk 21
-        targetSdk 33
+        targetSdk 34
         versionCode 25
         versionName "1.8.2"
 

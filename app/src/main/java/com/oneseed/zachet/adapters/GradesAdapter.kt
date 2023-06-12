@@ -23,7 +23,7 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     class GradesHolder(item: View) : RecyclerView.ViewHolder(item) {
 
         private val binding = SubjectGradesItemBinding.bind(item)
-        fun bind(subjectGrades: SubjedctGrades) = with(binding) {
+        fun bind(subjectGrades: SubjectGrades) = with(binding) {
             tv1Subject.text = subjectGrades.subject
             grAll.text = subjectGrades.allGradesCount.toString()
             grAll3.text = subjectGrades.allGradesCount.toString()

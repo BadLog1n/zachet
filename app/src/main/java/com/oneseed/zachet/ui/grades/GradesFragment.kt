@@ -111,11 +111,13 @@ class GradesFragment : Fragment() {
         rcAdapter.notifyItemRangeChanged(0, rcAdapter.itemCount)
         recyclerView.adapter = rcAdapter
         progressBar.visibility = View.VISIBLE
-        viewModel.getGrades()
+        viewModel.getGrades(requireContext(), 7)
         viewModel.listToObserve.observe(viewLifecycleOwner) {
             when (it) {
                 is StudentState.Success -> {
                     rcAdapter.gradesList = ArrayList(it.ratingData) //!!!!
+                    binding.gradesProgressBar.visibility = View.GONE
+                    binding.gradesRecyclerView.visibility = View.VISIBLE
 
 
                     /**************временная реализация**************/

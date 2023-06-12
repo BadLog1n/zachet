@@ -119,7 +119,7 @@ class GetRatingImpl(private val context: Context) : Repository.GetRating {
                     getSubjectName,
                     ratingScore,
                     subjectType,
-                    rating,
+                    rating.split(" ").toList(),
                     tutorName,
                     tutorId
                 )
