@@ -13,50 +13,25 @@ import org.jsoup.Jsoup
 
 
 class GetRatingImpl(private val context: Context) : Repository.GetRating {
-    private val sharedPrefGrades: SharedPreferences?
-        get() {
-            return context?.getSharedPreferences(
-                context.getString(R.string.gradesShared), Context.MODE_PRIVATE
-            )
-        }
-
     override suspend fun getRating(
-//        login: String,
-//        group: String,
-//        semester: String,
-//        form: String,
-//        status: String,
         semNumSpinner: Int,
         getRatingCallback: (ArrayList<SubjectGrades>) -> Unit
     ) {
-        val actualGrades =
-            sharedPrefGrades?.getString(context.getString(R.string.actualGrades), "").toString()
-                .split(" ").toList().toMutableList()
-        val sharedPrefSetting: SharedPreferences? = context?.getSharedPreferences(
-            context.getString(R.string.settingsShared), Context.MODE_PRIVATE
-        )
+        val sharedPrefGrades: SharedPreferences = context.getSharedPreferences(
+            context.getString(R.string.gradesShared), Context.MODE_PRIVATE)
         val login =
-            sharedPrefGrades?.getString(context.getString(R.string.loginWebShared), "").toString()
-        val password =
-            sharedPrefGrades?.getString(context.getString(R.string.passwordWebShared), "")
-                .toString()
-        val strSemesterOriginal =
-            sharedPrefGrades?.getString(context.getString(R.string.listOfSemester), "").toString()
-        val strSemester =
-            sharedPrefGrades?.getString(context.getString(R.string.listOfSemesterToChange), "")
-                .toString()
+            sharedPrefGrades.getString(context.getString(R.string.loginWebShared), "").toString()
         val group =
-            sharedPrefGrades?.getString(context.getString(R.string.groupOfStudent), "").toString()
+            sharedPrefGrades.getString(context.getString(R.string.groupOfStudent), "").toString()
         val form =
-            sharedPrefGrades?.getString(context.getString(R.string.formOfStudent), "").toString()
+            sharedPrefGrades.getString(context.getString(R.string.formOfStudent), "").toString()
         val ls =
-            sharedPrefGrades?.getInt(context.getString(R.string.lastSemester), 0).toString().toInt()
-
+            sharedPrefGrades.getInt(context.getString(R.string.lastSemester), 0).toString().toInt()
 
         val status = if (semNumSpinner + 1 >= ls) "false" else "true"
         val semester = semNumSpinner.toString().padStart(9, '0') //дополнение нулями впереди
 
-        getRatingCallback(returnRating(login, group, semester, form, status)!!)//мы тут возвращаем только ретурн рейтинг мы возвращаем то что
+        getRatingCallback(returnRating(login, group, semester, form, status)!!)
     }
 
     /**
