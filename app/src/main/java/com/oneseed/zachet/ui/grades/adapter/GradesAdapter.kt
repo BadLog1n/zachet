@@ -1,4 +1,4 @@
-package com.oneseed.zachet.adapters
+package com.oneseed.zachet.ui.grades.adapter
 
 import android.content.Intent
 import android.view.LayoutInflater
@@ -16,7 +16,9 @@ import com.oneseed.zachet.R
 import com.oneseed.zachet.domain.models.SubjectGrades
 import com.oneseed.zachet.databinding.SubjectGradesItemBinding
 
-class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
+class GradesAdapter(
+    private val onChatClick: (String) -> Unit
+) : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
     var gradesList = ArrayList<SubjectGrades>() //!!!!
     private lateinit var database: DatabaseReference
 
@@ -66,10 +68,13 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): GradesHolder {
+
         val view =
             LayoutInflater.from(parent.context).inflate(R.layout.subject_grades_item, parent, false)
         val expView = view.findViewById<LinearLayout>(R.id.expandedView)
         val collView = view.findViewById<LinearLayout>(R.id.collapsedView)
+        //временно
+        val userChatId1Tv = view.findViewById<TextView>(R.id.userChatId1_tv)
         expView.visibility = View.GONE
         collView.visibility = View.VISIBLE
 
@@ -95,27 +100,7 @@ class GradesAdapter : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
 
 
         view.findViewById<LinearLayout>(R.id.connectWTeacherLayout).setOnClickListener {
-
-            val user = view.findViewById<TextView>(R.id.userChatId1_tv).text.toString()
-            database = FirebaseDatabase.getInstance().getReference("login")
-            database.child(user).get().addOnSuccessListener { itLogin ->
-                val getUser = if (itLogin.exists()) {
-                    itLogin.value.toString()
-                } else {
-                    Toast.makeText(
-                        parent.context,
-                        "Преподаватель не зарегистрирован в приложении", Toast.LENGTH_SHORT
-                    ).show()
-                    return@addOnSuccessListener
-                }
-                database = FirebaseDatabase.getInstance().getReference("users")
-                database.child(user).get().addOnSuccessListener {
-                    val intent = Intent(parent.context, IndividualChatActivity::class.java)
-                    intent.putExtra("getUser", getUser)
-                    parent.context.startActivity(intent)
-                    //  view.findViewById<TextView>(R.id.connectWTeacher_tv).text = "Преподаватель не зарегистрирован в приложении"
-                }
-            }
+            onChatClick(userChatId1Tv.text.toString())
         }
         return GradesHolder(view)
     }

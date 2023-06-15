@@ -22,9 +22,9 @@ import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
-import com.oneseed.zachet.adapters.GradesAdapter
 import com.oneseed.zachet.databinding.FragmentGradesBinding
 import com.oneseed.zachet.domain.models.StudentState
+import com.oneseed.zachet.ui.grades.adapter.GradesAdapter
 import java.util.concurrent.Executors
 
 
