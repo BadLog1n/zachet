@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ImageButton
-import android.widget.Spinner
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.drawerlayout.widget.DrawerLayout
@@ -23,9 +22,9 @@ import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.databinding.FragmentGradesBinding
+import com.oneseed.zachet.domain.models.BackPressedState
 import com.oneseed.zachet.domain.models.StudentState
 import com.oneseed.zachet.ui.grades.adapter.GradesAdapter
-import java.util.concurrent.Executors
 
 
 class GradesFragment : Fragment() {
@@ -33,7 +32,7 @@ class GradesFragment : Fragment() {
     private lateinit var strSemester: String
     private var _binding: FragmentGradesBinding? = null
     private val binding get() = _binding!!
-    private var rcAdapter = GradesAdapter()
+    private var rcAdapter = GradesAdapter {}
     private var clickBack = false
     private val viewModel: GradesFragmentViewModel by lazy {
         ViewModelProvider(this)[GradesFragmentViewModel::class.java]
@@ -74,6 +73,7 @@ class GradesFragment : Fragment() {
                         swipeRefreshLayout.isEnabled = true  //NULL
                         semNumSpinner.isEnabled = true
                     }
+
                     is StudentState.Error -> TODO()
                     StudentState.Loading -> TODO()
 
@@ -107,36 +107,33 @@ class GradesFragment : Fragment() {
 
             // при нажатии кнопки "назад" на экране баллов(который является домашним), приложение выходит
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
-                if (!clickBack) {
-                    Toast.makeText(activity, getString(R.string.confirmReturn), Toast.LENGTH_SHORT)
-                        .show()
-                    clickBack = true
-                    val executor = Executors.newSingleThreadExecutor()
-                    executor.execute {
-                        Thread.sleep(2000)
-                        clickBack = false
+                viewModel.onBackPressed()
+                viewModel.backPressedState.observe(viewLifecycleOwner) {
+                    when (it) {
+                        is BackPressedState.Success -> activity?.finish()
+                        is BackPressedState.Waiting -> Toast.makeText(
+                            activity, getString(R.string.confirmReturn), Toast.LENGTH_SHORT
+                        ).show()
+                        BackPressedState.Reset -> Unit
                     }
-                } else {
-                    activity?.finish()
                 }
             }
 
             /** то, что проиходит во время выбора элемента в спиннере (списке семестров): обновление
              *  баллов и пока они обновляются спиннер будет не доступен
              */
-            semNumSpinner.onItemSelectedListener =
-                object : AdapterView.OnItemSelectedListener {
-                    override fun onNothingSelected(parent: AdapterView<*>?) {
+            semNumSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {
 
-                    }
-
-                    override fun onItemSelected(
-                        parent: AdapterView<*>?, view: View?, position: Int, id: Long
-                    ) {
-                        semNumSpinner.isEnabled = false
-                        //gradesChange(loginWeb)
-                    }
                 }
+
+                override fun onItemSelected(
+                    parent: AdapterView<*>?, view: View?, position: Int, id: Long
+                ) {
+                    semNumSpinner.isEnabled = false
+                    viewModel.getGrades(requireContext(), position)
+                }
+            }
 
             //перенести обработку свайпа в слушатель
             swipeRefreshLayout.setOnRefreshListener {
