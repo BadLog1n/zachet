@@ -63,6 +63,16 @@ class GradesFragment : Fragment() {
                     }
                 }
             }
+            viewModel.backPressedState.observe(viewLifecycleOwner) {
+                when (it) {
+                    is BackPressedState.Success -> activity?.finish()
+                    is BackPressedState.Waiting -> Toast.makeText(
+                        activity, getString(R.string.confirmExit), Toast.LENGTH_SHORT
+                    ).show()
+
+                    BackPressedState.Reset -> Unit
+                }
+            }
 
             val listOfSemester = viewModel.getSemesterList(requireContext())
             if (listOfSemester != null) {
@@ -76,16 +86,6 @@ class GradesFragment : Fragment() {
 
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
                 viewModel.onBackPressed()
-                viewModel.backPressedState.observe(viewLifecycleOwner) {
-                    when (it) {
-                        is BackPressedState.Success -> activity?.finish()
-                        is BackPressedState.Waiting -> Toast.makeText(
-                            activity, getString(R.string.confirmExit), Toast.LENGTH_SHORT
-                        ).show()
-
-                        BackPressedState.Reset -> Unit
-                    }
-                }
             }
 
             semNumSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
