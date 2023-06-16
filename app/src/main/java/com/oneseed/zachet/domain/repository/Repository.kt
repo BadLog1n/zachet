@@ -1,6 +1,6 @@
 package com.oneseed.zachet.domain.repository
 
-import com.oneseed.zachet.domain.models.BackPressedState
+import com.oneseed.zachet.domain.states.BackPressedState
 import com.oneseed.zachet.domain.models.SubjectGrades
 
 interface Repository {
@@ -11,8 +11,8 @@ interface Repository {
         )
     }
 
-    interface BackPressed {
-        suspend fun backPressed(callback: (result: BackPressedState) -> Unit)
+    interface GetSemesterList {
+        fun getSemesterList(getSemesterListCallback: (result: Array<String>?) -> Unit)
     }
 
 }

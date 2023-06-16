@@ -1,4 +1,4 @@
-package com.oneseed.zachet.domain.models
+package com.oneseed.zachet.domain.states
 
 sealed class BackPressedState {
     object Success : BackPressedState()

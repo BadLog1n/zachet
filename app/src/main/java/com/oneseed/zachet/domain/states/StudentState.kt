@@ -1,4 +1,6 @@
-package com.oneseed.zachet.domain.models
+package com.oneseed.zachet.domain.states
+
+import com.oneseed.zachet.domain.models.SubjectGrades
 
 sealed class StudentState {
     data class Success(

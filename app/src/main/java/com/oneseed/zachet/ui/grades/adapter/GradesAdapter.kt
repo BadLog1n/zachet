@@ -98,7 +98,6 @@ class GradesAdapter(
 
         expView.visibility = View.GONE
 
-
         view.findViewById<LinearLayout>(R.id.connectWTeacherLayout).setOnClickListener {
             onChatClick(userChatId1Tv.text.toString())
         }

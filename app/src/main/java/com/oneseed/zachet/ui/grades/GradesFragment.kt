@@ -1,42 +1,34 @@
 package com.oneseed.zachet.ui.grades
 
-import android.content.Context
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.os.Handler
-import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
-import android.widget.ImageButton
 import android.widget.Toast
 import androidx.activity.addCallback
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
-import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.databinding.FragmentGradesBinding
-import com.oneseed.zachet.domain.models.BackPressedState
-import com.oneseed.zachet.domain.models.StudentState
+import com.oneseed.zachet.domain.states.BackPressedState
+import com.oneseed.zachet.domain.states.StudentState
 import com.oneseed.zachet.ui.grades.adapter.GradesAdapter
 
-
 class GradesFragment : Fragment() {
-
-    private lateinit var strSemester: String
     private var _binding: FragmentGradesBinding? = null
     private val binding get() = _binding!!
-    private var rcAdapter = GradesAdapter {}
-    private var clickBack = false
     private val viewModel: GradesFragmentViewModel by lazy {
         ViewModelProvider(this)[GradesFragmentViewModel::class.java]
     }
+    private val adapter: GradesAdapter by lazy { GradesAdapter {
+        Toast.makeText(
+            requireContext(),
+            it,
+            Toast.LENGTH_SHORT
+        ).show() } }
 
 
     override fun onCreateView(
@@ -49,62 +41,39 @@ class GradesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sharedPrefGrades: SharedPreferences? = context?.getSharedPreferences(
-            getString(R.string.gradesShared), Context.MODE_PRIVATE
-        )
+        super.onViewCreated(view, savedInstanceState)
         with(binding) {
-            super.onViewCreated(view, savedInstanceState)
-            val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
-            toolbar1?.isEnabled = true
-            toolbar1?.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = true
-            //authCheck.check(view, this@GradesFragment.context) //todo
-            activity?.findViewById<DrawerLayout>(R.id.drawer)
-                ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
             gradesRecyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
-            toolbar1?.title = "Мои баллы" //todo вынести в string
-            activity?.findViewById<DrawerLayout>(R.id.drawer)
-                ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+            gradesRecyclerView.adapter = adapter
             viewModel.listToObserve.observe(viewLifecycleOwner) {
                 when (it) {
                     is StudentState.Success -> {
-                        rcAdapter.replaceAllGrades(it.ratingData)
-                        binding.gradesProgressBar.visibility = View.GONE
-                        binding.gradesRecyclerView.visibility = View.VISIBLE
-                        swipeRefreshLayout.isEnabled = true  //NULL
+                        adapter.replaceAllGrades(it.ratingData)
+                        gradesProgressBar.visibility = View.GONE
+                        gradesRecyclerView.visibility = View.VISIBLE
+                        swipeRefreshLayout.isEnabled = true
                         semNumSpinner.isEnabled = true
                     }
 
                     is StudentState.Error -> TODO()
-                    StudentState.Loading -> binding.gradesProgressBar.visibility = View.VISIBLE
+                    StudentState.Loading -> {
+                        gradesProgressBar.visibility = View.VISIBLE
+                        gradesRecyclerView.visibility = View.GONE
+                        swipeRefreshLayout.isEnabled = false
+                    }
                 }
             }
 
-            val loginWeb =
-                sharedPrefGrades?.getString(getString(R.string.loginWebShared), "").toString()
-            val passwordWeb =
-                sharedPrefGrades?.getString(getString(R.string.passwordWebShared), "").toString()
-            val strSemester =
-                sharedPrefGrades?.getString(getString(R.string.listOfSemesterToChange), "")
-                    .toString()
-
-            if (loginWeb != "" && passwordWeb != "" && strSemester != "") {
-                val semester = strSemester.split(",").toTypedArray()
-                semNumSpinner.visibility = View.VISIBLE
-                textviewNeedAuth.visibility = View.GONE
+            val listOfSemester = viewModel.getSemesterList(requireContext())
+            if (listOfSemester != null) {
                 val arrayAdapter: ArrayAdapter<String> = ArrayAdapter(
-                    requireContext(), android.R.layout.simple_spinner_dropdown_item, semester
+                    requireContext(), android.R.layout.simple_spinner_dropdown_item, listOfSemester
                 )
                 arrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                 semNumSpinner.adapter = arrayAdapter
-            } else {
-                textviewNeedAuth.visibility = View.VISIBLE
-                semNumSpinner.visibility = View.GONE
-                gradesProgressBar.visibility = View.GONE
-            }
-            gradesRecyclerView.adapter = rcAdapter
-            gradesRecyclerView.layoutManager = LinearLayoutManager(this@GradesFragment.context)
+                semNumSpinner.visibility = View.VISIBLE
+            } else textviewNeedAuth.visibility = View.VISIBLE
 
-            // при нажатии кнопки "назад" на экране баллов(который является домашним), приложение выходит
             requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner) {
                 viewModel.onBackPressed()
                 viewModel.backPressedState.observe(viewLifecycleOwner) {
@@ -119,14 +88,8 @@ class GradesFragment : Fragment() {
                 }
             }
 
-            /** то, что проиходит во время выбора элемента в спиннере (списке семестров): обновление
-             *  баллов и пока они обновляются спиннер будет не доступен
-             */
             semNumSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-                override fun onNothingSelected(parent: AdapterView<*>?) {
-
-                }
-
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
@@ -137,22 +100,11 @@ class GradesFragment : Fragment() {
                 }
             }
 
-            //перенести обработку свайпа в слушатель
             swipeRefreshLayout.setOnRefreshListener {
-                val spinnerElement = semNumSpinner.selectedItem.toString()
-                if (rcAdapter.itemCount > 0 && spinnerElement != "") {
-                    try {
-//                     gradesChange(loginWeb)
-                        Handler(Looper.getMainLooper()).postDelayed({
-                            swipeRefreshLayout.isRefreshing = false
-                        }, 500)
-                        Firebase.analytics.logEvent("grades_update") {
-                            param("grades_update", "")
-                        }
-                    } catch (_: Exception) {
-                        swipeRefreshLayout.isRefreshing = false
-                    }
-                }
+                val semester = semNumSpinner.selectedItem.toString().filter { it.isDigit() }
+                    .toInt() + 1
+                viewModel.getGrades(requireContext(), semester)
+                viewModel.sendSwipeAnalytics()
             }
         }
     }

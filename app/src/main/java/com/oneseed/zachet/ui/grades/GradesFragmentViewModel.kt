@@ -5,11 +5,16 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.analytics.ktx.logEvent
+import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.data.GetRatingImpl
+import com.oneseed.zachet.data.GetSemesterListImpl
 import com.oneseed.zachet.domain.GetRatingUseCase
-import com.oneseed.zachet.domain.models.BackPressedState
-import com.oneseed.zachet.domain.models.StudentState
+import com.oneseed.zachet.domain.GetSemesterListUseCase
 import com.oneseed.zachet.domain.models.SubjectGrades
+import com.oneseed.zachet.domain.states.BackPressedState
+import com.oneseed.zachet.domain.states.StudentState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
@@ -39,6 +44,24 @@ class GradesFragmentViewModel : ViewModel() {
         viewModelScope.launch(Dispatchers.IO) {
             Thread.sleep(2000)
             _backPressedState.postValue(BackPressedState.Reset)
+        }
+    }
+
+    fun getSemesterList(context: Context): Array<String>? {
+        val getSemesterListImpl = GetSemesterListImpl(context)
+        val getSemesterList = GetSemesterListUseCase(getSemesterListImpl)
+        var result: Array<String>? = null
+        getSemesterList.invoke() {
+            result = it
+        }
+        return result
+    }
+
+    fun sendSwipeAnalytics() {
+        viewModelScope.launch(Dispatchers.IO) {
+            Firebase.analytics.logEvent("grades_update") {
+                param("grades_update", "")
+            }
         }
     }
 }

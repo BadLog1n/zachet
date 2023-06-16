@@ -177,6 +177,11 @@ class MainActivity : AppCompatActivity() {
                         ).show()
                     }
                 }
+                R.id.loginFragment ->{
+                    toolbar.isEnabled = false
+                    menuBtn.isEnabled = false
+                    findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+                }
             }
             if (menuIsRight) {
                 drawer.closeDrawer(GravityCompat.END)
@@ -195,6 +200,9 @@ class MainActivity : AppCompatActivity() {
          * Меняем заголовок экрана в toolbar при восстановлении фрагментов
          */
         val toolbar: androidx.appcompat.widget.Toolbar = findViewById(R.id.toolbar1)
+        toolbar.isEnabled = true
+        toolbar.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = true
+        findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_UNLOCKED)
         when (findNavController(R.id.nav_host_fragment).currentDestination) {
             findNavController(R.id.nav_host_fragment).findDestination(R.id.gradesFragment) -> toolbar.title =
                 "Мои баллы"
@@ -208,6 +216,16 @@ class MainActivity : AppCompatActivity() {
                 "Расписание"
             findNavController(R.id.nav_host_fragment).findDestination(R.id.feedFragment) -> toolbar.title =
                 "Лента"
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.loginFragment) -> {
+                toolbar.isEnabled = false
+                toolbar.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = false
+                findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+            }
+            findNavController(R.id.nav_host_fragment).findDestination(R.id.registrationFragment) -> {
+                toolbar.isEnabled = false
+                toolbar.findViewById<ImageButton>(R.id.menuBtn)?.isEnabled = false
+                findViewById<DrawerLayout>(R.id.drawer)?.setDrawerLockMode(LOCK_MODE_LOCKED_CLOSED)
+            }
         }
         supportActionBar?.show()
     }
