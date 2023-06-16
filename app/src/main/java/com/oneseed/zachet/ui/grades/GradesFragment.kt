@@ -97,6 +97,7 @@ class GradesFragment : Fragment() {
                     val semester = semNumSpinner.selectedItem.toString().filter { it.isDigit() }
                         .toInt() + 1
                     viewModel.getGrades(requireContext(), semester)
+                    viewModel.changeGradList(requireContext(), semNumSpinner.selectedItem.toString())
                 }
             }
 

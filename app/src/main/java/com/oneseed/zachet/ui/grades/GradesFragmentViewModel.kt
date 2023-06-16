@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import com.google.firebase.analytics.ktx.analytics
 import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.ktx.Firebase
+import com.oneseed.zachet.data.ChangeGradListImpl
 import com.oneseed.zachet.data.GetRatingImpl
 import com.oneseed.zachet.data.GetSemesterListImpl
+import com.oneseed.zachet.domain.ChangeGradesListUseCase
 import com.oneseed.zachet.domain.GetRatingUseCase
 import com.oneseed.zachet.domain.GetSemesterListUseCase
 import com.oneseed.zachet.domain.models.SubjectGrades
@@ -51,7 +53,7 @@ class GradesFragmentViewModel : ViewModel() {
         val getSemesterListImpl = GetSemesterListImpl(context)
         val getSemesterList = GetSemesterListUseCase(getSemesterListImpl)
         var result: Array<String>? = null
-        getSemesterList.invoke() {
+        getSemesterList.invoke {
             result = it
         }
         return result
@@ -63,5 +65,11 @@ class GradesFragmentViewModel : ViewModel() {
                 param("grades_update", "")
             }
         }
+    }
+
+    fun changeGradList(context: Context, currentSemester: String) {
+        val changeGradListImpl = ChangeGradListImpl(context)
+        val changeList = ChangeGradesListUseCase(changeGradListImpl)
+        changeList.invoke(currentSemester)
     }
 }

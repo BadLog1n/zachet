@@ -15,4 +15,8 @@ interface Repository {
         fun getSemesterList(getSemesterListCallback: (result: Array<String>?) -> Unit)
     }
 
+    interface ChangeGradList {
+        fun changeGradList(semNumSpinner: String)
+    }
+
 }
