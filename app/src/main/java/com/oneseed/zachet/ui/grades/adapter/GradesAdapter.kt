@@ -123,8 +123,8 @@ class GradesAdapter(
     }
 
     private fun clearRecords() {
+        notifyItemRangeRemoved(0, gradesList.size)
         gradesList.removeAll(gradesList.toSet())
         gradesList.clear()
-        notifyItemRangeChanged(0, itemCount)
     }
 }
