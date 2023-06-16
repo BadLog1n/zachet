@@ -37,9 +37,7 @@ class GradesFragment : Fragment() {
     private val viewModel: GradesFragmentViewModel by lazy {
         ViewModelProvider(this)[GradesFragmentViewModel::class.java]
     }
-    private val sharedPrefGrades: SharedPreferences? = context?.getSharedPreferences(
-        getString(R.string.gradesShared), Context.MODE_PRIVATE
-    )
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -51,6 +49,9 @@ class GradesFragment : Fragment() {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val sharedPrefGrades: SharedPreferences? = context?.getSharedPreferences(
+            getString(R.string.gradesShared), Context.MODE_PRIVATE
+        )
         with(binding) {
             super.onViewCreated(view, savedInstanceState)
             val toolbar1 = activity?.findViewById<androidx.appcompat.widget.Toolbar>(R.id.toolbar1)
@@ -63,11 +64,10 @@ class GradesFragment : Fragment() {
             toolbar1?.title = "Мои баллы" //todo вынести в string
             activity?.findViewById<DrawerLayout>(R.id.drawer)
                 ?.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-            viewModel.getGrades(requireContext(), 7)
             viewModel.listToObserve.observe(viewLifecycleOwner) {
                 when (it) {
                     is StudentState.Success -> {
-                        rcAdapter.gradesList = ArrayList(it.ratingData) //!!!!
+                        rcAdapter.replaceAllGrades(it.ratingData)
                         binding.gradesProgressBar.visibility = View.GONE
                         binding.gradesRecyclerView.visibility = View.VISIBLE
                         swipeRefreshLayout.isEnabled = true  //NULL
@@ -75,8 +75,7 @@ class GradesFragment : Fragment() {
                     }
 
                     is StudentState.Error -> TODO()
-                    StudentState.Loading -> TODO()
-
+                    StudentState.Loading -> binding.gradesProgressBar.visibility = View.VISIBLE
                 }
             }
 
@@ -112,8 +111,9 @@ class GradesFragment : Fragment() {
                     when (it) {
                         is BackPressedState.Success -> activity?.finish()
                         is BackPressedState.Waiting -> Toast.makeText(
-                            activity, getString(R.string.confirmReturn), Toast.LENGTH_SHORT
+                            activity, getString(R.string.confirmExit), Toast.LENGTH_SHORT
                         ).show()
+
                         BackPressedState.Reset -> Unit
                     }
                 }
@@ -131,7 +131,9 @@ class GradesFragment : Fragment() {
                     parent: AdapterView<*>?, view: View?, position: Int, id: Long
                 ) {
                     semNumSpinner.isEnabled = false
-                    viewModel.getGrades(requireContext(), position)
+                    val semester = semNumSpinner.selectedItem.toString().filter { it.isDigit() }
+                        .toInt() + 1
+                    viewModel.getGrades(requireContext(), semester)
                 }
             }
 

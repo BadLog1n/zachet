@@ -19,7 +19,7 @@ import com.oneseed.zachet.databinding.SubjectGradesItemBinding
 class GradesAdapter(
     private val onChatClick: (String) -> Unit
 ) : RecyclerView.Adapter<GradesAdapter.GradesHolder>() {
-    var gradesList = ArrayList<SubjectGrades>() //!!!!
+    private var gradesList = ArrayList<SubjectGrades>() //!!!!
     private lateinit var database: DatabaseReference
 
     class GradesHolder(item: View) : RecyclerView.ViewHolder(item) {
@@ -117,10 +117,15 @@ class GradesAdapter(
         gradesList.add(subjectGrades)
     }
 
-    fun clearRecords() {
+    fun replaceAllGrades(_gradesList: ArrayList<SubjectGrades>) {
+        clearRecords()
+        gradesList = _gradesList
+
+    }
+
+    private fun clearRecords() {
         gradesList.removeAll(gradesList.toSet())
         gradesList.clear()
         notifyItemRangeChanged(0, itemCount)
-
     }
 }

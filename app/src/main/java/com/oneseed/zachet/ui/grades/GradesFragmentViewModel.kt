@@ -22,6 +22,7 @@ class GradesFragmentViewModel : ViewModel() {
     fun getGrades(context: Context, semester: Int) {
         val getRatingImpl = GetRatingImpl(context)
         val getRating = GetRatingUseCase(getRatingImpl)
+        _listToObserve.postValue(StudentState.Loading)
         viewModelScope.launch(Dispatchers.IO) {
             getRating.invoke(semester) { it: ArrayList<SubjectGrades> ->
                 _listToObserve.postValue(StudentState.Success(it))

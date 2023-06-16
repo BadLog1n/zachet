@@ -141,7 +141,7 @@
     <string name="noCodeWithBlanks">Нет кода</string>
     <string name="copySampleSchedule">Копировать шаблон</string>
     <string name="inputSchedule">Вставить расписание</string>
-    <string name="confirmReturn">Нажмите ещё раз, чтобы выйти</string>
+    <string name="confirmExit">Нажмите ещё раз, чтобы выйти</string>
 
 
 </resources>
