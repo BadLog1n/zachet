@@ -19,11 +19,11 @@ interface Repository {
         fun changeGradList(semNumSpinner: String)
     }
 
-    interface GetFeedsList {
-        fun getFeedsList(getFeedsList: (result: ArrayList<FeedRecord>) -> Unit)
+    interface GetFeedList {
+        fun getFeedsList(callback: (result: ArrayList<FeedRecord>) -> Unit)
     }
 
-    interface SendFeedsList {
-        fun getFeedsList(getFeedsList: (result: ArrayList<FeedRecord>) -> Unit)
+    interface SendFeedList {
+        fun sendFeedList(callback: (result: ArrayList<FeedRecord>) -> Unit)
     }
 }
