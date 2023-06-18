@@ -1,4 +1,4 @@
-package com.oneseed.zachet.dataClasses
+package com.oneseed.zachet.domain.models
 
 /**
  * data-классом элемента записи.
