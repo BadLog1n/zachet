@@ -19,7 +19,7 @@ import com.google.firebase.database.*
 import com.google.firebase.ktx.Firebase
 import com.oneseed.zachet.R
 import com.oneseed.zachet.adapters.FeedAdapter
-import com.oneseed.zachet.dataClasses.FeedRecord
+import com.oneseed.zachet.domain.models.FeedRecord
 import java.text.SimpleDateFormat
 import java.util.*
 
