@@ -35,8 +35,8 @@
             android:id="@+id/addRecord_imgbtn"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/ic_baseline_add_24"
             android:backgroundTint="@color/white"
+            android:src="@drawable/ic_baseline_add_24"
             app:tint="@color/blue" />
     </LinearLayout>
 
@@ -44,7 +44,7 @@
         android:id="@+id/feedProgressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content" />
 
     <ScrollView
         android:layout_width="match_parent"

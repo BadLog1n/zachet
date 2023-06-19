@@ -10,9 +10,9 @@
         android:id="@+id/weekday_tv"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="start"
         android:fontFamily="@font/inter"
         android:textColor="@color/black"
         android:textSize="16sp"
-        android:layout_gravity="start"
         android:textStyle="bold" />
 </LinearLayout>

@@ -32,7 +32,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:baselineAligned="false"
-            android:enabled = "false"
+            android:enabled="false"
             android:entries="@array/sem_nums"
             android:spinnerMode="dropdown"
             android:visibility="gone" />
@@ -51,7 +51,7 @@
         android:id="@+id/swipeRefreshLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:enabled = "false">
+        android:enabled="false">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/gradesRecyclerView"

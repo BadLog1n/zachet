@@ -19,14 +19,13 @@
         android:visibility="visible">
 
 
-
         <ImageButton
             android:id="@+id/subjectChange"
             android:layout_width="24dp"
             android:layout_height="match_parent"
             android:layout_weight="1"
             app:srcCompat="@drawable/ic_baseline_priority_high_24"
-            app:tint="@color/teal_700"/>
+            app:tint="@color/teal_700" />
 
         <TextView
             android:id="@+id/tv1_subject"
@@ -72,8 +71,7 @@
         android:layout_weight="15"
         android:background="@drawable/grades_collapsed_backgr"
         android:backgroundTint="@color/light_grey_background"
-        android:orientation="vertical"
-        >
+        android:orientation="vertical">
 
         <LinearLayout
             android:id="@+id/linearLayoutOpenUp"

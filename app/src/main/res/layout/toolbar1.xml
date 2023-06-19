@@ -4,9 +4,9 @@
     android:id="@+id/toolbar1"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:theme="@style/Theme.UniversitySystem"
     android:maxHeight="80dp"
     android:minHeight="?attr/actionBarSize"
+    android:theme="@style/Theme.UniversitySystem"
     app:buttonGravity="center_vertical"
     app:title=""
     app:titleTextAppearance="@style/ToolbarTitleText">
@@ -16,13 +16,13 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="end"
-        android:backgroundTint="@color/white"
-        android:paddingTop="10dp"
-        android:paddingStart="10dp"
-        android:paddingEnd="20dp"
-        android:visibility="gone"
         android:background="@null"
+        android:backgroundTint="@color/white"
+        android:paddingStart="10dp"
+        android:paddingTop="10dp"
+        android:paddingEnd="20dp"
         android:src="@drawable/ic_baseline_menu_24"
+        android:visibility="gone"
         app:tint="@color/black" />
 
 

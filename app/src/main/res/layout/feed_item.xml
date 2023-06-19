@@ -43,7 +43,7 @@
         android:layout_marginBottom="10dp"
         android:text="10 сен 12:34"
         android:textSize="14sp"
-        android:theme="@style/Theme.UniversitySystem"/>
+        android:theme="@style/Theme.UniversitySystem" />
 
     <TextView
         android:id="@+id/record_tv"
@@ -52,8 +52,8 @@
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/inter"
         android:text="Сообщение..."
-        android:textIsSelectable="true"
-        android:textColor="@color/black" />
+        android:textColor="@color/black"
+        android:textIsSelectable="true" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -75,8 +75,8 @@
             android:layout_height="30dp"
             android:layout_gravity="end"
             android:layout_marginEnd="10dp"
-            android:visibility="gone"
             android:background="@color/dark_grey_background"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_baseline_warning_24"
             app:tint="@color/light_grey_text" />
 
@@ -85,8 +85,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
-            android:visibility="gone"
             android:background="@color/dark_grey_background"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_baseline_delete_forever_24"
             app:tint="@color/light_grey_text" />
 
@@ -95,8 +95,8 @@
             android:layout_width="30dp"
             android:layout_height="30dp"
             android:layout_gravity="end"
-            android:visibility="gone"
             android:background="@color/dark_grey_background"
+            android:visibility="gone"
             app:srcCompat="@drawable/ic_baseline_chat_24"
             app:tint="@color/light_grey_text" />
 
