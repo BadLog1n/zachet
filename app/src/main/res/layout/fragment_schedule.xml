@@ -19,8 +19,6 @@
         android:orientation="horizontal">
 
 
-
-
         <Spinner
             android:id="@+id/spinner"
             android:layout_width="wrap_content"
@@ -77,8 +75,8 @@
     <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
         android:id="@+id/swipe"
         android:layout_width="match_parent"
-        android:layout_weight="0.1"
         android:layout_height="match_parent"
+        android:layout_weight="0.1"
         android:enabled="false">
 
         <androidx.recyclerview.widget.RecyclerView
@@ -92,8 +90,8 @@
         android:id="@+id/localScheduleLinearLayout"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="horizontal"
         android:layout_weight="0.7"
+        android:orientation="horizontal"
 
         tools:layout_editor_absoluteX="0dp">
 
@@ -101,10 +99,10 @@
             android:id="@+id/localSchedule"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/inter"
             android:text="@string/inputSchedule"
-            android:layout_gravity="center"
             android:textAlignment="center"
             android:textSize="12sp" />
 
@@ -112,9 +110,9 @@
             android:id="@+id/downloadSample"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_gravity="center"
             android:layout_weight="1"
             android:fontFamily="@font/inter"
-            android:layout_gravity="center"
 
             android:text="@string/copySampleSchedule"
             android:textAlignment="center"
