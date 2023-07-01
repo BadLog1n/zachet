@@ -18,7 +18,7 @@ class FeedAdapter(
     val warningClick: (String) -> Unit,
     val deleteClick: (String) -> Unit,
 ) : RecyclerView.Adapter<FeedAdapter.RecordHolder>() {
-    private var recordsList = ArrayList<FeedRecord>()
+    var recordsList = ArrayList<FeedRecord>()
 
     class RecordHolder(item: View) : RecyclerView.ViewHolder(item) {
         private val binding = FeedItemBinding.bind(item)

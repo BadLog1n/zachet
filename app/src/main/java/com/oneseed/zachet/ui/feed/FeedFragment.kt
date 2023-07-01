@@ -14,6 +14,8 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.oneseed.zachet.R
 import com.oneseed.zachet.databinding.FragmentFeedBinding
+import com.oneseed.zachet.domain.states.FeedState
+import com.oneseed.zachet.domain.states.StudentState
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
@@ -41,6 +43,24 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 LinearLayoutManager(requireContext(), LinearLayoutManager.VERTICAL, true)
             linearLayoutManager.stackFromEnd = true
             feedRc.layoutManager = linearLayoutManager
+
+            viewModel.listToObserve.observe(viewLifecycleOwner) {
+                when (it) {
+                    is FeedState.Success -> {
+                        binding.addRecordLayout.visibility = View.VISIBLE
+                        binding.addRecordBtnLayout.visibility = View.VISIBLE
+                        binding.feedProgressBar.visibility = View.GONE
+                        rcAdapter.recordsList = it.feedData
+                    }
+
+                    is FeedState.Error -> TODO()
+                    FeedState.Loading -> {
+                        binding.addRecordLayout.visibility = View.GONE
+                        binding.addRecordBtnLayout.visibility = View.GONE
+                        binding.feedProgressBar.visibility = View.VISIBLE
+                    }
+                }
+            }
             addRecordTv.setOnClickListener {
                 addRecordLayoutShow()
             }
@@ -58,9 +78,9 @@ class FeedFragment : Fragment(R.layout.fragment_feed) {
                 view.hideKeyboard()
             }
             publishNewMessButton.setOnClickListener {
-                val text = newMessEdittext.text.toString()
-                if (text.isNotBlank()) {
-                    //viewmodel.sendFeed(message)
+                val record = newMessEdittext.text.toString()
+                if (record.isNotBlank()) {
+                    viewModel.sendFeed(record)
                     addRecordLayoutGone()
                     newMessEdittext.text.clear()
                     view.hideKeyboard()
