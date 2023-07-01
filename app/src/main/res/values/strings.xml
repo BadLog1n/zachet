@@ -142,6 +142,12 @@
     <string name="copySampleSchedule">Копировать шаблон</string>
     <string name="inputSchedule">Вставить расписание</string>
     <string name="confirmExit">Нажмите ещё раз, чтобы выйти</string>
+    <string name="adminId">10</string>
+    <string name="complaintSent">Жалоба отправлена</string>
+    <string name="ConfirmDelete">Вы уверены, что хотите удалить запись?</string>
+    <string name="warningDelete">Это действие нельзя будет отменить</string>
+    <string name="deleteRecord">Удалить запись</string>
+    <string name="Cancel">Отмена</string>
 
 
 </resources>

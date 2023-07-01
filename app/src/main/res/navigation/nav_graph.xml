@@ -47,7 +47,7 @@
         tools:layout="@layout/fragment_schedule" />
     <fragment
         android:id="@+id/feedFragment"
-        android:name="com.oneseed.zachet.ui.FeedFragment"
+        android:name="com.oneseed.zachet.ui.feed.FeedFragment"
         android:label="fragment_feed"
         tools:layout="@layout/fragment_feed" />
     <fragment

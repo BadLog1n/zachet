@@ -1,4 +1,4 @@
-package com.oneseed.zachet.ui
+package com.oneseed.zachet.ui.feed
 
 import android.content.Context
 import android.os.Bundle
@@ -9,16 +9,19 @@ import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import androidx.activity.addCallback
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.database.DatabaseReference
 import com.oneseed.zachet.R
-import com.oneseed.zachet.adapters.FeedAdapter
 import com.oneseed.zachet.databinding.FragmentFeedBinding
 
 
 class FeedFragment : Fragment(R.layout.fragment_feed) {
-    private var rcAdapter = FeedAdapter()
+    private val viewModel: FeedFragmentViewModel by lazy {
+        ViewModelProvider(this)[FeedFragmentViewModel::class.java]
+    }
+    private var rcAdapter =
+        FeedAdapter({ viewModel.warningRecord(it) }, { viewModel.deleteRecord(it) })
     private var _binding: FragmentFeedBinding? = null
     private val binding get() = _binding!!
     override fun onCreateView(
