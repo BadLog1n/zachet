@@ -20,10 +20,10 @@ interface Repository {
     }
 
     interface GetFeedList {
-        fun getFeedsList(callback: (result: ArrayList<FeedRecord>) -> Unit)
+        fun getFeedsList(count: Long): ArrayList<FeedRecord>
     }
 
     interface SendFeedList {
-        fun sendFeedList(callback: (result: ArrayList<FeedRecord>) -> Unit)
+        fun sendFeedList(record: String)
     }
 }
