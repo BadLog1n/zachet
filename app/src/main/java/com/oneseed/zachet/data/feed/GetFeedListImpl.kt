@@ -1,37 +1,81 @@
 package com.oneseed.zachet.data.feed
 
 import android.util.Log
-import android.view.View
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.analytics.ktx.analytics
-import com.google.firebase.analytics.ktx.logEvent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.DatabaseReference
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import com.google.firebase.ktx.Firebase
-import com.oneseed.zachet.R
 import com.oneseed.zachet.domain.models.FeedRecord
 import com.oneseed.zachet.domain.repository.Repository
 import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class GetFeedListImpl:Repository.GetFeedList {
-    override fun getFeedsList(callback: (result: ArrayList<FeedRecord>) -> Unit) {
-        TODO("Not yet implemented")
+class GetFeedListImpl : Repository.GetFeedList {
+    private lateinit var database: DatabaseReference
+
+    override fun getFeedsList(count: Long): ArrayList<FeedRecord> {
+        val resultList: ArrayList<FeedRecord> = ArrayList()
+
+        database = FirebaseDatabase.getInstance().getReference("posts")
+        database.addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(dataSnapshot: DataSnapshot) {
+                val feedRecords = getFeedRecords(dataSnapshot).take(count.toInt())
+                resultList.addAll(feedRecords)
+            }
+
+            override fun onCancelled(databaseError: DatabaseError) {
+                Log.w("T", "loadPost:onCancelled") //databaseError.toException()
+            }
+        })
+
+        return resultList
     }
 
-    private fun addPostEventListener(view: View) {
+    private fun getFeedRecords(dataSnapshot: DataSnapshot): List<FeedRecord> {
+        val feedRecords: MutableList<FeedRecord> = mutableListOf()
+
+        for (item in dataSnapshot.children) {
+            val postId = item.key.toString()
+            val postAuthor = item.child("author").value.toString()
+            // Получение остальных необходимых данных из item и создание объекта FeedRecord
+            val name = item.child("name").value?.toString() ?: ""
+            val surname = item.child("surname").value?.toString() ?: ""
+            val displayName = "$name $surname"
+            val displayLogin = item.child("login").value?.toString() ?: ""
+            val dateTime = SimpleDateFormat("dd/MM/yyyy HH:mm:ss", Locale.getDefault())
+                .format(Date(postId.toLong())).toString()
+            val text = item.child("text").value?.toString() ?: ""
+            val sponsored = item.child("sponsored").value?.toString()?.toBoolean() ?: false
+            val user = Firebase.auth.currentUser
+            val uid = user?.uid
+
+            val feedRecord = FeedRecord(
+                displayName,
+                postAuthor,
+                dateTime,
+                text,
+                sponsored,
+                item.key.toString(),
+                uid.toString(),
+                displayLogin
+            )
+            feedRecords.add(feedRecord)
+        }
+
+        return feedRecords
+    }
+
+   /* private fun addPostEventListener(view: View) {
         postListener = object : ValueEventListener {
             override fun onDataChange(dataSnapshot: DataSnapshot) {
                 for (item in dataSnapshot.children) {
                     val postId = item.key.toString()
                     if (lastPost < postId.toLong()) {
                         val postAuthor = item.child("author").value.toString()
-
                         database = FirebaseDatabase.getInstance().getReference("users/$postAuthor")
                         val requestToDatabase = database.get()
                         requestToDatabase.addOnSuccessListener { itName ->
@@ -84,21 +128,24 @@ class GetFeedListImpl:Repository.GetFeedList {
                                 addRecordBtnLayout.visibility = View.VISIBLE
                                 progressBar.visibility = View.GONE
                             }
-                            /*                            if ((feedRc.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > 0){
-
-
-                                                        }*/
+                            *//*if ((feedRc.layoutManager as LinearLayoutManager).findLastVisibleItemPosition() > 0){}*//*
                         }
                     }
-
                 }
             }
-
-
             override fun onCancelled(databaseError: DatabaseError) {
                 Log.w("T", "loadPost:onCancelled") //databaseError.toException())
             }
-
         }
-    }
+    }*/
 }
+
+
+
+
+
+
+
+
+
+
